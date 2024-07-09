@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import RootLayout from "./pages/RootLayout";
+import PageRoutesComponents from "./pages";
+
+import "./App.css";
+
+const router = createBrowserRouter([
+	{
+		index: true,
+		element: <h1>LOGIN PAGE</h1>,
+	},
+	{
+		path: "/",
+		element: <RootLayout />,
+		children: [
+			{
+				path: "dashboard",
+				element: <PageRoutesComponents.DashboardPage />,
+			},
+			{
+				path: "personal-calendar",
+				element: <PageRoutesComponents.PersonalCalendarPage />,
+			},
+			{
+				path: "company-background",
+				element: <PageRoutesComponents.CompanyBackgroundPage />,
+			},
+			{
+				path: "notifications",
+				element: <PageRoutesComponents.NotificationPage />,
+			},
+			{
+				path: "events",
+				element: <PageRoutesComponents.EventPage />,
+			},
+			{
+				path: "assets",
+				element: <PageRoutesComponents.AssetsPage />,
+			},
+			{
+				path: "organisational-structure",
+				element: <PageRoutesComponents.OrganisationalStructurePage />,
+			},
+			{
+				path: "salaries",
+				element: <PageRoutesComponents.SalariesPage />,
+			},
+			{
+				path: "day-off",
+				element: <PageRoutesComponents.DayOffPage />,
+			},
+			{
+				path: "pormotion",
+				element: <PageRoutesComponents.PromotionPage />,
+			},
+			{
+				path: "recruitment",
+				element: <PageRoutesComponents.RecruitmentPage />,
+			},
+			{
+				path: "employment",
+				element: <PageRoutesComponents.EmploymentPage />,
+			},
+			{
+				path: "dismissed",
+				element: <PageRoutesComponents.DismissedPage />,
+			},
+		],
+	},
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
