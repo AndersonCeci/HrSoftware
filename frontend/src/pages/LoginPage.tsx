@@ -4,7 +4,7 @@ const LoginPAge: React.FC = () => {
     return (
         <div>
             <h1>Login Page</h1>
-            <NavLink to={"/dashboard"}>DASHBOARD</NavLink>
+            <NavLink to={"/your-info/dashboard"}>DASHBOARD</NavLink>
         </div>
     )
 }
