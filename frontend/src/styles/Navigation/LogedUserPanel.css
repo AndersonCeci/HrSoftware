@@ -1,0 +1,15 @@
+.loged-user-card{
+    width: 300px;
+    border: none;
+}
+
+.loged-user-panel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+

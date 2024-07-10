@@ -2,68 +2,69 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import RootLayout from "./pages/RootLayout";
 import PageRoutesComponents from "./pages";
+import { Paths } from "./enums/paths";
 
 import "./App.css";
 
 const router = createBrowserRouter([
 	{
 		index: true,
-		element: <h1>LOGIN PAGE</h1>,
+		element: <PageRoutesComponents.LoginPAge />,
 	},
 	{
 		path: "/",
 		element: <RootLayout />,
 		children: [
 			{
-				path: "dashboard",
+				path: Paths.Dashboard,
 				element: <PageRoutesComponents.DashboardPage />,
 			},
 			{
-				path: "personal-calendar",
+				path: Paths.PersonalCalendar,
 				element: <PageRoutesComponents.PersonalCalendarPage />,
 			},
 			{
-				path: "company-background",
+				path: Paths.CompanyBackground,
 				element: <PageRoutesComponents.CompanyBackgroundPage />,
 			},
 			{
-				path: "notifications",
+				path: Paths.Notifications,
 				element: <PageRoutesComponents.NotificationPage />,
 			},
 			{
-				path: "events",
+				path: Paths.Events,
 				element: <PageRoutesComponents.EventPage />,
 			},
 			{
-				path: "assets",
+				path: Paths.Assets,
 				element: <PageRoutesComponents.AssetsPage />,
 			},
 			{
-				path: "organisational-structure",
+				path: Paths.OrganisationalStructure,
 				element: <PageRoutesComponents.OrganisationalStructurePage />,
 			},
 			{
-				path: "salaries",
+				path: Paths.Salaries,
 				element: <PageRoutesComponents.SalariesPage />,
 			},
 			{
-				path: "day-off",
+				path: Paths.DayOff,
 				element: <PageRoutesComponents.DayOffPage />,
 			},
 			{
-				path: "pormotion",
+				path: Paths.Promotion,
 				element: <PageRoutesComponents.PromotionPage />,
 			},
 			{
-				path: "recruitment",
+				path: Paths.Recruitment,
 				element: <PageRoutesComponents.RecruitmentPage />,
 			},
 			{
-				path: "employment",
+				path: Paths.Employment,
 				element: <PageRoutesComponents.EmploymentPage />,
 			},
 			{
-				path: "dismissed",
+				path: Paths.Dismissed,
 				element: <PageRoutesComponents.DismissedPage />,
 			},
 		],

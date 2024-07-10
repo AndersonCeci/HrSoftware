@@ -1,7 +1,8 @@
-import { Avatar, Card, Skeleton, Switch } from "antd";
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from "@ant-design/icons";
+import { Avatar, Card, Skeleton } from "antd";
 
 import { useState, useEffect } from "react";
+
+import "../../styles/Navigation/LogedUserPanel.css";
 
 const { Meta } = Card;
 
@@ -16,12 +17,13 @@ const LogedUserPanel = () => {
 
 	return (
 		<>
-			<Card style={{ width: 300 }}>
-				<Skeleton loading={loading} avatar active>
+			<Card className="loged-user-card">
+				<Skeleton loading={loading} avatar active> 
 					<Meta
-						avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
+						avatar={<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
 						title="ILVIO CUMANI"
-						description="INTERN"
+						description="Frontend Developer"
+						className="loged-user-panel"
 					/>
 				</Skeleton>
 			</Card>

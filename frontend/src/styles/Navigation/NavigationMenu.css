@@ -11,9 +11,17 @@
 .side-nevigation-menu {
 	background-color: #fff;
 	font-size: 18px;
-    fill: aqua;
+	margin-bottom: 15px;
 }
 
 .nav-menu-icon{
     scale: 1.8;
+}
+
+.logout-button-container{
+	margin-top: auto;
+	margin-bottom: 20px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
