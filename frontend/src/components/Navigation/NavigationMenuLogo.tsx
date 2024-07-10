@@ -1,7 +1,6 @@
 import CodeviderLogo from "../../assets/codevider_logo-removebg-preview 1.svg"
 import "../../styles/Navigation/NavigationMenuLogo.css"
 
-
 const NavigationMenuLogo = () => {
 	return (
 		<div className="navigation-menu-logo">

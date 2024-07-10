@@ -11,8 +11,10 @@ import PromotionPage from "./PromotionPage";
 import RecruitmentPage from "./RecruitmentPage";
 import EmploymentPage from "./EmploymentPage";
 import DismissedPage from "./DismissedPage";
+import LoginPAge from "./LoginPage";
 
 const PageRoutesComponents = {
+    LoginPAge,
     DashboardPage,
     PersonalCalendarPage,
     CompanyBackgroundPage,
