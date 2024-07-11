@@ -4,7 +4,9 @@ export enum Role {
     Admin = 'admin',
     CEO = 'ceo',
     HR = 'hr',
-    Employee = 'employee'
+    Employee = 'employee',
+    Dev = 'dev',
+    ProjectManager = 'projectManager',
 }
 
 @Schema()
@@ -17,6 +19,9 @@ export class User {
 
     @Prop({ required: true })
     role: Role;
+
+    @Prop()
+    loginRole: Role;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
