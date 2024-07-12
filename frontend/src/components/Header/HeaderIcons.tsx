@@ -3,11 +3,7 @@ import NavigationLink from "../Shared/NavigationLink";
 import { Badge } from "antd";
 
 const logout = () => {
-	localStorage.removeItem('token');
-	localStorage.removeItem('username');
-	localStorage.removeItem('userId');
-	localStorage.removeItem('role');
-	localStorage.removeItem('loginRole');
+	localStorage.removeItem('userData');
 	console.log("Cleared?", localStorage.getItem('token'));
   };
 
