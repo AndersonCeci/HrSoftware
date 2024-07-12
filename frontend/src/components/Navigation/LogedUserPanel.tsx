@@ -6,6 +6,7 @@ import "../../styles/Navigation/LogedUserPanel.css";
 
 const { Meta } = Card;
 
+
 const LogedUserPanel = () => {
 	const [loading, setLoading] = useState(true);
 
@@ -18,7 +19,7 @@ const LogedUserPanel = () => {
 	return (
 		<>
 			<Card className="loged-user-card">
-				<Skeleton loading={loading} avatar active> 
+				<Skeleton loading={false} avatar active> 
 					<Meta
 						avatar={<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
 						title="ILVIO CUMANI"
