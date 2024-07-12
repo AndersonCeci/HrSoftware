@@ -3,6 +3,8 @@ import NavigationMenu from "../components/Navigation/NavigationMenu";
 import Header from "../components/Header/Header";
 import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 import HeaderIcons from "../components/Header/HeaderIcons";
+import LogedUserPanel from "../components/Navigation/LogedUserPanel";
+import Trigger from "../components/Navigation/Trigger";
 
 import { Layout } from "antd";
 const { Content, Sider } = Layout;
@@ -26,10 +28,17 @@ const RootLayout: React.FC = () => {
 						collapsible
 						collapsed={colapsed}
 						onCollapse={onCollapse}
-						width={"fit-content"}
-						className="site-layout-background"
+						width={300}
+						collapsedWidth={90}
+						style={{
+							minHeight: "90vh",
+							height: "100%",
+						}}
+						theme="light"
+						trigger={<Trigger colapsed={colapsed}/>}
 					>
-						<NavigationMenu colapsed={colapsed}/>
+						{!colapsed && <LogedUserPanel />}
+						<NavigationMenu colapsed={colapsed} />
 					</Sider>
 					<Content>
 						<Outlet />
