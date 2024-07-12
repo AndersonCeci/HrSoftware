@@ -1,7 +1,7 @@
 .side-nevigation-container {
-	width: 300px;
+	/* width: 300px; */
 	height: 100%;
-	min-height: 100vh;
+	min-height: 92vh;
 	background-color: #fff;
 	display: flex;
 	flex-direction: column;
