@@ -13,7 +13,7 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard)
-    @Get('me')
+    @Get('dashboard')
     getUserInfo(@Request() request) {
         return request.user;
     }

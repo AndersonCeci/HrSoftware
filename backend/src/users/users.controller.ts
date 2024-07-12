@@ -20,8 +20,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    async getUserById(@Param('id') id: string) {
-        
+    async getUserById(@Param('id') id: string) {    
 
     }
 

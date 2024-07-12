@@ -31,7 +31,7 @@ export class AuthService {
             return {
                 _id: user._id.toString(),
                 username: user.username
-            }
+            } 
         }
         return null;
     }
