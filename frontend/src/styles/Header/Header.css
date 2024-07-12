@@ -1,0 +1,23 @@
+.header{
+    background: linear-gradient(135deg, #30d3cb, #2a9be6,#2a9be6,#246afe, #246afe);
+    width: 100%;
+}
+
+.header-icons-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    list-style: none;
+    gap: 30px;
+    width: 100%;
+}
+
+.white-icon{
+    color: #dbdbdb;
+
+    &&:hover{
+        color: #fff;
+        scale: 2.1;
+    }
+}
