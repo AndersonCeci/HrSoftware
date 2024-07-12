@@ -2,16 +2,15 @@ import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
-import LogedUserPanel from "./LogedUserPanel";
 import "../../styles/Navigation/NavigationMenu.css";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const navElements = [Paths.Dashboard, Paths.Employee, Paths.Company];
 
-const items: any = navElements.map((element, index) => {
+const items: any = navElements.map((element) => {
 	return {
-		key: `${element.path}-${index}`,
+		key: `${element.path}`,
 		label: capitalizeFirstLetter(element.path),
 		type: element.type ? element.type : null,
 		children: element.children.map((subElement) => {
@@ -28,21 +27,17 @@ const items: any = navElements.map((element, index) => {
 	};
 });
 
-type NavigationMenuType = {
-	colapsed: boolean;
-};
-
-const NavigationMenu = ({colapsed} : NavigationMenuType) => {
+const NavigationMenu = () => {
 	const onClick: MenuProps["onClick"] = (e) => {
 		console.log("click ", e);
 	};
 
 	const location = useLocation();
 	const defaultSelectedKey = location.pathname.split("/").filter((x) => x);
-
+	console.log(defaultSelectedKey);
+	console.log(items);
 	return (
-		<section className="side-nevigation-container">
-			{!colapsed && <LogedUserPanel />}
+		<>
 			<Menu
 				onClick={onClick}
 				className="side-nevigation-menu"
@@ -51,7 +46,7 @@ const NavigationMenu = ({colapsed} : NavigationMenuType) => {
 				mode="inline"
 				items={items}
 			/>
-		</section>
+		</>
 	);
 };
 
