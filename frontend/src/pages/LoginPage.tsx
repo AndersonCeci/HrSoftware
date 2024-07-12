@@ -3,7 +3,10 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "../styles/LoginPage.css";
 import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 
+import { useNavigate } from "react-router-dom";
+
 const LoginPAge: React.FC = () => {
+  const navigate = useNavigate();
   const onFinish = (values: unknown) => {
     console.log("Received values of form:", values);
   };
@@ -44,6 +47,7 @@ const LoginPAge: React.FC = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            onClick={() => navigate('dashboard')}
           >
             Log in
           </Button>
