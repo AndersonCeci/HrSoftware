@@ -17,7 +17,8 @@ export class PassportAuthController {
         if(!user) {
             throw new UnauthorizedException('Invalid credentials');
         }
-        return this.authService.signIn(request.user)
+        const result = await this.authService.signIn(user);
+        return result;
     } catch (error) {
         throw new UnauthorizedException('Invalid credentials');
     }

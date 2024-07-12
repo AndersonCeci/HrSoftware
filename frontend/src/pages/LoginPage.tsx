@@ -2,14 +2,49 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "../styles/LoginPage.css";
 import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
-
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginPAge: React.FC = () => {
+const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const onFinish = (values: unknown) => {
     console.log("Received values of form:", values);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/auth-v2/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Authentication failed");
+      }
+  
+      const userData = {
+        token: data.accessToken,
+        username: data.username,
+        userId: data._id,
+        role: data.role,
+        loginRole: data.loginRole
+      };
+
+        localStorage.setItem('userData', JSON.stringify(userData));
+
+      console.log("Logged in successfully");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
+  
 
   return (
     <div className="login-page">
@@ -29,6 +64,8 @@ const LoginPAge: React.FC = () => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </Form.Item>
         <Form.Item
@@ -40,6 +77,8 @@ const LoginPAge: React.FC = () => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </Form.Item>
         <Form.Item>
@@ -47,7 +86,7 @@ const LoginPAge: React.FC = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
-            onClick={() => navigate('dashboard')}
+            onClick={handleSubmit}
           >
             Log in
           </Button>
@@ -57,4 +96,4 @@ const LoginPAge: React.FC = () => {
   );
 };
 
-export default LoginPAge;
+export default LoginPage;
