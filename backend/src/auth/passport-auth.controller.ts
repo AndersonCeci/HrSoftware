@@ -2,7 +2,7 @@ import { Controller, HttpCode, HttpStatus, Post, Get, UseGuards, Request, Unauth
 import { AuthService } from "./auth.service";
 import { PassportLocalGuard } from "./guards/passport-local.guard";
 import { PassportJwtAuthGuard } from "./guards/passport-jwt.guard";
-@Controller('auth')
+@Controller('')
 export class PassportAuthController {
     constructor(private authService: AuthService) {}
 
@@ -22,11 +22,15 @@ export class PassportAuthController {
     }
     }
 
-    @Get('dashboard')
-    @UseGuards(PassportJwtAuthGuard)
-    getUserInfo(@Request() request) {
-        return request.user;
-    }
+    // *** TESTING PURPOSES LEAVE FOR NOW  MIGHT NEED IT LEATER ***
+
+    // @Get('dashboard')
+    // @UseGuards(PassportJwtAuthGuard)
+    // getUserInfo(@Request() request) {
+    //     return request.user;
+    // }
+
+    
    
     @Get('verify')
     @UseGuards(PassportJwtAuthGuard)

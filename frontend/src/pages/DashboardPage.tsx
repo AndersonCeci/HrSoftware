@@ -7,7 +7,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const verifyToken = async (token: string) => {
       try {
-        const response = await fetch('http://localhost:3000/auth/verify', {
+        const response = await fetch('http://localhost:3000/verify', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
