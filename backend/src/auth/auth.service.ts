@@ -57,4 +57,22 @@ export class AuthService {
             loginRole: user.loginRole
         }
     }
+
+    async verifyToken(token: string): Promise<SignInData | null> {
+        try {
+            const decoded = this.jwtService.verify(token);
+            const user = await this.usersService.getUserByUsername(decoded.username);
+            if (!user) {
+                throw new UnauthorizedException('Invalid token');
+            }
+            return {
+                _id: user._id.toString(),
+                username: user.username,
+                role: user.role,
+                loginRole: user.loginRole,
+            };
+        } catch (error) {
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import { Controller, HttpCode, HttpStatus, Post, Get, UseGuards, Request, UnauthorizedException } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { PassportLocalGuard } from "./guards/passport-local.guard";
-import { PasswportJwtAuthGuard } from "./guards/passport-jwt.guard";
+import { PassportJwtAuthGuard } from "./guards/passport-jwt.guard";
 @Controller('auth')
 export class PassportAuthController {
     constructor(private authService: AuthService) {}
@@ -23,9 +23,20 @@ export class PassportAuthController {
     }
 
     @Get('dashboard')
-    @UseGuards(PasswportJwtAuthGuard)
+    @UseGuards(PassportJwtAuthGuard)
     getUserInfo(@Request() request) {
         return request.user;
     }
    
+    @Get('verify')
+    @UseGuards(PassportJwtAuthGuard)
+    async verifyToken(@Request() request) {
+        try {
+            const token = request.headers.authorization.split(' ')[1];
+            const user = await this.authService.verifyToken(token);
+            return { user };
+        } catch (error) {
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
 }
