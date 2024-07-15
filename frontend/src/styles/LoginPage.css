@@ -1,0 +1,45 @@
+.login-page {
+    position: absolute;
+    background: rgb(36, 106, 254);
+    background: linear-gradient(343deg, rgba(36, 106, 254, 1) 0%, rgba(48, 211, 203, 1) 67%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.login-form {
+    width: 500px;
+    height: 375px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-title {
+    text-align: center;
+    font-size: xx-large;
+}
+
+.login-form-button {
+    display: block;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+}
+
+.username-input {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.password-input {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.role-input {
+    margin-left: 20px;
+    margin-right: 20px;
+}
