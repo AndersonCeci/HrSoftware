@@ -23,7 +23,6 @@ export class RecruimentsController {
   @Post()
   @UsePipes(new ValidationPipe())
   createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
-    console.log(createRecruitmentDto);
     return this.recruitmentService.createRecruitment(createRecruitmentDto);
   }
 
