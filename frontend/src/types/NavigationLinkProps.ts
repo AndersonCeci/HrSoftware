@@ -3,4 +3,5 @@ export type NavigationLinkProps = {
 	icon?: JSX.Element | undefined;
 	linkTo: string;
 	whiteText?: boolean | undefined;
+	handleClick?: () => void | undefined;
 };
