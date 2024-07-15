@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { SalaryModule } from './modules/salary/salary.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { UserModule } from './modules/user/user.module';
     MongooseModule.forRoot(process.env.DBURL),
     UserModule,
     AuthModule,
+    SalaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
