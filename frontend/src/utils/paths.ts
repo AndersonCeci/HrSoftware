@@ -37,6 +37,14 @@ export const Paths = {
 			},
 		],
 	},
+	Background: {
+		path: "company-background",
+		// icon: NavigationIcons.BgColorsOutlined,
+		children: [{
+			path: "",
+			pageElement: PageRoutesComponents.CompanyBackgroundPage,
+		}],
+	},
 	Employee: {
 		path: "employee",
 		type: "group",
@@ -95,7 +103,6 @@ export const Paths = {
 		],
 	},
 };
-
 
 export function capitalizeFirstLetter(string: string) {
 	const words = string.split("-");
