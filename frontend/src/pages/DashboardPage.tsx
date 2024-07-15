@@ -1,9 +1,17 @@
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 const DashboardPage: React.FC = () => {
-	return (
-		<div>
-			<h1>Dashboard</h1>
-		</div>
-	);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+
+    if (!userData.token) {
+      navigate("/");
+    }
+  }, [navigate]);
+  return null;
 };
 
 export default DashboardPage;
