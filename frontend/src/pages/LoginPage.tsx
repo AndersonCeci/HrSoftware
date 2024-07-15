@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "../styles/LoginPage.css";
 import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
@@ -40,11 +40,17 @@ const LoginPage: React.FC = () => {
 
       console.log("Logged in successfully");
       navigate("/dashboard");
+
     } catch (error) {
       console.error("Login error:", error);
     }
   };
-  
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData') || "{}");
+    if(userData.token) {
+      navigate("/dashboard");
+    }
+  },[navigate])
 
   return (
     <div className="login-page">

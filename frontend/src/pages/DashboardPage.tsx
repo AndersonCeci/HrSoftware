@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-
     if (!userData.token) {
       navigate("/");
     }
