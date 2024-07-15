@@ -1,5 +1,5 @@
 import { UpdateRecruitmentDto } from './dto/UpdateRecruiments.dto';
-import { RecruimentsModule } from 'recruitments/recruitments.module';
+import { RecruimentsModule } from 'src/recruitments/recruitments.module';
 import { Injectable } from '@nestjs/common';
 import { Recruitment } from './schemas/recruiment.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -30,8 +30,7 @@ export class RecruitmentService {
     });
   }
 
-    deleteRecruitment ( id: string )
-    {
-        return this.recruitmentModel.findByIdAndDelete( id );
+  deleteRecruitment(id: string) {
+    return this.recruitmentModel.findByIdAndDelete(id);
   }
 }
