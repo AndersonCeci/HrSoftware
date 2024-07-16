@@ -1,49 +1,35 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { useState } from "react";
 
 import Button from "./Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
 
-import "../../styles/Shared/Modal.css";
+import { Modal as AntModal, Flex } from "antd";
 
 type ModalProps = {
 	children: React.ReactNode;
-	onClose?: () => void | undefined;
 	onOk?: () => void | undefined;
-	// title?: string | undefined;
+	onCancel?: () => void | undefined;
+	isOpen: boolean;
 };
 
-const Modal = forwardRef(({ children, onClose, onOk }: ModalProps, ref) => {
-	const modalRef = useRef<HTMLDialogElement>(null);
-
-	useImperativeHandle(ref, () => {
-		return {
-			open: () => {
-				modalRef.current?.showModal();
-			},
-			close: () => {
-				modalRef.current?.close();
-			},
-		};
-	});
+const Modal = ({ children, onOk, onCancel, isOpen }: ModalProps) => {
 	return (
-		<dialog className="modal" ref={modalRef}>
-			<div className="dialog">
-				{children}
-				<div className="modal-button-container-of-doom">
-					{onClose && (
-						<Button onClick={onClose} danger type={ButtonType.TEXT} size={ButtonSize.LARGE}>
-							Close
-						</Button>
-					)}
-					{onOk && (
-						<Button onClick={onOk} type={ButtonType.PRIMARY} size={ButtonSize.LARGE}>
-							Accept
-						</Button>
-					)}
-				</div>
-			</div>
-		</dialog>
+		<AntModal open={isOpen} onCancel={onCancel} onOk={onOk} footer={null}>
+			{children}
+			<Flex justify="flex-end">
+				{onCancel && (
+					<Button type={ButtonType.TEXT} danger onClick={onCancel}>
+						Cancel
+					</Button>
+				)}
+				{onOk && (
+					<Button type={ButtonType.PRIMARY} onClick={onOk}>
+						Ok
+					</Button>
+				)}
+			</Flex>
+		</AntModal>
 	);
-});
+};
 
 export default Modal;
