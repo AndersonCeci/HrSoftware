@@ -2,11 +2,10 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-
 import { LoggingMiddleware } from './middlewares/logging.middleware';
-import { AuthModule } from './modules/auth/auth.module';
 import { SalaryModule } from './modules/salary/salary.module';
 import { EventsModule } from './modules/events/events.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
