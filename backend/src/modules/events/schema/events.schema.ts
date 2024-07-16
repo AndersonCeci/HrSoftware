@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory, } from '@nestjs/mongoose';
-import { IsDate, IsDateString, IsOptional } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsOptional } from 'class-validator';
 import { Document } from'mongoose';
 
 export enum Status {
@@ -12,6 +12,7 @@ export enum Status {
 
 @Schema()
 export class Events extends Document {
+
     @Prop({required: true})
     title: string;
 
@@ -41,7 +42,9 @@ export class Events extends Document {
 
     updatedAt: string;
 
-
+    @Prop()
+    @IsNotEmpty()
+    status: Status;
     //This is for future reference to the employee who created this event
 
     // employeeID: {

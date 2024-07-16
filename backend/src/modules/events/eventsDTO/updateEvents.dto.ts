@@ -1,4 +1,5 @@
 import { IsOptional } from "class-validator";
+import { Status } from "../schema/events.schema";
 
 export class UpdateEventDto {
 
@@ -27,7 +28,7 @@ export class UpdateEventDto {
     progress: string;
     
     @IsOptional()
-    status: string;
+    status: Status;
 
     @IsOptional()
     createdAt: Date;
@@ -37,4 +38,5 @@ export class UpdateEventDto {
 
     @IsOptional()
     locationId: string;
+
 }

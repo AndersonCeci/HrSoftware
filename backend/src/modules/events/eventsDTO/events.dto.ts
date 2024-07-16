@@ -1,4 +1,5 @@
 import { IsString, IsDate, IsOptional, IsDateString } from 'class-validator';
+import { Status } from '../schema/events.schema';
 
 export class CreateEventDto {
     @IsString()
@@ -24,4 +25,6 @@ export class CreateEventDto {
     @IsOptional()
     @IsString()
     location?: string;
+
+    status: Status;
 }

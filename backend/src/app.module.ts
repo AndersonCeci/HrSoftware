@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
 import { SalaryModule } from './modules/salary/salary.module';
 import { EventsModule } from './modules/events/events.module';
 
@@ -17,7 +16,6 @@ import { EventsModule } from './modules/events/events.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
-    UserModule,
     AuthModule,
     SalaryModule,
     EventsModule,
