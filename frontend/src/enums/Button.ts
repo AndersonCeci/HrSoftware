@@ -7,4 +7,6 @@ export enum ButtonSize {
 export enum ButtonType {
 	PRIMARY = "primary",
 	TEXT = "text",
+	LINK = "link",
+	
 }
