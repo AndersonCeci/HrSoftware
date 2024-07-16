@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import RootLayout from "./pages/RootLayout";
-import PageRoutesComponents from "./pages";
 import { Paths } from "./utils/paths";
 
 import "./App.css";
