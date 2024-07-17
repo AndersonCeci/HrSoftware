@@ -4,8 +4,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
 
-type MenuItem = Required<MenuProps>["items"][number];
-
 const navElements = [Paths.Dashboard, Paths.Employee, Paths.Company];
 
 const items: any = navElements.map((element) => {
@@ -34,8 +32,6 @@ const NavigationMenu = () => {
 
 	const location = useLocation();
 	const defaultSelectedKey = location.pathname.split("/").filter((x) => x);
-	console.log(defaultSelectedKey);
-	console.log(items);
 	return (
 		<>
 			<Menu

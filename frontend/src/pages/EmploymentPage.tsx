@@ -2,6 +2,7 @@ import { Button, Dropdown, Form, Input, TableProps } from "antd";
 import Table, {
   createTableColumns,
   getAllUniqueValues,
+  //   getAllUniqueValues,
 } from "../components/Table/Table";
 import TableHeader from "../components/Table/TableHeader";
 import dummydataemployee from "../utils/dummydataemployee";
@@ -18,7 +19,7 @@ const EmploymentPage: React.FC = () => {
   //   const [dataSource, setDataSource] = useState<EmployeeDataType[]>([]);
   const [tableData, setTableDate] = useState<EmployeeDataType[]>([]);
   const [isEditable, setIsEditable] = useState(false);
-  const addWorkerFormRef = useRef();
+  const addWorkerFormRef = useRef()
   const [editedInfo, setEditedInfo] = useState<Partial<EmployeeDataType>>({});
   const [isVisible, setIsVisible] = useState(false);
 
@@ -168,7 +169,11 @@ const EmploymentPage: React.FC = () => {
     }),
   ];
 
-  const position = [{ label: "Frontend", value: "frontend" }];
+  const position = [
+	{label: "Frontend",
+		value:"frontend"
+	}
+  ]
 
   return (
     <section className="test">
@@ -176,15 +181,10 @@ const EmploymentPage: React.FC = () => {
       <Table columns={columns} data={tableData} fixed />
       <Modal
         onOk={() => addWorkerFormRef.current.submit()}
-        isOpen={isVisible}
-        onCancel={() => setIsVisible(false)}
+		isOpen={isVisible}
+		onCancel={() => setIsVisible(false)}
       >
-        <Form
-          ref={addWorkerFormRef}
-          form={form2}
-          layout="vertical"
-          onFinish={handleSubmit}
-        >
+        <Form ref={addWorkerFormRef} form={form2} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
             label="Name"
             name="name"
