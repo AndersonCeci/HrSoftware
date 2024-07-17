@@ -7,6 +7,8 @@ import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { EventsModule } from './modules/events/events.module';
+import { RecruimentsModule } from './recruitments/recruitments.module';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     MongooseModule.forRoot(process.env.DBURL),
     UsersModule,
+    RecruimentsModule,
     AuthModule,
     SalaryModule,
     EventsModule,
