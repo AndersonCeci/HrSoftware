@@ -14,7 +14,7 @@ type ModalProps = {
 
 const Modal = ({ children, onOk, onCancel, isOpen }: ModalProps) => {
 	return (
-		<AntModal open={isOpen} onCancel={onCancel} onOk={onOk} footer={null}>
+		<AntModal destroyOnClose open={isOpen} onCancel={onCancel} onOk={onOk} footer={null}>
 			{children}
 			<Flex justify="flex-end">
 				{onCancel && (
