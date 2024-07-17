@@ -4,10 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 import { LoggingMiddleware } from './middlewares/logging.middleware';
-import { AuthModule } from './modules/auth/auth.module';
 import { SalaryModule } from './modules/salary/salary.module';
-import { EventsModule } from './modules/events/events.module';
-
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +15,7 @@ import { EventsModule } from './modules/events/events.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
+    UsersModule,
     AuthModule,
     SalaryModule,
     EventsModule,
@@ -26,5 +26,7 @@ import { EventsModule } from './modules/events/events.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
       consumer.apply(LoggingMiddleware).forRoutes("*")
+      console.log("Middleware Applied")
   }
 }
+
