@@ -8,7 +8,6 @@ import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     AuthModule,
     SalaryModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [AppService],
