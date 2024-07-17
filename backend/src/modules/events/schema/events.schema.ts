@@ -1,12 +1,12 @@
 import { Schema, Prop, SchemaFactory, } from '@nestjs/mongoose';
 import { IsDate, IsDateString, IsNotEmpty, IsOptional } from 'class-validator';
-import { Document } from'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { User } from 'src/users/schemas/user.schema';
 
 export enum Status {
-    Progress = 'progress',
-    Completed = 'completed',
     Cancelled = 'cancelled',
     Finished = 'finished',
+    Ongoing = 'ongoing',
 }
 
 
@@ -16,7 +16,7 @@ export class Events extends Document {
     @Prop({required: true})
     title: string;
 
-    @Prop({required: true})
+    @Prop()
     description: string;
 
     @IsDateString()
@@ -24,34 +24,28 @@ export class Events extends Document {
     startDate: Date;
 
     @IsDateString()
-    @Prop({required: true})
+    @Prop()
     endDate: Date;
 
     @IsDateString()
     @IsOptional()
+    @Prop()
     startTime?: Date;
 
     @IsDateString()
     @IsOptional()
+    @Prop()
     endTime?: Date;
 
     @IsOptional()
     location?: string;
 
-    createdAt: string;
-
-    updatedAt: string;
-
     @Prop()
     @IsNotEmpty()
     status: Status;
-    //This is for future reference to the employee who created this event
-
-    // employeeID: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Employee',
-    // }
-
+    
+    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
+    creator: User;
 }
 
 const EventsSchema = SchemaFactory.createForClass(Events);
