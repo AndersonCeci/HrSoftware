@@ -8,7 +8,7 @@ import OrganisationalStructurePage from "./OrganisationalStructurePage";
 import SalariesPage from "./SalariesPage";
 import DayOffPage from "./DayOffPage";
 import PromotionPage from "./PromotionPage";
-import RecruitmentPage from "./RecruitmentPage";
+import RecruitmentPage from "./Recruitments/RecruitmentPage";
 import EmploymentPage from "./EmploymentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
