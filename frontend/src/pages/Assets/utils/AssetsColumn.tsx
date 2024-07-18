@@ -1,43 +1,71 @@
 import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
-import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Button from "../../../components/Shared/Button";
 import { TableProps, Dropdown } from "antd";
 import { ButtonType } from "../../../enums/Button";
 import { AssetDatatype } from "../types/AssetsDataType";
 
-export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype>["columns"] {
+export function getColumns(
+	tableData: AssetDatatype[],
+	handleDataDelete: (id: string) => void,
+	handleDataEdit: (id: string) => void,
+): TableProps<AssetDatatype>["columns"] {
 	return [
 		createTableColumns({
 			title: "Type",
-			dataIndex: "type",
+			dataIndex: "assetType",
 			key: "type",
-			filters: getAllUniqueValues(tableData, "type"),
-			onFilter: (value, record) => record.type.indexOf(value) === 0,
+			width: 150,
+			filters: getAllUniqueValues(tableData, "assetType"),
+			onFilter: (value, record) => record.assetType.indexOf(value) === 0,
 		}),
-		createTableColumns({ title: "Code", dataIndex: "code", key: "code" }),
-		createTableColumns({ title: "Date", dataIndex: "date", key: "date" }),
+		createTableColumns({ title: "Code", dataIndex: "assetCode", key: "code", width: 150 }),
+		createTableColumns({ title: "Date", dataIndex: "dateGiven", key: "date", width: 150 }),
 		createTableColumns({
 			title: "Employee",
-			dataIndex: "employee",
+			dataIndex: "userName",
 			key: "employee",
 			filterDropdown: true,
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
+			width: 150,
 			onFilter: (inputValue, filter) =>
-				filter.employee.toLowerCase().includes(inputValue.toLowerCase()),
+				filter.userName.toLowerCase().includes(inputValue.toLowerCase()),
 		}),
 		createTableColumns({
 			title: "Action",
-			dataIndex: "action",
+			dataIndex: "_id",
 			key: "action",
 			displayAs: (record) => (
 				<Dropdown
 					menu={{
 						items: [
-							{ key: "Edit", label: <Button type={ButtonType.TEXT}> Edit </Button> },
+							{
+								key: "Edit",
+								label: (
+									<Button
+										type={ButtonType.TEXT}
+										onClick={() => {handleDataEdit(record) 
+											console.log(record)
+										}}
+										// size={ButtonSize.LARGE}
+										icon={<EditOutlined />}
+										block
+									>
+										Edit
+									</Button>
+								),
+							},
 							{
 								key: "Delete",
 								label: (
-									<Button type={ButtonType.TEXT} danger>
+									<Button
+										type={ButtonType.TEXT}
+										// size={ButtonSize.LARGE}
+										onClick={() => handleDataDelete(record)}
+										danger
+										icon={<DeleteOutlined />}
+										block
+									>
 										Delete
 									</Button>
 								),
@@ -46,7 +74,7 @@ export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype
 					}}
 					trigger={["click"]}
 				>
-					<Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
+					<Button type={ButtonType.TEXT} block icon={<MoreOutlined />} />
 				</Dropdown>
 			),
 			fixed: "right",
