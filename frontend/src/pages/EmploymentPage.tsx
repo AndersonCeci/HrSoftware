@@ -1,84 +1,54 @@
-import { Button, Dropdown, Form, Input, TableProps } from "antd";
+import { Button, Dropdown, Form, Input, Modal, TableProps } from "antd";
 import Table, {
   createTableColumns,
   getAllUniqueValues,
-  //   getAllUniqueValues,
 } from "../components/Table/Table";
 import TableHeader from "../components/Table/TableHeader";
 import dummydataemployee from "../utils/dummydataemployee";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "../types/Employee";
 import { MoreOutlined } from "@ant-design/icons";
 import { ButtonType } from "../enums/Button";
 import Select from "../components/Shared/Select";
-import Modal from "../components/Shared/Modal";
+import CreateEmployeDrawer from "../components/Employment/CreateEmployeeDrawer";
 
 const EmploymentPage: React.FC = () => {
   const [form] = Form.useForm();
-  const [form2] = Form.useForm();
-  //   const [dataSource, setDataSource] = useState<EmployeeDataType[]>([]);
-  const [tableData, setTableDate] = useState<EmployeeDataType[]>([]);
+  const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
+  const [open, setOpen] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
-  const addWorkerFormRef = useRef()
-  const [editedInfo, setEditedInfo] = useState<Partial<EmployeeDataType>>({});
-  const [isVisible, setIsVisible] = useState(false);
+  const [editedEmployee, setEditedEmployee] = useState<EmployeeDataType>();
+
 
   useEffect(() => {
-    setTableDate(dummydataemployee);
+    setTableData(dummydataemployee);
   }, []);
 
-  const onEditInfo = (record: EmployeeDataType) => {
-    form.setFieldsValue({
-      name: record.name,
-      email: record.email,
-      position: record.position,
-      status: record.status,
-    });
+  const onEditEmployee = (record: EmployeeDataType) => {
+    setOpen(true);
+    console.log(record, "record");
+    // form.setFieldsValue({
+    //   name:record.name,
+    //   email:record.email,
+    //   position: record.position,
+    // })
 
-    setEditedInfo(record);
-    setIsEditable(true);
-  };
+    setEditedEmployee(record);
 
-  const handleAdd = () => {
-    setIsVisible(true);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = (values: any) => {
-    setIsVisible(false);
-    const newInfo = {
-      ...values,
-      id: tableData.length + 1,
-    };
-
-    setTableDate((prev) => [...prev, newInfo]);
-    form.resetFields();
-  };
-
-  const onDeleteInfo = (record: EmployeeDataType) => {
-    Modal.confirm({
-      title: "Are you sure, you want to delete this employee?",
-      okText: "Yes",
-      okType: "danger",
-      onOk: () => {
-        setTableDate((prev) => prev.filter((info) => info.id !== record.id));
-      },
-    });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEditSubmit = (values: any) => {
-    const updatedInfo = {
-      ...editedInfo,
-      ...values,
-    };
-
-    setTableDate((prev) =>
-      prev.map((info) =>
-        info.id === editedInfo.id ? (updatedInfo as EmployeeDataType) : info
-      )
-    );
-    setIsEditable(false);
+    // const updatedTask = {
+    //   ...editedEmployee,
+    //   ...values,
+    // };
+    // setTableDate((prev) =>
+    //   prev.map((employee) =>
+    //     employee.id === editedEmployee.id ? (updatedTask as EmployeeDataType) : employee
+    //   )
+    // );
+    // setIsEditable(false);
   };
 
   const selectOption = ["Active", "Inactive", "Remote"];
@@ -123,9 +93,9 @@ const EmploymentPage: React.FC = () => {
     }),
     createTableColumns({
       title: "Action",
-      dataIndex: "action",
+      dataIndex: "id",
       key: "action",
-      displayAs: (record: EmployeeDataType) => (
+      displayAs: (text, record) => (
         <Dropdown
           menu={{
             items: [
@@ -134,12 +104,10 @@ const EmploymentPage: React.FC = () => {
                 label: (
                   <Button
                     type={ButtonType.TEXT}
-                    onClick={() => {
-                      onEditInfo(record);
-                    }}
+                    block
+                    onClick={() => onEditEmployee(record)}
                   >
-                    {" "}
-                    Edit{" "}
+                    Edit
                   </Button>
                 ),
               },
@@ -148,9 +116,8 @@ const EmploymentPage: React.FC = () => {
                 label: (
                   <Button
                     type={ButtonType.TEXT}
-                    onClick={() => {
-                      onDeleteInfo(record);
-                    }}
+                    block
+                    onClick={() => {}}
                     danger
                   >
                     Delete
@@ -168,46 +135,13 @@ const EmploymentPage: React.FC = () => {
       width: 30,
     }),
   ];
-
-  const position = [
-	{label: "Frontend",
-		value:"frontend"
-	}
-  ]
-
+console.log( editedEmployee, 'stateeeeeeee');
+//  console.log(editedEmployee.name?.split(" ")[0], "HELLO JOHN");
   return (
     <section className="test">
-      <TableHeader title="Employment" onClick={handleAdd} />
-      <Table columns={columns} data={tableData} fixed />
-      <Modal
-        onOk={() => addWorkerFormRef.current.submit()}
-		isOpen={isVisible}
-		onCancel={() => setIsVisible(false)}
-      >
-        <Form ref={addWorkerFormRef} form={form2} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter a name" }]}
-          >
-            <Input size="large" placeholder="Enter the name" />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please enter an email" }]}
-          >
-            <Input size="large" placeholder="Enter an email" />
-          </Form.Item>
-          <Form.Item
-            label="Position"
-            name="position"
-            rules={[{ required: true, message: "Plese enter an position" }]}
-          >
-			<Select options={position} placeholder="" value={'test'} onChange={()=> console.log("test")}/>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <TableHeader title="Employment" onClick={() => setOpen(true)} />
+      <Table columns={columns} data={tableData} />
+      <CreateEmployeDrawer open={open} setOpen={setOpen} selectedEmployee={editedEmployee} />
     </section>
   );
 };

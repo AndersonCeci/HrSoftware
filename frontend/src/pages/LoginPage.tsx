@@ -55,6 +55,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
+      <div className="image"><img alt="Logo"/></div>
       <Form
         name="normal-login"
         className="login-form"
