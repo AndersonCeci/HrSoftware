@@ -1,5 +1,5 @@
 import DashboardPage from "./DashboardPage";
-import PersonalCalendarPage from "./PersonalCalendarPage";
+import PersonalCalendarPage from "./PersonalCalendar/PersonalCalendarPage";
 import CompanyBackgroundPage from "./CompanyBackgroundPage";
 import NotificationPage from "./NotificationPage";
 import EventPage from "./EventPage";
@@ -14,20 +14,20 @@ import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
 
 const PageRoutesComponents = {
-    LoginPAge,
-    DashboardPage,
-    PersonalCalendarPage,
-    CompanyBackgroundPage,
-    NotificationPage,
-    EventPage,
-    AssetsPage,
-    OrganisationalStructurePage,
-    SalariesPage,
-    DayOffPage,
-    PromotionPage,
-    RecruitmentPage,
-    EmploymentPage,
-    DismissedPage
+  LoginPAge,
+  DashboardPage,
+  PersonalCalendarPage,
+  CompanyBackgroundPage,
+  NotificationPage,
+  EventPage,
+  AssetsPage,
+  OrganisationalStructurePage,
+  SalariesPage,
+  DayOffPage,
+  PromotionPage,
+  RecruitmentPage,
+  EmploymentPage,
+  DismissedPage,
 };
 
-export default PageRoutesComponents;    
+export default PageRoutesComponents;

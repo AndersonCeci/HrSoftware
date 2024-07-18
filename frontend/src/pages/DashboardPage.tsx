@@ -47,6 +47,7 @@ const DashboardPage: React.FC = () => {
         }
 
         const data = await response.json();
+        return data;
       } catch (error) {
         console.error(error);
         navigate('/');

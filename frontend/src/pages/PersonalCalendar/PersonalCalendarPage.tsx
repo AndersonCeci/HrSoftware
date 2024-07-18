@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "../styles/PersonalCalendarPage/PersonalCalendar.css";
+import "../../styles/PersonalCalendarPage/PersonalCalendar.css";
 import {
   Badge,
   Calendar,
   Drawer,
   Space,
   Modal,
-  Input,
-  DatePicker,
   Typography,
-  TimePicker,
   Card,
   Avatar,
   Divider,
@@ -17,18 +14,16 @@ import {
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import {
-  EnvironmentOutlined,
   DeleteOutlined,
   EditOutlined,
   StopOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import TableHeader from "../components/Table/TableHeader";
+import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
+import EditNewEventForm from "./components/EditNewEventForm";
 
-const { TextArea } = Input;
 const { Title } = Typography;
-const format = "HH:mm";
 
 export enum Status {
   Cancelled = "cancelled",
@@ -78,22 +73,9 @@ const PersonalCalendarPage: React.FC = () => {
     setEditEventId(null); // Clear edit event ID when modal closes
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setNewEvent((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleDateChange =
-    (field: keyof NewEvent) => (date: Dayjs | null, dateString: string | string[]) => {
-      setNewEvent((prev) => ({ ...prev, [field]: date }));
-    };
-
-  const handleTimeChange =
-    (field: keyof NewEvent) => (time: Dayjs, timeString: string | string[]) => {
-      setNewEvent((prev) => ({ ...prev, [field]: time }));
-    };
+  function onChanges(value: any, identifier: string) {
+    setNewEvent((prev) => ({ ...prev, [identifier]: value }));
+  }
 
   const fetchEvents = async () => {
     try {
@@ -123,9 +105,9 @@ const PersonalCalendarPage: React.FC = () => {
     const currentDate = dayjs();
     const eventStartDate = dayjs(event.startDate);
     if (event.status !== Status.Cancelled) {
-      if (eventStartDate.isBefore(currentDate, 'day')) {
+      if (eventStartDate.isBefore(currentDate, "day")) {
         event.status = Status.Finished;
-      } else if (eventStartDate.isSame(currentDate, 'day')) {
+      } else if (eventStartDate.isSame(currentDate, "day")) {
         event.status = Status.Ongoing;
       } else {
         event.status = Status.Upcoming;
@@ -136,14 +118,16 @@ const PersonalCalendarPage: React.FC = () => {
 
   const addNewEvent = async () => {
     try {
-      const userId = JSON.parse(localStorage.getItem("userData") || "{}").userId;
+      const userId = JSON.parse(
+        localStorage.getItem("userData") || "{}"
+      ).userId;
       const response = await fetch(`http://localhost:3000/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...newEvent,
-          startDate: newEvent.startDate?.format('YYYY-MM-DD'),
-          endDate: newEvent.endDate?.format('YYYY-MM-DD'),
+          startDate: newEvent.startDate?.format("YYYY-MM-DD"),
+          endDate: newEvent.endDate?.format("YYYY-MM-DD"),
           startTime: newEvent.startTime?.toISOString(),
           endTime: newEvent.endTime?.toISOString(),
           location: newEvent.location,
@@ -230,19 +214,22 @@ const PersonalCalendarPage: React.FC = () => {
   const handleSaveEdit = async () => {
     try {
       if (!editEventId) return;
-      const response = await fetch(`http://localhost:3000/events/${editEventId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newEvent.title,
-          description: newEvent.description,
-          startDate: newEvent.startDate?.format('YYYY-MM-DD'),
-          endDate: newEvent.endDate?.format('YYYY-MM-DD'),
-          startTime: newEvent.startTime?.toISOString(),
-          endTime: newEvent.endTime?.toISOString(),
-          location: newEvent.location,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/events/${editEventId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: newEvent.title,
+            description: newEvent.description,
+            startDate: newEvent.startDate?.format("YYYY-MM-DD"),
+            endDate: newEvent.endDate?.format("YYYY-MM-DD"),
+            startTime: newEvent.startTime?.toISOString(),
+            endTime: newEvent.endTime?.toISOString(),
+            location: newEvent.location,
+          }),
+        }
+      );
       const data = await response.json();
       console.log("Updated event:", data);
       if (!response.ok) {
@@ -272,8 +259,7 @@ const PersonalCalendarPage: React.FC = () => {
     const eventsForDate = events.filter((event) => {
       const eventDate = dayjs(event.startDate);
       return (
-        eventDate.date() === value.date() &&
-        eventDate.month() === value.month()
+        eventDate.date() === value.date() && eventDate.month() === value.month()
       );
     });
 
@@ -345,21 +331,16 @@ const PersonalCalendarPage: React.FC = () => {
     setSelectedDate(null);
   };
 
-  const formatDate = (isoDateString: string) => {
+   const formatDateAndTime = (isoDateString: string) => {
     const date = new Date(isoDateString);
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
-
-  const formatTime = (isoDateString: string) => {
-    const date = new Date(isoDateString);
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+}
 
   return (
     <>
@@ -380,36 +361,48 @@ const PersonalCalendarPage: React.FC = () => {
           {events.length > 0 &&
             selectedDate &&
             events
-              .filter(
-                (event) =>
-                  dayjs(event.startDate).isSame(selectedDate, 'day')
+              .filter((event) =>
+                dayjs(event.startDate).isSame(selectedDate, "day")
               )
               .map((event: any) => (
                 <Card
                   key={event.id}
                   className="card-container"
                   actions={[
-                    <DeleteOutlined key="delete" onClick={() => handleDeleteEvent(event._id)} className="delete-icon-card" />,
-                    <EditOutlined key="edit" onClick={() => handleEditEvent(event._id)} className="edit-icon-card" />,
-                    <StopOutlined key="cancel" onClick={() => handleCancelEvent(event._id)} />,
+                    <DeleteOutlined
+                      key="delete"
+                      onClick={() => handleDeleteEvent(event._id)}
+                      className="delete-icon-card"
+                    />,
+                    <EditOutlined
+                      key="edit"
+                      onClick={() => handleEditEvent(event._id)}
+                      className="edit-icon-card"
+                    />,
+                    <StopOutlined
+                      key="cancel"
+                      onClick={() => handleCancelEvent(event._id)}
+                    />,
                   ]}
                 >
                   <Meta
-                    avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+                    avatar={
+                      <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
+                    }
                     title={event.title}
                     description={event.description}
                   />
                   <Divider orientation="left">Start Date:</Divider>
-                  <Title level={5}> {formatDate(event.startDate)}</Title>
+                  <Title level={5}> {formatDateAndTime(event.startDate)}</Title>
 
                   <Divider orientation="left">End Date:</Divider>
-                  <Title level={5}> {formatDate(event.endDate)}</Title>
+                  <Title level={5}> {formatDateAndTime(event.endDate)}</Title>
 
                   <Divider orientation="left">Start Time:</Divider>
-                  <Title level={5}> {formatTime(event.startTime)}</Title>
+                  <Title level={5}> {formatDateAndTime(event.startTime)}</Title>
 
                   <Divider orientation="left">End Time:</Divider>
-                  <Title level={5}> {formatTime(event.endTime)}</Title>
+                  <Title level={5}> {formatDateAndTime(event.endTime)}</Title>
 
                   <Divider orientation="left">Location:</Divider>
                   <Title level={5}> {event.location}</Title>
@@ -425,66 +418,24 @@ const PersonalCalendarPage: React.FC = () => {
         onCancel={handleCancel}
         onOk={editEventId ? handleSaveEdit : addNewEvent}
         title={editEventId ? "Edit Event" : "Add New Event"}
-        footer={
+        footer={[
           editEventId ? (
-            <span className="modal-footer">
-            <Button
-              key="save"
-              type="primary"
-              icon={<CheckCircleOutlined />}
-              onClick={handleSaveEdit}>Save Changes
-              </Button>
-              
-            </span>
-          ) : null
-        }
+            <Button key="submit" type="primary" onClick={handleSaveEdit}>
+              <CheckCircleOutlined
+                key="save"
+                className="save-icon"
+                onClick={handleSaveEdit}
+              />
+              Save Changes
+            </Button>
+          ) : (
+            <Button key="submit" type="primary" onClick={addNewEvent}>
+              Add Event
+            </Button>
+          ),
+        ]}
       >
-        <Title level={5}>Title*</Title>
-        <Input
-          placeholder="Title"
-          name="title"
-          value={newEvent.title}
-          onChange={handleInputChange}
-        />
-        <div style={{ margin: "24px 0" }} />
-        <Title level={5}>Description</Title>
-        <TextArea
-          placeholder="Description"
-          autoSize={{ minRows: 3, maxRows: 5 }}
-          name="description"
-          value={newEvent.description}
-          onChange={handleInputChange}
-        />
-        <Title level={5}>Start Date*</Title>
-        <DatePicker
-          onChange={handleDateChange("startDate")}
-          className="modal-date-picker"
-          value={newEvent.startDate}
-        />
-        <Title level={5}>End Date</Title>
-        <DatePicker
-          onChange={handleDateChange("endDate")}
-          className="modal-date-picker-end"
-          value={newEvent.endDate}
-        />
-        <Title level={5}>Start Time</Title>
-        <TimePicker
-          onChange={handleTimeChange("startTime")}
-          value={newEvent.startTime}
-        />
-        <Title level={5}>End Time</Title>
-        <TimePicker
-          onChange={handleTimeChange("endTime")}
-          value={newEvent.endTime}
-        />
-        <Title level={5}>Location</Title>
-        <Input
-          placeholder="Location"
-          prefix={<EnvironmentOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
-          name="location"
-          value={newEvent.location}
-          onChange={handleInputChange}
-        />
+        <EditNewEventForm newEvent={newEvent} onChanges={onChanges} />
       </Modal>
     </>
   );
