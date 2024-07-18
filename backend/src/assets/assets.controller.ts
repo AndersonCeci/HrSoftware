@@ -25,9 +25,9 @@ export class AssetsController {
     return findUserAssets;
   }
 
-  @Delete(':name')
-  async deleteByName(@Param('name') name: string) {
-    const result = await this.assetsService.deleteAssetsByName(name);
+  @Delete(':id')
+  async deleteByName(@Param('id') id: string) {
+    const result = await this.assetsService.deleteAssetsById(id);
     if (result.deletedCount === 0) {
       throw new HttpException('No assets found for the given user', 404);
     }

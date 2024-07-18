@@ -30,11 +30,10 @@ export class AssetsService {
     return this.assetModel.find({ userName: name }).exec();
   }
 
-  async deleteAssetsByName(name: string): Promise<{ deletedCount?: number }> {
-    const result = await this.assetModel.deleteMany({ userName: name }).exec();
+  async deleteAssetsById(id: string): Promise<{ deletedCount?: number }> {
+    const result = await this.assetModel.deleteMany({ _id: id }).exec();
     return { deletedCount: result.deletedCount };
   }
-
    
    async updateAsset(id: string, updateAssetDto: UpdateAssetDto): Promise<Asset> {
     return this.assetModel.findByIdAndUpdate(id, updateAssetDto, { new: true }).exec();
