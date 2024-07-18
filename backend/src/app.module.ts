@@ -2,13 +2,13 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-
+import { AuthModule } from './auth/auth.module';
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
+import { AssetsModule } from './assets/assets.module';
 
 @Module({
   imports: [
@@ -22,6 +22,7 @@ import { RecruimentsModule } from './recruitments/recruitments.module';
     AuthModule,
     SalaryModule,
     EventsModule,
+    AssetsModule
   ],
   controllers: [],
   providers: [AppService],
