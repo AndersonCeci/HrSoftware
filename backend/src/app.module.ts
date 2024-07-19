@@ -9,6 +9,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { RecruimentsModule } from './recruitments/recruitments.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
+    ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
     UsersModule,
     RecruimentsModule,
     AuthModule,
