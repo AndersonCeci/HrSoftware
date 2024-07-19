@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Login from "../assets/login.svg";
+import LoginLogo from "../assets/loginlogo.png"
 
 const LoginPage: React.FC = () => {
 	const [username, setUsername] = useState("");
@@ -56,9 +57,6 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<div className="login-page">
-			{/* <div className="image">
-				<img alt="Logo" />
-			</div> */}
 			<div className="image-container">
 				<img src={Login} alt="Logo" />
 			</div>
@@ -68,6 +66,7 @@ const LoginPage: React.FC = () => {
 				initialValues={{ remember: true }}
 				onFinish={onFinish}
 			>
+        <img src={LoginLogo} className="loginlogo"></img>
 				<div className="login-inputs">
 					<h2 className="login-title">Login</h2>
 					<Form.Item
