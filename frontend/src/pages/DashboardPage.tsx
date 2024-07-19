@@ -1,6 +1,5 @@
 
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Row, Col } from "antd";
 import { Content } from "antd/es/layout/layout";
 import WelcomeGrid from "../components/Dashboard/WelcomeGrid";
@@ -30,37 +29,7 @@ const initialData: Data[] = [
   },
 ];
 const DashboardPage: React.FC = () => {
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const verifyToken = async (token: string) => {
-      try {
-        const response = await fetch('http://localhost:3000/verify', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Token is invalid or expired');
-        }
-
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error(error);
-        navigate('/');
-      }
-    };
-
-    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    if (!userData.token) {
-      navigate("/");
-    } else {
-      verifyToken(userData.token);
-    }
-  }, [navigate]);
 
   return (
     <Content
