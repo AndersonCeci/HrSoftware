@@ -10,7 +10,6 @@ export class EventsController {
     @Post()
     async createEvent(@Body() createEventDto: CreateEventDto) {
         return await this.eventsService.create(createEventDto);
-
     }
 
     @Get()
@@ -23,6 +22,11 @@ export class EventsController {
         return await this.eventsService.findById(id);
     }
 
+    @Get('byCreator/:creatorId')
+    async findEventsByCreatorId(@Param('creatorId') creatorId: string) {
+        return await this.eventsService.findByCreatorId(creatorId);
+    }
+
     @Delete(':id')
     async deleteEvent(@Param('id') id: string) {
         return await this.eventsService.delete(id);
@@ -32,5 +36,4 @@ export class EventsController {
     async updateEvent(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
         return await this.eventsService.update(id, updateEventDto);
     }
-
 }

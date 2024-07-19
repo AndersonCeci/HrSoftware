@@ -2,7 +2,6 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import "../styles/LoginPage.css";
-// import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +52,7 @@ const LoginPage: React.FC = () => {
 		if (userData.token) {
 			navigate("/dashboard");
 		}
-	}, [navigate]);
+	}, []);
 
 	return (
 		<div className="login-page">
