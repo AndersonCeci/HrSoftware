@@ -31,7 +31,7 @@ export function createTableColumns({
 		title: title,
 		dataIndex: dataIndex,
 		key: key,
-		render: (text: any, record) => (displayAs ? displayAs(text, record) : text),
+		render: (text: any, record: any) => (displayAs ? displayAs(text, record) : text),
 		fixed: fixed,
 		width: width,
 		align: align,
