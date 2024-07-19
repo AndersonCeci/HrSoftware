@@ -189,6 +189,7 @@ const TaskGrid: React.FC = () => {
         }}
       />
       <Modal
+      footer={null}
         className="Edit-modal"
         title="Edit Task"
         open={isEditable}
@@ -252,6 +253,7 @@ const TaskGrid: React.FC = () => {
       </Modal>
       <Modal
         visible={isVisible}
+        footer={null}
         onCancel={() => {
           setIsVisible(false);
         }}

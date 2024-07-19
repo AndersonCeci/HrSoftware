@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, StopOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import formatDateAndTime from "../PersonalCalendarPage";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 interface Props {
   events: any[];

@@ -4,28 +4,28 @@ const DummyEmployeeData = [
         name:"John Wick",
         email:"johnwick@gmail.com",
         position:"Frontend Developer",
-        status:"At work"
+        status:"Workig"
     },
     {
         id: 2,
         name:"Iron Man",
         email:"ironman@gmail.com",
         position:"Backend Developer",
-        status:"Inactive"
+        status:"Remote"
     },
     {
         id: 3,
         name:"Captain America",
         email:"captainamerica@gmail.com",
         position:"Frontend Developer",
-        status:"Remote"
+        status:"Day off"
     },
     {
         id: 4,
         name:"Wanda Maximoff",
         email:"wandamaximoff@gmail.com",
         position:"Backend Developer",
-        status:"At work"
+        status:"Day off"
     },
     {
         id: 5,

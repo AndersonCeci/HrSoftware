@@ -3,5 +3,6 @@ export type EmployeeDataType ={
 	name: string;
 	email: string;
 	position: string;
+	
     status: string;
 }
