@@ -1,5 +1,5 @@
 import DashboardPage from "./DashboardPage";
-import PersonalCalendarPage from "./PersonalCalendarPage";
+import PersonalCalendarPage from "./PersonalCalendar/PersonalCalendarPage";
 import CompanyBackgroundPage from "./CompanyBackgroundPage";
 import NotificationPage from "./NotificationPage";
 import EventPage from "./EventPage";
