@@ -12,7 +12,7 @@ export type createTableColumns = {
 	dataIndex: string;
 	key: string;
 	fixed?: "left" | "right" | undefined; 
-	displayAs?: (text: any) => JSX.Element;
+	displayAs?: (text: any, record: any) => JSX.Element;
 	width?: number | string;
 	align?: "left" | "right" | "center";
 	filters?: { text: string; value: string }[];
