@@ -2,9 +2,13 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import "../styles/LoginPage.css";
-import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
+// import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import Login from "../assets/login.svg"
+import LoginLogo from "../assets/loginlogo.png"
+
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -55,13 +59,15 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-page">
+      <div className="image-container"><img src={Login} alt="Logo"/></div>
       <Form
         name="normal-login"
         className="login-form"
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
-        <NavigationMenuLogo logotext={"HRSoftware"} />
+        <img src={LoginLogo} className="loginlogo"></img>
+        <div className="login-inputs">
         <h2 className="login-title">Login</h2>
         <Form.Item
           name="username"
@@ -98,6 +104,7 @@ const LoginPage: React.FC = () => {
             Log in
           </Button>
         </Form.Item>
+        </div>
       </Form>
     </div>
   );
