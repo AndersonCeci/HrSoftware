@@ -31,7 +31,7 @@ export function createTableColumns({
 		title: title,
 		dataIndex: dataIndex,
 		key: key,
-		render: (text: any) => (displayAs ? displayAs(text) : text),
+		render: (text: any, record: any) => (displayAs ? displayAs(text, record) : text),
 		fixed: fixed,
 		width: width,
 		align: align,
@@ -74,13 +74,6 @@ const Table = ({ data, columns, fixed = false }: TablePropsType) => {
 			bordered
 			size="small"
 			scroll={{ x: fixed ? 1500 : undefined }}
-			onRow={(record) => {
-				return {
-					onClick: () => {
-						console.log(record);
-					},
-				};
-			}}
 		/>
 	);
 };
