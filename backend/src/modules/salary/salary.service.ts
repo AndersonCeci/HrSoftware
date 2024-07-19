@@ -1,9 +1,9 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose  from 'mongoose';
 import { Salary } from './schema/salary.schema';
-import { SalaryDTO } from './salaryDTO/salary.dto';
-import { UpdateSalaryDTO } from './salaryDTO/updateSalary.dto';
+import { SalaryDTO } from './dto/salaryDTO/salary.dto';
+import {  UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
 
 @Injectable()
 export class SalaryService {
@@ -64,22 +64,7 @@ export class SalaryService {
     }
   }
 
-  async addBonus(userId: string, bonus: Record<string, number>): Promise<Salary> {
-    try {
-      const update = {};
-      const bonusMap = new Map(Object.entries(bonus));
-      
-      bonusMap.forEach((value, key) => {
-        update[`bonuses.${key}`] = value;
-      });
-
-      return await this.salaryModel.findOneAndUpdate(
-        { employeeID: userId },
-        { $set: update },
-        { new: true, upsert: true }
-      );
-    } catch (error) {
-      throw new Error('Failed to add bonus');
-    }
+  async clearBonuses(): Promise<void> {
+    await this.salaryModel.updateMany({}, { $set: { bonuses: [] } });
   }
 }
