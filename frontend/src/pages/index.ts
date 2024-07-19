@@ -5,7 +5,7 @@ import NotificationPage from "./NotificationPage";
 import EventPage from "./EventPage";
 import AssetsPage from "./Assets/AssetsPage";
 import OrganisationalStructurePage from "./OrganisationalStructurePage";
-import SalariesPage from "./SalariesPage";
+import SalariesPage from "./Salary/SalariesPage";
 import DayOffPage from "./DayOffPage";
 import PromotionPage from "./PromotionPage";
 import RecruitmentPage from "./RecruitmentPage";
