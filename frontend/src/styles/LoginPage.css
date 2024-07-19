@@ -9,23 +9,6 @@
     align-items: center; 
 }
 
-.Logo{ 
-    width: auto;
-    height: auto;
-    background-image: url(../assets/loginlogo.png);
-}
-
-/* .image {
-    width: 500px;
-    height: 375px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-} */
-
-.login-form {
-    width: 500px;
-    height: 375px;
-}
 .image-container {
     width: 375px;
     height: 450px;
