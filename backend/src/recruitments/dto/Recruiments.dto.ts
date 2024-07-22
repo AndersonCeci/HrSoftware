@@ -21,11 +21,14 @@ export class CreateRecruitmentDto {
   readonly position: string;
 
   @IsNotEmpty()
-  @IsEnum(['approved', 'rejected', '1st interview', '2nd interview'], {
-    message:
-      'Stage must be one of the following: approved, rejected, 1st interview, 2nd interview',
-  })
-  readonly stage: 'approved' | 'rejected' | '1st interview' | '2nd interview';
+  @IsEnum(
+    ['Applied', 'Rejected', '1st Interview', '2nd Interview', 'Offer Made'],
+    {
+      message:
+        'Stage must be one of the following: Approved, Rejected, 1st Interview, 2nd Interview',
+    },
+  )
+  readonly stage: 'Approved' | 'Rejected' | '1st Interview' | '2nd Interview';
 
   @IsOptional()
   @IsString()
@@ -33,5 +36,7 @@ export class CreateRecruitmentDto {
 
   @IsOptional()
   @IsString()
-  readonly cv?: string; 
+  readonly cv?: string;
+
+  submittedDate: Date;
 }

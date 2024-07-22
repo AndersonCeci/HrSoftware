@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { SalaryService } from './salary.service'; 
-import { SalaryDTO } from './salaryDTO/salary.dto';
-import { UpdateSalaryDTO } from './salaryDTO/updateSalary.dto';
+import { SalaryDTO } from './dto/salaryDTO/salary.dto';
+import {  UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
 
 
 @Controller('salary')
@@ -10,38 +10,34 @@ export class SalaryController {
 
   @Post()
   async create(@Body() salaryDTO: SalaryDTO) {
-    return await  this.salaryService.create(salaryDTO);
+    return await this.salaryService.create(salaryDTO);
   }
 
   @Get()
-async getAllSalaries(){
-  return await this.salaryService.getAllSalaries()
-}
+  async getAllSalaries() {
+    return await this.salaryService.getAllSalaries();
+  }
 
   @Get(":id")
-  async findById(@Param("id") id:string) {
+  async findById(@Param("id") id: string) {
     return await this.salaryService.find(id);
   }
+
   @Put(':userId')
   async updateSalary(
     @Param('userId') userId: string,
     @Body() updateSalaryDto: UpdateSalaryDTO
   ) {
+    console.log(updateSalaryDto);
     return await this.salaryService.updateSalary(userId, updateSalaryDto);
   }
 
-  @Put(':userId/bonuses')
-  async addBonus(
-    @Param('userId') userId: string,
-    @Body() bonus: Record<string, number>
-  ) {
-    return await this.salaryService.addBonus(userId, bonus);
-  }
+
+
   @Delete(":userId")
   async deleteSalary(
     @Param('userId') userId: string,
-  ){
-  return await this.salaryService.deleteSalary(userId)
+  ) {
+    return await this.salaryService.deleteSalary(userId);
   }
 }
-

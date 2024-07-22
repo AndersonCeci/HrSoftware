@@ -2,16 +2,18 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-
+import { AuthModule } from './auth/auth.module';
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
 import { EmployeeModule } from './employee/employe.module';
-import { LeftService } from './left/left.service';
 import { LeftModule } from './left/left.module';
+import { AssetsModule } from './assets/assets.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
+import { LeftService } from './left/left.service';
 
 @Module({
   imports: [
@@ -20,13 +22,16 @@ import { LeftModule } from './left/left.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
+    ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
     UsersModule,
     RecruimentsModule,
     AuthModule,
-    SalaryModule,
+   SalaryModule,
     EventsModule,
     EmployeeModule,
-    LeftModule
+    LeftModule,
+    AssetsModule
   ],
   controllers: [],
   providers: [AppService, LeftService],

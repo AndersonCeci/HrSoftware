@@ -5,10 +5,11 @@ type SelectProps = {
 		value: string;
 		label: string;
 	}[];
-	placeholder: string;
-	onChange: (value: string) => void;
+	placeholder?: string;
+	onChange?: (value: string) => void;
 	value: string;
 	disabled?: boolean;
+	defaultValue?: string;
 };
 
 const Select = ({ options, ...props }: SelectProps) => {
