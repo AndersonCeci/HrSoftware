@@ -24,7 +24,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     UsersModule,
     RecruimentsModule,
     AuthModule,
-    SalaryModule,
+   SalaryModule,
     EventsModule,
     AssetsModule
   ],

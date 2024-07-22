@@ -1,14 +1,5 @@
-import { ButtonSize, ButtonType } from "../enums/Button";
+import { ButtonProps } from "antd";
 
-export type ButtonProps = {
-	children?: React.ReactNode | undefined;
-	onClick?: () => void;
-	size?: ButtonSize;
-	icon?: React.ReactNode | undefined;
-	type?: ButtonType;
-	ghost?: boolean;
-	danger?: boolean;
-	block?: boolean;
-	disabled?: boolean;
-	style?: React.CSSProperties;
-};
+export interface CustomButtonProps extends ButtonProps {
+  children?: React.ReactNode;
+}
