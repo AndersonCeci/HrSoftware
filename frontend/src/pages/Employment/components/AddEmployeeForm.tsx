@@ -5,8 +5,8 @@ import { FaUserCheck } from "react-icons/fa";
 import { IoDocumentOutline } from "react-icons/io5";
 import { CiCircleCheck } from "react-icons/ci";
 import { FaCircleCheck } from "react-icons/fa6";
-import dayjs from "dayjs";
 import { BsPencilSquare } from "react-icons/bs";
+import dayjs from "dayjs";
 import FirstPanel from "./FirstPanel";
 import SecondStep from "./SecondStep";
 import FinalStep from "./FinalStep";
@@ -144,7 +144,7 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 				</Form>
 			</Content>
 			<Sider theme={"light"}>
-				<Steps direction="vertical" current={current} responsive items={item} />
+				<Steps direction="vertical" current={current} items={item} />
 			</Sider>
 		</Layout>
 	);

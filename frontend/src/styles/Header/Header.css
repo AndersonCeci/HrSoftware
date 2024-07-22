@@ -23,3 +23,11 @@
         scale: 2.1;
     }
 }
+
+@media screen and (max-width: 476px){
+    .header-icons-list{
+        justify-content: start;
+        padding: 0 35px;
+    }
+    
+}

@@ -1,16 +1,5 @@
 import { useState } from "react";
-
-export type RequestConfigType = {
-	url: string;
-	method?: string;
-	headers?: any;
-	body?: any;
-};
-
-export type sendRequestType = (
-	requestConfig: RequestConfigType,
-	applyData?: (data: any) => void, 
-) => void;
+import { sendRequestType } from "../types/UseHttpTypes";
 
 export default function useHttp() {
 	const [isLoading, setIsLoading] = useState(false);

@@ -1,4 +1,5 @@
-import { Result, Spin } from "antd";
+import { Result } from "antd";
+import Loader from "../../../components/Shared/Loader";
 import { ResultStatusType } from "antd/lib/result";
 import Button from "../../../components/Shared/Button";
 
@@ -11,14 +12,14 @@ const FinalStep = ({ isSubmitting, error }: FinalStepProps) => {
 	return !isSubmitting ? (
 		<>
 			<Result
-				status={error ? "error" : ("success" as ResultStatusType)}
+				status={error ? "error" : "success"}
 				title={error ? "There was an error submitting the form" : "Your form has been submitted"}
 				extra={[]}
 			/>
 			<Button></Button>
 		</>
 	) : (
-		<Spin />
+		<Loader />
 	);
 };
 

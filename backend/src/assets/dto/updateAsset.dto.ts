@@ -1,16 +1,13 @@
-import { IsDateString, IsOptional, IsString,IsNumber } from "class-validator";
+import { IsDateString, IsOptional, IsString, IsNumber } from 'class-validator';
 
-export class UpdateAssetDto{
-    @IsOptional()
-    assetType?:string
-    
+export class UpdateAssetDto {
+  @IsOptional()
+  assetType?: string;
 
-    
-    @IsOptional()
-    dateGiven?: string;
+  @IsOptional()
+  dateGiven?: string;
 
-    @IsString()
-    @IsOptional()
-    userName?: string;
+  @IsString()
+  @IsOptional()
+  userName?: string;
 }
-

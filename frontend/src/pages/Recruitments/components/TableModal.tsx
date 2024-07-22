@@ -2,6 +2,7 @@ import { Form, Input, Modal, Select } from "antd";
 
 import { useRef, useEffect } from "react";
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
+import TextField from "../../../components/Shared/TextField";
 
 type EditModalProps = {
   open: boolean;
@@ -47,20 +48,19 @@ const TableModal: React.FC<EditModalProps> = ({
         layout="vertical"
         onFinish={onSubmit}
       >
-        <Form.Item
+        <TextField
           label="Name"
-          name="name"
-          rules={[{ required: true, message: "Please enter a name" }]}
-        >
-          <Input size="large" placeholder="Enter the name" />
-        </Form.Item>
-        <Form.Item
-          label="Email"
-          name="email"
+          name={"name"}
+          placeholder="Name"
+          size="large"
           rules={[{ required: true, message: "Please enter an email" }]}
-        >
-          <Input size="large" placeholder="Enter an email" />
-        </Form.Item>
+        />
+        <TextField
+          label={"Email"}
+          name={"email"}
+          rules={[{ required: true, message: "Please enter an email" }]}
+          placeholder="Enter an email"
+        />
         <Form.Item
           label="Stage"
           name="stage"
@@ -68,24 +68,12 @@ const TableModal: React.FC<EditModalProps> = ({
         >
           <Select options={options} placeholder="Select a stage" />
         </Form.Item>
-        <Form.Item
-          label="Position"
-          name="position"
-          rules={[{ required: true, message: "Please enter an email" }]}
-        >
-          <Input size="large" placeholder="Position" />
-        </Form.Item>
-        {/* <Form.Item label="Upload CV" name="cv">
-          <Input
-            onChange={(e) => handleUploadFile(e.target.files[0])}
-            type="file"
-            size="large"
-            placeholder="Upload CV..."
-          />
-        </Form.Item> */}
-        <Form.Item label="Reference" name="reference">
-          <Input size="large" placeholder="Reference" />
-        </Form.Item>
+        <TextField label="Position" name={"position"} placeholder="Position" />
+        <TextField
+          label="Reference"
+          name={"reference"}
+          placeholder="Position"
+        />
       </Form>
     </Modal>
   );

@@ -6,7 +6,7 @@ const Header = ({ first, second, third }: HeaderProps) => {
 	return (
 		<Row align={"middle"} justify={"center"} className="header">
 			{first && (
-				<Col xs={{ span: 24 }} md={{ span: 8 }} >
+				<Col xs={{ span: 12 }} md={{ span: 8 }} >
 					<Flex justify={"start"} align="flex-start">
 						{first}
 					</Flex>

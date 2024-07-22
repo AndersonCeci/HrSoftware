@@ -101,7 +101,7 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
       </Dropdown>
     ),
     fixed: "right",
-    width: 30,
+    width: 40,
   }),
 ];
 
