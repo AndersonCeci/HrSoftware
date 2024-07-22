@@ -2,9 +2,9 @@ import Select from "../../../components/Shared/Select";
 import { Form, DatePicker, AutoComplete } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useContext, useRef, useImperativeHandle, forwardRef } from "react";
-import { AssetContext } from "../context/asset-context";
+import { useRef, useImperativeHandle, forwardRef } from "react";
 import type { AddAssetFormProps, RangePickerProps } from "../types/AddAssetsForm";
+import { HTTP } from "../Enum/http";
 
 dayjs.extend(customParseFormat);
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
@@ -14,6 +14,40 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 const AddAssetForm = forwardRef(
 	({ availableOptions = [], availableEmployees, onSuccess }: AddAssetFormProps, ref) => {
 		const formRef = useRef<any>();
+		const availableAssets = [
+			{
+				value: "Laptop",
+				label: "Laptop",
+			},
+			{
+				value: "Monitor",
+				label: "Monitor",
+			},
+			{
+				value: "Keyboard",
+				label: "Keyboard",
+			},
+			{
+				value: "Mouse",
+				label: "Mouse",
+			},
+			{
+				value: "Headphones",
+				label: "Headphones",
+			},
+			{
+				value: "Phone",
+				label: "Phone",
+			},
+			{
+				value: "Tablet",
+				label: "Tablet",
+			},
+			{
+				value: "Other",
+				label: "Other",
+			},
+		];
 
 		useImperativeHandle(ref, () => ({
 			submit: () => {
@@ -25,23 +59,44 @@ const AddAssetForm = forwardRef(
 
 		function onChanges(value: any, identifier: string) {
 			form.setFieldsValue({ [identifier]: value });
-			// setNewAsset(identifier, value);
 		}
 
 		function handleSubmit(values: any) {
 			console.log(values);
-			const { type, date, employee } = values;
+			const { assetType, dateGiven, userName } = values;
 
 			const newAsset = {
-				id: Math.floor(Math.random() * 1000),
-				type: type,
-				date: `${dayjs(date).format("DD/MM/YYYY")}`,
-				employee: employee,
-				code: Math.floor(Math.random() * 100),
+				assetType: assetType,
+				dateGiven: `${dateGiven.$D}/${dateGiven.$M + 1}/${dateGiven.$y}`,
+				userName: userName,
 			};
 
+			console.log(newAsset);
+			// console.log( typeof newAsset.date)
 
-			onSuccess(newAsset);
+			async function handleAssetAdd(newAsset: any) {
+				try {
+					const response = await fetch(HTTP.ADDASSET, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(newAsset),
+					});
+
+					if (!response.ok) {
+						throw new Error("Failed to add asset");
+					}
+
+					const data = await response.json();
+
+					onSuccess(data);
+				} catch (error) {
+					console.error(error);
+				}
+			}
+
+			handleAssetAdd(newAsset);
 		}
 
 		return (
@@ -58,52 +113,49 @@ const AddAssetForm = forwardRef(
 			>
 				<Form.Item
 					label="Type"
-					name="type"
+					name="assetType"
 					rules={[{ required: true, message: "Please select type!" }]}
 				>
 					<Select
-						options={availableOptions.map((option) => ({
-							value: option.value,
-							label: option.label,
-						}))}
+						options={availableAssets}
 						placeholder="Select type"
-						value={form.getFieldValue("type")}
-						onChange={(value) => onChanges(value, "type")}
+						value={form.getFieldValue("assetType")}
+						onChange={(value) => onChanges(value, "assetType")}
 					/>
 				</Form.Item>
 
 				<Form.Item
 					label="Date"
-					name="date"
+					name="dateGiven"
 					rules={[{ required: true, message: "Please select date!" }]}
 				>
 					<DatePicker
 						style={{ width: "100%" }}
 						size="large"
 						format="DD/MM/YYYY"
-						
 						disabledDate={disabledDate}
-						value={form.getFieldValue("date")}
-						onChange={(value) => onChanges(value, "date")}
+						value={form.getFieldValue("dateGiven")}
+						onChange={(value) => onChanges(value, "dateGiven")}
 					/>
 				</Form.Item>
 
 				<Form.Item
 					label="Employee"
-					name="employee"
+					name="userName"
 					rules={[{ required: true, message: "Please select employee!" }]}
 				>
 					<AutoComplete
-						options={availableEmployees?.map((option) => ({
-							value: option.value,
-						}))}
+						// options={availableEmployees?.map((option) => ({
+						// 	value: option.value,
+						// }))}
+						// options={[]}
 						placeholder="Select employee"
 						size="large"
-						value={form.getFieldValue("employee")}
-						onChange={(value) => onChanges(value, "employee")}
-						filterOption={(inputValue, option) =>
-							option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-						}
+						value={form.getFieldValue("userName")}
+						onChange={(value) => onChanges(value, "userName")}
+						// filterOption={(inputValue, option) =>
+						// 	option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+						// }
 					/>
 				</Form.Item>
 			</Form>
