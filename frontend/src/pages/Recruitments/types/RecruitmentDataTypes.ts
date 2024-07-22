@@ -1,5 +1,5 @@
 export interface RecrutmentDataType {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   position: string;

@@ -3,7 +3,6 @@ import { Form, Input, Modal, Select } from "antd";
 import { useRef, useEffect } from "react";
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
 
-
 type EditModalProps = {
   open: boolean;
   onClose: () => void;
@@ -11,6 +10,7 @@ type EditModalProps = {
   onSubmit: (values: RecrutmentDataType) => void;
   data: RecrutmentDataType | null;
   options: { value: string; label: string }[];
+  handleUploadFile?: () => void;
 };
 
 const TableModal: React.FC<EditModalProps> = ({
@@ -20,14 +20,14 @@ const TableModal: React.FC<EditModalProps> = ({
   onSubmit,
   data,
   options,
+  handleUploadFile,
 }) => {
-    const [ form ] = Form.useForm();
-    const formRef = useRef<RecrutmentDataType>(null);
-    
+  const [form] = Form.useForm();
+  const formRef = useRef<RecrutmentDataType>(null);
+
   useEffect(() => {
-    if ( data )
-    {
-      console.log(data)
+    if (data) {
+      console.log(data);
       form.setFieldsValue(data);
     }
   }, [data, form]);
@@ -38,8 +38,15 @@ const TableModal: React.FC<EditModalProps> = ({
       title={modalTitle}
       onOk={() => form.submit()}
       onCancel={onClose}
+      destroyOnClose
     >
-      <Form ref={formRef} form={form} layout="vertical" onFinish={onSubmit}>
+      <Form
+        initialValues={{ remember: true }}
+        ref={formRef}
+        form={form}
+        layout="vertical"
+        onFinish={onSubmit}
+      >
         <Form.Item
           label="Name"
           name="name"
@@ -68,10 +75,15 @@ const TableModal: React.FC<EditModalProps> = ({
         >
           <Input size="large" placeholder="Position" />
         </Form.Item>
-        <Form.Item
-          label="Reference"
-          name="reference"
-        >
+        {/* <Form.Item label="Upload CV" name="cv">
+          <Input
+            onChange={(e) => handleUploadFile(e.target.files[0])}
+            type="file"
+            size="large"
+            placeholder="Upload CV..."
+          />
+        </Form.Item> */}
+        <Form.Item label="Reference" name="reference">
           <Input size="large" placeholder="Reference" />
         </Form.Item>
       </Form>

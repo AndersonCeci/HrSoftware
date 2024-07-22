@@ -1,5 +1,5 @@
 export type RecrutmentDataType = {
-	id: number;
+	_id: string;
 	name: string;
 	email: string;
 	position: string;

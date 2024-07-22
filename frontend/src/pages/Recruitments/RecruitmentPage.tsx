@@ -6,18 +6,20 @@ import Select from "../../components/Shared/Select";
 import Button from "../../components/Shared/Button";
 import TableHeader from "../../components/Table/TableHeader";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
-import { TableProps, Dropdown } from "antd";
+import { TableProps, Dropdown, Form } from "antd";
 import type { RecrutmentDataType } from "../../types/Recrutment";
 import { useEffect, useState } from "react";
 import TableModal from "./components/TableModal";
+import { IoDocumentAttach } from "react-icons/io5";
 
 const RecruitmentPage: React.FC = () => {
   const [tableData, setTableData] = useState<RecrutmentDataType[]>([]);
   const [editingRecord, setEditingRecord] = useState<RecrutmentDataType | null>(
     null
   );
+  const [form] = Form.useForm();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-
+  console.log(editingRecord, "editinggggRecorddd");
   useEffect(() => {
     const fetchRecruitments = async () => {
       try {
@@ -40,22 +42,21 @@ const RecruitmentPage: React.FC = () => {
   }, []);
 
   const selectOption = [
-    "First Interview",
-    "Second Interview",
-    "Final Interview",
     "Applied",
+    "Rejected",
+    "1st Interview",
+    "2nd Interview",
     "Offer Made",
   ];
 
-  const handleEdit = ( record: RecrutmentDataType ) =>
-  {
-    console.log(record, 'recordd')
+  const handleEdit = (record: RecrutmentDataType) => {
     setEditingRecord(record);
     setIsEditModalVisible(true);
   };
 
   const handleDelete = async (id: string) => {
     try {
+      console.log(id, "iddd");
       const response = await fetch(`http://localhost:3000/recruiments/${id}`, {
         method: "DELETE",
         headers: {
@@ -68,7 +69,7 @@ const RecruitmentPage: React.FC = () => {
       }
 
       setTableData((prevData) =>
-        prevData.filter((item: RecrutmentDataType) => item.id !== id)
+        prevData.filter((item: RecrutmentDataType) => item._id !== id)
       );
     } catch (error) {
       console.error("Error deleting recruitment:", error);
@@ -86,6 +87,14 @@ const RecruitmentPage: React.FC = () => {
         filter.name.toLowerCase().includes(inputValue.toLowerCase()),
     }),
     createTableColumns({
+      title: "Resume",
+      dataIndex: "cv",
+      key: "cv",
+      displayAs: (value) => (
+        <IoDocumentAttach onClick={() => console.log(value)} />
+      ),
+    }),
+    createTableColumns({
       title: "Position",
       dataIndex: "position",
       key: "position",
@@ -94,8 +103,8 @@ const RecruitmentPage: React.FC = () => {
     }),
     createTableColumns({
       title: "Application Phase",
-      dataIndex: "applicationPhase",
-      key: "applicationPhase",
+      dataIndex: "stage",
+      key: "stage",
       displayAs: (value) => (
         <Select
           options={selectOption.map((option) => ({
@@ -125,48 +134,106 @@ const RecruitmentPage: React.FC = () => {
       title: "Action",
       dataIndex: "_id",
       key: "action",
-      displayAs: (record) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "Edit",
-                label: <Button onClick={() => handleEdit(record)}>Edit</Button>,
-              },
-              {
-                key: "Delete",
-                label: (
-                  <Button danger onClick={() => handleDelete(record)}>
-                    Delete
-                  </Button>
-                ),
-              },
-            ],
-          }}
-          trigger={["click"]}
-        >
-          <Button icon={<MoreOutlined />} />
-        </Dropdown>
-      ),
+      displayAs: (text, record) => {
+        return (
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "Edit",
+                  label: (
+                    <Button onClick={() => handleEdit(record)}>Edit</Button>
+                  ),
+                },
+                {
+                  key: "Delete",
+                  label: (
+                    <Button danger onClick={() => handleDelete(record._id)}>
+                      Delete
+                    </Button>
+                  ),
+                },
+              ],
+            }}
+            trigger={["click"]}
+          >
+            <Button icon={<MoreOutlined />} />
+          </Dropdown>
+        );
+      },
       fixed: "right",
       width: 30,
     }),
   ];
+
+  const handleSubmit = async (values: RecrutmentDataType) => {
+    try {
+      const url = editingRecord
+        ? `http://localhost:3000/recruiments/${editingRecord._id}`
+        : "http://localhost:3000/recruiments";
+      const method = editingRecord ? "PATCH" : "POST";
+      console.log(method, "methodd");
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        const newData = await response.json();
+        setTableData((prevData) =>
+          editingRecord
+            ? prevData.map((item) =>
+                item._id === editingRecord._id ? newData : item
+              )
+            : [...prevData, newData]
+        );
+      } else {
+        console.error(
+          `Failed to ${editingRecord ? "update" : "create"} recruitment`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Error ${editingRecord ? "updating" : "creating"} recruitment:`,
+        error
+      );
+    } finally {
+      setIsEditModalVisible(false);
+      setEditingRecord(null);
+      form.resetFields();
+    }
+  };
+
+  const handleOnClose = () => {
+    setIsEditModalVisible(false);
+  };
+
+  const handleUploadFile = (e) =>
+  {
+    console.log(e, 'fileeeee')
+  }
+
   return (
     <section className="test">
-      <TableHeader title="Recrutment" />
+      <TableHeader
+        title="Recrutment"
+        onClick={() => setIsEditModalVisible(true)}
+      />
       <Table columns={columns} data={tableData} fixed />
       <TableModal
-        open={isEditModalVisible}
-        onClose={() => setIsEditModalVisible(false)}
-        onSubmit={() => console.log("testt")}
-        data={editingRecord}
-        options={selectOption.map((option) => ({
+        open={ isEditModalVisible }
+        onClose={ handleOnClose }
+        onSubmit={ handleSubmit }
+        data={ editingRecord }
+        options={ selectOption.map( ( option ) => ( {
           value: option,
           label: option,
-        }))}
-        modalTitle={"Edit Recruitment"}
-      />
+        } ) ) }
+        modalTitle={ editingRecord ? "Edit Recruitment" : "Create New Recruitment" }
+        handleUploadFile={handleUploadFile}  />
     </section>
   );
 };
