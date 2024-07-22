@@ -38,6 +38,9 @@ export class Employee extends Document {
 
   @Prop()
   salary: number;
+
+  @Prop({ default: false })  
+  isDeleted: boolean;
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);

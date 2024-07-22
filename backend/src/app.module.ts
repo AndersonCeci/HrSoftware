@@ -9,6 +9,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
+import { EmployeeModule } from './employee/employe.module';
+import { LeftService } from './left/left.service';
+import { LeftModule } from './left/left.module';
 
 @Module({
   imports: [
@@ -22,9 +25,11 @@ import { RecruimentsModule } from './recruitments/recruitments.module';
     AuthModule,
     SalaryModule,
     EventsModule,
+    EmployeeModule,
+    LeftModule
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, LeftService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

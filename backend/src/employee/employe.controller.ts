@@ -8,10 +8,12 @@ import {
   Delete,
   ValidationPipe,
   UsePipes,
+  HttpException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
+import mongoose from 'mongoose';
 
 @Controller('employees')
 export class EmployeeController {
@@ -30,6 +32,11 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
+  // @Get('/left')
+  //  findLeft(): Promise<Employee[]> {
+  //   return this.employeeService.findLeft();
+  // }
+
   @Get(':id')
    findOne(@Param('id') id: string): Promise<Employee | null> {
     return this.employeeService.findOne(id);
@@ -44,7 +51,13 @@ export class EmployeeController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Employee | null> {
-    return this.employeeService.delete(id);
+  async softDeleteById(@Param('id') id: string) {
+    const isValid = mongoose.Types.ObjectId.isValid(id);
+    if (!isValid) throw new HttpException('Invalid ID', 404);
+    const result = await this.employeeService.softDeleteAssetById(id);
+    if (!result) {
+      throw new HttpException('No assets found for the given ID', 404);
+    }
+    return result;
   }
 }
