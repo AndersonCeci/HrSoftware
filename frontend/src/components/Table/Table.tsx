@@ -14,18 +14,18 @@ export function getAllUniqueValues(array: any[], key: string) {
 }
 
 export function createTableColumns({
-	title,
-	dataIndex,
-	key,
-	fixed,
-	displayAs,
-	width = 90,
-	align = "center",
-	filters,
-	filterSearch,
-	filterIcon,
-	filterDropdown = false,
-	onFilter,
+  title,
+  dataIndex,
+  key,
+  fixed,
+  displayAs,
+  width = 90,
+  align = "center",
+  filters,
+  filterSearch,
+  filterIcon,
+  filterDropdown = false,
+  onFilter,
 }: createTableColumns) {
 	return {
 		title: title,
