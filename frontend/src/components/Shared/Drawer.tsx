@@ -7,6 +7,7 @@ type DrawerProps = {
 	onClose?: () => void;
 	closeIcon?: boolean | null;
 	size?: "default" | "large";
+	title?: string;
 };
 
 const Drawer = ({
@@ -14,18 +15,20 @@ const Drawer = ({
 	isOpen,
 	placement = "bottom",
 	onClose,
-	// closeIcon = null,
+	closeIcon,
 	size = "default",
+	title,
 }: DrawerProps) => {
 	return (
 		<AntDrawer
-			// closeIcon={closeIcon}
+			height={400}
+			closeIcon={closeIcon}
 			onClose={onClose}
 			destroyOnClose
 			open={isOpen}
 			placement={placement}
 			size={size}
-            
+			title={title}
 		>
 			{children}
 		</AntDrawer>

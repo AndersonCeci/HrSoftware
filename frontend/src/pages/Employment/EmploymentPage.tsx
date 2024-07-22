@@ -5,65 +5,63 @@ import AddEmployeeForm from "./components/AddEmployeeForm";
 import dummydataemployee from "../../utils/dummydataemployee";
 import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
-
-// import CreateEmployeDrawer from "../../components/Employment/CreateEmployeeDrawer";
-
 import { getColumns } from "./utils/EmployeeColumn";
-// import CreateEmployeDrawer from "../../components/Employment/CreateEmployeeDrawer";
 
 const EmploymentPage: React.FC = () => {
 	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
 	const [open, setOpen] = useState(false);
-	const [isEditable, setIsEditable] = useState(false);
-	const [editedEmployee, setEditedEmployee] = useState<EmployeeDataType>();
+	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
 
 	useEffect(() => {
 		setTableData(dummydataemployee);
 	}, []);
 
-	function handleModalClose() {
-		setOpen(false);
+	function handleEditButtonClick(record: EmployeeDataType) {
+		console.log(record);
+		setEditedData(record);
+		setOpen(true);
 	}
 
-	const onEditEmployee = (record: EmployeeDataType) => {
-		setOpen(true);
-		console.log(record, "record");
-		// form.setFieldsValue({
-		//   name:record.name,
-		//   email:record.email,
-		//   position: record.position,
-		// })
+	function handleAddNewEmployee(newEmployee: EmployeeDataType) {
+		setTableData((prev) => [...prev, newEmployee]);
+	}
 
-		setEditedEmployee(record);
-	};
+	function handleEditEmployee(editedEmployee: EmployeeDataType) {
+		setTableData((prev) =>
+			prev.map((item) => {
+				if (item.id === editedEmployee.id) {
+					return editedEmployee;
+				}
+				return item;
+			}),
+		);
+	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleEditSubmit = (values: any) => {
-		// const updatedTask = {
-		//   ...editedEmployee,
-		//   ...values,
-		// };
-		// setTableDate((prev) =>
-		//   prev.map((employee) =>
-		//     employee.id === editedEmployee.id ? (updatedTask as EmployeeDataType) : employee
-		//   )
-		// );
-		// setIsEditable(false);
-	};
+	function handleDeleteButtonClick(id: number) {
+		setTableData((prev) => prev.filter((item) => item.id !== id));
+	}
 
-	const columns = getColumns(tableData);
+	function handlClose() {
+		setOpen(false);
+		setEditedData(undefined);
+	}
 
-	console.log(editedEmployee, "stateeeeeeee");
-	//  console.log(editedEmployee.name?.split(" ")[0], "HELLO JOHN");
+	const columns = getColumns(tableData, handleEditButtonClick, handleDeleteButtonClick);
+
 	return (
-		<section className="test">
-			<Drawer isOpen={open} onClose={handleModalClose}>
-				<AddEmployeeForm />
+		<>
+			<Drawer isOpen={open} onClose={handlClose}>
+				<AddEmployeeForm
+					selectedEmployee={editedData}
+					onAdd={handleAddNewEmployee}
+					onEdit={handleEditEmployee}
+				/>
 			</Drawer>
 			<TableHeader title="Employment" onClick={() => setOpen(true)} />
-			<Table columns={columns} data={tableData} />
-			{/* <CreateEmployeDrawer open={open} setOpen={setOpen} selectedEmployee={editedEmployee} /> */}
-		</section>
+			<section className="test">
+				<Table columns={columns} data={tableData} fixed />
+			</section>
+		</>
 	);
 };
 

@@ -19,8 +19,8 @@ export function createTableColumns({
 	key,
 	fixed,
 	displayAs,
-	width = 90,
-	align = "center",
+	width = 100,
+	align = "left",
 	filters,
 	filterSearch,
 	filterIcon,
@@ -37,23 +37,25 @@ export function createTableColumns({
 		align: align,
 		filters: filters,
 		filterSearch: filterSearch,
-		filterDropdown: filterDropdown ? ({ setSelectedKeys, selectedKeys, confirm } : any) => (
-			<Input
-				autoFocus
-				placeholder="Search name"
-				value={selectedKeys[0]}
-				size="large"
-				onChange={(e) => {
-					setSelectedKeys(e.target.value ? [e.target.value] : []);
-				}}
-				onPressEnter={() => {
-					confirm();
-				}}
-				onBlur={() => {
-					confirm();
-				}}
-			/>
-		) : undefined,
+		filterDropdown: filterDropdown
+			? ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+					<Input
+						autoFocus
+						placeholder="Search name"
+						value={selectedKeys[0]}
+						size="large"
+						onChange={(e) => {
+							setSelectedKeys(e.target.value ? [e.target.value] : []);
+						}}
+						onPressEnter={() => {
+							confirm();
+						}}
+						onBlur={() => {
+							confirm();
+						}}
+					/>
+			  )
+			: undefined,
 		filterIcon: filterIcon,
 		onFilter: onFilter,
 	};
@@ -64,8 +66,7 @@ const Table = ({ data, columns, fixed = false }: TablePropsType) => {
 		<T
 			rowKey={(record) => record.id}
 			locale={{
-				emptyText:
-					"The philosophical importance of ducks in programming transcends their literal presence. They serve as symbols and tools that enhance problem-solving, embody simplicity and elegance, promote mindfulness, and encourage effective communication. The humble duck, in its various forms and metaphors, provides valuable lessons that enrich the practice of programming and elevate it from a technical skill to an art form. By embracing the wisdom of ducks, programmers can navigate the complexities of code with grace, clarity, and collaboration, ultimately creating software that is both beautiful and functional.",
+				emptyText: "No data available in table. Please check if you have added data to the table. ",
 			}}
 			pagination={{ position: ["bottomLeft"] }}
 			className="information-table-of-doom-and-despair-des-pa-sito "

@@ -9,4 +9,6 @@ export type ButtonProps = {
 	ghost?: boolean;
 	danger?: boolean;
 	block?: boolean;
+	disabled?: boolean;
+	style?: React.CSSProperties;
 };
