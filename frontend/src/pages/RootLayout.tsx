@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 
 const RootLayout: React.FC = () => {
 	const [colapsed, setColapsed] = useState<boolean>(false);
+	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const navigate = useNavigate();
 	
 	useEffect(() => {
@@ -50,8 +51,25 @@ const RootLayout: React.FC = () => {
 
 	function onCollapse(collapsed: boolean) {
 		console.log(collapsed);
-		setColapsed(prev => !prev);
+		setColapsed((prev) => !prev);
 	}
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 768) {
+				setColapsed(true);
+				setIsMobile(true);
+			} else {
+				setColapsed(false);
+				setIsMobile(false);
+			}
+		};
+
+		window.addEventListener("resize", handleResize);
+		handleResize();
+
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
 	return (
 		<Layout>
@@ -78,7 +96,7 @@ const RootLayout: React.FC = () => {
 							}
 						}
 						theme="light"
-						trigger={<Trigger colapsed={colapsed} />}
+						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
 					>
 						{!colapsed && <LogedUserPanel />}
 						<NavigationMenu />

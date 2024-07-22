@@ -10,11 +10,19 @@ type ModalProps = {
 	onOk?: () => void | undefined;
 	onCancel?: () => void | undefined;
 	isOpen: boolean;
+	title?: string;
 };
 
-const Modal = ({ children, onOk, onCancel, isOpen }: ModalProps) => {
+const Modal = ({ children, onOk, onCancel, isOpen, title }: ModalProps) => {
 	return (
-		<AntModal destroyOnClose open={isOpen} onCancel={onCancel} onOk={onOk} footer={null}>
+		<AntModal
+			title={title}
+			destroyOnClose
+			open={isOpen}
+			onCancel={onCancel}
+			onOk={onOk}
+			footer={null}
+		>
 			{children}
 			<Flex justify="flex-end">
 				{onCancel && (

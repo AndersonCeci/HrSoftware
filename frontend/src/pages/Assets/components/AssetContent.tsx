@@ -1,73 +1,45 @@
 import Table, { getAllUniqueValues } from "../../../components/Table/Table";
 import TableHeader from "../../../components/Table/TableHeader";
 import Modal from "../../../components/Shared/Modal";
-import AddAssetForm from "./AddAssetForm";
-import EditAssetForm from "./EditAssetForm";
+import AssetForm from "./AssetForm";
 import { AssetDatatype } from "../types/AssetsDataType";
 
 import { useState, useEffect, useRef } from "react";
 import { HTTP } from "../Enum/http";
+import useHttp from "../../../hooks/useHttp";
 
 import { getColumns } from "../utils/AssetsColumn";
 
 const AssetContent = () => {
 	const [tableData, setTableData] = useState<AssetDatatype[]>([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-	const formRef = useRef<any>();
 	const editFormRef = useRef<any>();
+	const [isLoading, error, sendRequest] = useHttp();
 	const [selectedElement, setSelectedElement] = useState<AssetDatatype | undefined>(undefined);
 
 	useEffect(() => {
-		async function fetchData() {
-			try {
-				const response = await fetch(HTTP.GETASSET);
-				if (!response.ok) {
-					throw new Error("Failed to fetch assets");
-				}
-				const data = await response.json();
-				setTableData(data);
-			} catch (error) {
-				console.error(error);
-			}
-		}
-		fetchData();
+		sendRequest({ url: HTTP.GETASSET }, setTableData);
 	}, []);
 
 	function handleDataDelete(id: string) {
-		// setTableData((prev) => prev.filter((item) => item.id !== id));
-		console.log(id);
-		console.log(
-			"RECORD",
-			tableData.filter((item) => item._id !== id),
+		sendRequest(
+			{
+				url: `${HTTP.DELETEASSET}/${id}`,
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			() => {
+				setTableData((prev) => prev.filter((item) => item._id !== id));
+			},
 		);
-		async function handleAssetDelete(id: string) {
-			try {
-				const response = await fetch(`${HTTP.DELETEASSET}/${id}`, {
-					method: "DELETE",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					// body: JSON.stringify({ id }),
-				});
-				if (!response.ok) {
-					throw new Error("Failed to delete asset");
-				}
-			} catch (error) {
-				console.error(error);
-			}
-
-			setTableData((prev) => prev.filter((item) => item._id !== id));
-		}
-
-		handleAssetDelete(id);
 	}
 
 	function handleStartEditing(id: string) {
 		const newElement = tableData.find((item) => item._id === id);
-		console.log("Handle start edit", newElement);
 		setSelectedElement(newElement);
-		setIsEditModalVisible(true);
+		setIsModalVisible(true);
 	}
 
 	function handleAssetEdit(newAsset: AssetDatatype) {
@@ -80,57 +52,37 @@ const AssetContent = () => {
 			});
 			return newTableData;
 		});
-		setIsEditModalVisible(false);
+		setIsModalVisible(false);
+		setSelectedElement(undefined);
 	}
 
-	const allAssetTypes = getAllUniqueValues(tableData, "type").map((option) => ({
-		value: option.text,
-		label: option.text,
-	}));
-
-	const allEmployees = getAllUniqueValues(tableData, "employee").map((option) => ({
-		value: option.text,
-		label: option.text,
-	}));
+	function handleAssetAdd(newAsset: AssetDatatype) {
+		setTableData((prev) => [...prev, newAsset]);
+		setIsModalVisible(false);
+	}
 
 	const columns = getColumns(tableData, handleDataDelete, handleStartEditing);
+
+	const display = error ? <div>{error}</div> : <Table columns={columns} data={tableData} />;
 
 	return (
 		<section className="test">
 			<Modal
-				isOpen={isEditModalVisible}
+				title={selectedElement ? "Edit Asset" : "Assign New Asset"}
+				isOpen={isModalVisible}
 				onCancel={() => {
-					setIsEditModalVisible(false);
+					setIsModalVisible(false);
+					setSelectedElement(undefined);
 				}}
 				onOk={() => {
 					editFormRef.current.submit();
 				}}
 			>
-				<EditAssetForm
+				<AssetForm
 					ref={editFormRef}
 					selectedElement={selectedElement}
-					availableOptions={allAssetTypes}
-					availableEmployees={allEmployees}
-					onSuccess={handleAssetEdit}
-				/>
-			</Modal>
-			<Modal
-				isOpen={isModalVisible}
-				onCancel={() => {
-					setIsModalVisible(false);
-				}}
-				onOk={() => {
-					formRef.current.submit();
-				}}
-			>
-				<AddAssetForm
-					ref={formRef}
-					availableOptions={allAssetTypes}
-					availableEmployees={allEmployees}
-					onSuccess={(newAsset) => {
-						setIsModalVisible(false);
-						setTableData((prev) => [...prev, newAsset]);
-					}}
+					onAdd={handleAssetAdd}
+					onEdit={handleAssetEdit}
 				/>
 			</Modal>
 			<TableHeader
@@ -139,7 +91,7 @@ const AssetContent = () => {
 					setIsModalVisible(true);
 				}}
 			/>
-			<Table columns={columns} data={tableData} />
+			{!isLoading ? display : <div>Loading...</div>}
 		</section>
 	);
 };

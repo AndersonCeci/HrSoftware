@@ -6,21 +6,48 @@ import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
 import { EmployeeDataType } from "../types/Employee";
 
-export function getColumns(tableData: EmployeeDataType[]): TableProps<EmployeeDataType>["columns"] {
+export function getColumns(
+	tableData: EmployeeDataType[],
+	onEdit: (record: EmployeeDataType) => void,
+	onDelete: (record: number) => void,
+): TableProps<EmployeeDataType>["columns"] {
 	return [
 		createTableColumns({
 			title: "Name",
-			dataIndex: "name",
+			dataIndex: "username",
 			key: "name",
 			filterDropdown: true,
 			onFilter: (inputValue, filter) =>
-				filter.name.toLowerCase().includes(inputValue.toLowerCase()),
+				filter.username.toLowerCase().includes(inputValue.toLowerCase()),
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
 		}),
 		createTableColumns({
 			title: "Email",
 			dataIndex: "email",
-			key: "",
+			key: "email",
+		}),
+		createTableColumns({
+			title: "Status",
+			dataIndex: "status",
+			key: "status",
+			displayAs: (value) => {
+				return (
+					<Tag
+						color={value === "Working" ? "green" : value === "Remote" ? "blue" : "yellow"}
+						key={value}
+					>
+						{value}
+					</Tag>
+				);
+			},
+			filters: getAllUniqueValues(tableData, "status"),
+			align: "center",
+			onFilter: (value, record) => record.status.indexOf(value) === 0,
+		}),
+		createTableColumns({
+			title: "Phone",
+			dataIndex: "phone",
+			key: "phone",
 		}),
 		createTableColumns({
 			title: "Poaition",
@@ -30,34 +57,30 @@ export function getColumns(tableData: EmployeeDataType[]): TableProps<EmployeeDa
 			onFilter: (value, record) => record.position.indexOf(value) === 0,
 		}),
 		createTableColumns({
-			title: "Status",
-			dataIndex: "status",
-			key: "status",
+			title: "Salary",
+			dataIndex: "salary",
+			key: "salary",
 			displayAs: (value) => {
-				return (
-					<Tag
-						color={value === "Workig" ? "green" : value === "Remote" ? "blue" : "yellow"}
-						key={value}
-					>
-						{value}
-					</Tag>
-				);
+				return <span>{value} €</span>;
 			},
-			filters: getAllUniqueValues(tableData, "status"),
-			onFilter: (value, record) => record.status.indexOf(value) === 0,
+		}),
+		createTableColumns({
+			title: "Start Date",
+			dataIndex: "startDate",
+			key: "startDate",
 		}),
 		createTableColumns({
 			title: "Action",
 			dataIndex: "id",
 			key: "action",
-			displayAs: (record) => (
+			displayAs: (text, record) => (
 				<Dropdown
 					menu={{
 						items: [
 							{
 								key: "Edit",
 								label: (
-									<Button type={ButtonType.TEXT} block onClick={() => {}}>
+									<Button type={ButtonType.TEXT} block onClick={() => onEdit(record)}>
 										Edit
 									</Button>
 								),
@@ -65,7 +88,7 @@ export function getColumns(tableData: EmployeeDataType[]): TableProps<EmployeeDa
 							{
 								key: "Delete",
 								label: (
-									<Button type={ButtonType.TEXT} block onClick={() => {}} danger>
+									<Button type={ButtonType.TEXT} block onClick={() => onDelete(text)} danger>
 										Remove
 									</Button>
 								),
@@ -78,6 +101,7 @@ export function getColumns(tableData: EmployeeDataType[]): TableProps<EmployeeDa
 				</Dropdown>
 			),
 			fixed: "right",
+			align: "center",
 			width: 30,
 		}),
 	];
