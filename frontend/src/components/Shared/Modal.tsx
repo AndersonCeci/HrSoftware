@@ -32,7 +32,7 @@ const Modal = ({ children, onOk, onCancel, isOpen, title }: ModalProps) => {
 				)}
 				{onOk && (
 					<Button type={ButtonType.PRIMARY} onClick={onOk}>
-						Ok
+						Submit
 					</Button>
 				)}
 			</Flex>

@@ -6,11 +6,13 @@ import dummydataemployee from "../../utils/dummydataemployee";
 import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
+import useHttp from "../../hooks/useHttp";
 
 const EmploymentPage: React.FC = () => {
 	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
 	const [open, setOpen] = useState(false);
 	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
+	const [isLoading, error, sendRequest] = useHttp();
 
 	useEffect(() => {
 		setTableData(dummydataemployee);
