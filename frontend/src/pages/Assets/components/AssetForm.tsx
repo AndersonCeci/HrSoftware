@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { AssetDatatype } from "../types/AssetsDataType";
 import { HTTP } from "../Enum/http";
 import useHttp from "../../../hooks/useHttp";
+import { availableAssets } from "../utils/AllAssets";
 
 type EditAssetFormProps = {
 	selectedElement?: AssetDatatype | undefined;
@@ -13,44 +14,9 @@ type EditAssetFormProps = {
 };
 
 const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormProps, ref) => {
-	const availableAssets = [
-		{
-			value: "Laptop",
-			label: "Laptop",
-		},
-		{
-			value: "Monitor",
-			label: "Monitor",
-		},
-		{
-			value: "Keyboard",
-			label: "Keyboard",
-		},
-		{
-			value: "Mouse",
-			label: "Mouse",
-		},
-		{
-			value: "Headphones",
-			label: "Headphones",
-		},
-		{
-			value: "Phone",
-			label: "Phone",
-		},
-		{
-			value: "Tablet",
-			label: "Tablet",
-		},
-		{
-			value: "Other",
-			label: "Other",
-		},
-	];
-
 	const formRef = useRef<any>();
 	const [form] = Form.useForm();
-	const [isLoading, error, sendRequest] = useHttp();
+	const [, , sendRequest] = useHttp();
 
 	const initialValues = {
 		assetType: selectedElement ? selectedElement.assetType : "",
@@ -77,8 +43,6 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 			dateGiven: dayjs(dateGiven).format("D/M/YYYY"),
 			userName: values.userName,
 		};
-
-		console.log(newAsset);
 
 		if (selectedElement) {
 			sendRequest(

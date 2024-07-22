@@ -47,7 +47,7 @@ export const Paths = {
 	},
 	Employee: {
 		path: "employee",
-		type: "group",
+		type: "",
 		children: [
 			{
 				path: "recruitment",

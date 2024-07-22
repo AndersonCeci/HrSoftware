@@ -29,7 +29,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Position"
 						name="position"
@@ -44,7 +44,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Salary"
 						name="salary"
@@ -62,7 +62,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 				</Col>
 			</Row>
 			<Row gutter={16}>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Team Leader"
 						name="teamLeader"
@@ -77,7 +77,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 					</Form.Item>
 				</Col>
 
-				<Col offset={1} span={5}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }} lg={{ offset: 1, span: 5 }}>
 					<Form.Item
 						label="Starting on"
 						name="startDate"
@@ -94,7 +94,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 					</Form.Item>
 				</Col>
 
-				<Col offset={0} span={5}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 21 }} lg={{ offset: 0, span: 5 }}>
 					<Form.Item
 						label="Contract"
 						name="contract"

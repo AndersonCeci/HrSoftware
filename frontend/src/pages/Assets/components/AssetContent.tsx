@@ -1,6 +1,7 @@
-import Table, { getAllUniqueValues } from "../../../components/Table/Table";
+import Table from "../../../components/Table/Table";
 import TableHeader from "../../../components/Table/TableHeader";
 import Modal from "../../../components/Shared/Modal";
+import Loader from "../../../components/Shared/Loader";
 import AssetForm from "./AssetForm";
 import { AssetDatatype } from "../types/AssetsDataType";
 
@@ -91,7 +92,7 @@ const AssetContent = () => {
 					setIsModalVisible(true);
 				}}
 			/>
-			{!isLoading ? display : <div>Loading...</div>}
+			{!isLoading ? display : <Loader />}
 		</section>
 	);
 };
