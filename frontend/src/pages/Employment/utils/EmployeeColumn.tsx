@@ -13,7 +13,7 @@ export function getColumns(
 ): TableProps<EmployeeDataType>["columns"] {
 	return [
 		createTableColumns({
-			title: "Name",
+			title: "Username",
 			dataIndex: "username",
 			key: "name",
 			filterDropdown: true,
@@ -26,24 +26,24 @@ export function getColumns(
 			dataIndex: "email",
 			key: "email",
 		}),
-		createTableColumns({
-			title: "Status",
-			dataIndex: "status",
-			key: "status",
-			displayAs: (value) => {
-				return (
-					<Tag
-						color={value === "Working" ? "green" : value === "Remote" ? "blue" : "yellow"}
-						key={value}
-					>
-						{value}
-					</Tag>
-				);
-			},
-			filters: getAllUniqueValues(tableData, "status"),
-			align: "center",
-			onFilter: (value, record) => record.status.indexOf(value) === 0,
-		}),
+		// createTableColumns({
+		// 	title: "Status",
+		// 	dataIndex: "status",
+		// 	key: "status",
+		// 	displayAs: (value) => {
+		// 		return (
+		// 			<Tag
+		// 				color={value === "Working" ? "green" : value === "Remote" ? "blue" : "yellow"}
+		// 				key={value}
+		// 			>
+		// 				{value}
+		// 			</Tag>
+		// 		);
+		// 	},
+		// 	filters: getAllUniqueValues(tableData, "status"),
+		// 	align: "center",
+		// 	onFilter: (value, record) => record.status.indexOf(value) === 0,
+		// }),
 		createTableColumns({
 			title: "Phone",
 			dataIndex: "phone",

@@ -9,6 +9,6 @@ export type EmployeeDataType = {
 	teamLeader: string;
 	startDate: string;
 	position: string;
-	status: "Working" | "Remote" | "On Leave";
-	contract: null;
+	// status: "Working" | "Remote" | "On Leave";
+	contract: string;
 };
