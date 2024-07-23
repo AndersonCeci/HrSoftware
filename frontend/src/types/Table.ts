@@ -5,6 +5,7 @@ export type TablePropsType = {
 	data: any[];
 	columns: TableProps<any>["columns"];
 	fixed?: boolean;
+	pageSize?: number;
 };
 
 export type createTableColumns = {

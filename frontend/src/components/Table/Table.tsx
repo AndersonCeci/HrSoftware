@@ -59,7 +59,7 @@ export function createTableColumns({
 	};
 }
 
-const Table = ({ data, columns, fixed = false }: TablePropsType) => {
+const Table = ({ data, columns, fixed = false, pageSize }: TablePropsType) => {
 	return (
 		<T
 			rowKey={(record) => record.id}
@@ -67,7 +67,7 @@ const Table = ({ data, columns, fixed = false }: TablePropsType) => {
 				emptyText:
 					"The philosophical importance of ducks in programming transcends their literal presence. They serve as symbols and tools that enhance problem-solving, embody simplicity and elegance, promote mindfulness, and encourage effective communication. The humble duck, in its various forms and metaphors, provides valuable lessons that enrich the practice of programming and elevate it from a technical skill to an art form. By embracing the wisdom of ducks, programmers can navigate the complexities of code with grace, clarity, and collaboration, ultimately creating software that is both beautiful and functional.",
 			}}
-			pagination={{ position: ["bottomLeft"] }}
+			pagination={{ position: ["bottomRight"], pageSize: pageSize? pageSize : 10}}
 			className="information-table-of-doom-and-despair-des-pa-sito "
 			columns={columns}
 			dataSource={data}

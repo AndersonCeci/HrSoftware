@@ -6,12 +6,13 @@ import EventPage from "./EventPage";
 import AssetsPage from "./Assets/AssetsPage";
 import OrganisationalStructurePage from "./OrganisationalStructurePage";
 import SalariesPage from "./Salary/SalariesPage";
-import DayOffPage from "./DayOffPage";
 import PromotionPage from "./PromotionPage";
 import RecruitmentPage from "./RecruitmentPage";
 import EmploymentPage from "./Employment/EmploymentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
+import RequestedLeavePage from "./DayOff/RequestedLeavePage";
+import CalendarLeavePage from "./CalendarLeavePage"
 
 const PageRoutesComponents = {
 	LoginPAge,
@@ -23,11 +24,12 @@ const PageRoutesComponents = {
 	AssetsPage,
 	OrganisationalStructurePage,
 	SalariesPage,
-	DayOffPage,
 	PromotionPage,
 	RecruitmentPage,
 	EmploymentPage,
 	DismissedPage,
+	RequestedLeavePage,
+	CalendarLeavePage
 };
 
 export default PageRoutesComponents;
