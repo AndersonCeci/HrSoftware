@@ -13,6 +13,7 @@ import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
 import RequestedLeavePage from "./DayOff/RequestedLeavePage";
 import CalendarLeavePage from "./CalendarLeavePage"
+import SettingsPage from "./Settings/SettingsPage";
 
 const PageRoutesComponents = {
 	LoginPAge,
@@ -29,7 +30,8 @@ const PageRoutesComponents = {
 	EmploymentPage,
 	DismissedPage,
 	RequestedLeavePage,
-	CalendarLeavePage
+	CalendarLeavePage,
+	SettingsPage,
 };
 
 export default PageRoutesComponents;

@@ -41,9 +41,12 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 			...valuesToSubmit,
 			username: valuesToSubmit.name + valuesToSubmit.surname,
 			password: "codevider",
+			phoneNumber: parseInt(valuesToSubmit.phoneNumber.toString()),
 			salary: parseInt(valuesToSubmit.salary.toString()),
-			status: "Working",
-			startingDate: dayjs(valuesToSubmit.startDate).format("D/M/YYYY"),
+			// status: "Working",
+			startingDate: dayjs(valuesToSubmit.startingDate).format("D/M/YYYY"),
+			contract: "Permanent",
+			isDeleted: false,
 		};
 
 		const userRole = devRoles.includes(data.position)
@@ -54,7 +57,7 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 
 		if (selectedEmployee) {
 			sendRequest(
-				exporter.submitHelper(`employees/${selectedEmployee.id}`, data, "PATCH"),
+				exporter.submitHelper(`employees/${selectedEmployee._id}`, data, "PATCH"),
 				(responseData: any) => {
 					onEdit(responseData);
 				},

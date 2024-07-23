@@ -3,7 +3,8 @@ import {
 	CalendarOutlined,
 	BookOutlined,
 	ApartmentOutlined,
-    BellOutlined
+    BellOutlined,
+    SettingOutlined
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -16,6 +17,7 @@ import { TbUserCancel } from "react-icons/tb";
 import { MdOutlinePersonSearch } from "react-icons/md";
 import { VscRequestChanges } from "react-icons/vsc";
 import { BsCalendar4Range } from "react-icons/bs";
+
 
 
 
@@ -34,7 +36,9 @@ const NavigationIcons = {
     TbUserCancel,
     MdOutlinePersonSearch,
     VscRequestChanges,
-    BsCalendar4Range
+    BsCalendar4Range,
+    IoSettingsOutline:SettingOutlined 
+    
 };
 
 export default NavigationIcons;

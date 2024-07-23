@@ -18,11 +18,12 @@ export function getInitialFormValues(data: EmployeeDataType | undefined): initia
 				name: "",
 				surname: "",
 				email: "",
-				phone: "",
+				phoneNumber: NaN,
 				salary: NaN,
 				teamLeader: "",
 				position: "",
-				startDate: dayjs(),
+				startingDate: "",
+				nID: "",
 		  };
 
 	return initialValues;
@@ -31,7 +32,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined): initia
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
 	return {
 		...selectedEmployee,
-		startDate: dayjs(selectedEmployee["startDate"], "D/M/YYYY"),
+		startDate: dayjs(selectedEmployee["startingDate"], "D/M/YYYY"),
 	};
 }
 
@@ -40,7 +41,15 @@ export function validate(salary: number | null | undefined) {
 }
 
 export function getDevRoles() {
-	return ["Frontend Developer", "Backend Developer", "Fullstack Developer"];
+	return [
+		"Junior FrontEnd",
+		"Junior BackEnd",
+		"Senior FrontEnd",
+		"Senior BackEnd",
+		"FullStack",
+		"DevOps",
+		"ProjectManager",
+	];
 }
 
 export function submitHelper(identifier: string, body: any, method: string = "POST") {

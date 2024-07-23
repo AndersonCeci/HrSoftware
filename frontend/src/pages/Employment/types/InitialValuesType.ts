@@ -1,12 +1,10 @@
-import dayjs from "dayjs";
-
 export type initialValuesType = {
 	name: string;
 	surname: string;
 	email: string;
-	phone: string;
+	phoneNumber: number;
 	salary: number;
 	teamLeader: string;
 	position: string;
-	startDate: dayjs.Dayjs;
+	startingDate: string;
 };

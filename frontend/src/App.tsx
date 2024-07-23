@@ -12,7 +12,8 @@ const iterationRoutes = [
 	Paths.Company,
 	Paths.Employee,
 	Paths.Background,
-	Paths.DayOff
+	Paths.DayOff,
+	Paths.Settings
 ];
 
 const router = createBrowserRouter([

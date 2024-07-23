@@ -1,9 +1,39 @@
-import { Flex, Input, Form, Row, Col } from "antd";
+import { Flex, Input, Select, Form, Row, Col } from "antd";
 
 type FirstPanelProps = {
 	onChange: (value: any, identifier: string) => void;
 	form: any;
 };
+
+// const genders = [
+// 	{ label: "Male", value: "Male" },
+// 	{ label: "Female", value: "Female" },
+// 	{ label: "Non-binary", value: "Non-binary" },
+// 	{ label: "Genderqueer", value: "Genderqueer" },
+// 	{ label: "Genderfluid", value: "Genderfluid" },
+// 	{ label: "Agender", value: "Agender" },
+// 	{ label: "Bigender", value: "Bigender" },
+// 	{ label: "Demiboy", value: "Demiboy" },
+// 	{ label: "Demigirl", value: "Demigirl" },
+// 	{ label: "Two-Spirit", value: "Two-Spirit" },
+// 	{ label: "Androgynous", value: "Androgynous" },
+// 	{ label: "Intersex", value: "Intersex" },
+// 	{ label: "Pangender", value: "Pangender" },
+// 	{ label: "Neutrois", value: "Neutrois" },
+// 	{ label: "Polygender", value: "Polygender" },
+// 	{ label: "Third Gender", value: "Third Gender" },
+// 	{ label: "Maverique", value: "Maverique" },
+// 	{ label: "Aliagender", value: "Aliagender" },
+// 	{ label: "Gender Apathetic", value: "Gender Apathetic" },
+// 	{ label: "Gender Nonconforming", value: "Gender Nonconforming" },
+// 	{ label: "Gender Variant", value: "Gender Variant" },
+// 	{ label: "Graygender", value: "Graygender" },
+// 	{ label: "Cisgender", value: "Cisgender" },
+// 	{ label: "Transgender", value: "Transgender" },
+// 	{ label: "Hijra", value: "Hijra" },
+// 	{ label: "Other", value: "Other", disabled: true }
+//   ];
+  
 
 const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 	return (
@@ -56,15 +86,15 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 				<Col span={10} offset={1}>
 					<Form.Item
 						label="Phone"
-						name="phone"
+						name="phoneNumber"
 						rules={[{ required: true, message: "Please input phone!" }]}
 					>
 						<Input
 							size="large"
 							type="number"
 							placeholder="Enter phone"
-							value={form.getFieldValue("phone")}
-							onChange={(e) => onChange(e.target.value, "phone")}
+							value={form.getFieldValue("phoneNumber")}
+							onChange={(e) => onChange(e.target.value, "phoneNumber")}
 						/>
 					</Form.Item>
 				</Col>
@@ -73,15 +103,34 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 				<Col span={10} offset={1}>
 					<Form.Item
 						label="Personal Number"
-						name="personalNumber"
+						name="nID"
 						rules={[{ required: true, message: "Please input personal Number!" }]}
 					>
 						<Input
 							maxLength={10}
 							size="large"
 							placeholder="Enter personal number"
-							value={form.getFieldValue("personalNumber")}
-							onChange={(e) => onChange(e.target.value, "personalNumber")}
+							value={form.getFieldValue("nID")}
+							onChange={(e) => onChange(e.target.value, "nID")}
+						/>
+					</Form.Item>
+				</Col>
+				<Col span={10} offset={1}>
+					<Form.Item
+						label="Gender"
+						name="gender"
+						rules={[{ required: true, message: "Please input a valid gender" }]}
+					>
+						<Select
+							size="large"
+							options={[
+								{ label: "Male", value: "Male" },
+								{ label: "Female", value: "Female" },
+								{ label: "Other", value: "Other", disabled: true },
+							]}
+							placeholder="Choose a position"
+							value={form.getFieldValue("gender")}
+							onChange={(value) => onChange(value, "gender")}
 						/>
 					</Form.Item>
 				</Col>

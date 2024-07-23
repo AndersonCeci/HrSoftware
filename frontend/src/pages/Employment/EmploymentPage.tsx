@@ -15,7 +15,6 @@ const EmploymentPage: React.FC = () => {
 	const [isLoading, error, sendRequest] = useHttp();
 
 	useEffect(() => {
-
 		sendRequest(
 			{
 				url: "http://localhost:3000/employees",
@@ -40,7 +39,7 @@ const EmploymentPage: React.FC = () => {
 	function handleEditEmployee(editedEmployee: EmployeeDataType) {
 		setTableData((prev) =>
 			prev.map((item) => {
-				if (item.id === editedEmployee.id) {
+				if (item._id === editedEmployee._id) {
 					return editedEmployee;
 				}
 				return item;
@@ -48,8 +47,20 @@ const EmploymentPage: React.FC = () => {
 		);
 	}
 
-	function handleDeleteButtonClick(id: number) {
-		setTableData((prev) => prev.filter((item) => item.id !== id));
+	function handleDeleteButtonClick(record: EmployeeDataType) {
+		console.log(record);
+		sendRequest(
+			{
+				url: `http://localhost:3000/employees/${record._id}`,
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			() => {
+				setTableData((prev) => prev.filter((item) => item._id !== record._id));
+			},
+		);
 	}
 
 	function handlClose() {
@@ -70,7 +81,7 @@ const EmploymentPage: React.FC = () => {
 			</Drawer>
 			<TableHeader title="Employment" onClick={() => setOpen(true)} />
 			<section className="test">
-				{isLoading ? <Loader /> : <Table columns={columns} data={tableData} fixed/>}
+				{isLoading ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
 			</section>
 		</>
 	);
