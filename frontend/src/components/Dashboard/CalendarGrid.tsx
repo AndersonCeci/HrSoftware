@@ -38,16 +38,16 @@ const CalendarGrid: React.FC = () => {
 
   const getListData = (value: Dayjs) => {
     const eventsForDate = events.filter(event => dayjs(event.startDate).isSame(value, 'day'));
-    return eventsForDate.length > 0 ? [{ type: 'default', content: `${eventsForDate.length} events` }] : [];
+    return eventsForDate.length > 0 ? [{ type: 'default'}] : [];
   };
 
-  const dateCellRender = (value: Dayjs) => {
+  const cellRender = (value: Dayjs) => {
     const listData = getListData(value);
     return (
       <ul className="events">
         {listData.map((item, index) => (
           <li key={index}>
-            <Badge status={item.type as 'success'} text={item.content} />
+            <Badge status={item.type as 'success'}/>
           </li>
         ))}
       </ul>
@@ -67,7 +67,7 @@ const CalendarGrid: React.FC = () => {
 
   return (
     <div className="calendarWrapper" style={wrapperStyle}>
-      <Calendar fullscreen={false} onPanelChange={onPanelChange} dateCellRender={dateCellRender} onSelect={onSelect}/>
+      <Calendar fullscreen={false} onPanelChange={onPanelChange} cellRender={cellRender} onSelect={onSelect}/>
     </div>
   );
 };

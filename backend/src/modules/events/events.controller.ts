@@ -2,10 +2,12 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common"
 import { CreateEventDto } from "./eventsDTO/events.dto";
 import { EventsService } from "./events.service";
 import { UpdateEventDto } from "./eventsDTO/updateEvents.dto";
-
+import { UserService } from "src/users/users.service";
 @Controller('events')
 export class EventsController {
-    constructor(private readonly eventsService: EventsService) {}
+    constructor(private readonly eventsService: EventsService,
+        
+    ) {}
 
     @Post()
     async createEvent(@Body() createEventDto: CreateEventDto) {
@@ -27,6 +29,11 @@ export class EventsController {
         return await this.eventsService.findByCreatorId(creatorId);
     }
 
+    @Get('invitee/:inviteesId')
+    async findEventsByInviteeId(@Param('inviteesId') inviteesId: string) {
+        return await this.eventsService.findByInviteeId(inviteesId);
+    }
+
     @Delete(':id')
     async deleteEvent(@Param('id') id: string) {
         return await this.eventsService.delete(id);
@@ -36,4 +43,5 @@ export class EventsController {
     async updateEvent(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
         return await this.eventsService.update(id, updateEventDto);
     }
+
 }

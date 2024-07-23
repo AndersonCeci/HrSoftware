@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../../styles/PersonalCalendarPage/PersonalCalendar.css";
 import {
   Badge,
@@ -22,28 +22,11 @@ import {
 import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
 import EditNewEventForm from "./components/EditNewEventForm";
+import useEvents, { Status, NewEvent } from './hooks/personalCalendarFetchHooks';
 
 const { Title } = Typography;
 
-export enum Status {
-  Cancelled = "cancelled",
-  Finished = "finished",
-  Ongoing = "ongoing",
-  Upcoming = "upcoming",
-}
-
-interface NewEvent {
-  title: string;
-  description: string;
-  startDate: Dayjs | null;
-  endDate: Dayjs | null;
-  startTime: Dayjs | null;
-  endTime: Dayjs | null;
-  location: string;
-}
-
 const PersonalCalendarPage: React.FC = () => {
-  const [events, setEvents] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,236 +38,71 @@ const PersonalCalendarPage: React.FC = () => {
     startTime: null,
     endTime: null,
     location: "",
+    invitee: [],
   });
   const [editEventId, setEditEventId] = useState<string | null>(null);
 
-  const placement = "bottom";
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  const { allEvents, addNewEvent, handleDeleteEvent, handleCancelEvent, handleEditEvent } = useEvents();
 
   const showModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setEditEventId(null); // Clear edit event ID when modal closes
   };
 
   function onChanges(value: any, identifier: string) {
     setNewEvent((prev) => ({ ...prev, [identifier]: value }));
   }
 
-  const fetchEvents = async () => {
-    try {
-      const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}"
-      ).userId;
-      const response = await fetch(
-        `http://localhost:3000/events/byCreator/${userId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-      console.log("Fetched events:", data);
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch events");
-      }
-      const updatedEvents = data.map(updateEventStatus);
-      setEvents(updatedEvents);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
+  const formatDateAndTime = (isoDateString: string) => {
+    const date = new Date(isoDateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
   };
 
-  const updateEventStatus = (event: any) => {
-    const currentDate = dayjs();
-    const eventStartDate = dayjs(event.startDate);
-    if (event.status !== Status.Cancelled) {
-      if (eventStartDate.isBefore(currentDate, "day")) {
-        event.status = Status.Finished;
-      } else if (eventStartDate.isSame(currentDate, "day")) {
-        event.status = Status.Ongoing;
-      } else {
-        event.status = Status.Upcoming;
-      }
-    }
-    return event;
+  const showDrawer = (value: Dayjs) => {
+    setSelectedDate(value);
+    setOpen(true);
   };
 
-  const addNewEvent = async () => {
-    try {
-      const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}"
-      ).userId;
-      const response = await fetch(`http://localhost:3000/events`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...newEvent,
-          startDate: newEvent.startDate?.format("YYYY-MM-DD"),
-          endDate: newEvent.endDate?.format("YYYY-MM-DD"),
-          startTime: newEvent.startTime?.toISOString(),
-          endTime: newEvent.endTime?.toISOString(),
-          location: newEvent.location,
-          creatorId: userId,
-        }),
-      });
-      const data = await response.json();
-      console.log("Added event:", data);
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to add event");
-      }
-      const updatedEvent = updateEventStatus(data);
-      setEvents((prev) => [...prev, updatedEvent]);
-      setIsModalOpen(false);
-      setNewEvent({
-        title: "",
-        description: "",
-        startDate: null,
-        endDate: null,
-        startTime: null,
-        endTime: null,
-        location: "",
-      });
-    } catch (error) {
-      console.error("Error adding event:", error);
-    }
-  };
-
-  const handleDeleteEvent = async (eventId: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await response.json();
-      console.log("Deleted event:", data);
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete event");
-      }
-      setEvents((prev) => prev.filter((event) => event._id !== eventId));
-    } catch (error) {
-      console.error("Error deleting event:", error);
-    }
-  };
-
-  const handleCancelEvent = async (eventId: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: Status.Cancelled }),
-      });
-      const data = await response.json();
-      console.log("Cancelled event:", data);
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to cancel event");
-      }
-      const updatedEvents = events.map((event) =>
-        event._id === eventId ? { ...event, status: Status.Cancelled } : event
-      );
-      setEvents(updatedEvents);
-    } catch (error) {
-      console.error("Error cancelling event:", error);
-    }
-  };
-
-  const handleEditEvent = (eventId: string) => {
-    const eventToEdit = events.find((event) => event._id === eventId);
-    if (eventToEdit) {
-      setEditEventId(eventId);
-      setNewEvent({
-        title: eventToEdit.title,
-        description: eventToEdit.description,
-        startDate: dayjs(eventToEdit.startDate),
-        endDate: dayjs(eventToEdit.endDate),
-        startTime: dayjs(eventToEdit.startTime),
-        endTime: dayjs(eventToEdit.endTime),
-        location: eventToEdit.location,
-      });
-      showModal();
-    }
-  };
-
-  const handleSaveEdit = async () => {
-    try {
-      if (!editEventId) return;
-      const response = await fetch(
-        `http://localhost:3000/events/${editEventId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: newEvent.title,
-            description: newEvent.description,
-            startDate: newEvent.startDate?.format("YYYY-MM-DD"),
-            endDate: newEvent.endDate?.format("YYYY-MM-DD"),
-            startTime: newEvent.startTime?.toISOString(),
-            endTime: newEvent.endTime?.toISOString(),
-            location: newEvent.location,
-          }),
-        }
-      );
-      const data = await response.json();
-      console.log("Updated event:", data);
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to update event");
-      }
-      const updatedEvents = events.map((event) =>
-        event._id === editEventId ? { ...event, ...data } : event
-      );
-      setEvents(updatedEvents);
-      setIsModalOpen(false);
-      setEditEventId(null);
-      setNewEvent({
-        title: "",
-        description: "",
-        startDate: null,
-        endDate: null,
-        startTime: null,
-        endTime: null,
-        location: "",
-      });
-    } catch (error) {
-      console.error("Error updating event:", error);
-    }
+  const onClose = () => {
+    setOpen(false);
+    setSelectedDate(null);
   };
 
   const getListData = (value: Dayjs) => {
-    const eventsForDate = events.filter((event) => {
+    const eventsForDate = allEvents.filter((event) => {
       const eventDate = dayjs(event.startDate);
       return (
         eventDate.date() === value.date() && eventDate.month() === value.month()
       );
     });
 
-    const listData = eventsForDate.map((event) => {
+    const listData = eventsForDate.map((allEvents: any) => {
       let type: "error" | "success" | "warning" | "default" = "warning";
-      if (event.status === Status.Cancelled) type = "error";
-      if (event.status === Status.Finished) type = "success";
-      if (event.status === Status.Ongoing) type = "warning";
-      if (event.status === Status.Upcoming) type = "default";
+      if (allEvents.status === Status.Cancelled) type = "error";
+      if (allEvents.status === Status.Finished) type = "success";
+      if (allEvents.status === Status.Ongoing) type = "warning";
+      if (allEvents.status === Status.Upcoming) type = "default";
 
       return {
         type: type,
-        content: event.title,
+        content: allEvents.title,
       };
     });
 
     return listData || [];
   };
 
+
   const getMonthData = (value: Dayjs) => {
     if (value.month() === 8) {
       return 1394;
     }
   };
-
   const monthCellRender = (value: Dayjs) => {
     const num = getMonthData(value);
     return num ? (
@@ -321,27 +139,40 @@ const PersonalCalendarPage: React.FC = () => {
     return null;
   };
 
-  const showDrawer = (value: Dayjs) => {
-    setSelectedDate(value);
-    setOpen(true);
+  const handleAddNewEvent = async () => {
+    await addNewEvent(newEvent);
+    setIsModalOpen(false);
+    setNewEvent({
+      title: "",
+      description: "",
+      startDate: null,
+      endDate: null,
+      startTime: null,
+      endTime: null,
+      location: "",
+      invitee: [],
+    });
   };
 
-  const onClose = () => {
-    setOpen(false);
-    setSelectedDate(null);
+  const handleEditEventClick = async () => {
+    if (editEventId) {
+      await handleEditEvent(editEventId, newEvent);
+      setIsModalOpen(false);
+      setEditEventId(null);
+      setNewEvent({
+        title: "",
+        description: "",
+        startDate: null,
+        endDate: null,
+        startTime: null,
+        endTime: null,
+        location: "",
+        invitee: [],
+      });
+      setOpen(false);
+
+    }
   };
-
-   const formatDateAndTime = (isoDateString: string) => {
-    const date = new Date(isoDateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-
-    return `${day}-${month}-${year} ${hours}:${minutes}`;
-}
-
   return (
     <>
       <Space>
@@ -350,23 +181,23 @@ const PersonalCalendarPage: React.FC = () => {
           <Calendar cellRender={cellRender} onSelect={showDrawer} />
         </section>
         <Drawer
-          placement={placement}
+          placement="bottom"
           closable={false}
           onClose={onClose}
-          visible={open}
-          key={placement}
+          open={open}
+          key="bottom"
           className="drawer-container"
         >
           <h2>Events on {selectedDate?.format("DD-MM-YYYY")}</h2>
-          {events.length > 0 &&
-            selectedDate &&
-            events
-              .filter((event) =>
-                dayjs(event.startDate).isSame(selectedDate, "day")
-              )
-              .map((event: any) => (
-                <Card
-                  key={event.id}
+
+          {allEvents.length > 0 && selectedDate && (
+            <>
+              <h3>Your Events</h3>
+              {allEvents
+                .filter((event) => dayjs(event.startDate).isSame(selectedDate, "day"))
+                .map((event) => (
+                  <Card
+                  key={event._id}
                   className="card-container"
                   actions={[
                     <DeleteOutlined
@@ -376,7 +207,19 @@ const PersonalCalendarPage: React.FC = () => {
                     />,
                     <EditOutlined
                       key="edit"
-                      onClick={() => handleEditEvent(event._id)}
+                      onClick={() => {
+                        setEditEventId(event._id);
+                        setNewEvent({
+                          title: event.title,
+                          description: event.description,
+                          startDate: dayjs(event.startDate),
+                          endDate: dayjs(event.endDate),
+                          startTime: dayjs(event.startTime),
+                          endTime: dayjs(event.endTime),
+                          location: event.location,
+                        });
+                        showModal();
+                      }}
                       className="edit-icon-card"
                     />,
                     <StopOutlined
@@ -385,58 +228,67 @@ const PersonalCalendarPage: React.FC = () => {
                     />,
                   ]}
                 >
-                  <Meta
-                    avatar={
-                      <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-                    }
-                    title={event.title}
-                    description={event.description}
-                  />
-                  <Divider orientation="left">Start Date:</Divider>
-                  <Title level={5}> {formatDateAndTime(event.startDate)}</Title>
+                    <Meta
+                      avatar={
+                        <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
+                      }
+                      title={event.title}
+                      description={event.description}
+                    />
+                    <Divider orientation="left">Start Date:</Divider>
+                    <Title level={5}>{formatDateAndTime(event.startDate)}</Title>
 
-                  <Divider orientation="left">End Date:</Divider>
-                  <Title level={5}> {formatDateAndTime(event.endDate)}</Title>
+                    <Divider orientation="left">End Date:</Divider>
+                    <Title level={5}>{formatDateAndTime(event.endDate)}</Title>
 
-                  <Divider orientation="left">Start Time:</Divider>
-                  <Title level={5}> {formatDateAndTime(event.startTime)}</Title>
+                    <Divider orientation="left">Start Time:</Divider>
+                    <Title level={5}>{formatDateAndTime(event.startTime)}</Title>
 
-                  <Divider orientation="left">End Time:</Divider>
-                  <Title level={5}> {formatDateAndTime(event.endTime)}</Title>
+                    <Divider orientation="left">End Time:</Divider>
+                    <Title level={5}>{formatDateAndTime(event.endTime)}</Title>
 
-                  <Divider orientation="left">Location:</Divider>
-                  <Title level={5}> {event.location}</Title>
+                    <Divider orientation="left">Location:</Divider>
+                    <Title level={5}>{event.location}</Title>
 
-                  <Divider orientation="left">Status:</Divider>
-                  <Title level={5}>{event.status}</Title>
-                </Card>
-              ))}
+                    <Divider orientation="left">Status:</Divider>
+                    <Title level={5}>{event.status}</Title>
+                  </Card>
+                ))}
+            </>
+          )}
         </Drawer>
-      </Space>
-      <Modal
-        visible={isModalOpen}
-        onCancel={handleCancel}
-        onOk={editEventId ? handleSaveEdit : addNewEvent}
+        <Modal
+        open={isModalOpen}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setEditEventId(null);
+          setNewEvent({
+            title: "",
+            description: "",
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
+            location: "",
+          });
+        }}
         title={editEventId ? "Edit Event" : "Add New Event"}
         footer={[
           editEventId ? (
-            <Button key="submit" type="primary" onClick={handleSaveEdit}>
-              <CheckCircleOutlined
-                key="save"
-                className="save-icon"
-                onClick={handleSaveEdit}
-              />
+            <Button key="submit" type="primary" onClick={handleEditEventClick}>
+              <CheckCircleOutlined key="save" className="save-icon" />
               Save Changes
             </Button>
           ) : (
-            <Button key="submit" type="primary" onClick={addNewEvent}>
+            <Button key="submit" type="primary" onClick={handleAddNewEvent}>
               Add Event
             </Button>
-          ),
+          )
         ]}
       >
         <EditNewEventForm newEvent={newEvent} onChanges={onChanges} />
       </Modal>
+      </Space>
     </>
   );
 };

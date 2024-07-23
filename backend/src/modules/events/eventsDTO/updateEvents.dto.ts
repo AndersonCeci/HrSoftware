@@ -1,4 +1,4 @@
-import { IsOptional } from "class-validator";
+import { IsArray, IsOptional } from "class-validator";
 import { Status } from "../schema/events.schema";
 
 export class UpdateEventDto {
@@ -39,4 +39,10 @@ export class UpdateEventDto {
     @IsOptional()
     locationId: string;
 
+    @IsOptional()
+    creatorId: string;
+
+    @IsOptional()
+    @IsArray()
+    invitees: string[];
 }
