@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEmail,
+  IsString,
+  IsEnum,
+  Matches,
+} from 'class-validator';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -15,18 +21,47 @@ export class CreateEmployeeDto {
 
   @IsNotEmpty()
   @IsString()
-  password: string;
+  readonly password: string;
 
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
+  readonly email: string;
 
   @IsNotEmpty()
   @IsString()
+  @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @IsString()
+  @IsEnum(
+    [
+      'hr',
+      'JuniorFrontEnd',
+      'JuniorBackEnd',
+      'JuniorFrontEnd',
+      'SeniorBackEnd',
+      'DevOps',
+      'FullStack',
+      'ProjectManager',
+    ],
+    {
+      message: 'Must be one of the following',
+    },
+  )
   position?: string;
 
-  startingDate?: Date;
+  startingDate?: string;
+
+  phoneNumber: number;
+
+  @IsEnum(['Female', 'Male'], {
+    message: 'Must be one of the following',
+  })
+  gender?: string;
+
+  @IsString()
+  teamLeader: string;
+
+  @IsString()
+  contract: string;
+
+  isDeleted: boolean;
 }

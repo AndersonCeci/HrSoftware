@@ -10,9 +10,10 @@ export class EmployeeService {
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
   ) {}
 
-  create(createEmployeeDto: CreateEmployeeDto) {
-    const createdEmployee = new this.employeeModel(createEmployeeDto);
-    return createdEmployee.save();
+  create ( createEmployeeDto: CreateEmployeeDto )
+  {
+    const createdEmploy = new this.employeeModel(createEmployeeDto).save();
+    return createdEmploy
   }
 
 
