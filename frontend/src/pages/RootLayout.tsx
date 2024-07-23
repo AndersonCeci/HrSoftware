@@ -63,7 +63,7 @@ const RootLayout: React.FC = () => {
 
 	useEffect(() => {
 		const handleResize = () => {
-			if (window.innerWidth < 768) {
+			if (window.innerWidth < 500) {
 				setColapsed(true);
 				setIsMobile(true);
 			} else {

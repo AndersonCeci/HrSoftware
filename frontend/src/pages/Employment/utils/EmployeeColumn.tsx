@@ -5,11 +5,12 @@ import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
 import { EmployeeDataType } from "../types/Employee";
+import { capitalizeFirstLetter } from "../../../utils/paths";
 
 export function getColumns(
 	tableData: EmployeeDataType[],
 	onEdit: (record: EmployeeDataType) => void,
-	onDelete: (record: number) => void,
+	onDelete: (id: EmployeeDataType) => void,
 ): TableProps<EmployeeDataType>["columns"] {
 	return [
 		createTableColumns({
@@ -20,6 +21,9 @@ export function getColumns(
 			onFilter: (inputValue, filter) =>
 				filter.username.toLowerCase().includes(inputValue.toLowerCase()),
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
+			displayAs: (value) => {
+				return <span>{capitalizeFirstLetter(value)}</span>;
+			}
 		}),
 		createTableColumns({
 			title: "Email",
@@ -66,7 +70,7 @@ export function getColumns(
 		}),
 		createTableColumns({
 			title: "Start Date",
-			dataIndex: "startDate",
+			dataIndex: "startingDate",
 			key: "startDate",
 		}),
 		createTableColumns({
@@ -88,7 +92,7 @@ export function getColumns(
 							{
 								key: "Delete",
 								label: (
-									<Button type={ButtonType.TEXT} block onClick={() => onDelete(text)} danger>
+									<Button type={ButtonType.TEXT} block onClick={() => onDelete(record)} danger>
 										Remove
 									</Button>
 								),

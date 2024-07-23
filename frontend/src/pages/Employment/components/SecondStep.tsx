@@ -5,6 +5,7 @@ import { GetProps } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { ButtonSize } from "../../../enums/Button";
+import { getDevRoles } from "../utils/helperFunctions";
 
 type SecondStepProps = {
 	onChange: (value: any, identifier: string) => void;
@@ -19,12 +20,7 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 };
 
 const SecondStep = ({ onChange, form }: SecondStepProps) => {
-	const position = [
-		{ label: "Frontend Developer", value: "Frontend Developer" },
-		{ label: "Backend Developer", value: "Backend Developer" },
-		{ label: "Fullstack Developer", value: "Fullstack Developer" },
-		{ label: "DevOps Engineer", value: "DevOps Engineer" },
-	];
+	const position = getDevRoles().map((role) => ({ label: role, value: role }));
 
 	return (
 		<Flex vertical>
@@ -58,13 +54,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 							placeholder="Enter a salary amount"
 							style={{ width: "100%" }}
 							value={form.getFieldValue("salary")}
-							status={form.getFieldError("salary") < 0 ? "error" : ""}
-							onChange={(e) => {
-								onChange(e.target.value, "salary");
-							}}
-							onBlur={(e) => {
-								onChange(e.target.value, "salary");
-							}}
+							onChange={(value) => onChange(value, "salary")}
 						/>
 					</Form.Item>
 				</Col>
@@ -88,7 +78,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }} lg={{ offset: 1, span: 5 }}>
 					<Form.Item
 						label="Starting on"
-						name="startDate"
+						name="startingDate"
 						// rules={[{ required: true, message: "Please enter a starting date" }]}
 					>
 						<DatePicker
@@ -96,8 +86,8 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 							style={{ width: "100%" }}
 							format={"DD/MM/YYYY"}
 							disabledDate={disabledDate}
-							value={form.getFieldValue("startDate")}
-							onChange={(value) => onChange(value, "startDate")}
+							value={form.getFieldValue("startingDate")}
+							onChange={(value) => onChange(value, "startingDate")}
 						/>
 					</Form.Item>
 				</Col>

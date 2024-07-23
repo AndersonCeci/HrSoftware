@@ -1,14 +1,15 @@
 export type EmployeeDataType = {
-	id: number;
+	_id: string;
 	name: string;
 	surname: string;
 	username: string;
 	email: string;
-	phone: string;
+	phoneNumber: number;
 	salary: number;
 	teamLeader: string;
-	startDate: string;
+	startingDate: string;
 	position: string;
+	nID: string;
 	// status: "Working" | "Remote" | "On Leave";
 	contract: string;
 };
