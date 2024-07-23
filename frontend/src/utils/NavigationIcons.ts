@@ -3,7 +3,8 @@ import {
 	CalendarOutlined,
 	BookOutlined,
 	ApartmentOutlined,
-    BellOutlined
+    BellOutlined,
+    SettingOutlined
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -14,6 +15,7 @@ import { GiDesk } from "react-icons/gi";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { TbUserCancel } from "react-icons/tb";
 import { MdOutlinePersonSearch } from "react-icons/md";
+
 
 const NavigationIcons = {
     ApartmentOutlined,
@@ -29,6 +31,8 @@ const NavigationIcons = {
     FaMoneyBillTrendUp,
     TbUserCancel,
     MdOutlinePersonSearch,
+    IoSettingsOutline:SettingOutlined 
+    
 };
 
 export default NavigationIcons;

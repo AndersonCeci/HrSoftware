@@ -12,22 +12,24 @@ import RecruitmentPage from "./RecruitmentPage";
 import EmploymentPage from "./EmploymentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
+import SettingsPage from "./Settings/SettingsPage";
 
 const PageRoutesComponents = {
-    LoginPAge,
-    DashboardPage,
-    PersonalCalendarPage,
-    CompanyBackgroundPage,
-    NotificationPage,
-    EventPage,
-    AssetsPage,
-    OrganisationalStructurePage,
-    SalariesPage,
-    DayOffPage,
-    PromotionPage,
-    RecruitmentPage,
-    EmploymentPage,
-    DismissedPage
+	LoginPAge,
+	DashboardPage,
+	PersonalCalendarPage,
+	CompanyBackgroundPage,
+	NotificationPage,
+	EventPage,
+	AssetsPage,
+	OrganisationalStructurePage,
+	SalariesPage,
+	DayOffPage,
+	PromotionPage,
+	RecruitmentPage,
+	EmploymentPage,
+	DismissedPage,
+	SettingsPage,
 };
 
 export default PageRoutesComponents;    

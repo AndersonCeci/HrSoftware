@@ -1,23 +1,24 @@
 import { Button, Form, Input } from "antd";
-import { MutableRefObject } from "react";
+import { MutableRefObject, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
-import { Salary } from "../../../types/SalaryProps";
+import { ModalContext, SalaryContext } from "../context";
 
 interface AddBonusProps {
-  isAddBonusModalOpen: boolean;
-  selectedSalary: Salary | undefined;
   addBonusRef: MutableRefObject<any>;
   handleAddBonusSubmit: (values: any) => void;
-  setIsAddBonusModalOpen: (isOpen: boolean) => void;
 }
 
 const AddBonusModal: React.FC<AddBonusProps> = ({
-  isAddBonusModalOpen,
   addBonusRef,
   handleAddBonusSubmit,
-  setIsAddBonusModalOpen,
-  selectedSalary,
 }) => {
+  const { selectedSalary } = useContext(SalaryContext)!;
+  const { isAddBonusModalOpen, setIsAddBonusModalOpen } = useContext(ModalContext)!;
+
+  if (!selectedSalary) {
+    return null;
+  }
+
   return (
     <Modal
       isOpen={isAddBonusModalOpen}
@@ -31,15 +32,13 @@ const AddBonusModal: React.FC<AddBonusProps> = ({
         style={{ padding: 40 }}
         initialValues={{
           ...selectedSalary,
-          bonuses: selectedSalary
-            ? selectedSalary.bonuses.map((bonus, index) => ({
-                ...bonus,
-                key: index.toString(),
-              }))
-            : [],
+          bonuses: selectedSalary.bonuses.map((bonus, index) => ({
+            ...bonus,
+            key: index.toString(),
+          })),
         }}
       >
-        <h2>Add bonuses </h2>
+        <h2>Add bonuses</h2>
         <Form.List name="bonuses">
           {(fields, { add, remove }) => (
             <>
