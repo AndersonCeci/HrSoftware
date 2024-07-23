@@ -12,6 +12,7 @@ import EmploymentPage from "./Employment/EmploymentPage";
 import RecruitmentPage from "./Recruitments/RecruitmentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
+import SettingsPage from "./Settings/SettingsPage";
 
 const PageRoutesComponents = {
 	LoginPAge,
@@ -28,6 +29,7 @@ const PageRoutesComponents = {
 	RecruitmentPage,
 	EmploymentPage,
 	DismissedPage,
+	SettingsPage,
 };
 
 export default PageRoutesComponents;

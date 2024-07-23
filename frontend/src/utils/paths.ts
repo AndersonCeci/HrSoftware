@@ -37,6 +37,16 @@ export const Paths = {
 			},
 		],
 	},
+	Settings: {
+		path: "settings",
+		icon: NavigationIcons.IoSettingsOutline,
+		children: [
+			{
+				path: "",
+				pageElement: PageRoutesComponents.SettingsPage,
+			},
+		],
+	},
 	Background: {
 		path: "company-background",
 		// icon: NavigationIcons.BgColorsOutlined,
