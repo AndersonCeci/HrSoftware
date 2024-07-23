@@ -23,7 +23,6 @@ export class EmployeeController {
   @UsePipes(new ValidationPipe())
   create ( @Body() createEmployeeDto: CreateEmployeeDto )
   {
-    console.log(this.employeeService.create(createEmployeeDto))
     return this.employeeService.create(createEmployeeDto);
   }
 
@@ -32,10 +31,6 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
-  // @Get('/left')
-  //  findLeft(): Promise<Employee[]> {
-  //   return this.employeeService.findLeft();
-  // }
 
   @Get(':id')
    findOne(@Param('id') id: string): Promise<Employee | null> {
