@@ -1,12 +1,7 @@
-import AssetProvider from "./context/asset-context";
 import AssetContent from "./components/AssetContent";
 
 const AssetsPage: React.FC = () => {
-	return (
-		<AssetProvider>
-			<AssetContent />
-		</AssetProvider>
-	);
+	return <AssetContent />;
 };
 
 export default AssetsPage;

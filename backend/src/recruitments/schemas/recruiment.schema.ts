@@ -14,8 +14,13 @@ export class Recruitment extends Document {
 
   @Prop({
     required: true,
-    enum: ['approved', 'rejected', '1st interview', '2nd interview', 'pending'],
-    default: '1st interview',
+    enum: [
+      'Applied',
+      'Rejected',
+      '1st Interview',
+      '2nd Interview',
+      'Offer Made',
+    ],
   })
   stage: string;
 
@@ -24,6 +29,10 @@ export class Recruitment extends Document {
 
   @Prop()
   cv: string;
+
+
+  @Prop({type : Date})
+  submittedDate: Date;
 }
 
 export const RecruitmentSchema = SchemaFactory.createForClass(Recruitment);

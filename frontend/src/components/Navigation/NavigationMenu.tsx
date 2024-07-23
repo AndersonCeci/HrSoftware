@@ -27,7 +27,7 @@ const items: any = navElements.map((element) => {
 
 const NavigationMenu = () => {
 	const onClick: MenuProps["onClick"] = (e) => {
-		console.log("click ", e);
+		// console.log("click ", e);
 	};
 
 	const location = useLocation();

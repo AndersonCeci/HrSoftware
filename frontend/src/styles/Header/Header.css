@@ -1,13 +1,15 @@
 .header{
     background: linear-gradient(135deg, #30d3cb, #2a9be6,#2a9be6,#246afe, #246afe);
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .header-icons-list{
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 30px;
     list-style: none;
     gap: 30px;
     width: 100%;
@@ -20,4 +22,12 @@
         color: #fff;
         scale: 2.1;
     }
+}
+
+@media screen and (max-width: 476px){
+    .header-icons-list{
+        justify-content: start;
+        padding: 0 35px;
+    }
+    
 }

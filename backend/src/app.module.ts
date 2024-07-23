@@ -2,12 +2,15 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
+import { AuthModule } from './auth/auth.module';
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
+import { EmployeeModule } from './employee/employe.module';
+import { LeftModule } from './left/left.module';
+import { AssetsModule } from './assets/assets.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -16,6 +19,7 @@ import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
 
+import { LeftService } from './left/left.service';
 
 @Module({
   imports: [
@@ -52,12 +56,15 @@ import { MailModule } from './modules/mail/mail.module';
     UsersModule,
     RecruimentsModule,
     AuthModule,
-    SalaryModule,
+   SalaryModule,
     EventsModule,
-    MailModule
+    MailModule,
+    EmployeeModule,
+    LeftModule,
+    AssetsModule
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, LeftService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
