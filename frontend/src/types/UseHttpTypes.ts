@@ -7,5 +7,5 @@ type RequestConfigType = {
 
 export type sendRequestType = (
 	requestConfig: RequestConfigType,
-	applyData?: (data: any) => void,
+	applyData: (data: any) => void,
 ) => void;
