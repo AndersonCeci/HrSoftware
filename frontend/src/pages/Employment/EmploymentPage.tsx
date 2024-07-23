@@ -1,8 +1,8 @@
 import Table from "../../components/Table/Table";
 import TableHeader from "../../components/Table/TableHeader";
 import Drawer from "../../components/Shared/Drawer";
+import Loader from "../../components/Shared/Loader";
 import AddEmployeeForm from "./components/AddEmployeeForm";
-import dummydataemployee from "../../utils/dummydataemployee";
 import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
@@ -15,7 +15,16 @@ const EmploymentPage: React.FC = () => {
 	const [isLoading, error, sendRequest] = useHttp();
 
 	useEffect(() => {
-		setTableData(dummydataemployee);
+
+		sendRequest(
+			{
+				url: "http://localhost:3000/employees",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			setTableData,
+		);
 	}, []);
 
 	function handleEditButtonClick(record: EmployeeDataType) {
@@ -52,7 +61,7 @@ const EmploymentPage: React.FC = () => {
 
 	return (
 		<>
-			<Drawer isOpen={open} onClose={handlClose}>
+			<Drawer height={500} isOpen={open} onClose={handlClose}>
 				<AddEmployeeForm
 					selectedEmployee={editedData}
 					onAdd={handleAddNewEmployee}
@@ -61,7 +70,7 @@ const EmploymentPage: React.FC = () => {
 			</Drawer>
 			<TableHeader title="Employment" onClick={() => setOpen(true)} />
 			<section className="test">
-				<Table columns={columns} data={tableData} fixed />
+				{isLoading ? <Loader /> : <Table columns={columns} data={tableData} fixed/>}
 			</section>
 		</>
 	);
