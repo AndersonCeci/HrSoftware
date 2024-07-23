@@ -69,6 +69,23 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 					</Form.Item>
 				</Col>
 			</Row>
+			<Row>
+				<Col span={10} offset={1}>
+					<Form.Item
+						label="Personal Number"
+						name="personalNumber"
+						rules={[{ required: true, message: "Please input personal Number!" }]}
+					>
+						<Input
+							maxLength={10}
+							size="large"
+							placeholder="Enter personal number"
+							value={form.getFieldValue("personalNumber")}
+							onChange={(e) => onChange(e.target.value, "personalNumber")}
+						/>
+					</Form.Item>
+				</Col>
+			</Row>
 		</Flex>
 	);
 };

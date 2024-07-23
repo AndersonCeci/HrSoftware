@@ -1,25 +1,23 @@
-// import Form from "antd/es/form/Form";
 import Steps from "../../../components/Shared/Steps";
-import Button from "../../../components/Shared/Button";
-import { UserOutlined } from "@ant-design/icons";
-import { FaUserCheck } from "react-icons/fa";
-import { IoDocumentOutline } from "react-icons/io5";
-import { CiCircleCheck } from "react-icons/ci";
-import { FaCircleCheck } from "react-icons/fa6";
-
-import { BsPencilSquare } from "react-icons/bs";
-import FirstPanel from "./FirstPanel";
-import SecondStep from "./SecondStep";
-import { Space, Flex, Form, Layout } from "antd";
-import { ButtonType } from "../../../enums/Button";
+import DrowerButton from "./DrowerButton";
+import getStepItems from "./StepItem";
+import dayjs from "dayjs";
+import { Form, Layout } from "antd";
+import useHttp from "../../../hooks/useHttp";
 import { useState } from "react";
+import exporter from "../utils/helperFunctions";
+import { AddEmployeeFormProps } from "../types/EmployeeFormTypes";
 import { EmployeeDataType } from "../types/Employee";
 
-const { Content, Sider, Header } = Layout;
+const { Content, Sider } = Layout;
+const devRoles = exporter.getDevRoles();
 
-const AddEmployeeForm = () => {
+const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormProps) => {
 	const [current, setCurrent] = useState(0);
 	const [form] = Form.useForm<EmployeeDataType>();
+	const [isLoading, error, sendRequest] = useHttp();
+	const initialValues = exporter.getInitialFormValues(selectedEmployee);
+	const [valuesToSubmit, setValuesToSubmit] = useState(initialValues);
 
 	function handleStepChanges(changer: number) {
 		if (changer > 0) {
@@ -32,77 +30,74 @@ const AddEmployeeForm = () => {
 	}
 
 	function handleFinish() {
-		form.validateFields().then((values) => {
-			console.log(values);
-		});
+		if (exporter.validate(valuesToSubmit.salary)) {
+			setValuesToSubmit((prev) => ({ ...prev, salary: 1 }));
+			return;
+		}
 
-		const fullname = `${form.getFieldValue("name")} ${form.getFieldValue("surname")}`;
-		const codeviderEmail = form.getFieldValue("email").split("@")[0] + "@codevider.com";
-		const dateToStart = form.getFieldValue("starting");
+		setCurrent((prev) => prev + 1);
 
-
-
-		const vdataToSubmit = {
-			name: form.getFieldValue("name"),
-			surname: form.getFieldValue("surname"),
-			username: fullname,
-			email: codeviderEmail,
-			phone: form.getFieldValue("phone"),
-			position: form.getFieldValue("position"),
-			salary: form.getFieldValue("salary"),
-			teamLeader: form.getFieldValue("teamLeader"),
-			dateToStart: `${dateToStart.$D}/${dateToStart.$M + 1}/${dateToStart.$y}`,
-			contract: form.getFieldValue("contract"),
+		const data = {
+			...valuesToSubmit,
+			username: valuesToSubmit.name + valuesToSubmit.surname,
 			password: "codevider",
+			salary: parseInt(valuesToSubmit.salary.toString()),
+			status: "Working",
+			startingDate: dayjs(valuesToSubmit.startDate).format("D/M/YYYY"),
 		};
 
-		console.log(vdataToSubmit, "vdataToSubmit");
+		const userRole = devRoles.includes(data.position)
+			? "dev"
+			: valuesToSubmit.position.toLowerCase();
 
-		handleStepChanges(1);
+		console.log(data);
+
+		if (selectedEmployee) {
+			sendRequest(
+				exporter.submitHelper(`employees/${selectedEmployee.id}`, data, "PATCH"),
+				(responseData: any) => {
+					onEdit(responseData);
+				},
+			);
+		} else {
+			sendRequest(exporter.submitHelper("employees", data), (responseData: any) => {
+				onAdd(responseData);
+			});
+			sendRequest(
+				exporter.submitHelper("users", {
+					username: data.username,
+					password: data.password,
+					role: userRole,
+				}),
+				(responseData: any) => {
+					console.log(responseData, "response data");
+				},
+			);
+		}
 	}
 
 	function handleInputChange(value: any, identifier: string) {
-		console.log(value, identifier);
 		form.setFieldsValue({ [identifier]: value });
+		setValuesToSubmit((prev) => ({ ...prev, [identifier]: value }));
 	}
 
-	const item = [
-		{
-			subTitle: "Create Account",
-			content: <FirstPanel onChange={handleInputChange} form={form} />,
-			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
-		},
-		{
-			subTitle: "Add Information",
-			content: <SecondStep onChange={handleInputChange} form={form} />,
-			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
-		},
-		{
-			subTitle: "Finalize Account",
-			content: <h1>EVALUATE</h1>,
-			icon: current === 2 ? <FaCircleCheck /> : <CiCircleCheck />,
-		},
-	];
+	const item = getStepItems(current, handleInputChange, form, isLoading, error);
 
 	return (
 		<Layout style={{ height: "100%", background: "#fff" }}>
 			<Content>
-				<Form layout="vertical" form={form} name="basic" initialValues={{ remember: true }}>
+				<Form layout="vertical" form={form} name="basic" initialValues={initialValues}>
 					<div>{item[current].content}</div>
-					<Space>
-						{current > 0 && <Button onClick={() => handleStepChanges(-1)}> Back</Button>}
-						<Button
-							type={ButtonType.PRIMARY}
-							onClick={() => (current === item.length - 2 ? handleFinish() : handleStepChanges(1))}
-							block
-						>
-							{current === item.length - 2 ? "Finish" : "Next"}
-						</Button>
-					</Space>
+					<DrowerButton
+						current={current}
+						item={item}
+						onChange={handleStepChanges}
+						onFinish={handleFinish}
+					/>
 				</Form>
 			</Content>
 			<Sider theme={"light"}>
-				<Steps direction="vertical" current={current} responsive items={item} />
+				<Steps direction="vertical" current={current} items={item} />
 			</Sider>
 		</Layout>
 	);

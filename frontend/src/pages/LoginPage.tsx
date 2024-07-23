@@ -2,58 +2,89 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import "../styles/LoginPage.css";
-// import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useHttp from "../hooks/useHttp";
 
 import Login from "../assets/login.svg";
-import LoginLogo from "../assets/loginlogo.png"
+import LoginLogo from "../assets/loginlogo.png";
 
 const LoginPage: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [isLoading, error, sendRequest] = useHttp();
 	const navigate = useNavigate();
 
 	const onFinish = (values: unknown) => {
 		console.log("Received values of form:", values);
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		try {
-			const response = await fetch("http://localhost:3000/login", {
+	// const handleSubmit = async (e: React.FormEvent) => {
+	// 	e.preventDefault();
+	// 	try {
+	// 		const response = await fetch("http://localhost:3000/login", {
+	// 			method: "POST",
+	// 			headers: { "Content-Type": "application/json" },
+	// 			body: JSON.stringify({ username, password }),
+	// 		});
+	// 		const data = await response.json();
+
+	// 		if (!response.ok) {
+	// 			throw new Error(data.message || "Authentication failed");
+	// 		}
+
+	// 		const userData = {
+	// 			token: data.accessToken,
+	// 			username: data.username,
+	// 			userId: data._id,
+	// 			role: data.role,
+	// 			loginRole: data.loginRole,
+	// 		};
+
+	// 		localStorage.setItem("userData", JSON.stringify(userData));
+
+	// 		console.log("Logged in successfully");
+	// 		navigate("/dashboard");
+	// 	} catch (error) {
+	// 		console.error("Login error:", error);
+	// 	}
+	// };
+
+	function handleSubmit() {
+		if (!username || !password) {
+			console.log("Please fill in all fields");
+			return;
+		}
+
+		sendRequest(
+			{
+				url: "http://localhost:3000/login",
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ username, password }),
-			});
-			const data = await response.json();
+				body: { username, password },
+			},
+			(responseData: any) => {
+				console.log(responseData);
+				const userData = {
+					token: responseData.accessToken,
+					username: responseData.username,
+					userId: responseData._id,
+					role: responseData.role,
+					loginRole: responseData.loginRole,
+				};
 
-			if (!response.ok) {
-				throw new Error(data.message || "Authentication failed");
-			}
+				localStorage.setItem("userData", JSON.stringify(userData));
+				navigate("/dashboard");
+			},
+		);
+	}
 
-			const userData = {
-				token: data.accessToken,
-				username: data.username,
-				userId: data._id,
-				role: data.role,
-				loginRole: data.loginRole,
-			};
-
-			localStorage.setItem("userData", JSON.stringify(userData));
-
-			console.log("Logged in successfully");
-			navigate("/dashboard");
-		} catch (error) {
-			console.error("Login error:", error);
-		}
-	};
-	useEffect(() => {
-		const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-		if (userData.token) {
-			navigate("/dashboard");
-		}
-	}, [navigate]);
+	// useEffect(() => {
+	// 	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+	// 	if (userData.token) {
+	// 		navigate("/dashboard");
+	// 	}
+	// }, []);
 
 	return (
 		<div className="login-page">
@@ -64,9 +95,9 @@ const LoginPage: React.FC = () => {
 				name="normal-login"
 				className="login-form"
 				initialValues={{ remember: true }}
-				onFinish={onFinish}
+				// onFinish={handleSubmit}
 			>
-        <img src={LoginLogo} className="loginlogo"></img>
+				<img src={LoginLogo} className="loginlogo"></img>
 				<div className="login-inputs">
 					<h2 className="login-title">Login</h2>
 					<Form.Item
@@ -97,11 +128,11 @@ const LoginPage: React.FC = () => {
 					<Form.Item>
 						<Button
 							type="primary"
-							htmlType="submit"
+							// htmlType="submit"
 							className="login-form-button"
 							onClick={handleSubmit}
 						>
-							Log in
+							{isLoading ? "Loading..." : "Log in"}
 						</Button>
 					</Form.Item>
 				</div>

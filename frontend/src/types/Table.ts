@@ -9,16 +9,16 @@ export type TablePropsType = {
 };
 
 export type createTableColumns = {
-	title: string;
-	dataIndex: string;
-	key: string;
-	fixed?: "left" | "right" | undefined; 
-	displayAs?: (text: any, record: any) => JSX.Element;
-	width?: number | string;
-	align?: "left" | "right" | "center";
-	filters?: { text: string; value: string }[];
-	filterSearch?: boolean | ((inputValue: string, filter: any) => boolean);
-	filterIcon?: JSX.Element ;
-	filterDropdown?: boolean;
-	onFilter?: (value: any, record: any) => boolean;
-}
+  title: string;
+  dataIndex: string;
+  key: string;
+  fixed?: "left" | "right" | undefined;
+  displayAs?: (text: any, record: any) => JSX.Element;
+  width?: number | string;
+  align?: "left" | "right" | "center";
+  filters?: { text: string; value: string }[];
+  filterSearch?: boolean | ((inputValue: string, filter: any) => boolean);
+  filterIcon?: JSX.Element;
+  filterDropdown?: boolean;
+  onFilter?: (value: any, record: any) => boolean;
+};

@@ -8,9 +8,12 @@ import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './modules/events/events.module';
 import { RecruimentsModule } from './recruitments/recruitments.module';
+import { EmployeeModule } from './employee/employe.module';
+import { LeftModule } from './left/left.module';
 import { AssetsModule } from './assets/assets.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LeftService } from './left/left.service';
 
 @Module({
   imports: [
@@ -24,12 +27,14 @@ import { ScheduleModule } from '@nestjs/schedule';
     UsersModule,
     RecruimentsModule,
     AuthModule,
-    SalaryModule,
+   SalaryModule,
     EventsModule,
+    EmployeeModule,
+    LeftModule,
     AssetsModule
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, LeftService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

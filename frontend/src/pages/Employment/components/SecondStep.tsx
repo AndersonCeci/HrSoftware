@@ -1,12 +1,10 @@
-import { Button, Col, DatePicker, Form, Input, Row, Select, Flex, Upload } from "antd";
-// import { useRef} from "react";
+import { Col, DatePicker, Form, Input, Row, Select, Flex, Upload, InputNumber } from "antd";
+import Button from "../../../components/Shared/Button";
 import { EuroCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { MdUploadFile } from "react-icons/md";
 import { GetProps } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-
-import { useState } from "react";
+import { ButtonSize } from "../../../enums/Button";
 
 type SecondStepProps = {
 	onChange: (value: any, identifier: string) => void;
@@ -21,21 +19,17 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 };
 
 const SecondStep = ({ onChange, form }: SecondStepProps) => {
-	// const addWorkerFormRef = useRef(: );
-	const [file, setFile] = useState(null);
-
 	const position = [
-		{ label: "Frontend Developer", value: "frontend" },
-		{ label: "Backend Developer", value: "backend" },
-		{ label: "Fullstack Developer", value: "fullstack" },
+		{ label: "Frontend Developer", value: "Frontend Developer" },
+		{ label: "Backend Developer", value: "Backend Developer" },
+		{ label: "Fullstack Developer", value: "Fullstack Developer" },
+		{ label: "DevOps Engineer", value: "DevOps Engineer" },
 	];
-
-	console.log(file, "file");
 
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Position"
 						name="position"
@@ -50,78 +44,74 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Salary"
 						name="salary"
-						rules={[{ required: true, message: "Please enter a password" }]}
+						rules={[{ required: true, message: "Please enter valid salary" }]}
 					>
-						<Input
-							prefix={<EuroCircleOutlined style={{ color: "#c8c8c8" }} />}
+						<InputNumber
+							min={1}
+							addonBefore={<EuroCircleOutlined style={{ color: "#c8c8c8" }} />}
 							size="large"
-							placeholder="Enter a salary amount"
 							type="number"
+							placeholder="Enter a salary amount"
+							style={{ width: "100%" }}
 							value={form.getFieldValue("salary")}
-							onChange={(e) => onChange(e.target.value, "salary")}
+							status={form.getFieldError("salary") < 0 ? "error" : ""}
+							onChange={(e) => {
+								onChange(e.target.value, "salary");
+							}}
+							onBlur={(e) => {
+								onChange(e.target.value, "salary");
+							}}
 						/>
 					</Form.Item>
 				</Col>
 			</Row>
 			<Row gutter={16}>
-				<Col offset={1} span={10}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Team Leader"
 						name="teamLeader"
-						rules={[{ required: true, message: "Please enter a team leader" }]}
+						rules={[{ message: "Please enter a team leader" }]}
 					>
-						<Select
+						<Input
 							size="large"
-							options={position}
-							placeholder="Choose a team leader"
+							placeholder="Enter a team leader"
 							value={form.getFieldValue("teamLeader")}
-							onChange={(value) => onChange(value, "teamLeader")}
+							onChange={(e) => onChange(e.target.value, "teamLeader")}
 						/>
 					</Form.Item>
 				</Col>
 
-				<Col offset={1} span={5}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }} lg={{ offset: 1, span: 5 }}>
 					<Form.Item
 						label="Starting on"
-						name="starting"
-						rules={[{ required: true, message: "Please enter a starting date" }]}
+						name="startDate"
+						// rules={[{ required: true, message: "Please enter a starting date" }]}
 					>
 						<DatePicker
 							size="large"
 							style={{ width: "100%" }}
-							format={"MM/DD/YYYY"}
-              disabledDate={disabledDate}
-							value={form.getFieldValue("starting")}
-							onChange={(value) => onChange(value, "starting")}
+							format={"DD/MM/YYYY"}
+							disabledDate={disabledDate}
+							value={form.getFieldValue("startDate")}
+							onChange={(value) => onChange(value, "startDate")}
 						/>
 					</Form.Item>
 				</Col>
 
-				<Col offset={1} span={5}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 21 }} lg={{ offset: 0, span: 5 }}>
 					<Form.Item
 						label="Contract"
 						name="contract"
-						rules={[{ required: true, message: "Please enter a contract" }]}
+						style={{ width: "100%" }}
+						// rules={[{ required: true, message: "Please enter a contract" }]}
 					>
-						<Upload>
-							<Button
-								size="large"
-								style={{ width: 180, color: "#c8c8c8" }}
-								icon={<UploadOutlined />}
-								block
-								// onClick={(e) => {
-								//   e.preventDefault();
-								//   console.log("clicked");
-								//   setFile(e.target.files[0]);
-								// }}
-							>
-								Click to upload
-							</Button>
-						</Upload>
+						<Button size={ButtonSize.LARGE} block icon={<UploadOutlined />}>
+							<Upload>Click to upload</Upload>
+						</Button>
 					</Form.Item>
 				</Col>
 			</Row>

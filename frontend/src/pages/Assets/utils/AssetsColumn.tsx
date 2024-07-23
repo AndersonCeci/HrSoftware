@@ -12,16 +12,6 @@ export function getColumns(
 ): TableProps<AssetDatatype>["columns"] {
 	return [
 		createTableColumns({
-			title: "Type",
-			dataIndex: "assetType",
-			key: "type",
-			width: 150,
-			filters: getAllUniqueValues(tableData, "assetType"),
-			onFilter: (value, record) => record.assetType.indexOf(value) === 0,
-		}),
-		createTableColumns({ title: "Code", dataIndex: "assetCode", key: "code", width: 150 }),
-		createTableColumns({ title: "Date", dataIndex: "dateGiven", key: "date", width: 150 }),
-		createTableColumns({
 			title: "Employee",
 			dataIndex: "userName",
 			key: "employee",
@@ -31,6 +21,16 @@ export function getColumns(
 			onFilter: (inputValue, filter) =>
 				filter.userName.toLowerCase().includes(inputValue.toLowerCase()),
 		}),
+		createTableColumns({
+			title: "Type",
+			dataIndex: "assetType",
+			key: "type",
+			width: 150,
+			filters: getAllUniqueValues(tableData, "assetType"),
+			onFilter: (value, record) => record.assetType.indexOf(value) === 0,
+		}),
+		createTableColumns({ title: "Date", dataIndex: "dateGiven", key: "date", width: 150 }),
+		createTableColumns({ title: "Code", dataIndex: "assetCode", key: "code", width: 150 }),
 		createTableColumns({
 			title: "Action",
 			dataIndex: "_id",
@@ -44,8 +44,9 @@ export function getColumns(
 								label: (
 									<Button
 										type={ButtonType.TEXT}
-										onClick={() => {handleDataEdit(record) 
-											console.log(record)
+										onClick={() => {
+											handleDataEdit(record);
+											console.log(record);
 										}}
 										// size={ButtonSize.LARGE}
 										icon={<EditOutlined />}
@@ -78,7 +79,8 @@ export function getColumns(
 				</Dropdown>
 			),
 			fixed: "right",
-			width: 30,
+			align: "center",
+			width: 20,
 		}),
 	];
 }
