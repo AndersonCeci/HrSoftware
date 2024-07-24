@@ -14,11 +14,13 @@ import { AssetsModule } from './assets/assets.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LeftService } from './left/left.service';
+import { UploadModule } from './upload/upload.module';
+import { FirebaseModule } from './upload/firebaseUpload.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:'.env',
+      envFilePath: '.env',
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
@@ -27,19 +29,21 @@ import { LeftService } from './left/left.service';
     UsersModule,
     RecruimentsModule,
     AuthModule,
-   SalaryModule,
+    SalaryModule,
     EventsModule,
     EmployeeModule,
     LeftModule,
-    AssetsModule
+    AssetsModule,
+    UploadModule,
+    FirebaseModule,
   ],
   controllers: [],
   providers: [AppService, LeftService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      consumer.apply(LoggingMiddleware).forRoutes("*")
-      console.log("Middleware Applied")
+    consumer.apply(LoggingMiddleware).forRoutes('*');
+    console.log('Middleware Applied');
   }
 }
 

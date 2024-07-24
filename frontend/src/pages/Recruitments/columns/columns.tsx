@@ -1,7 +1,10 @@
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import { TableProps, Dropdown } from "antd";
-import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
+import {
+  createTableColumns,
+  getAllUniqueValues,
+} from "../../../components/Table/Table";
 import { IoDocumentAttach } from "react-icons/io5";
 import Select from "../../../components/Shared/Select";
 import Button from "../../../components/Shared/Button";
@@ -12,7 +15,6 @@ type GenerateColumnsParams = {
   handleEdit: (record: RecrutmentDataType) => void;
   handleDelete: (id: string) => void;
 };
-
 
 export const columns = ({
   tableData,

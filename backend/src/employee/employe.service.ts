@@ -31,7 +31,7 @@ export class EmployeeService {
     return this.employeeModel.findById(id).exec();
   }
 
-  update(id: string, updateEmployeeDto: any): Promise<Employee | null> {
+  update(id: string, updateEmployeeDto: CreateEmployeeDto): Promise<Employee | null> {
     return this.employeeModel
       .findByIdAndUpdate(id, updateEmployeeDto, { new: true })
       .exec();
