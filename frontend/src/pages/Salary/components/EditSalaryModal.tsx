@@ -1,24 +1,22 @@
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
 import Form from "antd/es/form";
 import { Input } from "antd";
-import { Salary } from "../../../types/SalaryProps";
+import { ModalContext, SalaryContext } from "../context";
 
 interface EditSalaryProps {
-  isEditModalOpen: boolean;
   editFormRef: MutableRefObject<any>;
-  setIsEditModalOpen: (isOpen: boolean) => void;
   handleEditSubmit: (values: any) => void;
-  selectedSalary: Salary | undefined;
 }
 
 const EditSalaryModal: React.FC<EditSalaryProps> = ({
-  isEditModalOpen,
   editFormRef,
-  setIsEditModalOpen,
+
   handleEditSubmit,
-  selectedSalary,
 }) => {
+  const { selectedSalary } = useContext(SalaryContext)!;
+  const { isEditModalOpen, setIsEditModalOpen } = useContext(ModalContext)!;
+
   return (
     <Modal
       isOpen={isEditModalOpen}
