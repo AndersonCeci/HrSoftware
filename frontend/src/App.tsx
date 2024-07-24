@@ -11,7 +11,9 @@ const iterationRoutes = [
 	Paths.Notifications,
 	Paths.Company,
 	Paths.Employee,
-	Paths.Background
+	Paths.Background,
+	Paths.DayOff,
+	Paths.Settings
 ];
 
 const router = createBrowserRouter([

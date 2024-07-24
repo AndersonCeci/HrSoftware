@@ -5,7 +5,7 @@ import { Bonus, BonusSchema } from '../models/bonus.model';
 
 
 
-@Schema()
+@Schema({timestamps: true})
 export class Salary extends Document {
   @Prop({ required: true, unique: true })
   employeeID: string;
