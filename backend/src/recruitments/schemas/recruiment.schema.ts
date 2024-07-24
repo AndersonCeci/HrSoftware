@@ -6,8 +6,14 @@ export class Recruitment extends Document {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true })
+  surname: string;
+
   @Prop({ required: true, unique: true })
   email: string;
+
+  @Prop()
+  phoneNumber: number;
 
   @Prop({ required: true })
   position: string;
@@ -30,9 +36,8 @@ export class Recruitment extends Document {
   @Prop()
   cv: string;
 
-
-  @Prop({type : Date})
-  submittedDate: Date;
+  @Prop()
+  submittedDate: string;
 }
 
 export const RecruitmentSchema = SchemaFactory.createForClass(Recruitment);

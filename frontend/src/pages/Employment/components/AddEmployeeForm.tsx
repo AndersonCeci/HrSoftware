@@ -40,7 +40,7 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 		const data = {
 			...valuesToSubmit,
 			username: valuesToSubmit.name + valuesToSubmit.surname,
-			password: "codevider",
+			password: "codevider" + valuesToSubmit.surname,
 			phoneNumber: parseInt(valuesToSubmit.phoneNumber.toString()),
 			salary: parseInt(valuesToSubmit.salary.toString()),
 			// status: "Working",
