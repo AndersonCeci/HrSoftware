@@ -10,37 +10,39 @@ export class EmployeeService {
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
   ) {}
 
-  create ( createEmployeeDto: CreateEmployeeDto )
-  {
+  create(createEmployeeDto: CreateEmployeeDto) {
     const createdEmploy = new this.employeeModel(createEmployeeDto).save();
-    return createdEmploy
+    return createdEmploy;
   }
-
 
   findAll(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: false}).exec();
+    return this.employeeModel.find({ isDeleted: false }).exec();
   }
-
   
 
-   findLeft(): Promise<Employee[]> {
-     return this.employeeModel.find({ isDeleted: true}).exec();
-   }
+  findLeft(): Promise<Employee[]> {
+    return this.employeeModel.find({ isDeleted: true }).exec();
+  }
+
 
   findOne(id: string): Promise<Employee | null> {
     return this.employeeModel.findById(id).exec();
   }
 
-  update(id: string, updateEmployeeDto: CreateEmployeeDto): Promise<Employee | null> {
-    return this.employeeModel
-      .findByIdAndUpdate(id, updateEmployeeDto, { new: true })
-      .exec();
+
+  update(id: string, updateEmployeeDto: CreateEmployeeDto) {
+    return this.employeeModel.findByIdAndUpdate(id, updateEmployeeDto, {
+      new: true,
+    });
   }
-  delete(id:string): Promise<Employee | null>{
-     return this.employeeModel.findByIdAndDelete(id)
+
+  delete(id: string): Promise<Employee | null> {
+    return this.employeeModel.findByIdAndDelete(id);
   }
- 
+
   softDeleteAssetById(id: string): Promise<Employee> {
-    return this.employeeModel.findByIdAndUpdate(id, { isDeleted: true }, { new: true }).exec();
+    return this.employeeModel
+      .findByIdAndUpdate(id, { isDeleted: true }, { new: true })
+      .exec();
   }
 }

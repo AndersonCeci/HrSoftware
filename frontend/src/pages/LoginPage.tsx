@@ -79,12 +79,13 @@ const LoginPage: React.FC = () => {
 		);
 	}
 
-	// useEffect(() => {
-	// 	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-	// 	if (userData.token) {
-	// 		navigate("/dashboard");
-	// 	}
-	// }, []);
+	useEffect(() => {
+		const userData = localStorage.getItem("userData");
+		console.log(userData);
+		if (userData) {
+			navigate("/dashboard");
+		}
+	}, []);
 
 	return (
 		<div className="login-page">
@@ -117,9 +118,7 @@ const LoginPage: React.FC = () => {
 						className="password-input"
 						rules={[{ required: true, message: "Please input your password" }]}
 					>
-						<Input
-							prefix={<LockOutlined className="site-form-item-icon" />}
-							type="password"
+						<Input.Password
 							placeholder="Password"
 							onChange={(e) => setPassword(e.target.value)}
 							required

@@ -7,26 +7,30 @@ import CalendarGrid from "../components/Dashboard/CalendarGrid";
 import TaskGrid from "../components/Dashboard/TaskGrid";
 
 export interface Data {
-	noEmployee: number;
-	status: string;
-	color: string;
+  noEmployee: number;
+  status: string;
+  color: string;
+  path: string;
 }
 const initialData: Data[] = [
-	{
-		noEmployee: 300,
-		status: "Active Employee",
-		color: "#ccffcc",
-	},
-	{
-		noEmployee: 100,
-		status: "Remote Employee",
-		color: "#F0E6FA",
-	},
-	{
-		noEmployee: 50,
-		status: "Dismissed Employee",
-		color: "#ceebfd",
-	},
+  {
+    noEmployee: 300,
+    status: "Active Employee",
+    color: "#ccffcc",
+    path:"/employee/employment"
+  },
+  {
+    noEmployee: 100,
+    status: "Remote Employee",
+    color: "#F0E6FA",
+    path:"/employee/employment"
+  },
+  {
+    noEmployee: 50,
+    status: "Dismissed Employee",
+    color: "#ceebfd",
+    path:"/employee/dismissed"
+  },
 ];
 const DashboardPage: React.FC = () => {
 

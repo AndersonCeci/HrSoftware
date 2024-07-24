@@ -13,6 +13,12 @@ import { LeftModule } from './left/left.module';
 import { AssetsModule } from './assets/assets.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailModule } from './modules/mail/mail.module';
+
 import { LeftService } from './left/left.service';
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
@@ -26,11 +32,35 @@ import { FirebaseModule } from './upload/firebaseUpload.module';
     MongooseModule.forRoot(process.env.DBURL),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async () => ({
+        transport: {
+          host: process.env.HOST,
+          auth: {
+            user: process.env.MAILJET_API_KEY,
+            pass: process.env.MAILJET_API_SECRET,
+          },
+        },
+        defaults: {
+          from: '"No Reply" <no-reply@hrsofware.com>',
+        },
+        template: {
+          dir: join(__dirname, '..','src', 'modules', 'mail', 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
     UsersModule,
     RecruimentsModule,
     AuthModule,
     SalaryModule,
     EventsModule,
+    MailModule,
     EmployeeModule,
     LeftModule,
     AssetsModule,

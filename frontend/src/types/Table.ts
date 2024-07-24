@@ -2,9 +2,10 @@ import type { TableProps } from "antd";
 import { createTableColumns } from "../components/Table/Table";
 
 export type TablePropsType = {
-  data: any[];
-  columns: TableProps<any>["columns"];
-  fixed?: boolean;
+	data: any[];
+	columns: TableProps<any>["columns"];
+	fixed?: boolean;
+	pageSize?: number;
 };
 
 export type createTableColumns = {
