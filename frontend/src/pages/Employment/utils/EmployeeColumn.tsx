@@ -50,8 +50,8 @@ export function getColumns(
 		// }),
 		createTableColumns({
 			title: "Phone",
-			dataIndex: "phone",
-			key: "phone",
+			dataIndex: "phoneNumber",
+			key: "phoneNumber",
 		}),
 		createTableColumns({
 			title: "Poaition",
