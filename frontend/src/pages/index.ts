@@ -10,7 +10,7 @@ import DayOffPage from "./DayOffPage";
 import PromotionPage from "./PromotionPage";
 import EmploymentPage from "./Employment/EmploymentPage";
 import RecruitmentPage from "./Recruitments/RecruitmentPage";
-import DismissedPage from "./DismissedPage";
+import DismissedPage from "./Dissmised/DismissedPage";
 import LoginPAge from "./LoginPage";
 import SettingsPage from "./Settings/SettingsPage";
 
