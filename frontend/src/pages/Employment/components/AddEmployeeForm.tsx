@@ -33,51 +33,50 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 	function handleFinish() {
 		form.validateFields().then(() => {
 			setCurrent((prev) => prev + 1);
+			console.log(form.isFieldsValidating(), "validating");
+  
+			const data = {
+				...valuesToSubmit,
+				username: valuesToSubmit.name + valuesToSubmit.surname,
+				password: "codevider",
+				phoneNumber: parseInt(valuesToSubmit.phoneNumber.toString()),
+				salary: parseInt(valuesToSubmit.salary.toString()),
+				// status: "Working",
+				startingDate: dayjs(valuesToSubmit.startingDate).format("D/M/YYYY"),
+				contract: "Permanent",
+				isDeleted: false,
+			};
+
+			const userRole = devRoles.includes(data.position)
+				? "dev"
+				: valuesToSubmit.position.toLowerCase();
+
+			console.log(data);
+
+			if (selectedEmployee) {
+				console.log(selectedEmployee._id, "selected employee");
+				sendRequest(
+					exporter.submitHelper(`employees/${selectedEmployee._id}`, data, "PATCH"),
+					(responseData: any) => {
+						onEdit(responseData);
+					},
+				);
+			} else {
+				sendRequest(exporter.submitHelper("employees", data), (responseData: any) => {
+					onAdd(responseData);
+				});
+				sendRequest(
+					exporter.submitHelper("users", {
+						username: data.username,
+						password: data.password,
+						role: userRole,
+					}),
+					(responseData: any) => {
+						console.log(responseData, "response data");
+					},
+				);
+			}
 		});
-
-		console.log(form.isFieldsValidating(), "validating");
-
-		const data = {
-			...valuesToSubmit,
-			username: valuesToSubmit.name + valuesToSubmit.surname,
-			password: "codevider",
-			phoneNumber: parseInt(valuesToSubmit.phoneNumber.toString()),
-			salary: parseInt(valuesToSubmit.salary.toString()),
-			// status: "Working",
-			startingDate: dayjs(valuesToSubmit.startingDate).format("D/M/YYYY"),
-			contract: "Permanent",
-			isDeleted: false,
-		};
-
-		const userRole = devRoles.includes(data.position)
-			? "dev"
-			: valuesToSubmit.position.toLowerCase();
-
-		console.log(data);
-
-		if (selectedEmployee) {
-			console.log(selectedEmployee._id, "selected employee");
-			sendRequest(
-				exporter.submitHelper(`employees/${selectedEmployee._id}`, data, "PATCH"),
-				(responseData: any) => {
-					onEdit(responseData);
-				},
-			);
-		} else {
-			sendRequest(exporter.submitHelper("employees", data), (responseData: any) => {
-				onAdd(responseData);
-			});
-			sendRequest(
-				exporter.submitHelper("users", {
-					username: data.username,
-					password: data.password,
-					role: userRole,
-				}),
-				(responseData: any) => {
-					console.log(responseData, "response data");
-				},
-			);
-		}
 	}
 
 	function handleInputChange(value: any, identifier: string) {

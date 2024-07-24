@@ -21,6 +21,8 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 
 const SecondStep = ({ onChange, form }: SecondStepProps) => {
 	const position = getDevRoles().map((role) => ({ label: role, value: role }));
+	console.log("position", position);
+	// position.push({ label: "Human Resources", value: "Hr" });
 
 	return (
 		<Flex vertical>
