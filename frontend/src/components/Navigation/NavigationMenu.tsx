@@ -4,7 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
 
-const navElements = [Paths.Dashboard, Paths.Employee, Paths.Company];
+const navElements = [Paths.Dashboard, Paths.Employee, Paths.DayOff, Paths.Company];
 
 const items: any = navElements.map((element) => {
 	return {
@@ -35,7 +35,7 @@ const NavigationMenu = () => {
 	return (
 		<>
 			<Menu
-				onClick={onClick}
+				// onClick={onClick}/
 				className="side-nevigation-menu"
 				defaultSelectedKeys={[defaultSelectedKey[1]]}
 				defaultOpenKeys={[defaultSelectedKey[0]]}

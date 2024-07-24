@@ -3,7 +3,7 @@ import { Bonus } from "./BonusProps";
 export type Salary ={
     employeeID:string;
     NSSH: string;
-    netSalary:string;
+    netSalary:number;
     workDays:number;
     bonuses:Bonus[];
     socialSecurityContributions: number;

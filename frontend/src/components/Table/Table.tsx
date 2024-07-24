@@ -61,14 +61,14 @@ export function createTableColumns({
 	};
 }
 
-const Table = ({ data, columns, fixed = false }: TablePropsType) => {
+const Table = ({ data, columns, fixed = false, pageSize }: TablePropsType) => {
 	return (
 		<T
 			rowKey={(record) => record.id}
 			locale={{
 				emptyText: "No data available in table. Please check if you have added data to the table. ",
 			}}
-			pagination={{ position: ["bottomLeft"] }}
+			pagination={{ position: ["bottomRight"], pageSize: pageSize? pageSize : 10}}
 			className="information-table-of-doom-and-despair-des-pa-sito "
 			columns={columns}
 			dataSource={data}
