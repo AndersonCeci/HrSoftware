@@ -44,10 +44,20 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 					<Form.Item
 						label="Salary"
 						name="salary"
-						rules={[{ required: true, message: "Please enter valid salary" }]}
+						rules={[
+							{ required: true, message: "Please enter valid salary" },
+							{
+								validator: (rule, value) => {
+									if (value <= 0) {
+										return Promise.reject("Salary must be greater than 0");
+									}
+									return Promise.resolve();
+								},
+								validateTrigger: "onBlur",
+							},
+						]}
 					>
 						<InputNumber
-							min={1}
 							addonBefore={<EuroCircleOutlined style={{ color: "#c8c8c8" }} />}
 							size="large"
 							type="number"
@@ -79,7 +89,7 @@ const SecondStep = ({ onChange, form }: SecondStepProps) => {
 					<Form.Item
 						label="Starting on"
 						name="startingDate"
-						// rules={[{ required: true, message: "Please enter a starting date" }]}
+						rules={[{ required: true, message: "Please enter a starting date" }]}
 					>
 						<DatePicker
 							size="large"

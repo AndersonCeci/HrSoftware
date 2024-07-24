@@ -13,6 +13,7 @@ const EmploymentPage: React.FC = () => {
 	const [open, setOpen] = useState(false);
 	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
 	const [isLoading, error, sendRequest] = useHttp();
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	useEffect(() => {
 		sendRequest(
@@ -48,7 +49,7 @@ const EmploymentPage: React.FC = () => {
 	}
 
 	function handleDeleteButtonClick(record: EmployeeDataType) {
-		console.log(record);
+		setIsDeleting(true);
 		sendRequest(
 			{
 				url: `http://localhost:3000/employees/${record._id}`,
@@ -59,6 +60,7 @@ const EmploymentPage: React.FC = () => {
 			},
 			() => {
 				setTableData((prev) => prev.filter((item) => item._id !== record._id));
+				setIsDeleting(false);
 			},
 		);
 	}
@@ -81,7 +83,7 @@ const EmploymentPage: React.FC = () => {
 			</Drawer>
 			<TableHeader title="Employment" onClick={() => setOpen(true)} />
 			<section className="test">
-				{isLoading ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
+				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
 			</section>
 		</>
 	);

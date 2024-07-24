@@ -39,6 +39,7 @@ const HeaderIcons: React.FC = () => {
 				</li>
 			))}
 		</ul>
+
 	);
 };
 
