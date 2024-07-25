@@ -12,6 +12,7 @@ const iterationRoutes = [
 	Paths.Company,
 	Paths.Employee,
 	Paths.Background,
+	Paths.DayOff,
 	Paths.Settings
 ];
 

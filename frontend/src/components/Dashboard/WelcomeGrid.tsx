@@ -1,8 +1,9 @@
 import { Doughnut } from "react-chartjs-2";
 import { Data } from "../../pages/DashboardPage";
 import "../../styles/Dashboard/WelcomeGrid.css";
-import { Row, Col, Typography } from "antd";
+import { Row, Col, Typography, Button } from "antd";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { NavLink } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -38,13 +39,15 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
             return (
               <Row gutter={[16, 48]} key={data.status}>
                 <Col span={12} style={{ gap: "10px" }}>
-                  <div
+                <NavLink to={data.path}>
+                  <Button
                     className="active-dashboard"
                     style={{ backgroundColor: data.color }}
                   >
                     <Title style={{ margin: 0, color:"#666666" }}>{data.noEmployee}</Title>
                     <Text style={{ fontSize: 20, color:"#666666" }}>{data.status}</Text>
-                  </div>
+                  </Button>
+                  </NavLink>
                 </Col>
               </Row>
             );

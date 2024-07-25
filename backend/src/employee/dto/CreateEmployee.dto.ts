@@ -31,21 +31,7 @@ export class CreateEmployeeDto {
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @IsEnum(
-    [
-      'hr',
-      'JuniorFrontEnd',
-      'JuniorBackEnd',
-      'JuniorFrontEnd',
-      'SeniorBackEnd',
-      'DevOps',
-      'FullStack',
-      'ProjectManager',
-    ],
-    {
-      message: 'Must be one of the following',
-    },
-  )
+  @IsString()
   position?: string;
 
   startingDate?: string;
@@ -53,7 +39,7 @@ export class CreateEmployeeDto {
   phoneNumber: number;
 
   @IsEnum(['Female', 'Male'], {
-    message: 'Must be one of the following',
+    message: 'Must be one of the following gender',
   })
   gender?: string;
 

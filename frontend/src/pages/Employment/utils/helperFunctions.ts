@@ -11,15 +11,15 @@ const exporter = {
 
 export default exporter;
 
-export function getInitialFormValues(data: EmployeeDataType | undefined): initialValuesType {
+export function getInitialFormValues(data: EmployeeDataType | undefined) {
 	const initialValues = data
 		? prepareInitialValues(data)
 		: {
 				name: "",
 				surname: "",
 				email: "",
-				phoneNumber: NaN,
-				salary: NaN,
+				phoneNumber: "",
+				salary: "",
 				teamLeader: "",
 				position: "",
 				startingDate: "",
@@ -32,7 +32,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined): initia
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
 	return {
 		...selectedEmployee,
-		startDate: dayjs(selectedEmployee["startingDate"], "D/M/YYYY"),
+		startingDate: dayjs(selectedEmployee["startingDate"], "D/M/YYYY"),
 	};
 }
 

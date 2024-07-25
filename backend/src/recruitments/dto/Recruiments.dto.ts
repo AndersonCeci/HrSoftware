@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateRecruitmentDto {
@@ -19,6 +20,12 @@ export class CreateRecruitmentDto {
   @IsNotEmpty()
   @IsString()
   readonly position: string;
+
+  phoneNumber: number;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly surname: string;
 
   @IsNotEmpty()
   @IsEnum(
