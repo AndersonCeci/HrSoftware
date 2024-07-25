@@ -20,6 +20,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { MailModule } from './modules/mail/mail.module';
 
 import { LeftService } from './left/left.service';
+import { EventsModuleModale } from './events/eventsModale.module';
+
 
 @Module({
   imports: [
@@ -61,7 +63,8 @@ import { LeftService } from './left/left.service';
     MailModule,
     EmployeeModule,
     LeftModule,
-    AssetsModule
+    AssetsModule,
+    EventsModuleModale
   ],
   controllers: [],
   providers: [AppService, LeftService],
