@@ -3,8 +3,8 @@ import {
 	CalendarOutlined,
 	BookOutlined,
 	ApartmentOutlined,
-    BellOutlined,
-    SettingOutlined
+	BellOutlined,
+	SettingOutlined,
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -17,28 +17,30 @@ import { TbUserCancel } from "react-icons/tb";
 import { MdOutlinePersonSearch } from "react-icons/md";
 import { VscRequestChanges } from "react-icons/vsc";
 import { BsCalendar4Range } from "react-icons/bs";
-
-
-
+import { PiBuildingApartmentLight } from "react-icons/pi";
+import { GiSandsOfTime } from "react-icons/gi";
+import { FiUsers } from "react-icons/fi";
 
 const NavigationIcons = {
-    ApartmentOutlined,
-    BookOutlined,
-    BellOutlined,
-    CalendarOutlined,
-    AppstoreOutlined,
-    MdOutlineEventAvailable,
-    RiComputerLine,
-    TbPigMoney,
-    FaUmbrellaBeach,
-    GiDesk,
-    FaMoneyBillTrendUp,
-    TbUserCancel,
-    MdOutlinePersonSearch,
-    VscRequestChanges,
-    BsCalendar4Range,
-    IoSettingsOutline:SettingOutlined 
-    
+	ApartmentOutlined,
+	BookOutlined,
+	BellOutlined,
+	CalendarOutlined,
+	AppstoreOutlined,
+	MdOutlineEventAvailable,
+	RiComputerLine,
+	TbPigMoney,
+	FaUmbrellaBeach,
+	GiDesk,
+	FaMoneyBillTrendUp,
+	TbUserCancel,
+	MdOutlinePersonSearch,
+	VscRequestChanges,
+	BsCalendar4Range,
+	IoSettingsOutline: SettingOutlined,
+	Building: PiBuildingApartmentLight,
+    SandClock: GiSandsOfTime,
+    Management: FiUsers,
 };
 
 export default NavigationIcons;

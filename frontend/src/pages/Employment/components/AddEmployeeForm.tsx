@@ -24,6 +24,7 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 		if (changer > 0) {
 			form.validateFields().then(() => {
 				setCurrent((prev) => prev + changer);
+				console.log(form.isFieldsValidating(), "validating");
 			});
 		} else {
 			setCurrent((prev) => prev + changer);
