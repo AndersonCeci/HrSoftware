@@ -1,18 +1,21 @@
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import { TableProps, Dropdown } from "antd";
-import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
+import {
+  createTableColumns,
+  getAllUniqueValues,
+} from "../../../components/Table/Table";
 import { IoDocumentAttach } from "react-icons/io5";
 import Select from "../../../components/Shared/Select";
 import Button from "../../../components/Shared/Button";
 import { selectOption } from "./constants";
+import { Link } from "react-router-dom";
 
 type GenerateColumnsParams = {
   tableData: RecrutmentDataType[];
   handleEdit: (record: RecrutmentDataType) => void;
   handleDelete: (id: string) => void;
 };
-
 
 export const columns = ({
   tableData,
@@ -33,7 +36,9 @@ export const columns = ({
     dataIndex: "cv",
     key: "cv",
     displayAs: (value) => (
-      <IoDocumentAttach onClick={() => console.log(value)} />
+      <Link to={value}>
+        <IoDocumentAttach />
+      </Link>
     ),
   }),
   createTableColumns({
