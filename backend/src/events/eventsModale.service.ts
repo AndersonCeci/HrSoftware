@@ -15,7 +15,10 @@ export class EventsService {
     return createdEvent.save();
   }
 
-  async getEvent():Promise<Event[]>{
-    return this.eventModel.find().exec()
+  async getEvent(): Promise<Event[]> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    return this.eventModel.find({ eventDate: { $gte: currentDate } }).exec();
   }
 }
