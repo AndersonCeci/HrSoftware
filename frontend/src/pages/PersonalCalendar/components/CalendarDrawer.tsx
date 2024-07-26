@@ -32,7 +32,7 @@ const CalendarDrawer: React.FC<Props> = ({
           placement="bottom"
           closable={false}
           onClose={onClose}
-          visible={open} // Corrected to 'visible' instead of 'open'
+          open={open} 
           className="drawer-container"
         >
           <h2>Events on {selectedDate?.format("DD-MM-YYYY")}</h2>
