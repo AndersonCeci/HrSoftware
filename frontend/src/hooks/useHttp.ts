@@ -18,12 +18,12 @@ export default function useHttp() {
 				});
 
 				if (!response.ok) {
-					console.log("HELLO WORLD");
+					// console.log("HELLO WORLD");
 					throw new Error("Request failed!");
 				}
 
 				const responseData = await response.json();
-				console.log(responseData, "response data from http");
+				// console.log(responseData, "response data from http");
 				applyData(responseData);
 			} catch (err) {
 				setError("Something went wrong!");

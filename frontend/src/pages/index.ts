@@ -2,7 +2,7 @@ import DashboardPage from "./DashboardPage";
 import PersonalCalendarPage from "./PersonalCalendar/PersonalCalendarPage";
 import CompanyBackgroundPage from "./CompanyBackgroundPage";
 import NotificationPage from "./NotificationPage";
-import EventPage from "./EventPage";
+import EventPage from "./Events/EventPage";
 import AssetsPage from "./Assets/AssetsPage";
 import OrganisationalStructurePage from "./OrganisationalStructurePage";
 import SalariesPage from "./Salary/SalariesPage";
