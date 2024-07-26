@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Input, DatePicker, TimePicker, Typography, List, Space, Dropdown, Button, message } from 'antd';
+import { Input, DatePicker, TimePicker, Typography, List, Space, Dropdown, Button, message, Checkbox } from 'antd';
 import { EnvironmentOutlined, UserOutlined, CloseOutlined } from '@ant-design/icons';
 import { Dayjs } from 'dayjs';
 
@@ -28,6 +28,7 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
 
   useEffect(() => {
 
@@ -83,6 +84,18 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
     message.info('User removed');
   };
 
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedUsers([])
+      onChanges([], 'invitee');
+    } else {
+      const allUsersExceptLoggedIn = users.filter(user => user._id!== loggedInUserId);
+      setSelectedUsers(allUsersExceptLoggedIn);
+      onChanges(allUsersExceptLoggedIn.map(u => u._id), 'invitee');
+    }
+    setSelectAll(!selectAll);
+  }
+
 
     const menuItems = users
     .filter(user => user._id !== loggedInUserId) 
@@ -90,6 +103,8 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
       label: user.username,
       key: user._id,
       icon: <UserOutlined />,
+  
+
     }));
 
   const menuProps = {
@@ -149,17 +164,20 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
         onChange={(e) => onChanges(e.target.value, "location")}
       />
 
+      <Title level={5}>Invite Users</Title>
       <Space wrap>
+      <Checkbox checked={selectAll} onChange={handleSelectAll}>Invite All Users</Checkbox>
         <Dropdown.Button
           menu={menuProps}
           placement="bottom"
-          icon={<UserOutlined />}
-        >
-          Select User
+        >Invite
+        <UserOutlined />
         </Dropdown.Button>
-
+        
         {selectedUsers.length > 0 && (
+          
           <div style={{ marginTop: 10 }}>
+            
             <strong>Selected Users:</strong>
             <List
               bordered
