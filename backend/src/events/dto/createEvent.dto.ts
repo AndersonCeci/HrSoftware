@@ -1,4 +1,4 @@
-import {IsString,IsNotEmpty,IsDateString,} from 'class-validator';
+import {IsString,IsNotEmpty,IsDateString,IsOptional} from 'class-validator';
   
   export class CreateEventDto {
     @IsString()
@@ -6,6 +6,7 @@ import {IsString,IsNotEmpty,IsDateString,} from 'class-validator';
     eventName:string;
     
     @IsString()
+    @IsOptional()
     eventDescription?:string;
     
     @IsDateString()
@@ -14,9 +15,11 @@ import {IsString,IsNotEmpty,IsDateString,} from 'class-validator';
     eventStartTime:string;
 
     eventEndTime:string;
-
+    
+    @IsOptional()
     location?:string;
-
-    image:string;
+    
+    @IsOptional()
+    image?:string;
 }
   
