@@ -15,14 +15,14 @@ const LogedUserPanel = () => {
 			setLoading(false);
 		}, 1000);
 	}, []);
-
+	const username = JSON.parse(localStorage.getItem('userData') || '{}').username;
 	return (
 		<>
 			<Card className="loged-user-card">
 				<Skeleton loading={false} avatar active> 
 					<Meta
 						avatar={<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
-						title="ILVIO CUMANI"
+						title={username}
 						description="Frontend Developer"
 						className="loged-user-panel"
 					/>
