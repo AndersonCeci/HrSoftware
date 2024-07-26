@@ -3,6 +3,7 @@ import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
+import { useEffect, useState } from "react";
 
 const navElements = [Paths.Dashboard, Paths.Employee, Paths.DayOff, Paths.Company];
 
@@ -11,6 +12,7 @@ const items: any = navElements.map((element) => {
 		key: `${element.path}`,
 		label: capitalizeFirstLetter(element.path),
 		type: element.type ? element.type : null,
+		icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
 		children: element.children.map((subElement) => {
 			return {
 				key: subElement.path,
@@ -26,19 +28,27 @@ const items: any = navElements.map((element) => {
 });
 
 const NavigationMenu = () => {
-	const onClick: MenuProps["onClick"] = (e) => {
-		// console.log("click ", e);
-	};
+	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+		useLocation()
+			.pathname.split("/")
+			.filter((x) => x),
+	);
 
 	const location = useLocation();
-	const defaultSelectedKey = location.pathname.split("/").filter((x) => x);
+
+	useEffect(() => {
+		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+		console.log(defaultSelectedKey);
+	}, [location.pathname]);
+
 	return (
 		<>
 			<Menu
 				// onClick={onClick}/
 				className="side-nevigation-menu"
-				defaultSelectedKeys={[defaultSelectedKey[1]]}
-				defaultOpenKeys={[defaultSelectedKey[0]]}
+				defaultSelectedKeys={[defaultSelectedKey[defaultSelectedKey.length - 1]]}
+				defaultOpenKeys={[defaultSelectedKey[defaultSelectedKey.length - 2]]}
+				spellCheck={true}
 				mode="inline"
 				items={items}
 			/>

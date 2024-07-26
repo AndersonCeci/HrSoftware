@@ -5,6 +5,7 @@ import { Content } from "antd/es/layout/layout";
 import WelcomeGrid from "../components/Dashboard/WelcomeGrid";
 import CalendarGrid from "../components/Dashboard/CalendarGrid";
 import TaskGrid from "../components/Dashboard/TaskGrid";
+import { Paths } from "../utils/paths";
 
 export interface Data {
   noEmployee: number;
@@ -17,19 +18,19 @@ const initialData: Data[] = [
     noEmployee: 300,
     status: "Active Employee",
     color: "#ccffcc",
-    path:"/employee/employment"
+    path:"/management/employment"
   },
   {
     noEmployee: 100,
     status: "Remote Employee",
     color: "#F0E6FA",
-    path:"/employee/employment"
+    path:"/management/employment"
   },
   {
     noEmployee: 50,
     status: "Dismissed Employee",
     color: "#ceebfd",
-    path:"/employee/dismissed"
+    path:"/management/dismissed"
   },
 ];
 const DashboardPage: React.FC = () => {
