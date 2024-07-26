@@ -12,9 +12,9 @@ export class UploadService {
     const storage = this.firebaseService.getStorageInstance();
     const bucket = storage.bucket();
 
-    const fileName = `${Date.now()}_ ${file.originalname}`;
+    const fileName = `${Date.now()}_${file.originalname}`;
     const fileUpload = bucket.file(fileName);
-
+    console.log(fileName, 'fileNameeee');
     const stream = fileUpload.createWriteStream({
       metadata: {
         contentType: file.mimetype,
@@ -25,10 +25,14 @@ export class UploadService {
       stream.on('error', (error) => {
         rejects(error);
       });
-
-      stream.on('finish', () => {
-        const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-        resolve(imageUrl);
+      stream.on('finish', async () => {
+        try {
+          await fileUpload.publicUrl();
+          const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+          resolve(imageUrl);
+        } catch (error) {
+          rejects(error);
+        }
       });
       stream.end(file.buffer);
     });

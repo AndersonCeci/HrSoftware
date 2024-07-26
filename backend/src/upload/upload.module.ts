@@ -7,5 +7,6 @@ import { FileController } from './upload.controller';
   imports: [FirebaseModule],
   controllers: [FileController],
   providers: [UploadService],
+  exports: [UploadService],
 })
 export class UploadModule {}

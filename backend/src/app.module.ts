@@ -18,10 +18,10 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
-
 import { LeftService } from './left/left.service';
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
+import { UploadService } from './upload/upload.service';
 
 @Module({
   imports: [
@@ -68,7 +68,7 @@ import { FirebaseModule } from './upload/firebaseUpload.module';
     FirebaseModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService],
+  providers: [AppService, LeftService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
