@@ -1,17 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import * as muv from 'mongoose-unique-validator';
 import { Bonus, BonusSchema } from '../models/bonus.model';
 
-
-
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class Salary extends Document {
-  @Prop({ required: true, unique: true })
-  employeeID: string;
+  @Prop({ required: true, ref: "Employee" })
+  employeeID: Types.ObjectId;
 
-  @Prop({ required: true, unique: true })
-  NSSH: string;
+  @Prop({ required: true })
+  month: number; 
+
+  @Prop({ required: true })
+  year: number;
 
   @Prop({ required: true })
   netSalary: number;
@@ -35,7 +36,8 @@ export class Salary extends Document {
   total: number;
 }
 
-
 const SalarySchema = SchemaFactory.createForClass(Salary);
-SalarySchema.plugin(muv, { message: 'EmployeeID must be unique' });
+SalarySchema.index({ employeeID: 1, month: 1, year: 1 }, { unique: true });
+SalarySchema.plugin(muv, { message: 'Error, expected {PATH} to be unique.' });
+
 export { SalarySchema };

@@ -55,7 +55,7 @@ const EmploymentPage: React.FC = () => {
 				url: `http://localhost:3000/employees/${record._id}`,
 				method: "DELETE",
 				headers: {
-					"Content-Type": "application/json",
+				"Content-Type": "application/json",
 				},
 			},
 			() => {
