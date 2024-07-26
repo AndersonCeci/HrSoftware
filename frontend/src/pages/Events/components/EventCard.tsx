@@ -6,9 +6,10 @@ import { EvenType } from "../types/EventTypes";
 
 type EventCardProps = {
 	event: EvenType;
+	isAlone?: boolean;
 };
 
-const EventCard = ({ event }: EventCardProps) => {
+const EventCard = ({ event, isAlone }: EventCardProps) => {
 	const { eventName, eventDate, eventStartTime, eventEndTime } = event;
 
 	const date = new Date(eventDate);
@@ -16,7 +17,7 @@ const EventCard = ({ event }: EventCardProps) => {
 	const day = date.getDate();
 
 	return (
-		<div className="event-item">
+		<div className={`event-item ${isAlone ? "alone-event" : undefined}`}>
 			<article>
 				<Carousel pauseOnHover autoplay autoplaySpeed={10000} adaptiveHeight draggable>
 					<div className="event-image-container">

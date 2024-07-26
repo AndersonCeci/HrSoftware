@@ -28,6 +28,10 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 	gap: 2.5rem;
+
+	&& li {
+		max-width: fit-content;
+	}
 }
 
 .event-attachment-container {
@@ -36,7 +40,7 @@
 	border-radius: 5px;
 }
 
-.add-event-form-container{
+.add-event-form-container {
 	min-width: 600px;
 	padding: 10px 15px;
 }

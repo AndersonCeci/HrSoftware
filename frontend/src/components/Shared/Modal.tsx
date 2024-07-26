@@ -9,7 +9,7 @@ type ModalProps = {
 	children: React.ReactNode;
 	onOk?: () => void | undefined;
 	onCancel?: () => void | undefined;
-	isOpen: boolean;
+	isOpen: true | false;
 	title?: string;
 };
 
