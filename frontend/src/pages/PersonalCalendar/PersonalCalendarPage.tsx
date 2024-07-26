@@ -11,6 +11,7 @@ import {
   Avatar,
   Divider,
   Button,
+  Tooltip,
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -23,6 +24,7 @@ import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
 import EditNewEventForm from "./components/EditNewEventForm";
 import useEvents, { Status, NewEvent } from './hooks/personalCalendarFetchHooks';
+import Item from "antd/es/list/Item";
 
 const { Title } = Typography;
 
@@ -91,6 +93,7 @@ const PersonalCalendarPage: React.FC = () => {
       return {
         type: type,
         content: allEvents.title,
+        status: allEvents.status,
       };
     });
 
@@ -115,21 +118,24 @@ const PersonalCalendarPage: React.FC = () => {
 
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
+    const currentStatus = listData.map(item => item.status).join(", ");;
     return (
-      <ul className="events">
-        {listData.map((item, index) => (
-          <li key={index}>
-            <Badge
-              status={
-                item.type === "default"
-                  ? "default"
-                  : (item.type as "warning" | "success" | "error")
-              }
-              text={item.content}
-            />
-          </li>
-        ))}
-      </ul>
+      <Tooltip title={`Current Status: ${currentStatus}`}>
+        <ul className="events">
+          {listData.map((item, index) => (
+            <li key={index}>
+              <Badge
+                status={
+                  item.type === "default"
+                    ? "default"
+                    : (item.type as "warning" | "success" | "error")
+                }
+                text={item.content}
+              />
+            </li>
+          ))}
+        </ul>
+      </Tooltip>
     );
   };
 
@@ -179,7 +185,7 @@ const PersonalCalendarPage: React.FC = () => {
         <section className="calendar-container">
           <TableHeader title="Personal Calendar" onClick={showModal} />
           <Calendar cellRender={cellRender} onSelect={showDrawer} />
-        </section>
+          </section>
         <Drawer
           placement="bottom"
           closable={false}
