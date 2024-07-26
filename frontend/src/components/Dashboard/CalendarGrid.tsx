@@ -1,43 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Badge, theme } from 'antd';
-import type { CalendarProps } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import "../../styles/Dashboard/CalendarGrid.css";
 
-const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
-  console.log(value.format('YYYY-MM-DD'), mode);
-};
+interface Event {
+  id: string;
+  startDate: string;
+  // Add other properties as needed
+}
 
 const CalendarGrid: React.FC = () => {
   const { token } = theme.useToken();
-  const [events, setEvents] = useState<any[]>([]);
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
+  const fetchEventsByCriteria = async (endpoint: string, userId: string): Promise<Event[]> => {
     try {
-      const userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
-      const response = await fetch(`http://localhost:3000/events/byCreator/${userId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`http://localhost:3000/events/${endpoint}/${userId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch events');
+        throw new Error(data.message || `Failed to fetch ${endpoint} events`);
       }
-      setEvents(data);
+      return data;
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error(`Error fetching ${endpoint} events:`, error);
+      return [];
     }
   };
 
+  useEffect(() => {
+    const fetchAllEvents = async () => {
+      const userId = JSON.parse(localStorage.getItem("userData") || "{}").userId;
+      const [creatorEvents, inviteeEvents] = await Promise.all([
+        fetchEventsByCriteria('byCreator', userId),
+        fetchEventsByCriteria('invitee', userId),
+      ]);
+      setAllEvents([...creatorEvents, ...inviteeEvents]);
+    };
+
+    fetchAllEvents();
+  }, []);
+
   const getListData = (value: Dayjs) => {
-    const eventsForDate = events.filter(event => dayjs(event.startDate).isSame(value, 'day'));
+    const eventsForDate = allEvents.filter(event => dayjs(event.startDate).isSame(value, 'day'));
     return eventsForDate.length > 0 ? [{ type: 'default'}] : [];
   };
 
@@ -47,7 +57,7 @@ const CalendarGrid: React.FC = () => {
       <ul className="events">
         {listData.map((item, index) => (
           <li key={index}>
-            <Badge status={item.type as 'success'}/>
+            <Badge status={item.type as 'success'} />
           </li>
         ))}
       </ul>
@@ -55,8 +65,9 @@ const CalendarGrid: React.FC = () => {
   };
 
   const onSelect = (value: Dayjs) => {
-    navigate('/personal-calendar')
-  }
+    navigate('/personal-calendar');
+  };
+
   const wrapperStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: 535,
@@ -67,7 +78,12 @@ const CalendarGrid: React.FC = () => {
 
   return (
     <div className="calendarWrapper" style={wrapperStyle}>
-      <Calendar fullscreen={false} onPanelChange={onPanelChange} cellRender={cellRender} onSelect={onSelect}/>
+      <Calendar 
+        fullscreen={false} 
+        onPanelChange={(value, mode) => console.log(value.format('YYYY-MM-DD'), mode)} 
+        cellRender={cellRender} 
+        onSelect={onSelect} 
+      />
     </div>
   );
 };

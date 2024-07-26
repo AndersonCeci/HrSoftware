@@ -252,7 +252,7 @@ const TaskGrid: React.FC = () => {
         </Form>
       </Modal>
       <Modal
-        visible={isVisible}
+        open={isVisible}
         footer={null}
         onCancel={() => {
           setIsVisible(false);

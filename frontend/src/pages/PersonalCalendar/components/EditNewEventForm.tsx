@@ -53,10 +53,6 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
     fetchAllUsers();
   }, []);
 
-  useEffect(() => {
-    // Update newEvent invitee when selectedUsers changes
-    onChanges(selectedUsers.map(user => user._id), 'invitee');
-  }, [selectedUsers, onChanges]);
 
   const handleMenuClick = (e: any) => {
     const userId = e.key;
@@ -68,19 +64,25 @@ const EditNewEventForm = ({ newEvent, onChanges }: { newEvent: NewEvent; onChang
           return prevSelectedUsers;
         }
         message.info(`Selected user: ${user.username}`);
-        return [...prevSelectedUsers, user];
+        const newSelectedUsers = [...prevSelectedUsers, user];
+        onChanges(newSelectedUsers.map(u => u._id), 'invitee');
+        return newSelectedUsers;
       });
     } else {
       console.log('User not found');
     }
   };
+  
 
   const handleRemoveUser = (userId: string) => {
-    setSelectedUsers(prevSelectedUsers =>
-      prevSelectedUsers.filter(user => user._id !== userId)
-    );
+    setSelectedUsers(prevSelectedUsers => {
+      const newSelectedUsers = prevSelectedUsers.filter(user => user._id !== userId);
+      onChanges(newSelectedUsers.map(u => u._id), 'invitee');
+      return newSelectedUsers;
+    });
     message.info('User removed');
   };
+
 
     const menuItems = users
     .filter(user => user._id !== loggedInUserId) 
