@@ -28,6 +28,8 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			eventDate: values.eventDate.format("YYYY-MM-DD"),
 			eventStartTime: values.eventStartTime.format("HH:mm"),
 			eventEndTime: values.eventEndTime.format("HH:mm"),
+			eventDiscription: values.eventDescription ? values.eventDescription : " ",
+			location: "Location",
 		};
 
 		onAdd(valuesToSubmit);

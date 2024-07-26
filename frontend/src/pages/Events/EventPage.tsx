@@ -35,6 +35,9 @@ const EventPage: React.FC = () => {
 		sendRequest(
 			{
 				url: "http://localhost:3000/event",
+				headers: {
+					"Content-Type": "application/json",
+				},
 				method: "POST",
 				body: newEvent,
 			},

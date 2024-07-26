@@ -10,16 +10,10 @@ type EventCardProps = {
 
 const EventCard = ({ event }: EventCardProps) => {
 	const { eventName, eventDate, eventStartTime, eventEndTime } = event;
-	// const dayOfMonth = eventDate.split("/")[0];
-	// const month = eventDate.split("/")[1];
-	// const givenMonthName = new Date().toLocaleString("default", { month: "long" });
-	const [day, month, year] = eventDate.split("/");
 
-	// Create a new Date object using the extracted values
-	const date = new Date(parseInt(day), parseInt(month) - 1); // Month is 0-indexed in JavaScript Date object
-
-	// Get the three-letter abbreviation of the month
-	const monthAbbreviation = date.toLocaleString("default", { month: "short" });
+	const date = new Date(eventDate);
+	const month = date.toLocaleString("default", { month: "short" });
+	const day = date.getDate();
 
 	return (
 		<div className="event-item">
@@ -41,7 +35,7 @@ const EventCard = ({ event }: EventCardProps) => {
 
 				<Flex className="event-info-container" gap={35} justify="center">
 					<Flex vertical gap={4}>
-						<h4 className="event-date-month">{monthAbbreviation}</h4>
+						<h4 className="event-date-month">{month}</h4>
 						<h2 className="event-date-day">{day}</h2>
 					</Flex>
 					<Flex

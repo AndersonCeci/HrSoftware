@@ -2,7 +2,7 @@ export type EvenType = {
 	_id: string;
 	eventName: string;
 	eventDescription?: string;
-	eventDate: string;
+	eventDate: Date;
 	eventStartTime: string;
 	eventEndTime: string;
 	location?: string;
