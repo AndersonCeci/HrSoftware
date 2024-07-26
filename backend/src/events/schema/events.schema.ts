@@ -18,7 +18,7 @@ export class Event extends Document {
   @Prop({ required: true })
   eventEndTime: string;
 
-  @Prop({ required: true })
+  @Prop()
   location: string;
 
   @Prop()
