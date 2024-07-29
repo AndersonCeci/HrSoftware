@@ -8,13 +8,12 @@ import { useState } from "react";
 import exporter from "../utils/helperFunctions";
 import { AddEmployeeFormProps } from "../types/EmployeeFormTypes";
 import { EmployeeDataType } from "../types/Employee";
-
 const { Content, Sider } = Layout;
 const devRoles = exporter.getDevRoles();
 
 const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormProps) => {
 	const [current, setCurrent] = useState(0);
-	const [form] = Form.useForm<EmployeeDataType>();
+	const [form ] = Form.useForm<EmployeeDataType>();
 	const [isLoading, error, sendRequest] = useHttp();
 	const initialValues = exporter.getInitialFormValues(selectedEmployee);
 	const [valuesToSubmit, setValuesToSubmit] = useState(initialValues);

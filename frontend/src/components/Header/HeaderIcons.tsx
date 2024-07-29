@@ -2,10 +2,10 @@ import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
 import { Badge } from "antd";
 
-const logout = () => {
-  localStorage.removeItem("userData");
-  console.log("Cleared?", localStorage.getItem("token"));
-};
+// const logout = () => {
+//   localStorage.removeItem("userData");
+//   console.log("Cleared?", localStorage.getItem("token"));
+// };
 
 const navigationLinkList = [
   {
@@ -24,12 +24,12 @@ const navigationLinkList = [
     icon: <Paths.Settings.icon className="nav-menu-icon white-icon" />,
     linkTo: `${Paths.Settings.path}`,
   },
-  {
-    text: "Log Out",
-    linkTo: Paths.Login.path,
-    whiteText: true,
-    handleClick: logout,
-  },
+  // {
+  //   text: "Log Out",
+  //   linkTo: Paths.Login.path,
+  //   whiteText: true,
+  //   handleClick: logout,
+  // },
 ];
 
 const HeaderIcons: React.FC = () => {

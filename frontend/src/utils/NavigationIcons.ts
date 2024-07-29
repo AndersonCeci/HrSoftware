@@ -4,7 +4,7 @@ import {
 	BookOutlined,
 	ApartmentOutlined,
     BellOutlined,
-    SettingOutlined
+    SettingOutlined,
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -17,6 +17,9 @@ import { TbUserCancel } from "react-icons/tb";
 import { MdOutlinePersonSearch } from "react-icons/md";
 import { VscRequestChanges } from "react-icons/vsc";
 import { BsCalendar4Range } from "react-icons/bs";
+import { MdOutlineBadge } from "react-icons/md";
+import { PiChartLineUpBold } from "react-icons/pi";
+import { RiMoneyEuroCircleLine } from "react-icons/ri";
 
 
 
@@ -37,7 +40,12 @@ const NavigationIcons = {
     MdOutlinePersonSearch,
     VscRequestChanges,
     BsCalendar4Range,
-    IoSettingsOutline:SettingOutlined 
+    IoSettingsOutline:SettingOutlined ,
+    MdOutlineBadge,
+    PiChartLineUpBold,
+    RiMoneyEuroCircleLine,
+    
+
     
 };
 

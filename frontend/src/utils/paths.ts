@@ -27,15 +27,15 @@ export const Paths = {
     ],
   },
   Settings: {
-		path: "settings",
-		icon: NavigationIcons.IoSettingsOutline,
-		children: [
-			{
-				path: "",
-				pageElement: PageRoutesComponents.SettingsPage,
-			},
-		],
-	},
+    path: "settings",
+    icon: NavigationIcons.IoSettingsOutline,
+    children: [
+      {
+        path: "",
+        pageElement: PageRoutesComponents.SettingsPage,
+      },
+    ],
+  },
   Notifications: {
     path: "notifications",
     icon: NavigationIcons.BellOutlined,
@@ -67,17 +67,17 @@ export const Paths = {
       },
       {
         path: "salary",
-        icon: NavigationIcons.TbPigMoney,
+        icon: NavigationIcons.RiMoneyEuroCircleLine,
         pageElement: PageRoutesComponents.SalariesPage,
       },
       {
         path: "promotions",
-        icon: NavigationIcons.FaMoneyBillTrendUp,
+        icon: NavigationIcons.PiChartLineUpBold,
         pageElement: PageRoutesComponents.PromotionPage,
       },
       {
         path: "employment",
-        icon: NavigationIcons.GiDesk,
+        icon: NavigationIcons.MdOutlineBadge,
         pageElement: PageRoutesComponents.EmploymentPage,
       },
       {
