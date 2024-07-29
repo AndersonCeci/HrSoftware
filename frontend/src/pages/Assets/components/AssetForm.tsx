@@ -77,7 +77,6 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 		<Form
 			form={form}
 			ref={formRef}
-			style={{ maxWidth: 600, margin: "40px auto" }}
 			layout="vertical"
 			initialValues={initialValues}
 			autoComplete="off"

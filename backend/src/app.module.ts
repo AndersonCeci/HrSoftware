@@ -19,6 +19,8 @@ import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
 import { LeftService } from './left/left.service';
+import { EventsModuleModale } from './events/eventsModale.module';
+
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
@@ -64,6 +66,7 @@ import { UploadService } from './upload/upload.service';
     EmployeeModule,
     LeftModule,
     AssetsModule,
+    EventsModuleModale,
     UploadModule,
     FirebaseModule,
   ],
