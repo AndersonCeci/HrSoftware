@@ -32,6 +32,11 @@ export const columns = ({
       filter.name.toLowerCase().includes(inputValue.toLowerCase()),
   }),
   createTableColumns({
+    title: "Surname",
+    dataIndex: "surname",
+    key: "surname",
+  }),
+  createTableColumns({
     title: "Resume",
     dataIndex: "cv",
     key: "cv",
