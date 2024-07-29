@@ -18,14 +18,18 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
-
 import { LeftService } from './left/left.service';
+import { EventsModuleModale } from './events/eventsModale.module';
+
+import { UploadModule } from './upload/upload.module';
+import { FirebaseModule } from './upload/firebaseUpload.module';
+import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:'.env',
+      envFilePath: '.env',
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DBURL),
@@ -57,21 +61,24 @@ import { TasksModule } from './modules/tasks/tasks.module';
     UsersModule,
     RecruimentsModule,
     AuthModule,
-   SalaryModule,
+    SalaryModule,
     EventsModule,
     MailModule,
     EmployeeModule,
     LeftModule,
     AssetsModule,
+    EventsModuleModale,
+    UploadModule,
+    FirebaseModule,,
     TasksModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService],
+  providers: [AppService, LeftService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      consumer.apply(LoggingMiddleware).forRoutes("*")
-      console.log("Middleware Applied")
+    consumer.apply(LoggingMiddleware).forRoutes('*');
+    console.log('Middleware Applied');
   }
 }
 
