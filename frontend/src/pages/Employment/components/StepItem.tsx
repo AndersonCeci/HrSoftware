@@ -4,6 +4,7 @@ import { IoDocumentOutline } from "react-icons/io5";
 import { CiCircleCheck } from "react-icons/ci";
 import { FaCircleCheck } from "react-icons/fa6";
 import { BsPencilSquare } from "react-icons/bs";
+import { BiSolidError } from "react-icons/bi";
 import FirstPanel from "./FirstPanel";
 import SecondStep from "./SecondStep";
 import FinalStep from "./FinalStep";
@@ -37,7 +38,7 @@ const getStepItems: StepItemProps = (current, handleInputChange, form, isLoading
 		{
 			subTitle: "Finalize Account",
 			content: <FinalStep isSubmitting={isLoading} error={error} />,
-			icon: current === 2 ? <FaCircleCheck /> : <CiCircleCheck />,
+			icon: current === 2 ? error ? <BiSolidError /> : <FaCircleCheck /> : <CiCircleCheck />,
 		},
 	];
 };

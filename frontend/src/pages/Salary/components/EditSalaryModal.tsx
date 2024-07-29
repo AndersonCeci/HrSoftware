@@ -11,7 +11,6 @@ interface EditSalaryProps {
 
 const EditSalaryModal: React.FC<EditSalaryProps> = ({
   editFormRef,
-
   handleEditSubmit,
 }) => {
   const { selectedSalary } = useContext(SalaryContext)!;
@@ -34,12 +33,6 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
       >
         <h2>Edit Salary </h2>
         <div
-        //   style={{
-        //     display: "grid",
-        //     gridTemplateColumns: " repeat(2, 1fr)",
-        //     gap: "1rem",
-        //     margin: "1.5rem",
-        //   }}
         >
           <Form.Item label="ID" name="employeeID">
             <Input disabled />

@@ -1,5 +1,6 @@
 import NavigationIcons from "./NavigationIcons";
 import PageRoutesComponents from "../pages";
+
 export const Paths = {
   Login: {
     path: "/",
@@ -57,8 +58,9 @@ export const Paths = {
     ],
   },
   Employee: {
-    path: "employee",
-    type: "group",
+    path: "managment",
+    type: "",
+	icon: NavigationIcons.Management,
     children: [
       {
         path: "recruitment",
@@ -90,6 +92,7 @@ export const Paths = {
   DayOff: {
     path: "day-off",
     type: "",
+	icon: NavigationIcons.SandClock,
     children: [
       {
         path: "requested-leave",
@@ -106,6 +109,7 @@ export const Paths = {
   Company: {
     path: "company",
     type: "",
+	icon: NavigationIcons.Building,
     children: [
       {
         path: "events",
@@ -127,9 +131,7 @@ export const Paths = {
 };
 
 export function capitalizeFirstLetter(string: string) {
-  const words = string.split("-");
-  const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
-  );
-  return capitalizedWords.join(" ");
+	const words = string.split("-");
+	const capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+	return capitalizedWords.join(" ");
 }

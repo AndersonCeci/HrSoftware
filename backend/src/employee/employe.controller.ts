@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   UsePipes,
   HttpException,
+  Patch,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
@@ -21,23 +22,21 @@ export class EmployeeController {
 
   @Post()
   @UsePipes(new ValidationPipe())
-  create ( @Body() createEmployeeDto: CreateEmployeeDto )
-  {
+  create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeeService.create(createEmployeeDto);
   }
 
   @Get()
-   findAll(): Promise<Employee[]> {
+  findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
 
-
   @Get(':id')
-   findOne(@Param('id') id: string): Promise<Employee | null> {
+  findOne(@Param('id') id: string): Promise<Employee | null> {
     return this.employeeService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateEmployeeDto: any,

@@ -2,17 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsOptional, Matches } from 'class-validator';
 import { Document } from 'mongoose';
 
-export enum Position {
-  HR = 'hr',
-  JuniorFrontEnd = 'Junior FrontEnd',
-  JuniorBackEnd = 'Junior BackEnd',
-  SeniorFrontEnd = 'Senior FrontEnd',
-  SeniorBackEnd = 'Senior BackEnd',
-  DevOps = 'DevOps',
-  FullStack = 'FullStack',
-  ProjectManager = 'ProjectManager',
-}
-
 @Schema()
 export class Employee extends Document {
   @Prop({ required: true })
@@ -27,14 +16,14 @@ export class Employee extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true, unique: true })
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @Prop({ enum: Position })
+  @Prop()
   position: string;
 
   @Prop()

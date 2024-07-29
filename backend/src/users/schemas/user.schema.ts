@@ -1,4 +1,6 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import * as muv from 'mongoose-unique-validator';
+
 
 export enum Role {
     Admin = 'admin',
@@ -9,9 +11,9 @@ export enum Role {
     ProjectManager = 'projectManager',
 }
 
-@Schema()
+@Schema({ timestamps: true})
 export class User {
-    @Prop({required: true })
+    @Prop({required: true , unique: true })
     username: string;
 
     @Prop({ required: true })
@@ -24,4 +26,6 @@ export class User {
     loginRole: Role;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+ const UserSchema = SchemaFactory.createForClass(User);
+ UserSchema.plugin(muv ,{message:"Username must be unique"});
+ export {UserSchema};

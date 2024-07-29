@@ -5,45 +5,21 @@ type FirstPanelProps = {
 	form: any;
 };
 
-// const genders = [
-// 	{ label: "Male", value: "Male" },
-// 	{ label: "Female", value: "Female" },
-// 	{ label: "Non-binary", value: "Non-binary" },
-// 	{ label: "Genderqueer", value: "Genderqueer" },
-// 	{ label: "Genderfluid", value: "Genderfluid" },
-// 	{ label: "Agender", value: "Agender" },
-// 	{ label: "Bigender", value: "Bigender" },
-// 	{ label: "Demiboy", value: "Demiboy" },
-// 	{ label: "Demigirl", value: "Demigirl" },
-// 	{ label: "Two-Spirit", value: "Two-Spirit" },
-// 	{ label: "Androgynous", value: "Androgynous" },
-// 	{ label: "Intersex", value: "Intersex" },
-// 	{ label: "Pangender", value: "Pangender" },
-// 	{ label: "Neutrois", value: "Neutrois" },
-// 	{ label: "Polygender", value: "Polygender" },
-// 	{ label: "Third Gender", value: "Third Gender" },
-// 	{ label: "Maverique", value: "Maverique" },
-// 	{ label: "Aliagender", value: "Aliagender" },
-// 	{ label: "Gender Apathetic", value: "Gender Apathetic" },
-// 	{ label: "Gender Nonconforming", value: "Gender Nonconforming" },
-// 	{ label: "Gender Variant", value: "Gender Variant" },
-// 	{ label: "Graygender", value: "Graygender" },
-// 	{ label: "Cisgender", value: "Cisgender" },
-// 	{ label: "Transgender", value: "Transgender" },
-// 	{ label: "Hijra", value: "Hijra" },
-// 	{ label: "Other", value: "Other", disabled: true }
-//   ];
-  
-
 const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Name"
 						name="name"
-						rules={[{ required: true, message: "Please input name!" }]}
+						rules={[
+							{
+								required: true,
+								whitespace: true,
+								message: "Please input name!",
+							},
+						]}
 					>
 						<Input
 							size="large"
@@ -53,15 +29,21 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Surname"
 						name="surname"
-						rules={[{ required: true, message: "Please input surname" }]}
+						rules={[
+							{
+								required: true,
+								whitespace: true,
+								message: "Please input surname",
+							},
+						]}
 					>
 						<Input
 							size="large"
-							placeholder="Enter position"
+							placeholder="Enter Surname"
 							value={form.getFieldValue("surname")}
 							onChange={(e) => onChange(e.target.value, "surname")}
 						/>
@@ -69,11 +51,18 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 				</Col>
 			</Row>
 			<Row>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Email"
 						name="email"
-						rules={[{ required: true, message: "Please input email!" }]}
+						rules={[
+							{ required: true, message: "Please input email!" },
+							{
+								type: "email",
+								message: "Please input a valid email",
+								validateTrigger: "onBlur",
+							},
+						]}
 					>
 						<Input
 							size="large"
@@ -83,11 +72,18 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Phone"
 						name="phoneNumber"
-						rules={[{ required: true, message: "Please input phone!" }]}
+						rules={[
+							{ required: true, message: "Please input phone!" },
+							{
+								min: 10,
+								message: "Please input a valid phone number",
+								validateTrigger: "onBlur",
+							},
+						]}
 					>
 						<Input
 							size="large"
@@ -100,11 +96,18 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 				</Col>
 			</Row>
 			<Row>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Personal Number"
 						name="nID"
-						rules={[{ required: true, message: "Please input personal Number!" }]}
+						rules={[
+							{ required: true, whitespace: true, message: "Please input personal Number!" },
+							{
+								min: 10,
+								message: "Please input a valid personal number",
+								validateTrigger: "onBlur",
+							},
+						]}
 					>
 						<Input
 							maxLength={10}
@@ -115,7 +118,7 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col span={10} offset={1}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<Form.Item
 						label="Gender"
 						name="gender"
@@ -128,7 +131,7 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 								{ label: "Female", value: "Female" },
 								{ label: "Other", value: "Other", disabled: true },
 							]}
-							placeholder="Choose a position"
+							placeholder="Provide a gender"
 							value={form.getFieldValue("gender")}
 							onChange={(value) => onChange(value, "gender")}
 						/>

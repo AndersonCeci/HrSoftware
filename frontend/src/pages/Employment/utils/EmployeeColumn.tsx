@@ -1,6 +1,8 @@
-import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
+import {
+  createTableColumns,
+  getAllUniqueValues,
+} from "../../../components/Table/Table";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
-import { Tag } from "antd";
 import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
@@ -8,9 +10,9 @@ import { EmployeeDataType } from "../types/Employee";
 import { capitalizeFirstLetter } from "../../../utils/paths";
 
 export function getColumns(
-	tableData: EmployeeDataType[],
-	onEdit: (record: EmployeeDataType) => void,
-	onDelete: (id: EmployeeDataType) => void,
+  tableData: EmployeeDataType[],
+  onEdit: (record: EmployeeDataType) => void,
+  onDelete: (id: EmployeeDataType) => void
 ): TableProps<EmployeeDataType>["columns"] {
 	return [
 		createTableColumns({
@@ -50,8 +52,8 @@ export function getColumns(
 		// }),
 		createTableColumns({
 			title: "Phone",
-			dataIndex: "phone",
-			key: "phone",
+			dataIndex: "phoneNumber",
+			key: "phoneNumber",
 		}),
 		createTableColumns({
 			title: "Poaition",

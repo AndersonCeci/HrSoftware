@@ -33,15 +33,15 @@ const navigationLinkList = [
 ];
 
 const HeaderIcons: React.FC = () => {
-  return (
-    <ul className="header-icons-list">
-      {navigationLinkList.map((item, index) => (
-        <li key={index}>
-          <NavigationLink {...item} />
-        </li>
-      ))}
-    </ul>
-  );
+	return (
+		<ul className="header-icons-list">
+			{navigationLinkList.map((item, index) => (
+				<li key={index}>
+					<NavigationLink {...item} />
+				</li>
+			))}
+		</ul>
+	);
 };
 
 export default HeaderIcons;
