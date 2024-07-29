@@ -1,5 +1,6 @@
 import { useRef, useImperativeHandle, forwardRef } from "react";
 import { Form, DatePicker, AutoComplete } from "antd";
+import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import Select from "../../../components/Shared/Select";
 import dayjs from "dayjs";
 import { AssetDatatype } from "../types/AssetsDataType";
@@ -82,7 +83,7 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 			autoComplete="off"
 			onFinish={onFinish}
 		>
-			<Form.Item label="Type" name="assetType">
+			{/* <Form.Item label="Type" name="assetType">
 				<Select
 					options={availableAssets}
 					// defaultValue={selectedElement.type}
@@ -90,9 +91,10 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 					value={form.getFieldValue("assetType")}
 					onChange={(value) => onChanges(value, "assetType")}
 				/>
-			</Form.Item>
+			</Form.Item> */}
+			<FormInputs.Select label="Type" name="assetType" required options={availableAssets} />
 
-			<Form.Item label="Date" name="dateGiven">
+			{/* <Form.Item label="Date" name="dateGiven">
 				<DatePicker
 					style={{ width: "100%" }}
 					size="large"
@@ -102,9 +104,10 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 					value={form.getFieldValue("dateGiven")}
 					onChange={(value) => onChanges(value, "dateGiven")}
 				/>
-			</Form.Item>
+			</Form.Item> */}
+			<FormInputs.DatePicker label="Date Given" name="dateGiven" required isDisabledDate />
 
-			<Form.Item label="Employee" name="userName">
+			{/* <Form.Item label="Employee" name="userName">
 				<AutoComplete
 					options={[]}
 					size="large"
@@ -114,7 +117,8 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: EditAssetFormP
 					// 	option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 					// }
 				/>
-			</Form.Item>
+			</Form.Item> */}
+			<FormInputs.AutoComplete label="Employee" name="userName" required options={[]} />
 		</Form>
 	);
 });

@@ -36,7 +36,7 @@ export class CreateEmployeeDto {
 
   startingDate?: string;
 
-  phoneNumber: number;
+  phoneNumber: string;
 
   @IsEnum(['Female', 'Male'], {
     message: 'Must be one of the following gender',

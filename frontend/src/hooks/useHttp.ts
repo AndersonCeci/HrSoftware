@@ -18,12 +18,10 @@ export default function useHttp() {
 				});
 
 				if (!response.ok) {
-					// console.log("HELLO WORLD");
 					throw new Error("Request failed!");
 				}
 
 				const responseData = await response.json();
-				// console.log(responseData, "response data from http");
 				applyData(responseData);
 			} catch (err) {
 				setError("Something went wrong!");
@@ -35,3 +33,4 @@ export default function useHttp() {
 
 	return [isLoading, error, sendRequest] as const;
 }
+     

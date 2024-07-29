@@ -1,16 +1,12 @@
 import { Flex, Input, Select, Form, Row, Col } from "antd";
+import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 
-type FirstPanelProps = {
-	onChange: (value: any, identifier: string) => void;
-	form: any;
-};
-
-const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
+const FirstPanel = () => {
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Name"
 						name="name"
 						rules={[
@@ -27,10 +23,11 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("name")}
 							onChange={(e) => onChange(e.target.value, "name")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Input label="Name" name="name" required />
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Surname"
 						name="surname"
 						rules={[
@@ -47,12 +44,13 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("surname")}
 							onChange={(e) => onChange(e.target.value, "surname")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Input label="Surname" name="surname" required />
 				</Col>
 			</Row>
 			<Row>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Email"
 						name="email"
 						rules={[
@@ -70,10 +68,11 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("email")}
 							onChange={(e) => onChange(e.target.value, "email")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Input label="Email" name="email" required defaultValidateRule="email" />
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Phone"
 						name="phoneNumber"
 						rules={[
@@ -92,12 +91,18 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("phoneNumber")}
 							onChange={(e) => onChange(e.target.value, "phoneNumber")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Input
+						label="Phone Number"
+						name="phoneNumber"
+						required
+						defaultValidateRule="phoneNumber"
+					/>
 				</Col>
 			</Row>
 			<Row>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Personal Number"
 						name="nID"
 						rules={[
@@ -116,10 +121,16 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("nID")}
 							onChange={(e) => onChange(e.target.value, "nID")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Input
+						label="Personal Number"
+						name="personalNumber"
+						required
+						defaultValidateRule="personalNumber"
+					/>
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<Form.Item
+					{/* <Form.Item
 						label="Gender"
 						name="gender"
 						rules={[{ required: true, message: "Please input a valid gender" }]}
@@ -135,7 +146,17 @@ const FirstPanel = ({ onChange, form }: FirstPanelProps) => {
 							value={form.getFieldValue("gender")}
 							onChange={(value) => onChange(value, "gender")}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<FormInputs.Select
+						label="Gender"
+						name="gender"
+						options={[
+							{ label: "Male", value: "Male" },
+							{ label: "Female", value: "Female" },
+							{ label: "Other", value: "Other" },
+						]}
+						required
+					/>
 				</Col>
 			</Row>
 		</Flex>

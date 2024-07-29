@@ -27,7 +27,7 @@ const getStepItems: StepItemProps = (current, handleInputChange, form, isLoading
 	return [
 		{
 			subTitle: "Create Account",
-			content: <FirstPanel onChange={handleInputChange} form={form} />,
+			content: <FirstPanel  />,
 			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
 		},
 		{
