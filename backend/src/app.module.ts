@@ -24,6 +24,7 @@ import { EventsModuleModale } from './events/eventsModale.module';
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
+import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -68,7 +69,8 @@ import { UploadService } from './upload/upload.service';
     AssetsModule,
     EventsModuleModale,
     UploadModule,
-    FirebaseModule,
+    FirebaseModule,,
+    TasksModule,
   ],
   controllers: [],
   providers: [AppService, LeftService, UploadService],

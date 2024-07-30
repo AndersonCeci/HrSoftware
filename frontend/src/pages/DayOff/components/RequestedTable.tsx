@@ -1,27 +1,46 @@
-import { Button, Flex, Modal, Space, TableProps } from "antd";
-import Table, {
-  createTableColumns,
-  getAllUniqueValues,
-} from "../../../components/Table/Table";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Button, Modal, Space, TableProps } from "antd";
+import Table, { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
 import { RequestedDataType } from "../../../types/RequestedLeave";
-import DummyRequestedData from "../../../utils/dummyrequestedleave";
 import TableHeader from "../../../components/Table/TableHeader";
 import Drawer from "../../../components/Shared/Drawer";
 import RequestForm from "../../DayOff/components/RequestForm";
-import TextArea from "antd/es/input/TextArea";
 
-const RequestedTable: React.FC = () => {
-  const [tableData, setTableData] = useState<RequestedDataType[]>([]);
+export interface RequestedTableProps {
+  data?: RequestedDataType[];
+  onAdd?: (newRequest: RequestedDataType) => void;
+}
+
+const RequestedTable: React.FC<RequestedTableProps> = () => {
+  const [data, setData] = useState<RequestedDataType[]>([]);
   const [open, setOpen] = useState(false);
+  const [approvedId, setApprovedId] = useState<string[]>([]);
 
   function handleModalClose() {
     setOpen(false);
   }
 
-  useEffect(() => {
-    setTableData(DummyRequestedData);
-  }, []);
+  function handleApprove(id: string) {
+      setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
+  }
+
+  const onDecline = (record:RequestedDataType) => {
+    console.log(record, 'recorddd')
+    Modal.confirm({
+      title: "Are you sure you wanna decline?",
+      okText:"Yes",
+      okType:"danger",
+      onOk: () =>{
+        setData((prev) => prev.filter((item) => item.id !== record.id))
+      }
+    })
+    // setData((prevData) => prevData.filter((item) => item.id !== record.id))
+  }
+
+  function handleAddNewRequest(newRequest: RequestedDataType) {
+    setData((prev) => [...prev, newRequest])
+    setOpen(false)
+  }
 
   const columns: TableProps<RequestedDataType>["columns"] = [
     createTableColumns({
@@ -33,32 +52,43 @@ const RequestedTable: React.FC = () => {
       title: "Leave Type",
       dataIndex: "leaveType",
       key: "leaveType",
-      filters: getAllUniqueValues(tableData, "leaveType"),
-      onFilter: (value, record) => record.position.indexOf(value) === 0,
+      filters: getAllUniqueValues(data, "leaveType"),
+      onFilter: (value, record) => record.leaveType.indexOf(value) === 0,
     }),
     createTableColumns({
-      title: "Start Date",
-      dataIndex: "startingDate",
-      key: "startingDate",
+      title: "Leave From",
+      dataIndex: "leaveFrom",
+      key: "leaveFrom",
     }),
     createTableColumns({
-      title: "End Date",
-      dataIndex: "endDate",
-      key: "endDate",
+      title: "Leave To",
+      dataIndex: "leaveTo",
+      key: "leaveTo",
+    }),
+    createTableColumns({
+      title: "Reason",
+      dataIndex:"reason",
+      key: "reason"
     }),
     createTableColumns({
       title: "Action",
       dataIndex: "action",
       key: "action",
-      displayAs: () => (
+      displayAs: (_, record) => (
         <Space size="middle">
-          <Button style={{ background: "#246AFE", color: "white" }} ghost>
-            Approve
+          <Button
+            onClick={() => handleApprove(record.id)}
+            style={{
+              background: approvedId.includes(record.id) ? "green" : "#246AFE",
+              color: "white"
+            }}
+            disabled={approvedId.includes(record.id)}
+            ghost
+          >
+            {approvedId.includes(record.id) ? "Approved" : "Approve"}
           </Button>
           <Button
-            onClick={() => {
-              onDecline();
-            }}
+            onClick={() => onDecline(record)}
             style={{ background: "none", color: "red", border: "0" }}
             ghost
           >
@@ -69,23 +99,14 @@ const RequestedTable: React.FC = () => {
     }),
   ];
 
-  const onDecline = () => {
-    Modal.confirm({
-      title: "Please give a reason for decline",
-      content: <TextArea rows={4} placeholder="Reason here" />,
-    });
-  };
-
   return (
-    <section className="test">
-      <Flex vertical>
-        <Drawer placement="right" isOpen={open} onClose={handleModalClose}>
-          <RequestForm />
-        </Drawer>
-        <TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
-        <Table pageSize={4} columns={columns} data={tableData} />
-      </Flex>
-    </section>
+    <>
+      <Drawer placement="right" isOpen={open} onClose={handleModalClose}>
+        <RequestForm onAdd={handleAddNewRequest} />
+      </Drawer>
+      <TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
+      <Table columns={columns} data={data} />
+    </>
   );
 };
 

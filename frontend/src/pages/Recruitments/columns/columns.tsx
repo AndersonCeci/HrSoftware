@@ -27,6 +27,11 @@ export const columns = ({
 		filterIcon: <SearchOutlined className="nav-menu-icon" />,
 		onFilter: (inputValue, filter) => filter.name.toLowerCase().includes(inputValue.toLowerCase()),
 	}),
+    createTableColumns({
+    title: "Surname",
+    dataIndex: "surname",
+    key: "surname",
+  }),
 	createTableColumns({
 		title: "Resume",
 		dataIndex: "cv",
