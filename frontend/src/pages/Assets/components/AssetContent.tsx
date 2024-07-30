@@ -10,6 +10,7 @@ import { HTTP } from "../Enum/http";
 import useHttp from "../../../hooks/useHttp";
 
 import { getColumns } from "../utils/AssetsColumn";
+import { t } from "i18next";
 
 const AssetContent = () => {
 	const [tableData, setTableData] = useState<AssetDatatype[]>([]);
@@ -87,7 +88,7 @@ const AssetContent = () => {
 				/>
 			</Modal>
 			<TableHeader
-				title="Assets"
+				title={t('assetsTitle')}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}

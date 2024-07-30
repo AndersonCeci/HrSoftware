@@ -13,6 +13,7 @@ import { PlusOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import "../../styles/Dashboard/TaskGrid.css";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -28,7 +29,7 @@ interface Task {
 const TaskGrid: React.FC = () => {
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
-
+  const { t } = useTranslation();
   const [dataSource, setDataSource] = useState<Task[]>([]);
   const [searchData, setSearchData] = useState<Task[]>([]);
   const [len, setLen] = useState(0);
@@ -167,7 +168,7 @@ const TaskGrid: React.FC = () => {
   return (
     <div className="container">
       <div className="header-container">
-        <h1 className="task-title">Task List</h1>
+        <h1 className="task-title">{t(`taskList`)}</h1>
         <Search
           onChange={onSearch}
           placeholder="Search a task"

@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import Icon from '@ant-design/icons';
 import "../../styles/Shared/NavigationLink.css"
 import { NavigationLinkProps } from "../../types/NavigationLinkProps";
 

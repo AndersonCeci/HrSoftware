@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
 import useHttp from "../../hooks/useHttp";
+import { t } from "i18next";
 
 const EmploymentPage: React.FC = () => {
 	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
@@ -81,7 +82,7 @@ const EmploymentPage: React.FC = () => {
 					onEdit={handleEditEmployee}
 				/>
 			</Drawer>
-			<TableHeader title="Employment" onClick={() => setOpen(true)} />
+			<TableHeader title={t('employees')} onClick={() => setOpen(true)} />
 			<section className="test">
 				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
 			</section>

@@ -5,9 +5,12 @@ import columns from './components/TableColumns';
 import { useRef } from 'react';
 import { Salary } from '../../types/SalaryProps';
 import { useSalaryHook } from './context/hook';
+import { useTranslation } from 'react-i18next';
 
 
-const SalaryContent = () => {
+const SalaryContent = () =>
+{
+  const { t } = useTranslation();
     const addBonusRef = useRef<Salary>();
     const editFormRef = useRef<Salary>();
   
@@ -19,23 +22,23 @@ const SalaryContent = () => {
         handleEditSubmit,
       } = useSalaryHook();
   return (
-    <div style={{ margin: 20 }} >
-    <h1>Salaries</h1>
-    <Table
-      data={tableData}
-      columns={columns({ handleAddBonus, handleEdit })}
-      fixed
-    />
-    <AddBonusModal
-      addBonusRef={addBonusRef}
-      handleAddBonusSubmit={handleAddBonusSubmit}
-    />
-    <EditSalaryModal
-      editFormRef={editFormRef}
-      handleEditSubmit={handleEditSubmit}
-    />
-  </div>
-  )
+    <div style={{ margin: 20 }}>
+      <h1>{t("salariesTitle")}</h1>
+      <Table
+        data={tableData}
+        columns={columns({ handleAddBonus, handleEdit })}
+        fixed
+      />
+      <AddBonusModal
+        addBonusRef={addBonusRef}
+        handleAddBonusSubmit={handleAddBonusSubmit}
+      />
+      <EditSalaryModal
+        editFormRef={editFormRef}
+        handleEditSubmit={handleEditSubmit}
+      />
+    </div>
+  );
 }
 
 export default SalaryContent

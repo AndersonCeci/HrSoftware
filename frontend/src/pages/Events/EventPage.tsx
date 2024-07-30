@@ -14,8 +14,11 @@ import { Flex } from "antd";
 import Button from "../../components/Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
 import AddEventForm from "./components/AddEventForm";
+import { useTranslation } from "react-i18next";
 
-const EventPage: React.FC = () => {
+const EventPage: React.FC = () =>
+{
+	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,38 +73,40 @@ const EventPage: React.FC = () => {
 	}, []);
 
 	return !isLoading ? (
-		<main className="event-page-main">
-			<Modal
-				title="Add Event"
-				isOpen={isModalOpen}
-				onCancel={handleCloseModal}
-				onOk={() => {
-					formRef.current.submit();
-				}}
-			>
-				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
-			</Modal>
-			<Flex justify="space-between" align="center">
-				<Typography.Title>Events</Typography.Title>
-				<Button
-					icon={<PlusCircleOutlined />}
-					size={ButtonSize.LARGE}
-					type={ButtonType.PRIMARY}
-					onClick={handleOpenModal}
-				>
-					Add Event
-				</Button>
-			</Flex>
-			{loadedEvents.length <= 0 ? (
-				<NoDataResult onOpenModal={handleOpenModal} />
-			) : (
-				<EventMenu title={"This Month"} EventList={loadedEvents} />
-			)}
-			{loadedEvents.length > 0 && <EventMenu title={"Near Future"} EventList={loadedEvents} />}
-		</main>
-	) : (
-		<Loader />
-	);
+    <main className="event-page-main">
+      <Modal
+        title="Add Event"
+        isOpen={isModalOpen}
+        onCancel={handleCloseModal}
+        onOk={() => {
+          formRef.current.submit();
+        }}
+      >
+        <AddEventForm ref={formRef} onAdd={handleAddEvent} />
+      </Modal>
+      <Flex justify="space-between" align="center">
+        <Typography.Title>{t("eventTitle")}</Typography.Title>
+        <Button
+          icon={<PlusCircleOutlined />}
+          size={ButtonSize.LARGE}
+          type={ButtonType.PRIMARY}
+          onClick={handleOpenModal}
+        >
+          Add Event
+        </Button>
+      </Flex>
+      {loadedEvents.length <= 0 ? (
+        <NoDataResult onOpenModal={handleOpenModal} />
+      ) : (
+        <EventMenu title={"This Month"} EventList={loadedEvents} />
+      )}
+      {loadedEvents.length > 0 && (
+        <EventMenu title={"Near Future"} EventList={loadedEvents} />
+      )}
+    </main>
+  ) : (
+    <Loader />
+  );
 };
 
 export default EventPage;
