@@ -1,8 +1,5 @@
-import {
-  createTableColumns,
-  getAllUniqueValues,
-} from "../../../components/Table/Table";
-import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
+import { DeleteOutlined, EditOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
@@ -10,9 +7,9 @@ import { EmployeeDataType } from "../types/Employee";
 import { capitalizeFirstLetter } from "../../../utils/paths";
 
 export function getColumns(
-  tableData: EmployeeDataType[],
-  onEdit: (record: EmployeeDataType) => void,
-  onDelete: (id: EmployeeDataType) => void
+	tableData: EmployeeDataType[],
+	onEdit: (record: EmployeeDataType) => void,
+	onDelete: (id: EmployeeDataType) => void,
 ): TableProps<EmployeeDataType>["columns"] {
 	return [
 		createTableColumns({
@@ -25,7 +22,7 @@ export function getColumns(
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
 			displayAs: (value) => {
 				return <span>{capitalizeFirstLetter(value)}</span>;
-			}
+			},
 		}),
 		createTableColumns({
 			title: "Email",
@@ -86,7 +83,12 @@ export function getColumns(
 							{
 								key: "Edit",
 								label: (
-									<Button type={ButtonType.TEXT} block onClick={() => onEdit(record)}>
+									<Button
+										type={ButtonType.TEXT}
+										block
+										onClick={() => onEdit(record)}
+										icon={<EditOutlined />}
+									>
 										Edit
 									</Button>
 								),
@@ -94,7 +96,13 @@ export function getColumns(
 							{
 								key: "Delete",
 								label: (
-									<Button type={ButtonType.TEXT} block onClick={() => onDelete(record)} danger>
+									<Button
+										type={ButtonType.TEXT}
+										block
+										onClick={() => onDelete(record)}
+										danger
+										icon={<DeleteOutlined />}
+									>
 										Remove
 									</Button>
 								),

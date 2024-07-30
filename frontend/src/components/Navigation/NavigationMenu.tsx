@@ -45,7 +45,7 @@ const NavigationMenu = () => {
 
 	useEffect(() => {
 		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-		console.log(defaultSelectedKey);
+		// console.log(defaultSelectedKey);
 	}, [location.pathname]);
 
   const handleClick = () => {
