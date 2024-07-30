@@ -2,6 +2,7 @@ import EventMenu from "./components/EventMenu";
 import Loader from "../../components/Shared/Loader";
 import Modal from "../../components/Shared/Modal";
 import NoDataResult from "./components/NoDataResult";
+import TableHeader from "../../components/Table/TableHeader";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
 import { Typography, Flex } from "antd";
@@ -62,7 +63,9 @@ const EventPage: React.FC = () => {
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
-		<main className="event-page-main">
+		<main 
+		// className="event-page-main"
+		>
 			<Modal
 				title="Add Event"
 				isOpen={isModalOpen}
@@ -73,17 +76,7 @@ const EventPage: React.FC = () => {
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<Flex justify="space-between" align="center">
-				<Typography.Title>Events</Typography.Title>
-				<Button
-					icon={<PlusCircleOutlined />}
-					size={ButtonSize.LARGE}
-					type={ButtonType.PRIMARY}
-					onClick={handleOpenModal}
-				>
-					Add Event
-				</Button>
-			</Flex>
+			<TableHeader title="Events" onClick={handleOpenModal} />
 			{error ? (
 				<NoDataResult onOpenModal={handleOpenModal} isError />
 			) : (

@@ -1,4 +1,4 @@
-import { useRef, useImperativeHandle, forwardRef } from "react";
+import { useRef, useImperativeHandle, forwardRef, useEffect, useState } from "react";
 import { Form } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import dayjs from "dayjs";
@@ -7,11 +7,21 @@ import { availableAssets } from "../utils/AllAssets";
 import { AssetFormProps } from "../types/AddAssetsForm";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
+const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps, ref) => {
 	const formRef = useRef<any>();
 	const [form] = Form.useForm();
+	const [employeeList, setEmployeeList] = useState<any[]>([]);
 	const [, , sendRequest] = useHttp();
+
+	useEffect(() => {
+		sendRequest({ url: `${EMPLOYEE}/usernames` }, (responseData: any) =>
+			setEmployeeList(responseData),
+		);
+	}, []);
+
+	console.log("HELLO", employeeList);
 
 	const initialValues = {
 		assetType: selectedElement ? selectedElement.assetType : "",
@@ -61,7 +71,13 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps
 		>
 			<FormInputs.Select label="Type" name="assetType" required options={availableAssets} />
 			<FormInputs.DatePicker label="Date Given" name="dateGiven" required isDisabledDate />
-			<FormInputs.AutoComplete label="Employee" name="userName" required options={[]} />
+			<FormInputs.AutoComplete
+				label="Employee"
+				name="userName"
+				required
+				options={employeeList}
+				isMatchWithOption
+			/>
 		</Form>
 	);
 });

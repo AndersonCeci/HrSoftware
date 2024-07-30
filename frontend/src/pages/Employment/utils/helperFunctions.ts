@@ -48,7 +48,6 @@ export function getDevRoles() {
 		"Senior BackEnd",
 		"FullStack",
 		"DevOps",
-		"ProjectManager",
 	];
 }
 

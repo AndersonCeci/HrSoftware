@@ -1,33 +1,32 @@
-import { Avatar, Card, Skeleton } from "antd";
-
-import { useState, useEffect } from "react";
+import { Avatar, Card, Flex } from "antd";
 
 import "../../styles/Navigation/LogedUserPanel.css";
 
 const { Meta } = Card;
 
-const LogedUserPanel = () => {
-	const [loading, setLoading] = useState(true);
-	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+type LogedUserPanelProps = {
+	colapsed: boolean;
+};
 
-	useEffect(() => {
-		setTimeout(() => {
-			setLoading(false);
-		}, 1000);
-	}, []);
+const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
+	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
 	return (
 		<>
-			<Card className="loged-user-card">
-				<Skeleton loading={false} avatar active>
+			{!colapsed ? (
+				<Card className="loged-user-card">
 					<Meta
 						avatar={<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
 						title={userData.username}
 						description={userData.role.toUpperCase()}
 						className="loged-user-panel"
 					/>
-				</Skeleton>
-			</Card>
+				</Card>
+			) : (
+				<Flex className="colapsed-avatar-container" justify="center">
+					<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+				</Flex>
+			)}
 		</>
 	);
 };

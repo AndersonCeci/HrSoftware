@@ -8,7 +8,7 @@ import { getDevRoles } from "../utils/helperFunctions";
 const SecondStep = () => {
 	const position = getDevRoles().map((role) => ({ label: role, value: role }));
 	console.log("position", position);
-	// position.push({ label: "Human Resources", value: "Hr" });
+	position.push({ label: "Project Manager", value: "projectManager" });
 
 	return (
 		<Flex vertical>

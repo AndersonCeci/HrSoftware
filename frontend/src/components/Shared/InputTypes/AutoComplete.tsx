@@ -3,7 +3,7 @@ import { AutoComplete as AssasinsCreed, Form } from "antd";
 type AutoCompleteProps = {
 	name: string;
 	label: string;
-	options: { value: string }[];
+	options: string[];
 	required?: boolean;
 	isMatchWithOption?: boolean;
 };
@@ -16,10 +16,12 @@ const AutoComplete = ({ name, label, options, required, isMatchWithOption }: Aut
 		},
 	];
 
+	const formatedOptions = options.map((option) => ({ value: option }));
+
 	if (isMatchWithOption) {
 		rulesList.push({
 			validator: async (rule: any, value: any) => {
-				if (!options.some((option) => option.value === value)) {
+				if (!formatedOptions.some((option) => option.value === value)) {
 					throw new Error(`There is no record of ${value} `);
 				}
 			},
@@ -38,7 +40,7 @@ const AutoComplete = ({ name, label, options, required, isMatchWithOption }: Aut
 				allowClear
 				size="large"
 				placeholder={label}
-				options={options}
+				options={formatedOptions}
 				filterOption={(inputValue, option) =>
 					option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 				}
