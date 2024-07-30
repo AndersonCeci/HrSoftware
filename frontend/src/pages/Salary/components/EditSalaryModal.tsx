@@ -1,8 +1,10 @@
 import React, { MutableRefObject, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
 import Form from "antd/es/form";
-import { Input } from "antd";
+import { DatePicker, Input } from "antd";
 import { ModalContext, SalaryContext } from "../context";
+import moment from "moment";
+
 
 interface EditSalaryProps {
   editFormRef: MutableRefObject<any>;
@@ -11,12 +13,13 @@ interface EditSalaryProps {
 
 const EditSalaryModal: React.FC<EditSalaryProps> = ({
   editFormRef,
-
   handleEditSubmit,
 }) => {
   const { selectedSalary } = useContext(SalaryContext)!;
   const { isEditModalOpen, setIsEditModalOpen } = useContext(ModalContext)!;
-
+  const defaultDate = selectedSalary?.dateTaken
+  ? moment(new Date(selectedSalary.dateTaken))
+  : null;
   return (
     <Modal
       isOpen={isEditModalOpen}
@@ -29,26 +32,30 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
         onFinish={handleEditSubmit}
         initialValues={{
           ...selectedSalary,
+          employeeDetails: {
+            name: selectedSalary?.employeeDetails?.name,
+            surname: selectedSalary?.employeeDetails?.surname,
+            NSSH: selectedSalary?.employeeDetails?.NSSH,
+          },
+          dateTaken: defaultDate,
         }}
         style={{ padding: 35 }}
       >
         <h2>Edit Salary </h2>
-        <div
-        //   style={{
-        //     display: "grid",
-        //     gridTemplateColumns: " repeat(2, 1fr)",
-        //     gap: "1rem",
-        //     margin: "1.5rem",
-        //   }}
-        >
-          <Form.Item label="ID" name="employeeID">
+        <div>
+          <Form.Item label="Name" name={["employeeDetails", "name"]}>
             <Input disabled />
           </Form.Item>
-          <Form.Item label="NSSH" name="NSSH">
-            <Input />
+          <Form.Item label="surname" name={["employeeDetails", "surname"]}>
+            <Input disabled />
           </Form.Item>
+
           <Form.Item label="Net Salary" name="netSalary">
             <Input type="number" />
+          </Form.Item>
+
+          <Form.Item label="Date taken" name="dateTaken">
+            <DatePicker picker="month" />
           </Form.Item>
           <Form.Item label="Work Days" name="workDays">
             <Input type="number" />
