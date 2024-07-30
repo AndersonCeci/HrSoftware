@@ -15,31 +15,31 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
   const [data, setData] = useState<RequestedDataType[]>([]);
   const [open, setOpen] = useState(false);
   const [approvedId, setApprovedId] = useState<string[]>([]);
+  const [declineButtonVisible, setDeclineButtonVisible] = useState<{ [key: string]: boolean }>({});
 
   function handleModalClose() {
     setOpen(false);
   }
 
   function handleApprove(id: string) {
-      setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
+    setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
+    setDeclineButtonVisible((prev) => ({ ...prev, [id]: false }));
   }
 
-  const onDecline = (record:RequestedDataType) => {
-    console.log(record, 'recorddd')
+  const onDecline = (record: RequestedDataType) => {
     Modal.confirm({
       title: "Are you sure you wanna decline?",
-      okText:"Yes",
-      okType:"danger",
-      onOk: () =>{
-        setData((prev) => prev.filter((item) => item.id !== record.id))
-      }
-    })
-    // setData((prevData) => prevData.filter((item) => item.id !== record.id))
-  }
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setData((prev) => prev.filter((item) => item.id !== record.id));
+      },
+    });
+  };
 
   function handleAddNewRequest(newRequest: RequestedDataType) {
-    setData((prev) => [...prev, newRequest])
-    setOpen(false)
+    setData((prev) => [...prev, newRequest]);
+    setOpen(false);
   }
 
   const columns: TableProps<RequestedDataType>["columns"] = [
@@ -67,8 +67,8 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
     }),
     createTableColumns({
       title: "Reason",
-      dataIndex:"reason",
-      key: "reason"
+      dataIndex: "reason",
+      key: "reason",
     }),
     createTableColumns({
       title: "Action",
@@ -80,20 +80,22 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
             onClick={() => handleApprove(record.id)}
             style={{
               background: approvedId.includes(record.id) ? "green" : "#246AFE",
-              color: "white"
+              color: "white",
             }}
             disabled={approvedId.includes(record.id)}
             ghost
           >
             {approvedId.includes(record.id) ? "Approved" : "Approve"}
           </Button>
-          <Button
-            onClick={() => onDecline(record)}
-            style={{ background: "none", color: "red", border: "0" }}
-            ghost
-          >
-            Decline
-          </Button>
+          {declineButtonVisible[record.id] !== false && (
+            <Button
+              onClick={() => onDecline(record)}
+              style={{ background: "none", color: "red", border: "0" }}
+              ghost
+            >
+              Decline
+            </Button>
+          )}
         </Space>
       ),
     }),

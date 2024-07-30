@@ -1,0 +1,6 @@
+.ant-flex-align-flex-end {
+    align-items: flex-start;
+}
+.ant-card{
+    justify-content: space-between;
+}

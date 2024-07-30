@@ -5,7 +5,7 @@ import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
 import HeaderIcons from "../components/Header/HeaderIcons";
 import LogedUserPanel from "../components/Navigation/LogedUserPanel";
 import Trigger from "../components/Navigation/Trigger";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -110,7 +110,7 @@ const RootLayout: React.FC = () => {
 					</Sider>
 					<Content>
 						<FloatButton
-							icon={<QuestionCircleOutlined />}
+							icon={<ExclamationCircleOutlined />}
 							type="primary"
 							style={{ right: 12, bottom: 12 }}
 							onClick={() => navigate("/company-background")}

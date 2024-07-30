@@ -18,19 +18,19 @@ const initialData: Data[] = [
     noEmployee: 300,
     status: "Active Employee",
     color: "#ccffcc",
-    path:"/management/employment"
+    path:"/managment/employment"
   },
   {
     noEmployee: 100,
     status: "Remote Employee",
     color: "#F0E6FA",
-    path:"/management/employment"
+    path:"/managment/employment"
   },
   {
     noEmployee: 50,
     status: "Dismissed Employee",
     color: "#ceebfd",
-    path:"/management/dismissed"
+    path:"/managment/dismissed"
   },
 ];
 const DashboardPage: React.FC = () => {
