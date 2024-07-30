@@ -1,8 +1,20 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { SalaryService } from './salary.service'; 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
+import { SalaryService } from './salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
-import {  UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
-
+import { UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
+import { Types } from 'mongoose';
+import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
 
 @Controller('salary')
 export class SalaryController {
@@ -14,30 +26,50 @@ export class SalaryController {
   }
 
   @Get()
-  async getAllSalaries() {
-    return await this.salaryService.getAllSalaries();
+  async getAllNew(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('startDate') startDate?: Date,
+    @Query('endDate') endDate?: Date,
+    @Query('name') name?: string,
+  ) {
+  
+    const pageNumber = parseInt(page.toString(), 10);
+    const limitNumber = parseInt(limit.toString(), 10);
+    const filter = { startDate, endDate, name };
+    return await this.salaryService.getSalariesWithEmployeeInfo(
+      pageNumber,
+      limitNumber,
+      filter,
+    );
   }
 
-  @Get(":id")
-  async findById(@Param("id") id: string) {
-    return await this.salaryService.find(id);
-  }
-
-  @Put(':userId')
+  @Put(':salaryID')
   async updateSalary(
-    @Param('userId') userId: string,
-    @Body() updateSalaryDto: UpdateSalaryDTO
+    @Param('salaryID') salaryID: string,
+    @Body() updateSalaryDto: UpdateSalaryDTO,
   ) {
-    console.log(updateSalaryDto);
-    return await this.salaryService.updateSalary(userId, updateSalaryDto);
+   
+   
+
+   
+    const dto = plainToClass(UpdateSalaryDTO, updateSalaryDto);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed');
+    }
+
+    console.log('Received data:', { salaryID,  updateSalaryDto });
+
+    return await this.salaryService.updateSalary(
+      new Types.ObjectId(salaryID),
+      dto,
+    );
   }
 
 
-
-  @Delete(":userId")
-  async deleteSalary(
-    @Param('userId') userId: string,
-  ) {
+  @Delete(':userId')
+  async deleteSalary(@Param('userId') userId: string) {
     return await this.salaryService.deleteSalary(userId);
   }
 }

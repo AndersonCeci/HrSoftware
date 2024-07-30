@@ -1,15 +1,18 @@
 import { Bonus } from "./BonusProps";
+import { EmployeeDetails } from "./EmployeeDetailsProps";
 
-export type Salary ={
-    employeeID:string;
-    NSSH: string;
-    netSalary:number;
-    workDays:number;
-    bonuses:Bonus[];
-    socialSecurityContributions: number;
-    healthInsurance:number;
-    grossSalary:number;
-    total:number;
+export interface Salary {
+  _id: string;
+  employeeID: string;
+  NSSH: string;
+  netSalary: number;
+  dateTaken: Date;
+  workDays: number;
+  bonuses: Bonus[];
+  socialSecurityContributions: number;
+  healthInsurance: number;
+  grossSalary: number;
+  total: number;
+  paid: boolean;
+  employeeDetails?: EmployeeDetails;
 }
-
-
