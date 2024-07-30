@@ -1,11 +1,17 @@
 import type { MenuProps } from "antd";
-import { Menu } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { Button, Menu } from "antd";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
-const navElements = [Paths.Dashboard, Paths.Employee, Paths.DayOff, Paths.Company];
+const navElements = [
+  Paths.Dashboard,
+  Paths.Employee,
+  Paths.DayOff,
+  Paths.Company,
+];
 
 const items: any = navElements.map((element) => {
 	return {
@@ -35,11 +41,18 @@ const NavigationMenu = () => {
 	);
 
 	const location = useLocation();
+  const navigate = useNavigate();
 
 	useEffect(() => {
 		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-		console.log(defaultSelectedKey);
+		// console.log(defaultSelectedKey);
 	}, [location.pathname]);
+
+  const handleClick = () => {
+    localStorage.removeItem("userData");
+    console.log("Cleared?", localStorage.getItem("token"));
+    navigate("/");
+  };
 
 	return (
 		<>
@@ -52,6 +65,20 @@ const NavigationMenu = () => {
 				mode="inline"
 				items={items}
 			/>
+       <Button
+        size="large"
+        style={{
+          border: "none",
+          color: "red",
+          margin: "auto",
+          display: "flex",
+        }}
+        type="text"
+        onClick={handleClick}
+      >
+        <LogoutOutlined />
+        Log Out
+      </Button>
 		</>
 	);
 };

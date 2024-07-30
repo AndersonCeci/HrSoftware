@@ -1,16 +1,16 @@
 import EventMenu from "./components/EventMenu";
 import Loader from "../../components/Shared/Loader";
-import NoDataResult from "./components/NoDataResult";
 import Modal from "../../components/Shared/Modal";
+import NoDataResult from "./components/NoDataResult";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Typography } from "antd";
+
+import { Typography, Flex } from "antd";
 import "./styles/EventPage.css";
 
 import { EvenType } from "./types/EventTypes";
-
+import { sortByDate, devideEventsByMonth } from "./utils/utils";
 import useHttp from "../../hooks/useHttp";
 import { useState, useEffect, useRef } from "react";
-import { Flex } from "antd";
 import Button from "../../components/Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
 import AddEventForm from "./components/AddEventForm";
@@ -30,11 +30,9 @@ const EventPage: React.FC = () => {
 	}
 
 	function handleAddEvent(newEvent: EvenType) {
-		console.log("Add Event", newEvent);
-
 		sendRequest(
 			{
-				url: "http://localhost:3000/event",
+				url: import.meta.env.REACT_APP_EVENTS_API,
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -50,24 +48,18 @@ const EventPage: React.FC = () => {
 		);
 	}
 
-	// const today = new Date();
-	// const [month, date, year] = today.toLocaleDateString("en-US").split("/");
-	// console.log(date, month, year);
-	// console.log(today);
-	// const firstEventDate = loadedEvents.length > 0 ? loadedEvents[0].eventDate.split("/") : "";
-	// const [firstEventMonth, firstEventDay, firstEventYear] = firstEventDate;
-	// console.log(firstEventDay, firstEventMonth, firstEventYear);
-
 	useEffect(() => {
 		sendRequest(
 			{
-				url: "http://localhost:3000/event",
+				url: import.meta.env.REACT_APP_EVENTS_API,
 			},
 			(responseData: EvenType[]) => {
 				setLoadedEvents(responseData);
 			},
 		);
 	}, []);
+
+	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
 		<main className="event-page-main">
@@ -92,12 +84,23 @@ const EventPage: React.FC = () => {
 					Add Event
 				</Button>
 			</Flex>
-			{loadedEvents.length <= 0 ? (
-				<NoDataResult onOpenModal={handleOpenModal} />
+			{error ? (
+				<NoDataResult onOpenModal={handleOpenModal} isError />
 			) : (
-				<EventMenu title={"This Month"} EventList={loadedEvents} />
+				<>
+					<EventMenu
+						title={"This Month"}
+						EventList={sortByDate(thsMonth)}
+						displayNoResult
+						onOpenModal={handleOpenModal}
+					/>
+					<EventMenu
+						title={"Near Future"}
+						EventList={sortByDate(nextMonth)}
+						onOpenModal={handleOpenModal}
+					/>
+				</>
 			)}
-			{loadedEvents.length > 0 && <EventMenu title={"Near Future"} EventList={loadedEvents} />}
 		</main>
 	) : (
 		<Loader />

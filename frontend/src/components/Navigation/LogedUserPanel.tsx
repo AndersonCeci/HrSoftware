@@ -8,15 +8,14 @@ const { Meta } = Card;
 
 const LogedUserPanel = () => {
 	const [loading, setLoading] = useState(true);
-	const userData = JSON.parse(localStorage.getItem("userData") || "{}"); ;
-	console.log(userData);
+	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
 	useEffect(() => {
 		setTimeout(() => {
 			setLoading(false);
 		}, 1000);
 	}, []);
-	const username = JSON.parse(localStorage.getItem('userData') || '{}').username;
+
 	return (
 		<>
 			<Card className="loged-user-card">

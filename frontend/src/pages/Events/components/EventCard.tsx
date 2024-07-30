@@ -19,7 +19,7 @@ const EventCard = ({ event, isAlone }: EventCardProps) => {
 	return (
 		<div className={`event-item ${isAlone ? "alone-event" : undefined}`}>
 			<article>
-				<Carousel pauseOnHover autoplay autoplaySpeed={10000} adaptiveHeight draggable>
+				<Carousel pauseOnHover adaptiveHeight draggable>
 					<div className="event-image-container">
 						<img src={TempImage} alt="Event" />
 					</div>

@@ -7,7 +7,7 @@ type SelectProps = {
 	}[];
 	placeholder?: string;
 	onChange?: (value: string) => void;
-	value: string;
+	value?: string;
 	disabled?: boolean;
 	defaultValue?: string;
 };
