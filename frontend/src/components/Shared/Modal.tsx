@@ -8,12 +8,13 @@ import { Modal as AntModal, Flex } from "antd";
 type ModalProps = {
 	children: React.ReactNode;
 	onOk?: () => void | undefined;
+	isLoading?: boolean;
 	onCancel?: () => void | undefined;
-	isOpen: boolean;
+	isOpen: true | false;
 	title?: string;
 };
 
-const Modal = ({ children, onOk, onCancel, isOpen, title }: ModalProps) => {
+const Modal = ({ children, onOk, onCancel, isOpen, title, isLoading }: ModalProps) => {
 	return (
 		<AntModal
 			title={title}
@@ -32,7 +33,7 @@ const Modal = ({ children, onOk, onCancel, isOpen, title }: ModalProps) => {
 				)}
 				{onOk && (
 					<Button type={ButtonType.PRIMARY} onClick={onOk}>
-						Submit
+						{isLoading ? "Submiting..." : "Submit"}
 					</Button>
 				)}
 			</Flex>

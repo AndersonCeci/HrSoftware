@@ -30,7 +30,7 @@ export class Employee extends Document {
   startingDate: string;
 
   @Prop()
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Prop()
   @IsOptional()

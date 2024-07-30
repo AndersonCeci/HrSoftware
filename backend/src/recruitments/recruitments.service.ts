@@ -1,3 +1,5 @@
+import { UploadService } from './../upload/upload.service';
+import { UploadModule } from './../upload/upload.module';
 import { UpdateRecruitmentDto } from './dto/UpdateRecruiments.dto';
 import { RecruimentsModule } from 'src/recruitments/recruitments.module';
 import { Injectable } from '@nestjs/common';

@@ -5,9 +5,3 @@ export type AssetDatatype = {
     dateGiven: string;
     userName: string;
 };
-
-export type NewAssetType = {
-	assetType: string;
-	dateGiven: string;
-	userName: string;
-};

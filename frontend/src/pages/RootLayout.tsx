@@ -13,6 +13,7 @@ import { Layout } from "antd";
 const { Content, Sider } = Layout;
 
 import { useState, useEffect } from "react";
+let c = 0;
 
 const RootLayout: React.FC = () => {
 	const [colapsed, setColapsed] = useState<boolean>(false);
@@ -56,8 +57,8 @@ const RootLayout: React.FC = () => {
 	// 	}
 	//   }, []);
 
-	function onCollapse(collapsed: boolean) {
-		console.log(collapsed);
+	function onCollapse() {
+		// console.log(collapsed);
 		setColapsed((prev) => !prev);
 	}
 
@@ -67,13 +68,14 @@ const RootLayout: React.FC = () => {
 				setColapsed(true);
 				setIsMobile(true);
 			} else {
-				setColapsed(false);
 				setIsMobile(false);
 			}
 		};
 
-		window.addEventListener("resize", handleResize);
+
 		handleResize();
+
+		window.addEventListener("resize", handleResize);
 
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);

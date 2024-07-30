@@ -1,6 +1,18 @@
 import { useState } from "react";
 import { sendRequestType } from "../types/UseHttpTypes";
 
+export function postRequestHelper(url: string, body: any, headers?: any) {
+	return {
+		url: "http://localhost:3000/" + url, 
+		headers: {
+			"Content-Type": "application/json",
+			...headers,
+		},
+		method: "POST",
+		body: body,
+	};
+}
+
 export default function useHttp() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -18,12 +30,10 @@ export default function useHttp() {
 				});
 
 				if (!response.ok) {
-					console.log("HELLO WORLD");
 					throw new Error("Request failed!");
 				}
 
 				const responseData = await response.json();
-				console.log(responseData, "response data from http");
 				applyData(responseData);
 			} catch (err) {
 				setError("Something went wrong!");

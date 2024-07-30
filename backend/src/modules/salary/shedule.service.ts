@@ -8,9 +8,9 @@ export class ScheduleService {
 
   constructor(private readonly salaryService: SalaryService) {}
 
-  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT) 
-  async handleCron() {
-    this.logger.debug('Clearing bonuses every 5 minutes for testing');
-    await this.salaryService.clearBonuses();
-  }
+  // @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT) 
+  // async handleCron() {
+  //   this.logger.debug('Clearing bonuses for testing');
+  //   await this.salaryService.clearBonuses();
+  // }
 }

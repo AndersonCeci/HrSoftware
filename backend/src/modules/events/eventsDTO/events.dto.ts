@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsDateString, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsNotEmpty, IsArray } from 'class-validator';
 import { Status } from '../schema/events.schema';
 
 export class CreateEventDto {
@@ -32,4 +32,8 @@ export class CreateEventDto {
 
     @IsNotEmpty()
     creatorId: string;
+
+    @IsOptional()
+    @IsArray()
+    invitees?: string[];
 }

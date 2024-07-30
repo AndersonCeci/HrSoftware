@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { PlusOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
-import moment from "moment";
+import moment from "moment"
 import "../../styles/Dashboard/TaskGrid.css";
 
 const { Option } = Select;
@@ -252,7 +252,7 @@ const TaskGrid: React.FC = () => {
         </Form>
       </Modal>
       <Modal
-        visible={isVisible}
+        open={isVisible}
         footer={null}
         onCancel={() => {
           setIsVisible(false);

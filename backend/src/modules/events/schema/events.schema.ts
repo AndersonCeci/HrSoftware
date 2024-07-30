@@ -38,6 +38,7 @@ export class Events extends Document {
     endTime?: Date;
 
     @IsOptional()
+    @Prop()
     location?: string;
 
     @Prop()
@@ -46,6 +47,10 @@ export class Events extends Document {
     
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
     creator: User;
+
+    @Prop({type: [MongooseSchema.Types.ObjectId], ref: 'User'})
+    @IsOptional()
+    invitees?: User[];
 }
 
 const EventsSchema = SchemaFactory.createForClass(Events);
