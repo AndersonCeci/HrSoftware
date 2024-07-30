@@ -8,6 +8,8 @@ import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
 import useHttp from "../../hooks/useHttp";
 
+const API = import.meta.env.REACT_APP_EMPLOYEE_API;
+
 const EmploymentPage: React.FC = () => {
 	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
 	const [open, setOpen] = useState(false);
@@ -18,7 +20,7 @@ const EmploymentPage: React.FC = () => {
 	useEffect(() => {
 		sendRequest(
 			{
-				url: "http://localhost:3000/employees",
+				url: API,
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -52,10 +54,10 @@ const EmploymentPage: React.FC = () => {
 		setIsDeleting(true);
 		sendRequest(
 			{
-				url: `http://localhost:3000/employees/${record._id}`,
+				url: `${API}/${record._id}`,
 				method: "DELETE",
 				headers: {
-				"Content-Type": "application/json",
+					"Content-Type": "application/json",
 				},
 			},
 			() => {

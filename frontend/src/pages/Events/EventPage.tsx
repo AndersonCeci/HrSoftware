@@ -32,7 +32,7 @@ const EventPage: React.FC = () => {
 	function handleAddEvent(newEvent: EvenType) {
 		sendRequest(
 			{
-				url: "http://localhost:3000/event",
+				url: import.meta.env.REACT_APP_EVENTS_API,
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -51,7 +51,7 @@ const EventPage: React.FC = () => {
 	useEffect(() => {
 		sendRequest(
 			{
-				url: "http://localhost:3000/event",
+				url: import.meta.env.REACT_APP_EVENTS_API,
 			},
 			(responseData: EvenType[]) => {
 				setLoadedEvents(responseData);

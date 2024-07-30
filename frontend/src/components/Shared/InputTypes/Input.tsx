@@ -5,7 +5,8 @@ type InputProps = {
 	name: string;
 	type?: "password" | "textarea";
 	required?: boolean;
-	defaultValidateRule?: "email" | "password" | "personalNumber" | "phoneNumber";
+	defaultValidateRule?: "email" | "password" | "personalNumber" | "phoneNumber" | "number";
+	[prop: string]: any;
 };
 
 type RulePatterns = {
@@ -22,6 +23,10 @@ type RulePatterns = {
 		template: string;
 	};
 	phoneNumber: {
+		regex: RegExp;
+		template: string;
+	};
+	number: {
 		regex: RegExp;
 		template: string;
 	};
@@ -44,9 +49,20 @@ const rulePatterns: RulePatterns = {
 		regex: /^06[789]\d{7}$/,
 		template: "0681234567",
 	},
+	number: {
+		regex: /^\d+$/,
+		template: "123",
+	},
 };
 
-const Input = ({ label, name, type, required = false, defaultValidateRule }: InputProps) => {
+const Input = ({
+	label,
+	name,
+	type,
+	required = false,
+	defaultValidateRule,
+	...prop
+}: InputProps) => {
 	const Input = type === "password" ? I.Password : type === "textarea" ? I.TextArea : I;
 
 	const rulesList: any = [
@@ -71,7 +87,7 @@ const Input = ({ label, name, type, required = false, defaultValidateRule }: Inp
 			rules={rulesList}
 			validateDebounce={1000}
 		>
-			<Input size="large" placeholder={`${label}`} />
+			<Input size="large" placeholder={`${label}`} {...prop} />
 		</Form.Item>
 	);
 };

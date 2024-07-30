@@ -17,13 +17,12 @@ type StepItem = {
 
 type StepItemProps = (
 	current: number,
-	handleInputChange: (value: string, key: string) => void,
 	form: any,
 	isLoading: boolean,
 	error: string | null,
 ) => StepItem[];
 
-const getStepItems: StepItemProps = (current, handleInputChange, form, isLoading, error) => {
+const getStepItems: StepItemProps = (current, form, isLoading, error) => {
 	return [
 		{
 			subTitle: "Create Account",
@@ -32,7 +31,7 @@ const getStepItems: StepItemProps = (current, handleInputChange, form, isLoading
 		},
 		{
 			subTitle: "Add Information",
-			content: <SecondStep onChange={handleInputChange} form={form} />,
+			content: <SecondStep form={form} />,
 			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
 		},
 		{
