@@ -24,7 +24,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 				</Card>
 			) : (
 				<Flex className="colapsed-avatar-container" justify="center">
-					<Avatar size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+					<Avatar  size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
 				</Flex>
 			)}
 		</>
