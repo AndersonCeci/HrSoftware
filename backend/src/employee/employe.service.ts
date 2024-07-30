@@ -45,4 +45,10 @@ export class EmployeeService {
       .findByIdAndUpdate(id, { isDeleted: true }, { new: true })
       .exec();
   }
+
+  async getUsernames(): Promise<string[]> {
+    const employees = await this.employeeModel.find( { isDeleted: false } ).select( 'username' ).exec();
+    const usernameArray = employees.map((employee) => employee.username);
+    return usernameArray;
+  }
 }
