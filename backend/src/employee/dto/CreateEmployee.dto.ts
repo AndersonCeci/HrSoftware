@@ -50,4 +50,5 @@ export class CreateEmployeeDto {
   contract: string;
 
   isDeleted: boolean;
+  deleteDate:Date
 }

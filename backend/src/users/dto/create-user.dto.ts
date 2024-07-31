@@ -15,4 +15,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsEnum(Role)
   role: Role;
+
+
+  isDeleted:boolean;
+  deleteDate?: Date;
 }

@@ -47,7 +47,12 @@ export class SalaryDTO {
   @Min(0)
   readonly total: number;
 
-  @IsNotEmpty()
-  @IsBoolean()
-  readonly paid: boolean;
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(1900)
+    @Max(new Date().getFullYear() + 1)  
+    readonly year: number;
+
+    isDeleted:boolean;
+    deleteDate?:Date;
 }

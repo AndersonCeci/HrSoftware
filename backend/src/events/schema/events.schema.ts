@@ -23,6 +23,12 @@ export class Event extends Document {
 
   @Prop()
   image: string;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop()
+  deleteDate: Date;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
