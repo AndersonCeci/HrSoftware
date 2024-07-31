@@ -1,8 +1,6 @@
-import { t } from "i18next";
 import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
 import { Badge } from "antd";
-import i18n from "../../utils/i18n";
 
 const logout = () => {
   localStorage.removeItem("userData");
@@ -27,7 +25,7 @@ const navigationLinkList = [
     linkTo: `${Paths.Settings.path}`,
   },
   {
-    text: i18n.t("logOut"),
+    text: "logOut",
     linkTo: Paths.Login.path,
     whiteText: true,
     handleClick: logout,
@@ -35,6 +33,7 @@ const navigationLinkList = [
 ];
 
 const HeaderIcons: React.FC = () => {
+  console.log("header");
   return (
     <ul className="header-icons-list">
       {navigationLinkList.map((item, index) => (

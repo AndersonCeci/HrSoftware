@@ -62,21 +62,23 @@ const RootLayout: React.FC = () => {
 	}
 
 	useEffect(() => {
-		const handleResize = () => {
-			if (window.innerWidth < 600) {
-				setColapsed(true);
-				setIsMobile(true);
-			} else {
-				setColapsed(false);
-				setIsMobile(false);
-			}
-		};
+    const handleResize = () => {
+      if (window.innerWidth < 600) {
+        setColapsed(true);
+        setIsMobile(true);
+      } else {
+        setColapsed(false);
+        setIsMobile(false);
+      }
+    };
 
-		window.addEventListener("resize", handleResize);
-		handleResize();
+    window.addEventListener("resize", handleResize);
+    handleResize();
 
-		// return () => window.removeEventListener("resize", handleResize);
-	}, []);
+    // return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  console.log("sdsasdsdas");
 
 	return (
 		<Layout>

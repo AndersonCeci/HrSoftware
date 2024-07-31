@@ -40,24 +40,24 @@ const TaskGrid: React.FC = () => {
   const columns: ColumnsType<Task> = [
     {
       key: "1",
-      title: "Title",
+      title: t(`taskTitle`),
       dataIndex: "title",
     },
     {
       key: "2",
-      title: "Description",
+      title: t("taskDescription"),
       dataIndex: "description",
       width: "200px",
     },
     {
       key: "3",
-      title: "Due Date",
+      title: t("taskDate"),
       dataIndex: "due",
       sorter: (a, b) => a.due.localeCompare(b.due),
     },
     {
       key: "4",
-      title: "Status",
+      title: t("taskStatus"),
       dataIndex: "status",
       filters: [
         { text: "TO DO", value: "TO DO" },
@@ -68,7 +68,7 @@ const TaskGrid: React.FC = () => {
     },
     {
       key: "7",
-      title: "Actions",
+      title: t(`taskAction`),
       render: (record) => (
         <>
           <EditTwoTone
@@ -190,7 +190,7 @@ const TaskGrid: React.FC = () => {
         }}
       />
       <Modal
-      footer={null}
+        footer={null}
         className="Edit-modal"
         title="Edit Task"
         open={isEditable}

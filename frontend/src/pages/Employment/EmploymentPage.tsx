@@ -74,20 +74,24 @@ const EmploymentPage: React.FC = () => {
 	const columns = getColumns(tableData, handleEditButtonClick, handleDeleteButtonClick);
 
 	return (
-		<>
-			<Drawer height={500} isOpen={open} onClose={handlClose}>
-				<AddEmployeeForm
-					selectedEmployee={editedData}
-					onAdd={handleAddNewEmployee}
-					onEdit={handleEditEmployee}
-				/>
-			</Drawer>
-			<TableHeader title={t('employees')} onClick={() => setOpen(true)} />
-			<section className="test">
-				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
-			</section>
-		</>
-	);
+    <>
+      <Drawer height={500} isOpen={open} onClose={handlClose}>
+        <AddEmployeeForm
+          selectedEmployee={editedData}
+          onAdd={handleAddNewEmployee}
+          onEdit={handleEditEmployee}
+        />
+      </Drawer>
+      <TableHeader title={t("employment")} onClick={() => setOpen(true)} />
+      <section className="test">
+        {isLoading && !isDeleting ? (
+          <Loader />
+        ) : (
+          <Table columns={columns} data={tableData} fixed />
+        )}
+      </section>
+    </>
+  );
 };
 
 export default EmploymentPage;

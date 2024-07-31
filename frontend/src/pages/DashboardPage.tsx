@@ -14,7 +14,6 @@ export interface Data {
 }
 
 
-
  
 const DashboardPage: React.FC = () =>
 {
@@ -33,7 +32,7 @@ const DashboardPage: React.FC = () =>
      },
      {
        noEmployee: 50,
-       status: t("dismissedEmployee"),
+       status: t("dismissed"),
        color: "#ceebfd",
        path: "/management/dismissed",
      },
