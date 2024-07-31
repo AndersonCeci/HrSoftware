@@ -58,4 +58,7 @@ export class SalaryDTO {
     @Min(1900)
     @Max(new Date().getFullYear() + 1)  
     readonly year: number;
+
+    isDeleted:boolean;
+    deleteDate?:Date;
 }

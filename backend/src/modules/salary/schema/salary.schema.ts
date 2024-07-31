@@ -34,6 +34,12 @@ export class Salary extends Document {
 
   @Prop({ required: true })
   total: number;
+
+  @Prop({default:false})
+  isDeleted:boolean
+
+  @Prop()
+  deleteDate: Date;
 }
 
 const SalarySchema = SchemaFactory.createForClass(Salary);

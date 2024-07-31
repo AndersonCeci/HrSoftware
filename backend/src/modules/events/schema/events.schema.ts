@@ -51,6 +51,12 @@ export class Events extends Document {
     @Prop({type: [MongooseSchema.Types.ObjectId], ref: 'User'})
     @IsOptional()
     invitees?: User[];
+
+    @Prop({default:false})
+    isDeleted:boolean
+
+    @Prop()
+    deleteDate: Date;
 }
 
 const EventsSchema = SchemaFactory.createForClass(Events);

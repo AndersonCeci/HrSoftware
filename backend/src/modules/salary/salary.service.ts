@@ -31,7 +31,7 @@ export class SalaryService {
 
   async find(id: string): Promise<Salary> {
     try {
-      const salary = await this.salaryModel.findById(id);
+      const salary = await this.salaryModel.findById(id,{isDeleted:false});
       if (!salary) {
         throw new NotFoundException('Salary not found');
       }
@@ -44,12 +44,23 @@ export class SalaryService {
     }
   }
 
-  async deleteSalary(userId: string): Promise<Salary> {
-    try {
-      return await this.salaryModel.findOneAndDelete({ employeeID: userId });
-    } catch (error) {
-      throw new Error('Failed to delete salary');
-    }
+  // async deleteSalary(userId: string): Promise<Salary> {
+  //   try {
+  //     return await this.salaryModel.findOneAndDelete({ employeeID: userId });
+  //   } catch (error) {
+  //     throw new Error('Failed to delete salary');
+  //   }
+  // }
+
+  async softDeleteSalaryById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    return this.salaryModel.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deleteDate: currentDate }, 
+      { new: true }
+    )
   }
 
   async updateSalary(userId: string, newSalary: UpdateSalaryDTO): Promise<Salary> {

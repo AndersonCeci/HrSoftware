@@ -9,4 +9,6 @@ export class BonusDTO {
     @IsNumber()
     @Min(0)
     readonly amount: number;
+
+    
   }

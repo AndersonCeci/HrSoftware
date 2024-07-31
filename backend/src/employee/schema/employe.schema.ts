@@ -49,6 +49,9 @@ export class Employee extends Document {
 
   @Prop({ default: false })
   isDeleted: boolean;
+
+  @Prop({default:false})
+  deleteDate: Date;
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);

@@ -36,4 +36,8 @@ export class CreateEventDto {
     @IsOptional()
     @IsArray()
     invitees?: string[];
+    
+
+    isDeleted: boolean;
+    deleteDate?: Date;
 }
