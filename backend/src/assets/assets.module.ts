@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Asset,AssetSchema } from 'src/schemas/Asset.schema';
+import { Asset, AssetSchema } from 'src/assets/schemas/Asset.schema';
 import { AssetsService } from './assets.service';
 import { AssetsController } from './assets.controller';
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import RootLayout from "./pages/RootLayout";
+import RootLayout from "./pages/Root/RootLayout";
 import { Paths } from "./utils/paths";
 
 import "./App.css";
@@ -13,7 +13,7 @@ const iterationRoutes = [
 	Paths.Employee,
 	Paths.Background,
 	Paths.DayOff,
-	Paths.Settings
+	Paths.Settings,
 ];
 
 const router = createBrowserRouter([
@@ -39,7 +39,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	
 	return <RouterProvider router={router} />;
 }
 

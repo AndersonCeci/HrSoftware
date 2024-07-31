@@ -1,23 +1,44 @@
-import { Button, Dropdown } from "antd";
+import { Button, Checkbox, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
+import { getMonthName } from "../../../utils/generals";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
   handleEdit: (employeeID: string) => void;
+  tableData: any;
 }
 
 const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
   createTableColumns({
-    dataIndex: "employeeID",
-    title: "ID",
-    key: "id",
+    dataIndex: "employeeDetails",
+    title: "Employee Details",
+    key: "employeeDetails",
+    displayAs: (employeeDetails) => {
+      if (!employeeDetails) {
+        return <span>No Details</span>;
+      }
+      return (
+        <span>
+          {employeeDetails.name} {employeeDetails.surname}
+        </span>
+      );
+    },
   }),
   createTableColumns({
-    dataIndex: "NSSH",
-    title: "NSSH",
-    key: "NSSH",
+    dataIndex: "dateTaken",
+    title: "Date Taken",
+    key: "dateTaken",
+    displayAs: (dateTaken) => {
+      const dateObj = new Date(dateTaken);
+      if (dateObj instanceof Date && !isNaN(dateObj.getTime())) {
+        const year = dateObj.getFullYear();
+        const monthName = getMonthName(dateObj);
+        return <span style={{ width: "200px" }}>{`${monthName} ${year}`}</span>;
+      }
+      return <span>Invalid Date</span>;
+    },
   }),
   createTableColumns({
     dataIndex: "netSalary",
@@ -62,44 +83,62 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
     key: "total",
   }),
   createTableColumns({
+    dataIndex: "paid",
+    title: "Compensated",
+    key: "paid",
+    displayAs: (paid: boolean) => {
+      const newPaid = paid;
+      return (
+        <Checkbox
+          checked={newPaid}
+          onChange={() => {
+            newPaid === !newPaid;
+          }}
+        ></Checkbox>
+      );
+    },
+  }),
+  createTableColumns({
     title: "Action",
-    dataIndex: "employeeID",
+    dataIndex: "_id",
     key: "action",
-    displayAs: (employeeID: string) => (
-      <Dropdown
-        menu={{
-          items: [
-            {
-              key: "Add Bonus",
-              label: (
-                <Button
-                  type={ButtonType.TEXT}
-                  onClick={() => {
-                    handleAddBonus(employeeID);
-                  }}
-                >
-                  Add Bonus
-                </Button>
-              ),
-            },
-            {
-              key: "Edit",
-              label: (
-                <Button
-                  type={ButtonType.TEXT}
-                  onClick={() => handleEdit(employeeID)}
-                >
-                  Edit
-                </Button>
-              ),
-            },
-          ],
-        }}
-        trigger={["click"]}
-      >
-        <Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
-      </Dropdown>
-    ),
+    displayAs: (salaryID: string) => {
+      return (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "Add Bonus",
+                label: (
+                  <Button
+                    type={ButtonType.TEXT}
+                    onClick={() => {
+                      handleAddBonus(salaryID);
+                    }}
+                  >
+                    Add Bonus
+                  </Button>
+                ),
+              },
+              {
+                key: "Edit",
+                label: (
+                  <Button
+                    type={ButtonType.TEXT}
+                    onClick={() => handleEdit(salaryID)}
+                  >
+                    Edit
+                  </Button>
+                ),
+              },
+            ],
+          }}
+          trigger={["click"]}
+        >
+          <Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
+        </Dropdown>
+      );
+    },
     fixed: "right",
     width: 40,
   }),

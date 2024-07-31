@@ -28,7 +28,7 @@ export class CreateEmployeeDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
+  @Matches( /^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
   @IsString()
@@ -36,7 +36,7 @@ export class CreateEmployeeDto {
 
   startingDate?: string;
 
-  phoneNumber: number;
+  phoneNumber: string;
 
   @IsEnum(['Female', 'Male'], {
     message: 'Must be one of the following gender',

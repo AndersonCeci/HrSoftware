@@ -1,0 +1,29 @@
+.root-page-container {
+	height: 100%;
+    min-height: 100vh;
+	/* height: fit-content; */
+}
+
+.root-content-container {
+	/* height: 100%; */
+    /* background-color: red; */
+}
+
+.root-layout-container{
+    height: 100%;
+    /* background-color: blanchedalmond; */
+}
+
+.sider-container{
+    min-height: 100%;
+    /* background-color: blanchedalmond; */
+    /* background-color: aquamarine; */
+    border-right: 1px solid #cecece;
+}
+
+.outlet-container{
+    height: 100%;
+    /* min-height: 100vh; */
+    /* background-color: blanchedalmond; */
+    padding: 0 25px;
+}

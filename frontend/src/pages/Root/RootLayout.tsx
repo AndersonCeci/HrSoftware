@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
-import NavigationMenu from "../components/Navigation/NavigationMenu";
-import Header from "../components/Header/Header";
-import NavigationMenuLogo from "../components/Navigation/NavigationMenuLogo";
-import HeaderIcons from "../components/Header/HeaderIcons";
-import LogedUserPanel from "../components/Navigation/LogedUserPanel";
-import Trigger from "../components/Navigation/Trigger";
+import NavigationMenu from "../../components/Navigation/NavigationMenu";
+import Header from "../../components/Header/Header";
+import NavigationMenuLogo from "../../components/Navigation/NavigationMenuLogo";
+import HeaderIcons from "../../components/Header/HeaderIcons";
+import LogedUserPanel from "../../components/Navigation/LogedUserPanel";
+import Trigger from "../../components/Navigation/Trigger";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
-
 import { Layout } from "antd";
+import "./Style/RootStyle.css";
+
 const { Content, Sider } = Layout;
 
 import { useState, useEffect } from "react";
@@ -56,8 +57,8 @@ const RootLayout: React.FC = () => {
 	// 	}
 	//   }, []);
 
-	function onCollapse(collapsed: boolean) {
-		console.log(collapsed);
+	function onCollapse() {
+		// console.log(collapsed);
 		setColapsed((prev) => !prev);
 	}
 
@@ -67,48 +68,36 @@ const RootLayout: React.FC = () => {
 				setColapsed(true);
 				setIsMobile(true);
 			} else {
-				setColapsed(false);
 				setIsMobile(false);
 			}
 		};
 
-		window.addEventListener("resize", handleResize);
 		handleResize();
 
-		// return () => window.removeEventListener("resize", handleResize);
+		window.addEventListener("resize", handleResize);
+
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	return (
-		<Layout>
+		<Layout className="root-page-container">
 			<Header first={<NavigationMenuLogo logotext="HRSoftware" />} third={<HeaderIcons />} />
-			<Content>
-				<Layout
-					style={{
-						minHeight: "90vh",
-						height: "100%",
-						backgroundColor: "#fff",
-					}}
-				>
+			<Content className="root-content-container">
+				<Layout className="root-layout-container">
 					<Sider
 						collapsible
 						collapsed={colapsed}
 						onCollapse={onCollapse}
 						width={300}
 						collapsedWidth={90}
-						style={
-							{
-								// minHeight: "90vh",
-								// height: "100%",
-								// backgroundColor: "#fff",
-							}
-						}
+						className="sider-container"
 						theme="light"
 						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
 					>
-						{!colapsed && <LogedUserPanel />}
-						<NavigationMenu />
+						{<LogedUserPanel colapsed={colapsed} />}
+						<NavigationMenu colapsed={colapsed}/>
 					</Sider>
-					<Content>
+					<Content className="outlet-container">
 						<FloatButton
 							icon={<QuestionCircleOutlined />}
 							type="primary"

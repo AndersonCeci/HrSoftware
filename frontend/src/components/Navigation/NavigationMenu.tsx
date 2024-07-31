@@ -1,8 +1,10 @@
 import type { MenuProps } from "antd";
+import Button from "../Shared/Button";
 import { Menu } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
 const navElements = [Paths.Dashboard, Paths.Employee, Paths.DayOff, Paths.Company];
@@ -27,7 +29,7 @@ const items: any = navElements.map((element) => {
 	};
 });
 
-const NavigationMenu = () => {
+const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
 		useLocation()
 			.pathname.split("/")
@@ -35,14 +37,21 @@ const NavigationMenu = () => {
 	);
 
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-		console.log(defaultSelectedKey);
+		// console.log(defaultSelectedKey);
 	}, [location.pathname]);
 
+	const handleClick = () => {
+		localStorage.removeItem("userData");
+		console.log("Cleared?", localStorage.getItem("token"));
+		navigate("/");
+	};
+
 	return (
-		<>
+		<div className="navmenu-container">
 			<Menu
 				// onClick={onClick}/
 				className="side-nevigation-menu"
@@ -52,7 +61,13 @@ const NavigationMenu = () => {
 				mode="inline"
 				items={items}
 			/>
-		</>
+			<div className="logout-button-container">
+				<Button type="text" danger size="large" onClick={handleClick}>
+					<LogoutOutlined />
+					{!colapsed? "Log Out" : ""}
+				</Button>
+			</div>
+		</div>
 	);
 };
 
