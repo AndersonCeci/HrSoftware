@@ -46,4 +46,8 @@ export class CreateRecruitmentDto {
   readonly cv?: string;
 
   submittedDate: Date;
+
+
+  isDeleted:boolean;
+  deleteDate?: Date;
 }

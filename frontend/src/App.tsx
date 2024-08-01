@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import RootLayout from "./pages/RootLayout";
+import RootLayout from "./pages/Root/RootLayout";
 import { Paths } from "./utils/paths";
 
 import "./App.css";
@@ -40,7 +40,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	
 	return <RouterProvider router={router} />;
 }
 

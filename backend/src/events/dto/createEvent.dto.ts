@@ -21,5 +21,9 @@ import {IsString,IsNotEmpty,IsDateString,IsOptional} from 'class-validator';
     
     @IsOptional()
     image?:string;
+    
+    
+    isDeleted: boolean;
+    deleteDate?: Date;
 }
   
