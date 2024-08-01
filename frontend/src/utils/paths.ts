@@ -27,6 +27,16 @@ export const Paths = {
       },
     ],
   },
+  Profile: {
+    path:"profile",
+    icon: NavigationIcons.UserOutlined,
+    children: [
+      {
+        path:"",
+        pageElement: PageRoutesComponents.ProfilePage
+      }
+    ]
+  },
   Settings: {
     path: "settings",
     icon: NavigationIcons.IoSettingsOutline,

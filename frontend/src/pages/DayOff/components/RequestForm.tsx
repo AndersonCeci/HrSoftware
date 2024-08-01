@@ -38,9 +38,9 @@ const RequestForm = ({ onAdd }: RequestedTableProps) => {
   };
 
   const type = [
-    { label: "Annual Leave", value: "annual" },
-    { label: "Sick Leave", value: "sick" },
-    { label: "Other", value: "other"}
+    { label: "Annual Leave", value: "Annual Leave" },
+    { label: "Sick Leave", value: "Sick Leave" },
+    { label: "Other", value: "Other"}
   ];
   return (
     <Layout style={{ width: "100%", background: "#fff" }}>

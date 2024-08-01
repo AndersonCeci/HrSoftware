@@ -1,11 +1,12 @@
 import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
-import { Badge } from "antd";
+import { Avatar, Badge } from "antd";
 
 // const logout = () => {
 //   localStorage.removeItem("userData");
 //   console.log("Cleared?", localStorage.getItem("token"));
 // };
+
 
 const navigationLinkList = [
   {
@@ -21,9 +22,11 @@ const navigationLinkList = [
     linkTo: `${Paths.Notifications.path}`,
   },
   {
-    icon: <Paths.Settings.icon className="nav-menu-icon white-icon" />,
-    linkTo: `${Paths.Settings.path}`,
+    icon: <Paths.Settings.icon className="nav-menu-icon white-icon"/>,
+    linkTo: `${Paths.Settings.path}`
   },
+
+  // }
   // {
   //   text: "Log Out",
   //   linkTo: Paths.Login.path,

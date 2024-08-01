@@ -1,6 +1,7 @@
 import { Avatar, Card, Flex } from "antd";
 
 import "../../styles/Navigation/LogedUserPanel.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -13,6 +14,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 
 	return (
 		<>
+    <Link to={"/profile"}>
 			{!colapsed ? (
 				<Card className="loged-user-card">
 					<Meta
@@ -27,6 +29,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 					<Avatar  size={"large"} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
 				</Flex>
 			)}
+      </Link>
 		</>
 	);
 };

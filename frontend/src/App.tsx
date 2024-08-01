@@ -14,6 +14,7 @@ const iterationRoutes = [
 	Paths.Background,
 	Paths.DayOff,
 	Paths.Settings,
+	Paths.Profile
 ];
 
 const router = createBrowserRouter([
