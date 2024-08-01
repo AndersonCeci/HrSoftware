@@ -52,8 +52,8 @@ const EmploymentPage: React.FC = () => {
 		setIsDeleting(true);
 		sendRequest(
 			{
-				url: `http://localhost:3000/employees/${record._id}`,
-				method: "DELETE",
+				url: `http://localhost:3000/left/copy/${record._id}`,
+				method: "POST",
 				headers: {
 				"Content-Type": "application/json",
 				},

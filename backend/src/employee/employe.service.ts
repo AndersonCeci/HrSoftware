@@ -16,12 +16,12 @@ export class EmployeeService {
   }
 
   findAll(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: false }).exec();
+    return this.employeeModel.find().exec();
   }
   
 
   findLeft(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: true }).exec();
+    return this.employeeModel.find().exec();
   }
 
 
@@ -42,7 +42,7 @@ export class EmployeeService {
 
   softDeleteAssetById(id: string): Promise<Employee> {
     return this.employeeModel
-      .findByIdAndUpdate(id, { isDeleted: true }, { new: true })
+      .findByIdAndUpdate(id, { new: true })
       .exec();
   }
 }

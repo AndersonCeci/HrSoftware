@@ -69,11 +69,11 @@ import { TasksModule } from './modules/tasks/tasks.module';
     AssetsModule,
     EventsModuleModale,
     UploadModule,
-    FirebaseModule,,
+    FirebaseModule,
     TasksModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService, UploadService],
+  providers: [AppService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
