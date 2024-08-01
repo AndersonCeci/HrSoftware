@@ -28,7 +28,7 @@ export class CreateEmployeeDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches( /^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
+  @Matches( /^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
   @IsString()
@@ -50,5 +50,4 @@ export class CreateEmployeeDto {
   contract: string;
 
   isDeleted: boolean;
-  deleteDate:Date
 }

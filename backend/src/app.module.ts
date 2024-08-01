@@ -73,7 +73,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
     TasksModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService, UploadService],
+  providers: [AppService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

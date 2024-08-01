@@ -16,12 +16,12 @@ export class EmployeeService {
   }
 
   findAll(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: false }).exec();
+    return this.employeeModel.find().exec();
   }
   
 
   findLeft(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: true }).exec();
+    return this.employeeModel.find().exec();
   }
 
 

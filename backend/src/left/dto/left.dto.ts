@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsOptional, Matches } from 'class-validator';
-import { Document } from 'mongoose';
 
 @Schema()
-export class Employee extends Document {
+export class LeftDto {
   @Prop({ required: true })
   name: string;
 
@@ -16,10 +15,10 @@ export class Employee extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true})
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
@@ -30,7 +29,7 @@ export class Employee extends Document {
   startingDate: string;
 
   @Prop()
-  phoneNumber: string;
+  phoneNumber: number;
 
   @Prop()
   @IsOptional()
@@ -47,8 +46,8 @@ export class Employee extends Document {
   @Prop()
   contract: string;
 
-  @Prop({default:false})
-  deleteDate: string;
+  // @Prop()
+  // daletedAt: {type: Date}
+
 }
 
-export const EmployeeSchema = SchemaFactory.createForClass(Employee);
