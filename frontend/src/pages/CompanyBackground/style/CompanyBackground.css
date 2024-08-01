@@ -1,6 +1,32 @@
-.ant-flex-align-flex-end {
-    align-items: flex-start;
+.about-us {
+    background-image: url('../../../assets/company.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
 }
-.ant-card{
-    justify-content: space-between;
+.about-us-inner {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align items at the bottom */
+    padding: 20px; 
+}
+.ant-layout-content {
+    overflow-x: scroll;
+}
+
+.ant-steps{
+    margin-left: 40px;
+}
+
+.aboutus-avatar{
+    width: 100px;
+    height: 100px;
+}
+
+.ant-card-meta-detail{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

@@ -69,7 +69,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
     AssetsModule,
     EventsModuleModale,
     UploadModule,
-    FirebaseModule,,
+    FirebaseModule,
     TasksModule,
   ],
   controllers: [],

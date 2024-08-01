@@ -1,13 +1,20 @@
-import { Card, Flex} from "antd";
-import AboutUs from "../../assets/aboutus.jpeg";
-import Histroy from "../../assets/history.jpeg"
-import Values from "../../assets/values.jpg"
-
+import React from "react";
+import { Avatar, Button, Card, Col, Row, Steps, Typography } from "antd";
+import "../CompanyBackground/style/CompanyBackground.css";
+import { PiBuildingApartmentLight } from "react-icons/pi";
+import { FaRegUser } from "react-icons/fa";
+import { MdOutlineBadge } from "react-icons/md";
+import Meta from "antd/es/card/Meta";
+import CEO from "../../assets/ceo.jpeg";
 
 const cardStyle: React.CSSProperties = {
   width: "900px",
   margin: "auto",
   marginTop: "20px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-end",
+  height: "300px", // Adjust height as needed
 };
 
 const bigcardStyle: React.CSSProperties = {
@@ -15,89 +22,111 @@ const bigcardStyle: React.CSSProperties = {
   margin: "auto",
   border: "2px solid #e6eeff",
   marginTop: "30px",
-  backgroundColor: "#e6eeff",
+  marginBottom: "30px",
+  backgroundColor: "white",
 };
+
+const { Title } = Typography;
 
 const CompanyBackgroundPage: React.FC = () => {
   return (
     <Card style={bigcardStyle}>
-      <h1 style={{ marginTop: "0px" }}>Company's Background</h1>
-      <Card
-        style={cardStyle}
-        styles={{ body: { padding: 0, overflow: "hidden" } }}
-      >
-        <div>
-          <Flex justify="space-between">
-            <Flex
-              vertical
-              align="flex-start"
-              justify="space-between"
-              style={{ padding: 32 }}
-            >
-              <h2 style={{ marginTop: "0px" }}>About Us</h2>
-              <p>
-                CodeVider is a leading provider of cutting-edge technology
-                solutions, dedicated to empowering businesses of all sizes. With
-                a focus on innovation and customer success, we strive to
-                transform the way organizations operate and thrive in the
-                digital landscape.
-              </p>
-            </Flex>
-            <img style={{ width: "300px", height: "auto" }} src={AboutUs}></img>
-          </Flex>
+      <Card style={cardStyle} bordered={false} className="about-us">
+        <div className="about-us-inner">
+          <Title style={{ color: "white", marginBottom: "0px" }} level={2}>
+            About Us
+          </Title>
+          <p style={{ fontSize: "17px", fontWeight: "lighter" }}>
+            <b>CodeVider</b> is a leading provider of cutting-edge technology
+            solutions, dedicated to empowering businesses of all sizes. With a
+            focus on innovation and customer success, we strive to transform the
+            way organizations operate and thrive in the digital landscape.
+          </p>
         </div>
       </Card>
-      <Card
-        style={cardStyle}
-        styles={{ body: { padding: 0, overflow: "hidden" } }}
-      >
-        <div>
-          <Flex justify="space-between">
-            <img style={{ width: "300px", height: "auto" }} src={Histroy}></img>
-            <Flex
-              vertical
-              align="flex-start"
-              // justify="space-between"
-              style={{ padding: 32 }}
-            >
-              <h2 style={{ marginTop: "0px" }}>Our History</h2>
-              <p>
-                CodeVider was founded in 2010 with a vision to revolutionize the
-                way businesses leverage technology. Over the years, we've grown
-                into a trusted partner for organizations across industries,
-                helping them navigate the ever-evolving digital landscape and
-                achieve their goals.
-              </p>
-            </Flex>
-          </Flex>
-        </div>
-      </Card>
-      <Card
-        style={cardStyle}
-        styles={{ body: { padding: 0, overflow: "hidden" } }}
-      >
-        <div>
-          <Flex justify="space-between">
-            <Flex
-              vertical
-              align="flex-start"
-              justify="space-between"
-              style={{ padding: 32 }}
-            >
-              <h2 style={{ marginTop: "0px" }}>Our Values</h2>
-              <p>
-                At the heart of CodeVider are our core values: innovation,
-                integrity, and customer-centricity. We are committed to pushing
-                the boundaries of what\'s possible, always striving to deliver
-                solutions that exceed our clients' expectations. Our unwavering
-                dedication to ethical practices and transparent communication
-                has earned us the trust of businesses worldwide.
-              </p>
-            </Flex>
-            <img style={{ width: "300px", height: "auto" }} src={Values}></img>
-          </Flex>
-        </div>
-      </Card>
+      <Title style={{ marginLeft: "40px" }} level={3}>
+        Our Journey
+      </Title>
+      <Steps
+        direction="vertical"
+        status="wait"
+        items={[
+          {
+            title: "Company founded",
+            description: "July 2020",
+            icon: <PiBuildingApartmentLight />,
+          },
+          {
+            title: "First customers",
+            description: "Sep 2020",
+            icon: <FaRegUser />,
+          },
+          {
+            title: "Hired first employee",
+            description: "Oct 2020",
+            icon: <MdOutlineBadge />,
+          },
+        ]}
+      />
+      <Typography>
+        <Title style={{ marginLeft: "40px" }} level={3}>
+          Our Mission
+        </Title>
+        <p style={{ fontSize: "15px", marginLeft: "40px" }}>
+          We believe that everyone should have the opportunity to work with a
+          great team. That's why we're building a platform that helps companies
+          find and hire the best talent, and helps job seekers find the right
+          team for them. Our mission is to make it easier for everyone to build
+          and join great teams, so that more people can do the work they love.
+        </p>
+      </Typography>
+      <Title style={{ marginLeft: "40px" }} level={3}>
+        Our Team
+      </Title>
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
+            <Meta
+              avatar={<Avatar className="aboutus-avatar" size={"large"} src={CEO} />}
+              title="Pasho Toska"
+              description="CEO"
+            />
+            {/* <Button>View Profile</Button> */}
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
+            <Meta
+              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              title="Ervin Ziko"
+              description="Finance Manager"
+            />
+            {/* <Button>View Profile</Button> */}
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
+            <Meta
+              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              title="Erion Domi"
+              description="Multinational Manager"
+            />
+            {/* <Button>View Profile</Button> */}
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
+            <Meta
+              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              title="Altin Luli"
+              description="Outsorcing Manager"
+            />
+            {/* <Button>View Profile</Button> */}
+          </Card>
+        </Col>
+      </Row>
     </Card>
   );
 };

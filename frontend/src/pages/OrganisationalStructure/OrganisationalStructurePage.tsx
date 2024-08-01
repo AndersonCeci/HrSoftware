@@ -2,8 +2,9 @@ import { useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import { TreeNode } from "primereact/treenode";
 import "../OrganisationalStructure/style/OrganisationalStructure.css";
-import "../../../node_modules/primereact/resources/primereact.css"
-import "../../../node_modules/primereact/resources/themes/lara-light-blue/theme.css"
+import "../../../node_modules/primereact/resources/primereact.css";
+import "../../../node_modules/primereact/resources/themes/lara-light-blue/theme.css";
+import CEO from "../../assets/ceo.jpeg";
 
 export default function SelectionDemo() {
   const [selection, setSelection] = useState<TreeNode[]>([]);
@@ -13,8 +14,7 @@ export default function SelectionDemo() {
       key: "person",
       className: "card ceo-card",
       data: {
-        image:
-          "https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png",
+        image: { CEO },
         name: "Pasho Toska",
         title: "CEO",
       },
@@ -129,46 +129,46 @@ export default function SelectionDemo() {
                 },
               ],
             },
-            {
-              // expanded: true,
-              className: "card hr-card",
-              key: "label",
-              data: {
-                name: "Project 3",
-              },
-              children: [
-                {
-                  className: "card hr-card",
-                  key: "person",
-                  data: {
-                    image:
-                      "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
-                  },
-                },
-                {
-                  className: "card hr-card",
-                  key: "person",
-                  data: {
-                    image:
-                      "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
-                  },
-                },
-                {
-                  className: "card hr-card",
-                  key: "person",
-                  data: {
-                    image:
-                      "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
-                  },
-                },
-              ],
-            },
+            // {
+            //   // expanded: true,
+            //   className: "card hr-card",
+            //   key: "label",
+            //   data: {
+            //     name: "Project 3",
+            //   },
+            //   children: [
+            //     {
+            //       className: "card hr-card",
+            //       key: "person",
+            //       data: {
+            //         image:
+            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
+            //         name: "Elizabeta Guri",
+            //         title: "CMO",
+            //       },
+            //     },
+            //     {
+            //       className: "card hr-card",
+            //       key: "person",
+            //       data: {
+            //         image:
+            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
+            //         name: "Elizabeta Guri",
+            //         title: "CMO",
+            //       },
+            //     },
+            //     {
+            //       className: "card hr-card",
+            //       key: "person",
+            //       data: {
+            //         image:
+            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
+            //         name: "Elizabeta Guri",
+            //         title: "CMO",
+            //       },
+            //     },
+            //   ],
+            // },
           ],
         },
       ],
@@ -179,7 +179,7 @@ export default function SelectionDemo() {
     if (node.key === "person") {
       return (
         <div className="flex flex-column">
-          <div className="flex flex-column align-items-center" >
+          <div className="flex flex-column align-items-center">
             <img
               alt={node.data.name}
               src={node.data.image}
@@ -203,7 +203,7 @@ export default function SelectionDemo() {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="card overflow-x-auto">
       <OrganizationChart
         value={data}
         selectionMode="multiple"

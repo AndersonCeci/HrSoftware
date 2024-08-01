@@ -1,9 +1,9 @@
-import { Avatar, Button, Card, Skeleton } from "antd";
+import { Avatar, Card, Skeleton } from "antd";
 
 import { useState, useEffect } from "react";
 
 import "../../styles/Navigation/LogedUserPanel.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -21,16 +21,17 @@ const LogedUserPanel = () => {
     localStorage.getItem("userData") || "{}"
   ).username;
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleClick = () => {
-    localStorage.removeItem("userData");
-    console.log("Cleared?", localStorage.getItem("token"));
-    navigate("/");
-  };
+  // const handleClick = () => {
+  //   localStorage.removeItem("userData");
+  //   console.log("Cleared?", localStorage.getItem("token"));
+  //   navigate("/frontend/src/pages/ProfilePage.tsx");
+  // };
   return (
     <>
-        <Card className="loged-user-card" onClick={handleClick}>
+      <Link to={"/profile"}>
+        <Card className="loged-user-card">
           <Skeleton loading={false} avatar active>
             <Meta
               avatar={
@@ -45,6 +46,7 @@ const LogedUserPanel = () => {
             />
           </Skeleton>
         </Card>
+      </Link>
     </>
   );
 };
