@@ -1,10 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { Salary } from "../../../types/SalaryProps";
 import { ModalContext, SalaryContext, TableContext } from ".";
 import { Bonus } from "../../../types/BonusProps";
+import { message } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 
 interface EditSalaryValues {
+  _id: string;
+  dateTaken: Date;
   employeeID: string;
   NSSH: string;
   netSalary: number;
@@ -13,21 +17,38 @@ interface EditSalaryValues {
   healthInsurance: number;
   grossSalary: number;
   total: number;
+  paid: boolean;
+  employeeDetails?: {
+    name: string;
+    surname: string;
+  };
+}
+
+interface Filter {
+  name?: string;
+  startDate?: Dayjs;
+  endDate?: Dayjs;
 }
 
 export const useSalaryHook = () => {
   const salaryContext = useContext(SalaryContext);
   const modalContext = useContext(ModalContext);
   const tableContext = useContext(TableContext);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [itemCount, setItemCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  if (!salaryContext) {
-    throw new Error("useSalaryHandlers must be used within a SalaryProvider");
-  }
-  if (!modalContext) {
-    throw new Error("useSalaryHandlers must be used within a BonusProvider");
-  }
-  if (!tableContext) {
-    throw new Error("useSalaryHandlers must be used within a TableProvider");
+  const startOfMonth = dayjs().startOf("month");
+  const endOfMonth = dayjs().endOf("month");
+
+  const [filters, setFilters] = useState<Filter>({
+    startDate: startOfMonth,
+    endDate: endOfMonth,
+  });
+
+  if (!salaryContext || !modalContext || !tableContext) {
+    throw new Error("Contexts must be used within their respective providers");
   }
 
   const { selectedSalary, setSelectedSalary } = salaryContext;
@@ -35,44 +56,75 @@ export const useSalaryHook = () => {
   const { tableData, setTableData } = tableContext;
 
   useEffect(() => {
-    const fetchSalaries = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/salary`);
-        const data = response.data;
-        setTableData(data);
-      } catch (error) {
-        console.log("No data found");
-      }
-    };
-    fetchSalaries();
-    console.log(tableData);
-  }, []);
+    fetchSalaries(page, limit, filters);
+  }, [page, limit, filters]);
 
-  const updateSalary = async (employeeID: string, newSalary: Salary) => {
+  const fetchSalaries = async (
+    page: number,
+    limit: number,
+    filters: Filter
+  ) => {
+    setLoading(true);
     try {
-      await axios.put(`http://localhost:3000/salary/${employeeID}`, newSalary);
-      setTableData((prevData) =>
-        prevData.map((salary) =>
-          salary.employeeID === employeeID ? newSalary : salary
-        )
-      );
+      const response = await axios.get("http://localhost:3000/salary", {
+        params: { page, limit, ...filters },
+      });
+      const { data, meta } = response.data;
+      setTableData(data);
+      setItemCount(meta.itemCount);
     } catch (error) {
-      console.error("Cannot update salary", error);
+      console.error("No data found", error);
+      message.error("Failed to fetch salaries.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getSelectedSalary = (employeeID: string) => {
-    const salary = tableData.find((item) => item.employeeID === employeeID);
-    setSelectedSalary(salary);
+  const handlePageChange = (page: number) => {
+    setPage(page);
   };
 
-  const handleEdit = (employeeID: string) => {
-    getSelectedSalary(employeeID);
+  const handleLimitChange = (pageSize: number) => {
+    setLimit(pageSize);
+    setPage(1);
+  };
+
+  const updateSalary = async (salaryID: string, newSalary: Salary) => {
+    const sentSalary: Salary = {
+      ...newSalary,
+      dateTaken: new Date(newSalary.dateTaken),
+    };
+    try {
+      await axios.put(`http://localhost:3000/salary/${salaryID}`, sentSalary);
+      setTableData((prevData) =>
+        prevData.map((salary) => (salary._id === salaryID ? newSalary : salary))
+      );
+      message.success("Salary updated successfully.");
+    } catch (error) {
+      console.error("Cannot update salary", error);
+      message.error("Failed to update salary.");
+    }
+  };
+
+  const getSelectedSalary = (salaryID: string) => {
+    const salary = tableData.find((item) => item._id === salaryID);
+    setSelectedSalary(salary);
+    if (!salary) {
+      message.error(
+        "No salary record found for the selected employee and date."
+      );
+    } else {
+      message.info("Salary record selected.");
+    }
+  };
+
+  const handleEdit = (salaryID: string,) => {
+    getSelectedSalary(salaryID,);
     setIsEditModalOpen(true);
   };
 
-  const handleAddBonus = (employeeID: string) => {
-    getSelectedSalary(employeeID);
+  const handleAddBonus = (salaryID: string,) => {
+    getSelectedSalary(salaryID );
     setIsAddBonusModalOpen(true);
   };
 
@@ -81,18 +133,19 @@ export const useSalaryHook = () => {
 
     const bonuses = values.bonuses.map((bonus) => ({
       desc: bonus.desc,
-      amount: parseInt(bonus.amount.toString()),
+      amount: parseInt(bonus.amount.toString(), 10),
     }));
 
     const updatedSalary: Salary = {
       ...selectedSalary,
       bonuses: [...bonuses],
+      dateTaken: new Date(selectedSalary.dateTaken),
       total:
         selectedSalary.grossSalary +
         bonuses.reduce((acc, bonus) => acc + bonus.amount, 0),
     };
 
-    updateSalary(selectedSalary.employeeID, updatedSalary);
+    updateSalary(selectedSalary._id, updatedSalary);
     setIsAddBonusModalOpen(false);
     setSelectedSalary(undefined);
   };
@@ -101,30 +154,43 @@ export const useSalaryHook = () => {
     if (!selectedSalary) return;
 
     const salary: Salary = {
+      _id: values._id,
       employeeID: values.employeeID,
       NSSH: values.NSSH,
-      netSalary: parseInt(values.netSalary.toString()),
-      workDays: parseInt(values.workDays.toString()),
+      dateTaken: values.dateTaken,
+      netSalary: parseInt(values.netSalary.toString(), 10),
+      workDays: parseInt(values.workDays.toString(), 10),
       bonuses: selectedSalary.bonuses,
       socialSecurityContributions: parseInt(
-        values.socialSecurityContributions.toString()
+        values.socialSecurityContributions.toString(),
+        10
       ),
-      healthInsurance: parseInt(values.healthInsurance.toString()),
-      grossSalary: parseInt(values.grossSalary.toString()),
-      total: parseInt(values.total.toString()),
+      healthInsurance: parseInt(values.healthInsurance.toString(), 10),
+      grossSalary: parseInt(values.grossSalary.toString(), 10),
+      total: parseInt(values.total.toString(), 10),
+      paid: values.paid,
     };
 
-    updateSalary(selectedSalary.employeeID, salary);
+    updateSalary(selectedSalary._id, salary);
     setIsEditModalOpen(false);
     setSelectedSalary(undefined);
   };
 
   return {
+    setTableData,
     tableData,
+    itemCount,
+    page,
+    limit,
+    loading,
+    handlePageChange,
+    handleLimitChange,
     setSelectedSalary,
     handleEdit,
     handleAddBonus,
     handleAddBonusSubmit,
     handleEditSubmit,
+    setFilters,
+    filters,
   };
 };

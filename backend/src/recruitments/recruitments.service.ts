@@ -19,7 +19,7 @@ export class RecruitmentService {
   }
 
   getRecruitment() {
-    return this.recruitmentModel.find();
+    return this.recruitmentModel.find({isDeleted:false});
   }
 
   getUserById(id: string) {
@@ -32,7 +32,14 @@ export class RecruitmentService {
     });
   }
 
-  deleteRecruitment(id: string) {
-    return this.recruitmentModel.findByIdAndDelete(id);
+  async softDeleteRecruitById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    return this.recruitmentModel.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deleteDate: currentDate }, 
+      { new: true }
+    )
   }
 }

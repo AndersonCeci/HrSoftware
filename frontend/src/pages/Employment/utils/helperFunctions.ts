@@ -6,7 +6,7 @@ const exporter = {
 	getInitialFormValues,
 	validate,
 	getDevRoles,
-	submitHelper,
+	getFormValues,
 };
 
 export default exporter;
@@ -48,17 +48,23 @@ export function getDevRoles() {
 		"Senior BackEnd",
 		"FullStack",
 		"DevOps",
-		"ProjectManager",
 	];
 }
 
-export function submitHelper(identifier: string, body: any, method: string = "POST") {
+export function getFormValues(form: any) {
 	return {
-		url: `http://localhost:3000/${identifier}`,
-		method: method,
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body,
+		name: form.getFieldValue("name"),
+		surname: form.getFieldValue("surname"),
+		email: form.getFieldValue("email"),
+		phoneNumber: form.getFieldValue("phoneNumber"),
+		position: form.getFieldValue("position"),
+		salary: form.getFieldValue("salary"),
+		teamLeader: form.getFieldValue("teamLeader"),
+		startingDate: form.getFieldValue("startingDate").format("D/M/YYYY"),
+		contract: "Permanent",
+		nID: form.getFieldValue("nID"),
+		username: form.getFieldValue("name") + form.getFieldValue("surname"),
+		password: "codevider",
+		gender: form.getFieldValue("gender"),
 	};
 }

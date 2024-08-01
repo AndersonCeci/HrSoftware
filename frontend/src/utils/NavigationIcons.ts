@@ -5,6 +5,7 @@ import {
 	ApartmentOutlined,
 	BellOutlined,
 	SettingOutlined,
+	UserOutlined,
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -20,6 +21,9 @@ import { BsCalendar4Range } from "react-icons/bs";
 import { PiBuildingApartmentLight } from "react-icons/pi";
 import { GiSandsOfTime } from "react-icons/gi";
 import { FiUsers } from "react-icons/fi";
+import { MdOutlineBadge } from "react-icons/md";
+import { PiChartLineUpBold } from "react-icons/pi";
+import { RiMoneyEuroCircleLine } from "react-icons/ri";
 
 const NavigationIcons = {
 	ApartmentOutlined,
@@ -37,10 +41,14 @@ const NavigationIcons = {
 	MdOutlinePersonSearch,
 	VscRequestChanges,
 	BsCalendar4Range,
+    MdOutlineBadge,
+    PiChartLineUpBold,
+    RiMoneyEuroCircleLine,
 	IoSettingsOutline: SettingOutlined,
 	Building: PiBuildingApartmentLight,
     SandClock: GiSandsOfTime,
     Management: FiUsers,
+	UserOutlined
 };
 
 export default NavigationIcons;

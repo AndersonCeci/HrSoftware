@@ -1,14 +1,19 @@
-import { Flex } from "antd";
+import { Flex, Typography } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import Button from "../Shared/Button";
-import { ButtonSize } from "../../enums/Button";
+import { ButtonSize, ButtonType } from "../../enums/Button";
 
-const TableHeader = ({ title, onClick }: { title: string, onClick?: () => void | undefined }) => {
+const TableHeader = ({ title, onClick }: { title: string; onClick?: () => void | undefined }) => {
 	return (
-		<Flex align="center" justify="space-between">
-			<h1>{title}</h1>
-			<Button icon={<PlusCircleOutlined />} size={ButtonSize.LARGE} onClick={onClick}>
-				Add New
+		<Flex justify="space-between" align="center">
+			<Typography.Title>{title}</Typography.Title>
+			<Button
+				icon={<PlusCircleOutlined />}
+				size={ButtonSize.LARGE}
+				type={ButtonType.PRIMARY}
+				onClick={onClick}
+			>
+				Add {title}
 			</Button>
 		</Flex>
 	);

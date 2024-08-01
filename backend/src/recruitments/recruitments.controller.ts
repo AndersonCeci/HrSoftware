@@ -62,7 +62,7 @@ export class RecruimentsController {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Id Invalid', 400);
     const deletedRecruitment =
-      await this.recruitmentService.deleteRecruitment(id);
+      await this.recruitmentService.softDeleteRecruitById(id);
     if (!deletedRecruitment)
       throw new HttpException('Recruitment not Found', 404);
     return;

@@ -28,7 +28,7 @@ export class UserService {
     }
 
     async getUsers() {
-        return this.userModel.find();
+        return this.userModel.find({isDeleted:false});
     }
 
     async getUserByUsername(username: string) {
@@ -62,4 +62,15 @@ export class UserService {
     private async hashPassword(password: string): Promise<string> {
         return await bcrypt.hash(password, this.saltRounds);
     }
+
+    async softDeleteUserById(id: string): Promise<Event> {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        return this.userModel.findByIdAndUpdate(
+          id, 
+          { isDeleted: true, deleteDate: currentDate }, 
+          { new: true }
+        )
+      }
 }

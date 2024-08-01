@@ -30,7 +30,7 @@ export class TasksController {
         throw new BadRequestException('Invalid ID format');
       }
   
-      const result = await this.tasksService.deleteTask(id);
+      const result = await this.tasksService.softDeleteTaskById(id);
       if (!result) {
         throw new NotFoundException('Task not found');
       }

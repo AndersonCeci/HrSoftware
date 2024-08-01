@@ -24,6 +24,12 @@ export class Task extends Document {
 
     @Prop({ required: true, enum: TaskStatus })
     status: TaskStatus;
+
+    @Prop({default:false})
+    isDeleted: boolean
+
+    @Prop({default:false})
+    deleteDate: Date;
 }
 
 const TaskSchema = SchemaFactory.createForClass(Task);

@@ -1,12 +1,7 @@
-import type { GetProps } from "antd";
-import { DatePicker } from "antd";
+import { AssetDatatype } from "./AssetsDataType";
 
-export type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
-
-
-export type AddAssetFormProps = {
-	availableOptions?: { value: string; label: string }[];
-	availableEmployees?: { value: string; label: string }[];
-	onSuccess: (newAsset: any) => void;
+export type AssetFormProps = {
+	selectedElement?: AssetDatatype | undefined;
+	onAdd: (newAsset: AssetDatatype) => void;
+	onEdit: (editedAsset: AssetDatatype) => void;
 };
-
