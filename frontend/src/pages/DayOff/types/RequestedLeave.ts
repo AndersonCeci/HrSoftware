@@ -1,6 +1,5 @@
 export type RequestedDataType = {
-  key: string;
-  id: number;
+  _id: string;
   name: string;
   leaveType: string;
   leaveFrom: string;

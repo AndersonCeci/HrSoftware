@@ -95,15 +95,17 @@ const RootLayout: React.FC = () => {
 						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
 					>
 						{<LogedUserPanel colapsed={colapsed} />}
-						<NavigationMenu colapsed={colapsed}/>
+						<NavigationMenu colapsed={colapsed} />
 					</Sider>
 					<Content className="outlet-container">
 						<FloatButton
+							className="float-button"
 							icon={<QuestionCircleOutlined />}
 							type="primary"
 							style={{ right: 12, bottom: 12 }}
 							onClick={() => navigate("/company-background")}
 						/>
+
 						<Outlet />
 					</Content>
 				</Layout>

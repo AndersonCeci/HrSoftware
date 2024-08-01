@@ -1,113 +1,88 @@
-import React, { useState } from "react";
-import { Button, Modal, Space, TableProps } from "antd";
-import Table, { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
-import { RequestedDataType } from "../../../types/RequestedLeave";
+import React, { useEffect, useState } from "react";
+import { Modal, TableProps } from "antd";
+import Table from "../../../components/Table/Table";
+import { RequestedDataType } from "../types/RequestedLeave";
 import TableHeader from "../../../components/Table/TableHeader";
 import Drawer from "../../../components/Shared/Drawer";
 import RequestForm from "../../DayOff/components/RequestForm";
+import { createColumns } from "../utils/tableColumns";
+import useHttp from "../../../hooks/useHttp";
 
 export interface RequestedTableProps {
-  data?: RequestedDataType[];
-  onAdd?: (newRequest: RequestedDataType) => void;
+	data?: RequestedDataType[];
+	onAdd?: (newRequest: RequestedDataType) => void;
 }
 
+const API = import.meta.env.REACT_APP_DAYOFF_API;
+
 const RequestedTable: React.FC<RequestedTableProps> = () => {
-  const [data, setData] = useState<RequestedDataType[]>([]);
-  const [open, setOpen] = useState(false);
-  const [approvedId, setApprovedId] = useState<string[]>([]);
+	const [data, setData] = useState<RequestedDataType[]>([]);
+	const [open, setOpen] = useState(false);
+	const [loading, error, fetchData] = useHttp();
+	const [approvedId, setApprovedId] = useState<string[]>([]);
 
-  function handleModalClose() {
-    setOpen(false);
-  }
+	function handleModalClose() {
+		setOpen(false);
+	}
 
-  function handleApprove(id: string) {
-      setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
-  }
+	useEffect(() => {
+		fetchData({ url: API }, (data) => {
+			setData(data);
+		});
+	}, []);
 
-  const onDecline = (record:RequestedDataType) => {
-    console.log(record, 'recorddd')
-    Modal.confirm({
-      title: "Are you sure you wanna decline?",
-      okText:"Yes",
-      okType:"danger",
-      onOk: () =>{
-        setData((prev) => prev.filter((item) => item.id !== record.id))
-      }
-    })
-    // setData((prevData) => prevData.filter((item) => item.id !== record.id))
-  }
+	function handleApprove(id: string) {
+		setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
+	}
 
-  function handleAddNewRequest(newRequest: RequestedDataType) {
-    setData((prev) => [...prev, newRequest])
-    setOpen(false)
-  }
+	const onDecline = (record: RequestedDataType) => {
+		console.log(record, "recorddd");
+		Modal.confirm({
+			title: "Are you sure you wanna decline?",
+			okText: "Yes",
+			okType: "danger",
+			onOk: () => {
+				setData((prev) => prev.filter((item) => item._id !== record._id));
+			},
+		});
+		// setData((prevData) => prevData.filter((item) => item.id !== record.id))
+	};
 
-  const columns: TableProps<RequestedDataType>["columns"] = [
-    createTableColumns({
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    }),
-    createTableColumns({
-      title: "Leave Type",
-      dataIndex: "leaveType",
-      key: "leaveType",
-      filters: getAllUniqueValues(data, "leaveType"),
-      onFilter: (value, record) => record.leaveType.indexOf(value) === 0,
-    }),
-    createTableColumns({
-      title: "Leave From",
-      dataIndex: "leaveFrom",
-      key: "leaveFrom",
-    }),
-    createTableColumns({
-      title: "Leave To",
-      dataIndex: "leaveTo",
-      key: "leaveTo",
-    }),
-    createTableColumns({
-      title: "Reason",
-      dataIndex:"reason",
-      key: "reason"
-    }),
-    createTableColumns({
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      displayAs: (_, record) => (
-        <Space size="middle">
-          <Button
-            onClick={() => handleApprove(record.id)}
-            style={{
-              background: approvedId.includes(record.id) ? "green" : "#246AFE",
-              color: "white"
-            }}
-            disabled={approvedId.includes(record.id)}
-            ghost
-          >
-            {approvedId.includes(record.id) ? "Approved" : "Approve"}
-          </Button>
-          <Button
-            onClick={() => onDecline(record)}
-            style={{ background: "none", color: "red", border: "0" }}
-            ghost
-          >
-            Decline
-          </Button>
-        </Space>
-      ),
-    }),
-  ];
+	function handleAddNewRequest(newRequest: RequestedDataType) {
+		fetchData(
+			{
+				url: API,
+				method: "POST",
+				body: newRequest,
+			},
+			() => {
+				setData((prev) => [...prev, newRequest]);
+				setOpen(false);
+			},
+		);
+	}
 
-  return (
-    <>
-      <Drawer placement="right" isOpen={open} onClose={handleModalClose}>
-        <RequestForm onAdd={handleAddNewRequest} />
-      </Drawer>
-      <TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
-      <Table columns={columns} data={data} />
-    </>
-  );
+	const columns: TableProps<RequestedDataType>["columns"] = createColumns(
+		data,
+		handleApprove,
+		onDecline,
+		approvedId,
+	);
+
+	return (
+		<>
+			<Drawer
+				placement="right"
+				title={"Leave Request Form"}
+				isOpen={open}
+				onClose={handleModalClose}
+			>
+				<RequestForm onAdd={handleAddNewRequest} />
+			</Drawer>
+			<TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
+			<Table columns={columns} data={data} />
+		</>
+	);
 };
 
 export default RequestedTable;

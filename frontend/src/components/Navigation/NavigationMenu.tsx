@@ -64,7 +64,7 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 			<div className="logout-button-container">
 				<Button type="text" danger size="large" onClick={handleClick}>
 					<LogoutOutlined />
-					{!colapsed? "Log Out" : ""}
+					{!colapsed ? "Log Out" : ""}
 				</Button>
 			</div>
 		</div>

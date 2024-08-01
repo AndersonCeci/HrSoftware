@@ -8,6 +8,7 @@ type DatePickerProps = {
 	name: string;
 	required?: boolean;
 	isDisabledDate?: boolean;
+	dependsOn?: string;
 };
 type RangePickerProps = GetProps<typeof DudePerfect.RangePicker>;
 
@@ -16,18 +17,42 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 	return current && current < dayjs().startOf("day");
 };
 
-const DatePicker = ({ label, name, required, isDisabledDate }: DatePickerProps) => {
+const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePickerProps) => {
+	function dateValidator(getFieldValue: any, dependsOn?: string) {
+		console.log("getFieldValue", getFieldValue);
+		return {
+			validator(rule: any, value: any) {
+				const startTime = getFieldValue(dependsOn);
+				if (value && startTime) {
+					if (value.isAfter(startTime)) {
+						return Promise.resolve();
+					} else {
+						return Promise.reject("End time should be after start time");
+					}
+				}
+				return Promise.resolve();
+			},
+		};
+	}
+
+	const rulesList: any = [
+		{
+			required: required,
+			message: `Please enter ${label}!`,
+		},
+	];
+
+	if (dependsOn) {
+		rulesList.push(({ getFieldValue }: any) => dateValidator(getFieldValue, dependsOn));
+	}
+
 	return (
 		<Form.Item
 			name={name}
 			label={label}
-			rules={[
-				{
-					required: required,
-					message: `Please enter ${label}!`,
-				},
-			]}
-            validateDebounce={1000}
+			rules={rulesList}
+			validateDebounce={1000}
+			dependencies={[dependsOn]}
 		>
 			<DudePerfect
 				size="large"

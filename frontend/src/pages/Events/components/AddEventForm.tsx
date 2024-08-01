@@ -71,8 +71,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 					label="End Time"
 					name="eventEndTime"
 					required
-					dependsOn={["eventStartTime"]}
-					validatorFunction
+					dependsOn={"eventStartTime"}
 				/>
 			</Flex>
 			<FormInputs.Input label="Event Description" name="eventDescription" type="textarea" />

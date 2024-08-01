@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
 import useHttp from "../../hooks/useHttp";
+import Modal from "../../components/Shared/Modal";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
@@ -52,23 +53,30 @@ const EmploymentPage: React.FC = () => {
 
 	function handleDeleteButtonClick(record: EmployeeDataType) {
 		setIsDeleting(true);
+		setEditedData(record);
+	}
+
+	function handleDeleteModalOk() {
 		sendRequest(
 			{
-				url: `${API}/${record._id}`,
+				url: `${API}/${editedData?._id}`,
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
 				},
 			},
 			() => {
-				setTableData((prev) => prev.filter((item) => item._id !== record._id));
+				setTableData((prev) => prev.filter((item) => item._id !== editedData?._id));
 				setIsDeleting(false);
 			},
 		);
+
+		setIsDeleting(false);
+		setEditedData(undefined);
 	}
 
-	function handlClose() {
-		setOpen(false);
+	function handlClose(fn: (arg: boolean) => void) {
+		fn(false);
 		setEditedData(undefined);
 	}
 
@@ -76,13 +84,21 @@ const EmploymentPage: React.FC = () => {
 
 	return (
 		<>
-			<Drawer height={500} isOpen={open} onClose={handlClose}>
+			<Drawer height={500} isOpen={open} onClose={() => handlClose(setOpen)}>
 				<AddEmployeeForm
 					selectedEmployee={editedData}
 					onAdd={handleAddNewEmployee}
 					onEdit={handleEditEmployee}
 				/>
 			</Drawer>
+			<Modal
+				title="Are you sure"
+				isOpen={isDeleting}
+				onOk={handleDeleteModalOk}
+				onCancel={() => handlClose(setIsDeleting)}
+			>
+				Are you sure you want to delete {editedData?.name}?
+			</Modal>
 			<TableHeader title="Employment" onClick={() => setOpen(true)} />
 			<section className="test">
 				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
