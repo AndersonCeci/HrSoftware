@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsOptional, Matches } from 'class-validator';
+import { IsEnum, IsOptional, Matches } from 'class-validator';
 import { Document } from 'mongoose';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Schema()
 export class Employee extends Document {
@@ -23,8 +24,8 @@ export class Employee extends Document {
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @Prop()
-  position: string;
+  @IsEnum(Role)
+  position: Role;
 
   @Prop()
   startingDate: string;

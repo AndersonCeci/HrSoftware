@@ -1,8 +1,11 @@
 import { IsString, IsEnum, IsNotEmpty } from 'class-validator';
 import { Role } from '../schemas/user.schema';
+import { ObjectId, Types } from 'mongoose';
 
-export class CreateUserDto {
 
+export class CreateUserDto
+{
+  employID: Types.ObjectId;
 
   @IsNotEmpty()
   @IsString()
@@ -17,6 +20,10 @@ export class CreateUserDto {
   role: Role;
 
 
-  isDeleted:boolean;
+  isDeleted: boolean;
+  
   deleteDate?: Date;
+  
+  @IsString()
+  email: string;
 }
