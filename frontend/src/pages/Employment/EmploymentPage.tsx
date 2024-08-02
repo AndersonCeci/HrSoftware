@@ -63,8 +63,8 @@ const EmploymentPage: React.FC = () => {
 	function handleDeleteModalOk() {
 		sendRequest(
 			{
-				url: `${API}/${editedData?._id}`,
-				method: "DELETE",
+				url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
+				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},

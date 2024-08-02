@@ -28,7 +28,7 @@ export class CreateEmployeeDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches( /^\d{10}$/, { message: 'nID must be exactly 10 digits' })
+  @Matches( /^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
   @IsString()
