@@ -38,7 +38,7 @@ export class DayoffService {
       
     
       async findAll(): Promise<DayOff[]> {
-        return this.dayoffModel.find().populate('EmployeeName', 'name').exec();
+        return this.dayoffModel.find({ isDeleted: false } && {isApproved:false} ).populate('EmployeeName', 'name').exec();
       }
     
       private calculateTotalDays(startDate: Date, endDate: Date): number {
@@ -50,7 +50,7 @@ export class DayoffService {
         return differenceInDays;
       }
 
-      async softDeleteAssetById(id: string): Promise<DayOff> {
+      async softDeleteDayOffById(id: string): Promise<DayOff> {
         const currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
         
@@ -60,6 +60,17 @@ export class DayoffService {
           { new: true }
         ).exec();
 
+    }
+
+    async approved(id:string):Promise<DayOff>{
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        return this.dayoffModel.findByIdAndUpdate(
+          id, 
+          { isApproved: true, approvedDate: currentDate }, 
+          { new: true }
+        ).exec();
     }
 
     async updateAsset(id: string, updateDayOffDto: UpdateDayOffDto): Promise<DayOff> {
