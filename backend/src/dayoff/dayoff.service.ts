@@ -13,33 +13,43 @@ export class DayoffService {
     private readonly employeeService: EmployeeService,
     ){}
 
-      async createDayOff(createDayOff: CreateDayOffDto) {
+    async createDayOff(createDayOff: CreateDayOffDto) {
         const employee = await this.employeeService.findOne(createDayOff.employeeId);
         if (!employee) {
-          throw new HttpException('The ID of the employee doesn\'t exist', 404);
+            throw new HttpException('The ID of the employee doesn\'t exist', 404);
         }
-    
+
         const employeeName = await this.employeeService.findNameById(createDayOff.employeeId);
         if (!employeeName) {
-          throw new HttpException('The name of the employee doesn\'t exist', 404);
-          
+            throw new HttpException('The name of the employee doesn\'t exist', 404);
         }
-       
-      const totalDays = this.calculateTotalDays(createDayOff.StartTime, createDayOff.EndTime);
-      const createdDayoff = new this.dayoffModel({
-      ...createDayOff,
-      EmployeeName: employeeName,
-      totalDays,
-    });
 
-    return createdDayoff.save();
-      }
+        let totalDays: number;
+        if (!createDayOff.EndTime) {
+            createDayOff.EndTime = createDayOff.StartTime;
+            createDayOff.totalDays = 1;
+            totalDays = createDayOff.totalDays;
+        } else {
+            totalDays = this.calculateTotalDays(createDayOff.StartTime, createDayOff.EndTime);
+        }
 
+        const createdDayoff = new this.dayoffModel({
+            ...createDayOff,
+            EmployeeName: employeeName,
+            totalDays,
+        });
+
+        return createdDayoff.save();
+    }
       
-    
+
       async findAll(): Promise<DayOff[]> {
-        return this.dayoffModel.find({ isDeleted: false } && {isApproved:false} ).populate('EmployeeName', 'name').exec();
-      }
+        return this.dayoffModel.find({ isDeleted: false, isApproved: false }).populate('EmployeeName', 'name').exec();
+    }
+    async accepted(): Promise<DayOff[]> {
+        return this.dayoffModel.find({ isApproved: true }).populate('EmployeeName', 'name').exec();
+    }
+    
     
       private calculateTotalDays(startDate: Date, endDate: Date): number {
         const start = new Date(startDate);
