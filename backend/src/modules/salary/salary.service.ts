@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
@@ -29,7 +30,7 @@ export class SalaryService {
       return await createdSalary.save();
     } catch (error) {
       console.log(error);
-
+    
       if (error instanceof ValidationError) {
         throw new ValidationError();
       }
@@ -40,17 +41,49 @@ export class SalaryService {
           `A salary record with the same ${duplicateKey} already exists.`,
         );
       }
-
-      throw new InternalServerErrorException('Failed to create salary');
     }
   }
 
-  async deleteSalary(userId: string): Promise<Salary> {
+  async getAllSalaries(): Promise<Salary[]> {
     try {
-      return await this.salaryModel.findOneAndDelete({ employeeID: userId });
+      return await this.salaryModel.find();
     } catch (error) {
-      throw new Error('Failed to delete salary');
+      throw new Error('Failed to fetch salaries');
     }
+  }
+
+  async find(id: string): Promise<Salary> {
+    try {
+      const salary = await this.salaryModel.findById(id,{isDeleted:false});
+      if (!salary) {
+        throw new NotFoundException('Salary not found');
+      }
+      return salary;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error('Failed to find salary');
+    }
+  }
+
+   async deleteSalary(userId: string): Promise<Salary> {
+     try {
+       return await this.salaryModel.findOneAndDelete({ employeeID: userId });
+     } catch (error) {
+       throw new Error('Failed to delete salary');
+     }
+   }
+
+  async softDeleteSalaryById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    return this.salaryModel.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deleteDate: currentDate }, 
+      { new: true }
+    )
   }
 
   async updateSalary(
@@ -148,4 +181,4 @@ export class SalaryService {
 
     return new PaginatedDTO<ExportSalaryDTO[]>(data, page, limit, itemCount);
   }
-}
+} 

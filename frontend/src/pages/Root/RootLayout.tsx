@@ -5,7 +5,7 @@ import NavigationMenuLogo from "../../components/Navigation/NavigationMenuLogo";
 import HeaderIcons from "../../components/Header/HeaderIcons";
 import LogedUserPanel from "../../components/Navigation/LogedUserPanel";
 import Trigger from "../../components/Navigation/Trigger";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "antd";
@@ -95,15 +95,17 @@ const RootLayout: React.FC = () => {
 						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
 					>
 						{<LogedUserPanel colapsed={colapsed} />}
-						<NavigationMenu colapsed={colapsed}/>
+						<NavigationMenu colapsed={colapsed} />
 					</Sider>
 					<Content className="outlet-container">
 						<FloatButton
-							icon={<QuestionCircleOutlined />}
+							className="float-button "
+							icon={<ExclamationCircleOutlined />}
 							type="primary"
 							style={{ right: 12, bottom: 12 }}
 							onClick={() => navigate("/company-background")}
 						/>
+
 						<Outlet />
 					</Content>
 				</Layout>

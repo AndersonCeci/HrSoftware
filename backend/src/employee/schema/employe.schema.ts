@@ -20,7 +20,7 @@ export class Employee extends Document {
   email: string;
 
   @Prop({ required: true, unique: true })
-  @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
+  @Matches(/^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
   @Prop()
@@ -48,7 +48,7 @@ export class Employee extends Document {
   contract: string;
 
   @Prop({ default: false })
-  isDeleted: boolean;
+  deleteDate: string;
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);

@@ -24,6 +24,12 @@ export class User {
 
     @Prop()
     loginRole: Role;
+
+    @Prop({ default: false })
+    isDeleted: boolean;
+
+    @Prop()
+    deleteDate: Date;
 }
 
  const UserSchema = SchemaFactory.createForClass(User);

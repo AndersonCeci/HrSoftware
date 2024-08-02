@@ -2,19 +2,31 @@ import { Flex, Typography } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import Button from "../Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
+import { useTranslation } from "react-i18next";
 
-const TableHeader = ({ title, onClick }: { title: string; onClick?: () => void | undefined }) => {
+const TableHeader = ({
+	title,
+	onClick,
+	hideButton,
+}: {
+	title: string;
+	onClick?: () => void | undefined;
+	hideButton?: boolean;
+}) => {
+	const { t } = useTranslation();
 	return (
 		<Flex justify="space-between" align="center">
 			<Typography.Title>{title}</Typography.Title>
-			<Button
-				icon={<PlusCircleOutlined />}
-				size={ButtonSize.LARGE}
-				type={ButtonType.PRIMARY}
-				onClick={onClick}
-			>
-				Add {title}
-			</Button>
+			{!hideButton && (
+				<Button
+					icon={<PlusCircleOutlined />}
+					size={ButtonSize.LARGE}
+					type={ButtonType.PRIMARY}
+					onClick={onClick}
+				>
+					{t("AddNew")}
+				</Button>
+			)}
 		</Flex>
 	);
 };

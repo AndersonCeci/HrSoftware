@@ -49,7 +49,7 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 			);
 
 			if (!selectedEmployee) {
-				const userRole = devRoles.includes(data.position) ? "dev" : data.position.toLowerCase();
+				const userRole = devRoles.includes(data.position) ? "dev" : data.position;
 
 				sendRequest(
 					{
