@@ -16,8 +16,8 @@ export class DayOff extends Document {
     @Prop({required:true})
     StartTime: Date;
     
-    @Prop({required:true})
-	EndTime: Date;
+    @Prop()
+	EndTime?: Date;
 
     @Prop({
         enum: ['annual', 'sick','other'],
@@ -27,7 +27,7 @@ export class DayOff extends Document {
     @Prop()
     totalDays: number;
   
-    @Prop({required:true})
+    @Prop()
     description:string;
 
     @Prop({ default: false })

@@ -13,7 +13,7 @@ import {
     @IsDateString()
     StartTime?: Date;
     
-    @IsNotEmpty()
+    
     @IsDateString()
 	EndTime?: Date;
 

@@ -3,6 +3,7 @@ import { DayoffService } from './dayoff.service';
 import { CreateDayOffDto } from './dto/CreateDayOff.dto';
 import mongoose from 'mongoose';
 import { UpdateDayOffDto } from './dto/UpdateDayOff.dto';
+import { DayOff } from './schema/dayoff.schema';
 
 
 @Controller('dayoff')
@@ -14,14 +15,19 @@ export class DayoffController {
     create(@Body() createDayOffDto:CreateDayOffDto){
        return this.dayoffService.createDayOff(createDayOffDto);
     }
-
+    
     @Get()
-    find(){
+    findAll(): Promise<DayOff[]> {
         return this.dayoffService.findAll()
     }
 
+    @Get('accepted')
+    accepted():Promise<DayOff[]>{
+        return this.dayoffService.accepted()
+    }
+
     @Delete(':id/soft-delete')
-     async deleteByName(@Param('id') id: string) {
+    async deleteByName(@Param('id') id: string) {
     const result = await this.dayoffService.softDeleteDayOffById(id);
     return result;
   }

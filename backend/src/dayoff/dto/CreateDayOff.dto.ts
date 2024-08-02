@@ -16,9 +16,9 @@ import {
     @IsDateString()
     StartTime: Date;
     
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
-	EndTime: Date;
+	EndTime?: Date;
 
     @IsEnum(
         ['annual', 'sick', 'other'],
