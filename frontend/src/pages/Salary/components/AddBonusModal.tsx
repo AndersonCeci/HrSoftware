@@ -32,10 +32,10 @@ const AddBonusModal: React.FC<AddBonusProps> = ({
         style={{ padding: 40 }}
         initialValues={{
           ...selectedSalary,
-          bonuses: selectedSalary.bonuses.map((bonus, index) => ({
+          bonuses: selectedSalary.bonuses?.map((bonus, index) => ({
             ...bonus,
             key: index.toString(),
-          })),
+          })) || [],
         }}
       >
         <h2>Add bonuses</h2>

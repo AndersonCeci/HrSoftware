@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Employee } from './schema/employe.schema';
@@ -62,4 +62,23 @@ export class EmployeeService {
     const usernameArray = employees.map((employee) => employee.username);
     return usernameArray;
   }
-}
+
+  async searchEmployee(name?: string, surname?: string): Promise<Employee[] | null> {
+    try {
+      const query: any = {};
+      if (name) {
+        query.name = { $regex: new RegExp(name, 'i') };
+      }
+      if (surname) {
+        query.surname = { $regex: new RegExp(surname, 'i') };
+      }
+      const employees = await this.employeeModel.find(query);
+  
+      return employees.length > 0 ? employees : null;
+    } catch (error) {
+      throw new Error('An error occurred while searching for employees.');
+    }
+  }
+  
+  
+  }

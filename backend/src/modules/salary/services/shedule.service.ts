@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
-import { SalaryService } from './salary.service'; 
+import { SalaryService } from './salary.service';
+import { Cron } from '@nestjs/schedule/dist/decorators/cron.decorator';
+import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
 
 @Injectable()
 export class ScheduleService {
@@ -8,9 +9,9 @@ export class ScheduleService {
 
   constructor(private readonly salaryService: SalaryService) {}
 
-  // @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT) 
+  // @Cron(CronExpression.EVERY_5_MINUTES)
   // async handleCron() {
   //   this.logger.debug('Clearing bonuses for testing');
-  //   await this.salaryService.clearBonuses();
+  //   await this.salaryService.createSalariesPerMonth();
   // }
 }

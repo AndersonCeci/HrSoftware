@@ -18,7 +18,7 @@ export class Salary extends Document {
   workDays: number;
 
   @Prop({ type: [BonusSchema], required: true })
-  bonuses: Bonus[];
+  bonuses?: Bonus[];
 
   @Prop({ required: true })
   socialSecurityContributions: number;
@@ -32,17 +32,26 @@ export class Salary extends Document {
   @Prop({ required: true })
   total: number;
 
+  @Prop({ required: true, default: false, type: Boolean })
+  paid?: boolean;
   @Prop({default:false})
   isDeleted:boolean
-
   @Prop()
   deleteDate: Date;
-  @Prop({ required: true, default: false, type:Boolean })
-  paid: boolean;
+
 }
 
 const SalarySchema = SchemaFactory.createForClass(Salary);
+// SalarySchema.virtual('month').get(function () {
+//   return this.dateTaken.getMonth() + 1;
+// });
+// SalarySchema.virtual('year').get(function () {
+//   return this.dateTaken.getFullYear();
+// });
+// SalarySchema.set('toJSON', { virtuals: true });
+// SalarySchema.set('toObject', { virtuals: true });
 SalarySchema.index({ employeeID: 1, dateTaken: 1 }, { unique: true });
+
 SalarySchema.plugin(muv, {
   message: 'Error, expected {employeeID, dateTaken} to be unique.',
 });

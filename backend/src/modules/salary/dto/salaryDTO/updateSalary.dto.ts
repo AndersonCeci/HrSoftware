@@ -1,11 +1,12 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber, IsOptional,  Max, Min, ValidateNested } from 'class-validator';
 import { UpdateBonusDTO } from '../bonusDTO/updateBonus.dto';
+import { Types } from 'mongoose';
 
 export class UpdateSalaryDTO {
   @IsOptional()
-  @IsString()
-   employeeID: string;
+  @Type(() => Types.ObjectId)
+  employeeID:Types.ObjectId
 
   @IsOptional()
   @IsDate()
@@ -45,6 +46,6 @@ export class UpdateSalaryDTO {
 
    @IsOptional()
   @IsBoolean()
-  readonly paid: boolean;
+   paid: boolean;
 }
 

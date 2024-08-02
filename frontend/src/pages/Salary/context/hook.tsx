@@ -1,10 +1,11 @@
 import { useEffect, useContext, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Salary } from "../../../types/SalaryProps";
 import { ModalContext, SalaryContext, TableContext } from ".";
 import { Bonus } from "../../../types/BonusProps";
 import { message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+const API = import.meta.env.REACT_APP_SALARY;
 
 interface EditSalaryValues {
   _id: string;
@@ -95,54 +96,60 @@ export const useSalaryHook = () => {
       dateTaken: new Date(newSalary.dateTaken),
     };
     try {
-      await axios.put(`http://localhost:3000/salary/${salaryID}`, sentSalary);
+      const res = await axios.put(`${API}/${salaryID}`, sentSalary);
       setTableData((prevData) =>
-        prevData.map((salary) => (salary._id === salaryID ? newSalary : salary))
+        prevData.map((salary) =>
+          salary._id === salaryID
+            ? {
+                employeeID: salary.employeeID,
+                employeeDetails: salary.employeeDetails,
+                ...res.data,
+              }
+            : salary
+        )
       );
       message.success("Salary updated successfully.");
     } catch (error) {
-      console.error("Cannot update salary", error);
-      message.error("Failed to update salary.");
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      } else {
+        console.error("Cannot update salary", error);
+        message.error("Failed to update salary.");
+      }
     }
   };
 
   const getSelectedSalary = (salaryID: string) => {
     const salary = tableData.find((item) => item._id === salaryID);
     setSelectedSalary(salary);
-    if (!salary) {
-      message.error(
-        "No salary record found for the selected employee and date."
-      );
-    } else {
-      message.info("Salary record selected.");
-    }
   };
 
-  const handleEdit = (salaryID: string,) => {
-    getSelectedSalary(salaryID,);
+  const handleModal = (salaryID?: string) => {
+    getSelectedSalary(salaryID!);
     setIsEditModalOpen(true);
   };
 
-  const handleAddBonus = (salaryID: string,) => {
-    getSelectedSalary(salaryID );
+  const handleAddBonus = (salaryID: string) => {
+    getSelectedSalary(salaryID);
     setIsAddBonusModalOpen(true);
   };
 
   const handleAddBonusSubmit = (values: { bonuses: Bonus[] }) => {
     if (!selectedSalary) return;
 
-    const bonuses = values.bonuses.map((bonus) => ({
+    const bonuse = values.bonuses.map((bonus) => ({
       desc: bonus.desc,
       amount: parseInt(bonus.amount.toString(), 10),
     }));
-
+    const { bonuses, total, ...others } = selectedSalary;
     const updatedSalary: Salary = {
-      ...selectedSalary,
-      bonuses: [...bonuses],
-      dateTaken: new Date(selectedSalary.dateTaken),
+      ...others,
+      bonuses: [...bonuse],
       total:
         selectedSalary.grossSalary +
-        bonuses.reduce((acc, bonus) => acc + bonus.amount, 0),
+        bonuse.reduce((acc, bonus) => acc + bonus.amount, 0),
     };
 
     updateSalary(selectedSalary._id, updatedSalary);
@@ -152,7 +159,6 @@ export const useSalaryHook = () => {
 
   const handleEditSubmit = (values: EditSalaryValues) => {
     if (!selectedSalary) return;
-
     const salary: Salary = {
       _id: values._id,
       employeeID: values.employeeID,
@@ -176,6 +182,39 @@ export const useSalaryHook = () => {
     setSelectedSalary(undefined);
   };
 
+  const createSalary = async (values: EditSalaryValues) => {
+    try {
+      const salary: Salary = {
+        _id: values._id,
+        employeeID: values.employeeID,
+        NSSH: values.NSSH,
+        dateTaken: new Date(values.dateTaken),
+        netSalary: parseInt(values.netSalary.toString(), 10),
+        workDays: parseInt(values.workDays.toString(), 10),
+        socialSecurityContributions: parseInt(
+          values.socialSecurityContributions.toString(),
+          10
+        ),
+        healthInsurance: parseInt(values.healthInsurance.toString(), 10),
+        grossSalary: parseInt(values.grossSalary.toString(), 10),
+        total: parseInt(values.total.toString(), 10),
+        paid: false,
+      };
+
+      await axios.post(API, salary);
+      message.success("Salary inserted successfully");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      } else {
+        message.error("Cannot insert the salary");
+      }
+    }
+    setIsEditModalOpen(false);
+  };
+
   return {
     setTableData,
     tableData,
@@ -186,11 +225,12 @@ export const useSalaryHook = () => {
     handlePageChange,
     handleLimitChange,
     setSelectedSalary,
-    handleEdit,
+    handleModal,
     handleAddBonus,
     handleAddBonusSubmit,
     handleEditSubmit,
     setFilters,
     filters,
+    createSalary,
   };
 };

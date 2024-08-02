@@ -2,15 +2,15 @@ import { Button, Checkbox, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
-import { getMonthName } from "../../../utils/generals";
+import { capitalizeFirstLetter, getMonthName } from "../../../utils/generals";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
-  handleEdit: (employeeID: string) => void;
+  handleModal: (employeeID: string) => void;
   tableData: any;
 }
 
-const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
+const columns = ({ handleAddBonus, handleModal }: ColumnsParams) => [
   createTableColumns({
     dataIndex: "employeeDetails",
     title: "Employee Details",
@@ -21,7 +21,8 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
       }
       return (
         <span>
-          {employeeDetails.name} {employeeDetails.surname}
+          {capitalizeFirstLetter(employeeDetails.name)}{" "}
+          {capitalizeFirstLetter(employeeDetails.surname)}
         </span>
       );
     },
@@ -111,6 +112,7 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
                 key: "Add Bonus",
                 label: (
                   <Button
+                  style={{width:"80px"}}
                     type={ButtonType.TEXT}
                     onClick={() => {
                       handleAddBonus(salaryID);
@@ -124,8 +126,9 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
                 key: "Edit",
                 label: (
                   <Button
+                  style={{width:"80px", alignItems:"center"}}
                     type={ButtonType.TEXT}
-                    onClick={() => handleEdit(salaryID)}
+                    onClick={() => handleModal(salaryID)}
                   >
                     Edit
                   </Button>
