@@ -35,6 +35,7 @@ export const columns = ({
 		dataIndex: "surname",
 		key: "surname",
 	}),
+	createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
 	createTableColumns({
 		title: "Resume",
 		dataIndex: "cv",
@@ -42,10 +43,12 @@ export const columns = ({
 		displayAs: (value) =>
 			value ? (
 				<Link to={value} target="_blank" rel="noopener noreferrer">
-					<IoDocumentAttach className="nav-menu-icon" />
+					<Button size="large" type={ButtonType.LINK} icon={<IoDocumentAttach />}>
+						<span> View </span>
+					</Button>
 				</Link>
 			) : (
-				<AiFillFileUnknown className="nav-menu-icon" />
+				<span>No File</span>
 			),
 
 		align: "center",
@@ -81,7 +84,7 @@ export const columns = ({
 		dataIndex: "reference",
 		key: "reference",
 	}),
-	createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
+
 	createTableColumns({
 		title: "Action",
 		dataIndex: "_id",
@@ -121,11 +124,12 @@ export const columns = ({
 					}}
 					trigger={["click"]}
 				>
-					<Button icon={<MoreOutlined />} />
+					<Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
 				</Dropdown>
 			);
 		},
 		fixed: "right",
+		align: "center",
 		width: 35,
 	}),
 ];

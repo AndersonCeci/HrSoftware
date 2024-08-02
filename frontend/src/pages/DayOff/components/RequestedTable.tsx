@@ -36,7 +36,7 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
 	}
 
 	const onDecline = (record: RequestedDataType) => {
-		console.log(record, "recorddd");
+		console.log(record, "record");
 		Modal.confirm({
 			title: "Are you sure you wanna decline?",
 			okText: "Yes",
