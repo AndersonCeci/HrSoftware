@@ -36,22 +36,6 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 		onAdd(valuesToSubmit);
 	}
 
-	function timeValidator(getFieldValue: any) {
-		return {
-			validator(rule: any, value: any) {
-				const startTime = getFieldValue("eventStartTime");
-				if (value && startTime) {
-					if (value.isAfter(startTime)) {
-						return Promise.resolve();
-					} else {
-						return Promise.reject("End time should be after start time");
-					}
-				}
-				return Promise.resolve();
-			},
-		};
-	}
-
 	return (
 		<Form
 			onFinish={onFinish}

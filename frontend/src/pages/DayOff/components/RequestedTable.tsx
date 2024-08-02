@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Modal, TableProps } from "antd";
+import { TableProps } from "antd";
+import Modal from "../../../components/Shared/Modal";
 import Table from "../../../components/Table/Table";
 import { RequestedDataType } from "../types/RequestedLeave";
 import TableHeader from "../../../components/Table/TableHeader";
@@ -15,14 +16,14 @@ export interface RequestedTableProps {
 
 const API = import.meta.env.REACT_APP_DAYOFF_API;
 
-const RequestedTable: React.FC<RequestedTableProps> = () => {
+const RequestedTable = () => {
 	const [data, setData] = useState<RequestedDataType[]>([]);
-	const [open, setOpen] = useState(false);
+	const [isDrawerOpen, setisDrawerOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [loading, error, fetchData] = useHttp();
 	const [approvedId, setApprovedId] = useState<string[]>([]);
-
 	function handleModalClose() {
-		setOpen(false);
+		setisDrawerOpen(false);
 	}
 
 	useEffect(() => {
@@ -35,29 +36,43 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
 		setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
 	}
 
+	function handleDecline(id: string) {
+		fetchData(
+			{
+				url: `${API}/${id}`,
+				method: "DELETE",
+			},
+			() => {
+				setData((prev) => prev.filter((item) => item._id !== id));
+			},
+		);
+	}
+
 	const onDecline = (record: RequestedDataType) => {
 		console.log(record, "record");
-		Modal.confirm({
-			title: "Are you sure you wanna decline?",
-			okText: "Yes",
-			okType: "danger",
-			onOk: () => {
-				setData((prev) => prev.filter((item) => item._id !== record._id));
-			},
-		});
+		setIsModalOpen(true);
 		// setData((prevData) => prevData.filter((item) => item.id !== record.id))
 	};
 
+	function handleAddNew(data: RequestedDataType) {
+		console.log("data", data);
+		setData((prev) => [...prev, data]);
+	}
+
 	function handleAddNewRequest(newRequest: RequestedDataType) {
+		console.log("RRERERER", newRequest);
 		fetchData(
 			{
 				url: API,
 				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
 				body: newRequest,
 			},
-			() => {
-				setData((prev) => [...prev, newRequest]);
-				setOpen(false);
+			(response) => {
+				handleAddNew(response);
+				setisDrawerOpen(false);
 			},
 		);
 	}
@@ -74,12 +89,20 @@ const RequestedTable: React.FC<RequestedTableProps> = () => {
 			<Drawer
 				placement="right"
 				title={"Leave Request Form"}
-				isOpen={open}
+				isOpen={isDrawerOpen}
 				onClose={handleModalClose}
 			>
 				<RequestForm onAdd={handleAddNewRequest} />
 			</Drawer>
-			<TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
+			<Modal
+				isOpen={isModalOpen}
+				onCancel={() => setIsModalOpen(false)}
+				// onOk={}
+				title={"Delete Request"}
+			>
+				<p>Are you sure you want to delete this request?</p>
+			</Modal>
+			<TableHeader title={"Requested Leave"} onClick={() => setisDrawerOpen(true)} />
 			<Table columns={columns} data={data} />
 		</>
 	);

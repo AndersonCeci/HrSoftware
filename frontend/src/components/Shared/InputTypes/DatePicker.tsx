@@ -19,7 +19,6 @@ const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 
 const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePickerProps) => {
 	function dateValidator(getFieldValue: any, dependsOn?: string) {
-		console.log("getFieldValue", getFieldValue);
 		return {
 			validator(rule: any, value: any) {
 				const startTime = getFieldValue(dependsOn);

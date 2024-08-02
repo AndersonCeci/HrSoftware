@@ -18,7 +18,7 @@ export const createColumns = (
 	return [
 		createTableColumns({
 			title: "Name",
-			dataIndex: "name",
+			dataIndex: "EmployeeName",
 			key: "name",
 		}),
 		createTableColumns({
@@ -30,23 +30,22 @@ export const createColumns = (
 		}),
 		createTableColumns({
 			title: "Leave From",
-			dataIndex: "leaveFrom",
+			dataIndex: "StartTime",
 			key: "leaveFrom",
+			displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
 		}),
 		createTableColumns({
 			title: "Leave To",
-			dataIndex: "leaveTo",
+			dataIndex: "EndTime",
 			key: "leaveTo",
-		}),
-		createTableColumns({
-			title: "Reason",
-			dataIndex: "reason",
-			key: "reason",
+			displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
 		}),
 		createTableColumns({
 			title: "Action",
-			dataIndex: "action",
+			dataIndex: "_id",
 			key: "action",
+			align: "center",
+			width: 150,
 			displayAs: (text, record) => (
 				<Space size="middle">
 					<Button
@@ -59,11 +58,7 @@ export const createColumns = (
 					>
 						{approvedId.includes(record.id) ? "Approved" : "Approve"}
 					</Button>
-					<Button
-						onClick={() => onDecline(record)}
-						style={{ background: "none", color: "red", border: "0" }}
-						ghost
-					>
+					<Button onClick={() => onDecline(record)} danger type="text">
 						Decline
 					</Button>
 				</Space>

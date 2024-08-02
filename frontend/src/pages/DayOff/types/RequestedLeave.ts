@@ -1,8 +1,10 @@
 export type RequestedDataType = {
-  _id: string;
-  name: string;
-  leaveType: string;
-  leaveFrom: string;
-  leaveTo: string;
-  reason: string;
+	_id: string;
+	employeeId: string;
+	leaveType: string;
+	StartTime: Date;
+	EndTime: Date;
+	description: string;
+	totalDays: number;
+	EmployeeName: string;
 };
