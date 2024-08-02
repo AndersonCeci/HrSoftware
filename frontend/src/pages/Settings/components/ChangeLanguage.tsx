@@ -9,7 +9,7 @@ export default function ChangeLanguage ()
 
 
   const languagge = [
-    { code: "sq", title: "Ablanian" },
+    { code: "sq", title: "Albanian" },
     { code: "en", title: "English" },
   ];
 
