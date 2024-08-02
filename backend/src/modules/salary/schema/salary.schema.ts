@@ -32,6 +32,11 @@ export class Salary extends Document {
   @Prop({ required: true })
   total: number;
 
+  @Prop({default:false})
+  isDeleted:boolean
+
+  @Prop()
+  deleteDate: Date;
   @Prop({ required: true, default: false, type:Boolean })
   paid: boolean;
 }

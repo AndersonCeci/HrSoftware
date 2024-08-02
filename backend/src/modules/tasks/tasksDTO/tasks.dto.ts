@@ -15,4 +15,7 @@ export class CreateTaskDto {
     @IsNotEmpty()
     status: TaskStatus;
 
+    isDeleted:boolean;
+    deleteDate:Date
+
 }

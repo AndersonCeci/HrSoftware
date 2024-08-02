@@ -36,7 +36,7 @@ export class EventsController {
 
     @Delete(':id')
     async deleteEvent(@Param('id') id: string) {
-        return await this.eventsService.delete(id);
+        return await this.eventsService.softDeleteEventById(id);
     }
 
     @Put(':id')

@@ -49,11 +49,13 @@ export class EmployeeController {
     return this.employeeService.update(id, updateEmployeeDto);
   }
 
+  
+
   @Delete(':id')
   async softDeleteById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
-    const result = await this.employeeService.softDeleteAssetById(id);
+    const result = await this.employeeService.softDeleteEmployeeById(id);
     if (!result) {
       throw new HttpException('No assets found for the given ID', 404);
     }

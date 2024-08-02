@@ -68,8 +68,11 @@ export class SalaryController {
   }
 
 
-  @Delete(':userId')
-  async deleteSalary(@Param('userId') userId: string) {
-    return await this.salaryService.deleteSalary(userId);
+
+  @Delete(":userId")
+  async deleteSalary(
+    @Param('userId') userId: string,
+  ) {
+    return await this.salaryService.softDeleteSalaryById(userId);
   }
 }
