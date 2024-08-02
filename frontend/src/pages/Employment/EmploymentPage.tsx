@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
 import useHttp from "../../hooks/useHttp";
+import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
@@ -90,7 +91,7 @@ const EmploymentPage: React.FC = () => {
           onEdit={handleEditEmployee}
         />
       </Drawer>
-      <TableHeader title="Employment" onClick={() => setOpen(true)} />
+      <TableHeader title={t("employment")}  onClick={() => setOpen(true)} />
       <section className="test">
         {isLoading && !isDeleting ? (
           <Loader />

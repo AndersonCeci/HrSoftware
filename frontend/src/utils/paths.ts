@@ -28,14 +28,14 @@ export const Paths = {
     ],
   },
   Profile: {
-    path:"profile",
+    path: "profile",
     icon: NavigationIcons.UserOutlined,
     children: [
       {
-        path:"",
-        pageElement: PageRoutesComponents.ProfilePage
-      }
-    ]
+        path: "",
+        pageElement: PageRoutesComponents.ProfilePage,
+      },
+    ],
   },
   Settings: {
     path: "settings",
@@ -70,7 +70,7 @@ export const Paths = {
   Employee: {
     path: "managment",
     type: "",
-	icon: NavigationIcons.Management,
+    icon: NavigationIcons.Management,
     children: [
       {
         path: "recruitment",
@@ -100,17 +100,17 @@ export const Paths = {
     ],
   },
   DayOff: {
-    path: "day-off",
+    path: "dayoff",
     type: "",
-	icon: NavigationIcons.SandClock,
+    icon: NavigationIcons.SandClock,
     children: [
       {
-        path: "requested-leave",
+        path: "requestedLeave",
         icon: NavigationIcons.VscRequestChanges,
         pageElement: PageRoutesComponents.RequestedLeavePage,
       },
       {
-        path: "calendar-leave",
+        path: "calendarLeave",
         icon: NavigationIcons.BsCalendar4Range,
         pageElement: PageRoutesComponents.CalendarLeavePage,
       },
@@ -119,7 +119,7 @@ export const Paths = {
   Company: {
     path: "company",
     type: "",
-	icon: NavigationIcons.Building,
+    icon: NavigationIcons.Building,
     children: [
       {
         path: "events",
@@ -132,7 +132,7 @@ export const Paths = {
         pageElement: PageRoutesComponents.AssetsPage,
       },
       {
-        path: "organisational-structure",
+        path: "organisationalStructure",
         icon: NavigationIcons.ApartmentOutlined,
         pageElement: PageRoutesComponents.OrganisationalStructurePage,
       },
@@ -141,7 +141,9 @@ export const Paths = {
 };
 
 export function capitalizeFirstLetter(string: string) {
-	const words = string.split("-");
-	const capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
-	return capitalizedWords.join(" ");
+  const words = string.split("-");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  return capitalizedWords.join(" ");
 }

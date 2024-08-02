@@ -2,8 +2,11 @@ import { Flex, Typography } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import Button from "../Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
+import { useTranslation } from "react-i18next";
 
-const TableHeader = ({ title, onClick }: { title: string; onClick?: () => void | undefined }) => {
+const TableHeader = ( { title, onClick }: { title: string; onClick?: () => void | undefined } ) =>
+{
+	const { t } = useTranslation();
 	return (
 		<Flex justify="space-between" align="center">
 			<Typography.Title>{title}</Typography.Title>
@@ -13,7 +16,7 @@ const TableHeader = ({ title, onClick }: { title: string; onClick?: () => void |
 				type={ButtonType.PRIMARY}
 				onClick={onClick}
 			>
-				Add {title}
+				{t('AddNew')}
 			</Button>
 		</Flex>
 	);
