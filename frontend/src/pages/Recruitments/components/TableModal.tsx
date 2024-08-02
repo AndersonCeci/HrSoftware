@@ -25,7 +25,7 @@ const TableModal: React.FC<EditModalProps> = ({
   handleUploadFile,
 }) => {
   const [form] = Form.useForm();
-  const formRef = useRef<RecrutmentDataType>(null);
+  const formRef = useRef<any>(null);
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {

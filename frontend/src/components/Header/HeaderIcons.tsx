@@ -1,6 +1,11 @@
 import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
-import { Badge } from "antd";
+import { Avatar, Badge } from "antd";
+
+// const logout = () => {
+//   localStorage.removeItem("userData");
+//   console.log("Cleared?", localStorage.getItem("token"));
+// };
 
 const logout = () => {
   localStorage.removeItem("userData");
@@ -24,16 +29,17 @@ const navigationLinkList = [
     icon: <Paths.Settings.icon className="nav-menu-icon white-icon" />,
     linkTo: `${Paths.Settings.path}`,
   },
-  {
-    text: "logOut",
-    linkTo: Paths.Login.path,
-    whiteText: true,
-    handleClick: logout,
-  },
+
+  // }
+  // {
+  //   text: "Log Out",
+  //   linkTo: Paths.Login.path,
+  //   whiteText: true,
+  //   handleClick: logout,
+  // },
 ];
 
 const HeaderIcons: React.FC = () => {
-  console.log("header");
   return (
     <ul className="header-icons-list">
       {navigationLinkList.map((item, index) => (

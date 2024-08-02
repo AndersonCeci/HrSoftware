@@ -24,6 +24,7 @@ import { EventsModuleModale } from './events/eventsModale.module';
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
+import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -69,9 +70,10 @@ import { UploadService } from './upload/upload.service';
     EventsModuleModale,
     UploadModule,
     FirebaseModule,
+    TasksModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService, UploadService],
+  providers: [AppService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

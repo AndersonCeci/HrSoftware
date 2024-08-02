@@ -12,8 +12,6 @@ export interface Data {
   color: string;
   path: string;
 }
-
-
  
 const DashboardPage: React.FC = () =>
 {

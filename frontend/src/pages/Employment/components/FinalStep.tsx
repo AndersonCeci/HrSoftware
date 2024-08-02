@@ -16,7 +16,7 @@ const FinalStep = ({ isSubmitting, error }: FinalStepProps) => {
 				title={error ? "There was an error submitting the form" : "Your form has been submitted"}
 				extra={[]}
 			/>
-			<Button></Button>
+			{/* <Button></Button> */}
 		</>
 	) : (
 		<Loader />

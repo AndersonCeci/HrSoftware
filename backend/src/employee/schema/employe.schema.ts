@@ -30,7 +30,7 @@ export class Employee extends Document {
   startingDate: string;
 
   @Prop()
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Prop()
   @IsOptional()
@@ -47,8 +47,8 @@ export class Employee extends Document {
   @Prop()
   contract: string;
 
-  @Prop({ default: false })
-  isDeleted: boolean;
+  @Prop({default:false})
+  deleteDate: string;
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);

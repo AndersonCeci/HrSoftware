@@ -1,6 +1,5 @@
 import NavigationIcons from "./NavigationIcons";
 import PageRoutesComponents from "../pages";
-import { t } from "i18next";
 
 export const Paths = {
   Login: {
@@ -10,7 +9,6 @@ export const Paths = {
   Dashboard: {
     path: "",
     type: "group",
-    icon: undefined,
     children: [
       {
         path: "dashboard",
@@ -26,6 +24,16 @@ export const Paths = {
       {
         path: "",
         pageElement: PageRoutesComponents.PersonalCalendarPage,
+      },
+    ],
+  },
+  Profile: {
+    path: "profile",
+    icon: NavigationIcons.UserOutlined,
+    children: [
+      {
+        path: "",
+        pageElement: PageRoutesComponents.ProfilePage,
       },
     ],
   },
@@ -60,7 +68,7 @@ export const Paths = {
     ],
   },
   Employee: {
-    path: "management",
+    path: "managment",
     type: "",
     icon: NavigationIcons.Management,
     children: [
@@ -71,17 +79,17 @@ export const Paths = {
       },
       {
         path: "salary",
-        icon: NavigationIcons.TbPigMoney,
+        icon: NavigationIcons.RiMoneyEuroCircleLine,
         pageElement: PageRoutesComponents.SalariesPage,
       },
       {
         path: "promotions",
-        icon: NavigationIcons.FaMoneyBillTrendUp,
+        icon: NavigationIcons.PiChartLineUpBold,
         pageElement: PageRoutesComponents.PromotionPage,
       },
       {
         path: "employment",
-        icon: NavigationIcons.GiDesk,
+        icon: NavigationIcons.MdOutlineBadge,
         pageElement: PageRoutesComponents.EmploymentPage,
       },
       {
@@ -92,17 +100,17 @@ export const Paths = {
     ],
   },
   DayOff: {
-    path: "time-off",
+    path: "dayoff",
     type: "",
     icon: NavigationIcons.SandClock,
     children: [
       {
-        path: "requested-leave",
+        path: "requestedLeave",
         icon: NavigationIcons.VscRequestChanges,
         pageElement: PageRoutesComponents.RequestedLeavePage,
       },
       {
-        path: "calendar-leave",
+        path: "calendarLeave",
         icon: NavigationIcons.BsCalendar4Range,
         pageElement: PageRoutesComponents.CalendarLeavePage,
       },
@@ -124,7 +132,7 @@ export const Paths = {
         pageElement: PageRoutesComponents.AssetsPage,
       },
       {
-        path: "organisational-structure",
+        path: "organisationalStructure",
         icon: NavigationIcons.ApartmentOutlined,
         pageElement: PageRoutesComponents.OrganisationalStructurePage,
       },

@@ -1,4 +1,5 @@
 import { Form, Flex, Upload } from "antd";
+import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import TextField from "../../../components/Shared/TextField";
 import Button from "../../../components/Shared/Button";
 import { ButtonSize, ButtonType } from "../../../enums/Button";
@@ -35,6 +36,22 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 		onAdd(valuesToSubmit);
 	}
 
+	function timeValidator(getFieldValue: any) {
+		return {
+			validator(rule: any, value: any) {
+				const startTime = getFieldValue("eventStartTime");
+				if (value && startTime) {
+					if (value.isAfter(startTime)) {
+						return Promise.resolve();
+					} else {
+						return Promise.reject("End time should be after start time");
+					}
+				}
+				return Promise.resolve();
+			},
+		};
+	}
+
 	return (
 		<Form
 			onFinish={onFinish}
@@ -45,20 +62,20 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			ref={formRef}
 			autoComplete="off"
 		>
-			<TextField label="Event Name" name="eventName" placeholder="Enter event eame" isRequired />
+			<FormInputs.Input label="Event Name" name="eventName" required />
 
-			<TextField
-				label="Event Date"
-				name="eventDate"
-				inputType="date"
-				placeholder="Enter event date"
-				isRequired
-			/>
+			<FormInputs.DatePicker label="Event Start" name="eventDate" required isDisabledDate />
 			<Flex gap={10}>
-				<TextField label="Start Time" name="eventStartTime" inputType="time" isRequired />
-				<TextField label="End Time" name="eventEndTime" inputType="time" isRequired />
+				<FormInputs.TimePicker label="Start Time" name="eventStartTime" required />
+				<FormInputs.TimePicker
+					label="End Time"
+					name="eventEndTime"
+					required
+					dependsOn={["eventStartTime"]}
+					validatorFunction
+				/>
 			</Flex>
-			<TextField label="Event Description" name="eventDescription" inputType="textarea" />
+			<FormInputs.Input label="Event Description" name="eventDescription" type="textarea" />
 
 			<Form.Item label="Event Attachment" name="image">
 				<Flex className="event-attachment-container">

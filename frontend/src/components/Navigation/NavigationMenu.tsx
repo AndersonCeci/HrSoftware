@@ -1,10 +1,11 @@
 import type { MenuProps } from "antd";
+import Button from "../Shared/Button";
 import { Menu } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Paths, capitalizeFirstLetter } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-// import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const navElements = [
@@ -14,23 +15,22 @@ const navElements = [
   Paths.Company,
 ];
 
-const NavigationMenu = () => {
-  const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-    useLocation()
-      .pathname.split("/")
-      .filter((x) => x)
-  );
+const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
+	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+		useLocation()
+			.pathname.split("/")
+			.filter((x) => x),
+	);
 
-  const location = useLocation();
+	const location = useLocation();
+  const navigate = useNavigate();
+  
   const { t } = useTranslation();
 
   const items: any = navElements.map((element) => {
     return {
       key: `${element.path}`,
-      label:
-        element.path === "time-off"
-          ? capitalizeFirstLetter(element.path)
-          : t(element.path),
+      label: t(element.path),
       type: element.type ? element.type : null,
       icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
       children: element.children.map((subElement) => {
@@ -47,14 +47,20 @@ const NavigationMenu = () => {
     };
   });
 
-  useEffect(() => {
-    setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-    console.log(defaultSelectedKey);
-  }, [location.pathname]);
+	useEffect(() => {
+		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+	}, [location.pathname]);
 
-  return (
-    <>
+	const handleClick = () => {
+		localStorage.removeItem("userData");
+		console.log("Cleared?", localStorage.getItem("token"));
+		navigate("/");
+	};
+
+	return (
+    <div className="navmenu-container">
       <Menu
+        // onClick={onClick}/
         className="side-nevigation-menu"
         defaultSelectedKeys={[
           defaultSelectedKey[defaultSelectedKey.length - 1],
@@ -64,7 +70,13 @@ const NavigationMenu = () => {
         mode="inline"
         items={items}
       />
-    </>
+      <div className="logout-button-container">
+        <Button type="text" danger size="large" onClick={handleClick}>
+          <LogoutOutlined />
+          {!colapsed ? t(`logOut`) : ""}
+        </Button>
+      </div>
+    </div>
   );
 };
 

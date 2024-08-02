@@ -1,45 +1,50 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
 import { UpdateBonusDTO } from '../bonusDTO/updateBonus.dto';
 
 export class UpdateSalaryDTO {
   @IsOptional()
   @IsString()
-  readonly employeeID: string;
+   employeeID: string;
 
   @IsOptional()
-  @IsString()
-  readonly NSSH: string;
+  @IsDate()
+  @Type(() => Date)
+   dateTaken?: Date;
 
   @IsOptional()
   @IsNumber()
-  readonly netSalary: number;
+   netSalary: number;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(30)
-  readonly workDays: number;
+   workDays: number;
   
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => UpdateBonusDTO)
-  readonly bonuses: UpdateBonusDTO[];
+   bonuses: UpdateBonusDTO[];
 
   @IsOptional()
   @IsNumber()
-  readonly socialSecurityContributions: number;
+   socialSecurityContributions: number;
 
   @IsOptional()
   @IsNumber()
-  readonly healthInsurance: number;
+   healthInsurance: number;
 
   @IsOptional()
   @IsNumber()
-  readonly grossSalary: number;
+   grossSalary: number;
 
   @IsOptional()
   @IsNumber()
-  readonly total: number;
+   total: number;
+
+   @IsOptional()
+  @IsBoolean()
+  readonly paid: boolean;
 }
 

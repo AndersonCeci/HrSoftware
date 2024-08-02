@@ -4,29 +4,29 @@ import Modal from "../../../components/Shared/Modal";
 import Loader from "../../../components/Shared/Loader";
 import AssetForm from "./AssetForm";
 import { AssetDatatype } from "../types/AssetsDataType";
-
 import { useState, useEffect, useRef } from "react";
-import { HTTP } from "../Enum/http";
 import useHttp from "../../../hooks/useHttp";
 
 import { getColumns } from "../utils/AssetsColumn";
 import { t } from "i18next";
 
+const API = import.meta.env.REACT_APP_ASSET_API;
+
 const AssetContent = () => {
 	const [tableData, setTableData] = useState<AssetDatatype[]>([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const editFormRef = useRef<any>();
+	const editFormRef = useRef<HTMLFormElement>();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [selectedElement, setSelectedElement] = useState<AssetDatatype | undefined>(undefined);
 
 	useEffect(() => {
-		sendRequest({ url: HTTP.GETASSET }, setTableData);
+		sendRequest({ url: API }, setTableData);
 	}, []);
 
 	function handleDataDelete(id: string) {
 		sendRequest(
 			{
-				url: `${HTTP.DELETEASSET}/${id}`,
+				url: `${API}/${id}`,
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
@@ -77,7 +77,7 @@ const AssetContent = () => {
 					setSelectedElement(undefined);
 				}}
 				onOk={() => {
-					editFormRef.current.submit();
+					editFormRef.current?.submit();
 				}}
 			>
 				<AssetForm
