@@ -1,37 +1,44 @@
-import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId, Types } from 'mongoose';
 import * as muv from 'mongoose-unique-validator';
-
+import { Employee } from 'src/employee/schema/employe.schema';
 
 export enum Role {
-    Admin = 'admin',
-    CEO = 'ceo',
-    HR = 'hr',
-    Employee = 'employee',
-    Dev = 'dev',
-    ProjectManager = 'projectManager',
+  Admin = 'admin',
+  CEO = 'ceo',
+  HR = 'hr',
+  Employee = 'employee',
+  Dev = 'dev',
+  ProjectManager = 'projectManager',
 }
 
-@Schema({ timestamps: true})
+@Schema({ timestamps: true })
 export class User {
-    @Prop({required: true , unique: true })
-    username: string;
+  @Prop()
+  employID: Types.ObjectId;
 
-    @Prop({ required: true })
-    password: string;
+  @Prop({ required: true, unique: true })
+  username: string;
 
-    @Prop({ required: true })
-    role: Role;
+  @Prop({ required: true })
+  password: string;
 
-    @Prop()
-    loginRole: Role;
+  @Prop({ required: true })
+  role: Role;
 
-    @Prop({ default: false })
-    isDeleted: boolean;
+  @Prop()
+  email: string;
 
-    @Prop()
-    deleteDate: Date;
+  @Prop()
+  loginRole: Role;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop()
+  deleteDate: Date;
 }
 
- const UserSchema = SchemaFactory.createForClass(User);
- UserSchema.plugin(muv ,{message:"Username must be unique"});
- export {UserSchema};
+const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.plugin(muv, { message: 'Username must be unique' });
+export { UserSchema };

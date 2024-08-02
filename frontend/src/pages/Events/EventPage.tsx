@@ -15,8 +15,11 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../../components/Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
 import AddEventForm from "./components/AddEventForm";
+import { useTranslation } from "react-i18next";
 
-const EventPage: React.FC = () => {
+const EventPage: React.FC = () =>
+{
+	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,7 +79,7 @@ const EventPage: React.FC = () => {
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<TableHeader title="Events" onClick={handleOpenModal} />
+			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
 			{error ? (
 				<NoDataResult onOpenModal={handleOpenModal} isError />
 			) : (

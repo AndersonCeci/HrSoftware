@@ -4,6 +4,7 @@ import "../../styles/Dashboard/WelcomeGrid.css";
 import { Row, Col, Typography, Button } from "antd";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,6 +32,9 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
 
   }
 
+   const { t } = useTranslation();
+
+
   return (
     <>
       <div className="welcome-grid">
@@ -54,7 +58,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
           })}
         </div>
         <div className="pie-chart">
-          <Title style={{marginTop: 15, color:"#666666", textAlign:"center", fontSize:23}}>Attendance Overview</Title>
+          <Title style={{marginTop: 15, color:"#666666", textAlign:"center", fontSize:23}}>{t(`attendanceOverview`)}</Title>
           <Doughnut style={{marginTop: '15px'}} data={data} options={options}></Doughnut>
         </div>
       </div>

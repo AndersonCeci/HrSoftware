@@ -113,6 +113,7 @@
 import { Form, Input, Button, Card } from 'antd';
 import { usePassword } from '../context';
 import { usePasswordValidation } from '../context/hook';
+import { useTranslation } from 'react-i18next';
 
 
 const ChangePasswordForm = () => {
@@ -131,6 +132,8 @@ const ChangePasswordForm = () => {
     }
   };
 
+  const {t} = useTranslation()
+
   return (
     <div
       style={{
@@ -141,7 +144,7 @@ const ChangePasswordForm = () => {
         // height: '100vh',
       }}
     >
-      <Card title="Change Password" style={{ width: 400 }}>
+      <Card title={t(`changePassoword`)} style={{ width: 400 }}>
         <Form
           form={form}
           id="change-password-form"
@@ -152,7 +155,7 @@ const ChangePasswordForm = () => {
             label="Old Password"
             name="oldPassword"
             rules={[
-              { required: true, message: 'Please input your old password!' },
+              { required: true, message: "Please input your old password!" },
             ]}
           >
             <Input.Password />
@@ -161,10 +164,10 @@ const ChangePasswordForm = () => {
             label="New Password"
             name="newPassword"
             rules={[
-              { required: true, message: 'Please input your new password!' },
+              { required: true, message: "Please input your new password!" },
               {
-                validator: validateNewPasswordNotOldPassword
-              }
+                validator: validateNewPasswordNotOldPassword,
+              },
             ]}
           >
             <Input.Password />
@@ -172,19 +175,19 @@ const ChangePasswordForm = () => {
           <Form.Item
             label="Confirm Password"
             name="confirmPassword"
-            dependencies={['newPassword']}
+            dependencies={["newPassword"]}
             rules={[
-              { required: true, message: 'Please confirm your new password!' },
+              { required: true, message: "Please confirm your new password!" },
               {
-                validator: validateConfirmPassword
-              }
+                validator: validateConfirmPassword,
+              },
             ]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-              Change Password
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+              {t(`changePassoword`)}
             </Button>
           </Form.Item>
         </Form>

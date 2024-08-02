@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEnum, IsOptional, Matches } from 'class-validator';
+import { IsOptional, Matches } from 'class-validator';
 import { Document } from 'mongoose';
-import { Role } from 'src/users/schemas/user.schema';
 
 @Schema()
-export class Employee extends Document {
+export class Left extends Document {
   @Prop({ required: true })
   name: string;
 
@@ -17,21 +16,21 @@ export class Employee extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true})
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @IsEnum(Role)
-  position: Role;
+  @Prop()
+  position: string;
 
   @Prop()
   startingDate: string;
 
   @Prop()
-  phoneNumber: string;
+  phoneNumber: number;
 
   @Prop()
   @IsOptional()
@@ -48,8 +47,8 @@ export class Employee extends Document {
   @Prop()
   contract: string;
 
-  @Prop({default:false})
-  deleteDate: string;
+  @Prop()
+  deletedAt: string;
 }
 
-export const EmployeeSchema = SchemaFactory.createForClass(Employee);
+export const LeftSchema = SchemaFactory.createForClass(Left);

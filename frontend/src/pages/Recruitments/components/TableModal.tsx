@@ -38,13 +38,11 @@ const TableModal: React.FC<EditModalProps> = ({
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    console.log(formData, "formDataaa");
     try {
       const uploadResponse = await fetch("http://localhost:3000/files/upload", {
         method: "POST",
         body: formData,
       });
-
       if (!uploadResponse.ok) {
         throw new Error("File upload failed");
       }
@@ -61,7 +59,6 @@ const TableModal: React.FC<EditModalProps> = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file, "fileeee");
     if (file) {
       handleUpload(file);
     }

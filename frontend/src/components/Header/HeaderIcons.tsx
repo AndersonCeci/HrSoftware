@@ -7,6 +7,10 @@ import { Avatar, Badge } from "antd";
 //   console.log("Cleared?", localStorage.getItem("token"));
 // };
 
+const logout = () => {
+  localStorage.removeItem("userData");
+  console.log("Cleared?", localStorage.getItem("token"));
+};
 
 const navigationLinkList = [
   {
@@ -22,8 +26,8 @@ const navigationLinkList = [
     linkTo: `${Paths.Notifications.path}`,
   },
   {
-    icon: <Paths.Settings.icon className="nav-menu-icon white-icon"/>,
-    linkTo: `${Paths.Settings.path}`
+    icon: <Paths.Settings.icon className="nav-menu-icon white-icon" />,
+    linkTo: `${Paths.Settings.path}`,
   },
 
   // }
@@ -36,15 +40,15 @@ const navigationLinkList = [
 ];
 
 const HeaderIcons: React.FC = () => {
-	return (
-		<ul className="header-icons-list">
-			{navigationLinkList.map((item, index) => (
-				<li key={index}>
-					<NavigationLink {...item} />
-				</li>
-			))}
-		</ul>
-	);
+  return (
+    <ul className="header-icons-list">
+      {navigationLinkList.map((item, index) => (
+        <li key={index}>
+          <NavigationLink {...item} />
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 export default HeaderIcons;

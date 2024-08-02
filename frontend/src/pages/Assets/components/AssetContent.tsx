@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
 
 import { getColumns } from "../utils/AssetsColumn";
+import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 
@@ -87,7 +88,7 @@ const AssetContent = () => {
 				/>
 			</Modal>
 			<TableHeader
-				title="Assets"
+				title={t('assetsTitle')}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}

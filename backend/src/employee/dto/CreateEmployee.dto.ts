@@ -5,6 +5,7 @@ import {
   IsEnum,
   Matches,
 } from 'class-validator';
+import { Role } from 'src/users/schemas/user.schema';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -28,11 +29,11 @@ export class CreateEmployeeDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches( /^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
+  @Matches( /^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
-  @IsString()
-  position?: string;
+  @IsEnum(Role)
+  position?: Role;
 
   startingDate?: string;
 
@@ -50,5 +51,4 @@ export class CreateEmployeeDto {
   contract: string;
 
   isDeleted: boolean;
-  deleteDate:Date
 }
