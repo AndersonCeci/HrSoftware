@@ -6,8 +6,10 @@ import type { RecrutmentDataType } from "../../types/Recrutment";
 import { useEffect, useState } from "react";
 import TableModal from "./components/TableModal";
 import { selectOption } from "./columns/constants";
+import { useTranslation } from "react-i18next";
 
 const RecruitmentPage: React.FC = () => {
+	const { t } = useTranslation();
 	const [tableData, setTableData] = useState<RecrutmentDataType[]>([]);
 	const [editingRecord, setEditingRecord] = useState<RecrutmentDataType | null>(null);
 	const [form] = Form.useForm();
@@ -104,7 +106,7 @@ const RecruitmentPage: React.FC = () => {
 
 	return (
 		<section className="test">
-			<TableHeader title="Recrutment" onClick={() => setIsEditModalVisible(true)} />
+			<TableHeader title={t("recruitmentTitle")} onClick={() => setIsEditModalVisible(true)} />
 			<Table columns={columns} data={tableData} fixed />
 			<TableModal
 				open={isEditModalVisible}

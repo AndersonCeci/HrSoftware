@@ -5,6 +5,7 @@ import {
 	ApartmentOutlined,
 	BellOutlined,
 	SettingOutlined,
+	UserOutlined,
 } from "@ant-design/icons";
 
 import { MdOutlineEventAvailable } from "react-icons/md";
@@ -47,6 +48,7 @@ const NavigationIcons = {
 	Building: PiBuildingApartmentLight,
     SandClock: GiSandsOfTime,
     Management: FiUsers,
+	UserOutlined
 };
 
 export default NavigationIcons;

@@ -3,6 +3,7 @@ import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
 import columns from "./components/TableColumns";
 import { useRef, useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { useSalaryHook } from "./context/hook";
 import { Salary } from "../../types/SalaryProps";
 import { Button, Col, DatePicker, Input, Row, Space } from "antd";
@@ -12,6 +13,8 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 
 const SalaryContent = () => {
+    const { t } = useTranslation();
+
   const addBonusRef = useRef<Salary>(null);
   const editFormRef = useRef<Salary>(null);
   
@@ -73,7 +76,7 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <h1>Salaries</h1>
+      {t("salariesTitle")}
       <Row title="Filters" gutter={16} align="middle">
         <Col>
           <Space direction="vertical" size={12}>

@@ -75,7 +75,7 @@ import { DayoffModule } from './dayoff/dayoff.module';
     DayoffModule,
   ],
   controllers: [],
-  providers: [AppService, LeftService, UploadService],
+  providers: [AppService, UploadService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
