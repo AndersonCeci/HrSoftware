@@ -47,13 +47,7 @@ const RequestForm = ({ onAdd }: any) => {
 				isMatchWithOption
 			/>
 			<FormInputs.DatePicker name="StartTime" label="Leave From" required isDisabledDate />
-			<FormInputs.DatePicker
-				name="EndTime"
-				label="Leave To"
-				required
-				isDisabledDate
-				dependsOn="StartTime"
-			/>
+			<FormInputs.DatePicker name="EndTime" label="Leave To" isDisabledDate dependsOn="StartTime" />
 			<FormInputs.Select name="leaveType" label="Leave Type" options={type} required />
 			<FormInputs.Input name="reason" label="Reason" type="textarea" />
 			<Button type={ButtonType.PRIMARY} htmlType="submit">

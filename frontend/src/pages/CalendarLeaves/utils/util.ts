@@ -9,6 +9,7 @@ export const fieldsData = {
 	},
 	startTime: { name: "StartTime", title: "From", validation: { required: true } },
 	endTime: { name: "EndTime", title: "To", validation: { required: true } },
+	description: { name: "description", title: "Reason", validation: { required: true } },
 };
 
 export const onDragStart = (args: DragEventArgs): void => {
@@ -33,7 +34,7 @@ const styleTypes = {
 export const applyCategoryColor = (args: EventRenderedArgs, currentView: string): void => {
 	console.log(args, "args");
 	console.log(currentView, "currentView");
-	let categoryType: "annual" | "sick" | "other" = args.data.type;
+	let categoryType: "annual" | "sick" | "other" = args.data.leaveType;
 	console.log(categoryType, "categoryColor");
 	if (!args.element || !categoryType) {
 		return;

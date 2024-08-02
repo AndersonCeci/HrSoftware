@@ -23,7 +23,7 @@ const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePi
 			validator(rule: any, value: any) {
 				const startTime = getFieldValue(dependsOn);
 				if (value && startTime) {
-					if (value.isAfter(startTime)) {
+					if (value.isAfter(startTime) || value.isSame(startTime)) {
 						return Promise.resolve();
 					} else {
 						return Promise.reject("End time should be after start time");

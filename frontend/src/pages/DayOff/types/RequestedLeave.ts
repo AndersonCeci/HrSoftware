@@ -7,4 +7,5 @@ export type RequestedDataType = {
 	description: string;
 	totalDays: number;
 	EmployeeName: string;
+	isApproved: boolean;  
 };
