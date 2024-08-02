@@ -81,7 +81,7 @@ const CompanyBackgroundPage: React.FC = () => {
         </p>
       </Typography>
       <Title style={{ marginLeft: "40px" }} level={3}>
-        Our Team
+        Boarding Managment
       </Title>
       <Row gutter={[16, 16]}>
         <Col span={12}>

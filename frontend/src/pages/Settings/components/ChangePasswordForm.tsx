@@ -135,9 +135,10 @@ const ChangePasswordForm = () => {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
+        flexDirection: 'column'
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // height: '100vh',
       }}
     >
       <Card title="Change Password" style={{ width: 400 }}>
