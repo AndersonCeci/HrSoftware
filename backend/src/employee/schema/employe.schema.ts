@@ -50,7 +50,7 @@ export class Employee extends Document {
   @Prop({ default: false })
   isDeleted: boolean;
 
-  @Prop({default:false})
+  @Prop()
   deleteDate: Date;
 }
 

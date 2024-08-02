@@ -39,7 +39,13 @@ export class EmployeeService {
    delete(id: string): Promise<Employee | null> {
      return this.employeeModel.findByIdAndDelete(id);
    }
-
+   async findNameById(id: string): Promise<string | null> {
+    const employee = await this.employeeModel.findById(id).exec();
+    if (employee) {
+      return employee.name;
+    }
+    return null;
+  }
    softDeleteEmployeeById(id: string): Promise<Event> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
