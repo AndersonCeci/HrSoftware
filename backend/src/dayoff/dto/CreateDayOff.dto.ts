@@ -36,4 +36,7 @@ import {
 
     isDeleted:boolean;
     deleteDate?:Date
+
+    isApproved:boolean;
+    approvedDate?:Date
   }

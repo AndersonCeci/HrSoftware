@@ -20,11 +20,19 @@ export class DayoffController {
         return this.dayoffService.findAll()
     }
 
-    @Delete(':id')
+    @Delete(':id/soft-delete')
      async deleteByName(@Param('id') id: string) {
-    const result = await this.dayoffService.softDeleteAssetById(id);
+    const result = await this.dayoffService.softDeleteDayOffById(id);
     return result;
   }
+
+  @Patch(':id/approve')
+  async approve(@Param('id') id: string) {
+    const result = await this.dayoffService.approved(id);
+    if (!result) throw new HttpException('Day off not found', 404);
+    return result;
+  }
+
 
   @Patch(':id')
   async updateUser(@Param('id') id: string, @Body() updateDayOffDto: UpdateDayOffDto) {

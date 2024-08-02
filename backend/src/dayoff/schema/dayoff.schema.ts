@@ -7,7 +7,8 @@ import { Document } from 'mongoose';
 @Schema()
 export class DayOff extends Document {
     @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
-    employeeId: Types.ObjectId;
+    //employeeId: Types.ObjectId;
+    employeeId: string;
 
     @Prop()
     EmployeeName: string;
@@ -26,15 +27,20 @@ export class DayOff extends Document {
     @Prop()
     totalDays: number;
   
-
     @Prop({required:true})
     description:string;
 
     @Prop({ default: false })
-  isDeleted: boolean;
+    isDeleted: boolean;
 
-  @Prop()
-  deleteDate: Date;
+    @Prop()
+    deleteDate: Date;
+    
+    @Prop({ default: false })
+    isApproved:boolean;
+
+    @Prop()
+    approvedDate: Date;
 
    
 
