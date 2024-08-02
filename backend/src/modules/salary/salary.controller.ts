@@ -9,20 +9,30 @@ import {
   Query,
   BadRequestException,
 } from '@nestjs/common';
-import { SalaryService } from './salary.service';
+import { SalaryService } from './services/salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
 import { UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
 import { Types } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
+import { Payroll, PayrollService } from './services/payroll.service';
 
 @Controller('salary')
 export class SalaryController {
-  constructor(private readonly salaryService: SalaryService) {}
+  constructor(
+    private readonly salaryService: SalaryService,
+    private readonly payrollService: PayrollService,
+  ) {}
 
   @Post()
   async create(@Body() salaryDTO: SalaryDTO) {
-    return await this.salaryService.create(salaryDTO);
+    const dto = plainToClass(SalaryDTO, salaryDTO);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed');
+    }
+    console.log(dto);
+    return await this.salaryService.create(dto);
   }
 
   @Get()
@@ -33,7 +43,6 @@ export class SalaryController {
     @Query('endDate') endDate?: Date,
     @Query('name') name?: string,
   ) {
-  
     const pageNumber = parseInt(page.toString(), 10);
     const limitNumber = parseInt(limit.toString(), 10);
     const filter = { startDate, endDate, name };
@@ -46,30 +55,25 @@ export class SalaryController {
 
   @Put(':salaryID')
   async updateSalary(
-    @Param('salaryID') salaryID: string,
+    @Param('salaryID') salaryID: Types.ObjectId,
     @Body() updateSalaryDto: UpdateSalaryDTO,
   ) {
-   
-   
-
-   
     const dto = plainToClass(UpdateSalaryDTO, updateSalaryDto);
     const errors = await validate(dto);
     if (errors.length > 0) {
       throw new BadRequestException('Validation failed');
     }
-
-    console.log('Received data:', { salaryID,  updateSalaryDto });
-
-    return await this.salaryService.updateSalary(
-      new Types.ObjectId(salaryID),
-      dto,
-    );
+    console.log(dto);
+    return await this.salaryService.updateSalary(salaryID, dto);
   }
-
 
   @Delete(':userId')
   async deleteSalary(@Param('userId') userId: string) {
     return await this.salaryService.deleteSalary(userId);
+  }
+  @Post('net-salary')
+  async netSalary(@Body('grossSalary') grossSalary: number): Promise<Payroll> {
+    const res = this.payrollService.calculateNetSalary(grossSalary);
+    return res;
   }
 }

@@ -1,13 +1,23 @@
-import { Type } from "class-transformer";
-import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsString, Max, Min, ValidateNested } from "class-validator";
-import { BonusDTO } from "../bonusDTO/createBonus.dto";
-import { Types } from "mongoose";
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { BonusDTO } from '../bonusDTO/createBonus.dto';
+import { Types } from 'mongoose';
 
 export class SalaryDTO {
-    @IsNotEmpty()
-    readonly employeeID: Types.ObjectId;
+  @Type(() => Types.ObjectId)
+  @IsNotEmpty()
+  readonly employeeID: Types.ObjectId;
 
   @IsNotEmpty()
+  @Type(() => Date)
   @IsDate()
   readonly dateTaken: Date;
 
@@ -22,10 +32,9 @@ export class SalaryDTO {
   @Max(30)
   readonly workDays: number;
 
-  @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => BonusDTO)
-  readonly bonuses: BonusDTO[];
+  readonly bonuses?: BonusDTO[];
 
   @IsNotEmpty()
   @IsNumber()
@@ -47,7 +56,6 @@ export class SalaryDTO {
   @Min(0)
   readonly total: number;
 
-  @IsNotEmpty()
   @IsBoolean()
-  readonly paid: boolean;
+  readonly paid?: boolean;
 }

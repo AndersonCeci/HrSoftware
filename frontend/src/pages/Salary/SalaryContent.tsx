@@ -7,6 +7,7 @@ import { useSalaryHook } from "./context/hook";
 import { Salary } from "../../types/SalaryProps";
 import { Button, Col, DatePicker, Input, Row, Space } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+import TableHeader from "../../components/Table/TableHeader";
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -14,11 +15,14 @@ const { Search } = Input;
 const SalaryContent = () => {
   const addBonusRef = useRef<Salary>(null);
   const editFormRef = useRef<Salary>(null);
-  
+
   const startOfMonth = dayjs().startOf("month");
   const endOfMonth = dayjs().endOf("month");
-  
-  const [selectedRange, setSelectedRange] = useState<[Dayjs, Dayjs]>([startOfMonth, endOfMonth]);
+
+  const [selectedRange, setSelectedRange] = useState<[Dayjs, Dayjs]>([
+    startOfMonth,
+    endOfMonth,
+  ]);
   const [searchValue, setSearchValue] = useState<string>("");
 
   const {
@@ -28,12 +32,13 @@ const SalaryContent = () => {
     limit,
     handlePageChange,
     handleLimitChange,
-    handleEdit,
+    handleModal,
     handleAddBonus,
     handleAddBonusSubmit,
     handleEditSubmit,
     setFilters,
     filters,
+    createSalary,
   } = useSalaryHook();
 
   useEffect(() => {
@@ -49,7 +54,6 @@ const SalaryContent = () => {
     setFilters({ ...filters, name: value.trim() });
   };
 
- 
   const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates) {
       const [start, end] = dates;
@@ -73,7 +77,7 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <h1>Salaries</h1>
+      <TableHeader title={"Salaries"} onClick={handleModal}></TableHeader>
       <Row title="Filters" gutter={16} align="middle">
         <Col>
           <Space direction="vertical" size={12}>
@@ -93,8 +97,8 @@ const SalaryContent = () => {
             enterButton
             allowClear
             value={searchValue}
-
             onChange={(e) => setSearchValue(e.target.value)}
+          
           />
         </Col>
         <Col flex="auto" style={{ textAlign: "right" }}>
@@ -105,7 +109,7 @@ const SalaryContent = () => {
       </Row>
       <Table
         data={tableData}
-        columns={columns({ handleAddBonus, handleEdit, tableData })}
+        columns={columns({ handleAddBonus, handleModal, tableData })}
         fixed
         pagination={{
           position: ["bottomRight"],
@@ -123,6 +127,7 @@ const SalaryContent = () => {
       <EditSalaryModal
         editFormRef={editFormRef}
         handleEditSubmit={handleEditSubmit}
+        handleCreateSubmit={createSalary}
       />
     </div>
   );
