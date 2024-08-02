@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import { TreeNode } from "primereact/treenode";
-import "../styles/OrganisationalStructure/OrganisationalStructure.css";
+import "../OrganisationalStructure/style/OrganisationalStructure.css";
+import "../../../node_modules/primereact/resources/primereact.css";
+import "../../../node_modules/primereact/resources/themes/lara-light-blue/theme.css";
+import CEO from "../../assets/ceo.jpeg";
 
 export default function SelectionDemo() {
   const [selection, setSelection] = useState<TreeNode[]>([]);
@@ -11,8 +14,7 @@ export default function SelectionDemo() {
       key: "person",
       className: "card ceo-card",
       data: {
-        image:
-          "https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png",
+        image: { CEO },
         name: "Pasho Toska",
         title: "CEO",
       },

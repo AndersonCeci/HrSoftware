@@ -2,20 +2,18 @@ import EventMenu from "./components/EventMenu";
 import Loader from "../../components/Shared/Loader";
 import Modal from "../../components/Shared/Modal";
 import NoDataResult from "./components/NoDataResult";
-import { PlusCircleOutlined } from "@ant-design/icons";
-
-import { Typography, Flex } from "antd";
+import TableHeader from "../../components/Table/TableHeader";
 import "./styles/EventPage.css";
-
 import { EvenType } from "./types/EventTypes";
 import { sortByDate, devideEventsByMonth } from "./utils/utils";
 import useHttp from "../../hooks/useHttp";
 import { useState, useEffect, useRef } from "react";
-import Button from "../../components/Shared/Button";
-import { ButtonSize, ButtonType } from "../../enums/Button";
 import AddEventForm from "./components/AddEventForm";
+import { useTranslation } from "react-i18next";
 
-const EventPage: React.FC = () => {
+const EventPage: React.FC = () =>
+{
+	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +60,7 @@ const EventPage: React.FC = () => {
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
-		<main className="event-page-main">
+		<main>
 			<Modal
 				title="Add Event"
 				isOpen={isModalOpen}
@@ -73,17 +71,7 @@ const EventPage: React.FC = () => {
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<Flex justify="space-between" align="center">
-				<Typography.Title>Events</Typography.Title>
-				<Button
-					icon={<PlusCircleOutlined />}
-					size={ButtonSize.LARGE}
-					type={ButtonType.PRIMARY}
-					onClick={handleOpenModal}
-				>
-					Add Event
-				</Button>
-			</Flex>
+			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
 			{error ? (
 				<NoDataResult onOpenModal={handleOpenModal} isError />
 			) : (

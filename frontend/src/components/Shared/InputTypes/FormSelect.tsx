@@ -22,8 +22,9 @@ const FormSelect = ({ name, label, options, required }: FormSelectProps) => {
 					message: `Please select ${label}!`,
 				},
 			]}
+			style={{ width: "100%" }}
 		>
-			<Select options={options} placeholder={`Select ${label}`} />
+			<Select  options={options} placeholder={`Select ${label}`} />
 		</Form.Item>
 	);
 }; 

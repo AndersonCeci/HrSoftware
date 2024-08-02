@@ -16,12 +16,12 @@ export class EmployeeService {
   }
 
   findAll(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: false }).exec();
+    return this.employeeModel.find().exec();
   }
   
 
   findLeft(): Promise<Employee[]> {
-    return this.employeeModel.find({ isDeleted: true }).exec();
+    return this.employeeModel.find().exec();
   }
 
 
@@ -36,14 +36,25 @@ export class EmployeeService {
     });
   }
 
-  delete(id: string): Promise<Employee | null> {
-    return this.employeeModel.findByIdAndDelete(id);
+   delete(id: string): Promise<Employee | null> {
+     return this.employeeModel.findByIdAndDelete(id);
+   }
+   async findNameById(id: string): Promise<string | null> {
+    const employee = await this.employeeModel.findById(id).exec();
+    if (employee) {
+      return employee.name;
+    }
+    return null;
   }
-
-  softDeleteAssetById(id: string): Promise<Employee> {
-    return this.employeeModel
-      .findByIdAndUpdate(id, { isDeleted: true }, { new: true })
-      .exec();
+   softDeleteEmployeeById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    return this.employeeModel.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deleteDate: currentDate }, 
+      { new: true }
+    )
   }
 
   async getUsernames(): Promise<string[]> {

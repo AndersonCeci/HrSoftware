@@ -26,18 +26,22 @@ export class TasksService {
 
 
     findAllTasks(): Promise<Task[]> {
-        return this.taskModel.find().exec();
+        return this.taskModel.find({isDeleted:false}).exec();
     }
 
     findTaskById(id: string): Promise<Task | null> {
         return this.taskModel.findById(id).exec();
     }
 
-    async deleteTask(id: string): Promise<Task | null> {
-        if (!Types.ObjectId.isValid(id)) {
-          throw new BadRequestException('Invalid ID format');
-        }
-        return this.taskModel.findByIdAndDelete(id).exec();
+    softDeleteTaskById(id: string): Promise<Event> {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        return this.taskModel.findByIdAndUpdate(
+          id, 
+          { isDeleted: true, deleteDate: currentDate }, 
+          { new: true }
+        )
       }
 
     editTask(id: string, updateTaskDto: CreateTaskDto): Promise<Task | null> {

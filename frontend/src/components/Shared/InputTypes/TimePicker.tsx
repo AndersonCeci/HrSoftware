@@ -4,35 +4,27 @@ type TimePickerProps = {
 	label: string;
 	name: string;
 	required?: boolean;
-	dependsOn?: string[];
-	validatorFunction?: boolean;
+	dependsOn?: string;
 	format?: string;
 };
 
-function timeValidator(getFieldValue: any) {
-	return {
-		validator(rule: any, value: any) {
-			const startTime = getFieldValue("eventStartTime");
-			if (value && startTime) {
-				if (value.isAfter(startTime)) {
-					return Promise.resolve();
-				} else {
-					return Promise.reject("End time should be after start time");
+const TimePicker = ({ label, name, required, dependsOn, format = "h:mm" }: TimePickerProps) => {
+	function timeValidator(getFieldValue: any, dependsOn?: string) {
+		return {
+			validator(rule: any, value: any) {
+				const startTime = getFieldValue(dependsOn);
+				if (value && startTime) {
+					if (value.isAfter(startTime)) {
+						return Promise.resolve();
+					} else {
+						return Promise.reject("End time should be after start time");
+					}
 				}
-			}
-			return Promise.resolve();
-		},
-	};
-}
+				return Promise.resolve();
+			},
+		};
+	}
 
-const TimePicker = ({
-	label,
-	name,
-	required,
-	dependsOn,
-	validatorFunction,
-	format = "h:mm",
-}: TimePickerProps) => {
 	const rulesList: any = [
 		{
 			required: required,
@@ -40,8 +32,8 @@ const TimePicker = ({
 		},
 	];
 
-	if (validatorFunction) {
-		rulesList.push(({ getFieldValue }: any) => timeValidator(getFieldValue));
+	if (dependsOn) {
+		rulesList.push(({ getFieldValue }: any) => timeValidator(getFieldValue, dependsOn));
 	}
 
 	return (
@@ -49,7 +41,7 @@ const TimePicker = ({
 			label={label}
 			style={{ width: "100%" }}
 			name={name}
-			dependencies={dependsOn}
+			dependencies={[dependsOn]}
 			rules={rulesList}
 			validateDebounce={1000}
 		>

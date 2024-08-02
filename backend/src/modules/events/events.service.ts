@@ -40,7 +40,7 @@ export class EventsService {
     }
 
     async findAll(): Promise<Events[]> {
-        return this.eventsModel.find().exec();
+        return this.eventsModel.find({isDeleted:false}).exec();
     }
 
     async findById(id: string): Promise<Events> {
@@ -55,9 +55,16 @@ export class EventsService {
         return this.eventsModel.find({ invitees: inviteesId }).exec();
     }
 
-    async delete(id: string): Promise<Events> {
-        return this.eventsModel.findByIdAndDelete(id).exec();
-    }
+    async softDeleteEventById(id: string): Promise<Event> {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        return this.eventsModel.findByIdAndUpdate(
+          id, 
+          { isDeleted: true, deleteDate: currentDate }, 
+          { new: true }
+        )
+      }
 
     async update(id: string, updateEventDto: UpdateEventDto): Promise<Events> {
         return this.eventsModel.findByIdAndUpdate(id, updateEventDto, { new: true }).exec();

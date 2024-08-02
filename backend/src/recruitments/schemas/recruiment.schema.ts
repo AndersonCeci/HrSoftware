@@ -38,6 +38,12 @@ export class Recruitment extends Document {
 
   @Prop()
   submittedDate: string;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop()
+  deleteDate: Date;
 }
 
 export const RecruitmentSchema = SchemaFactory.createForClass(Recruitment);

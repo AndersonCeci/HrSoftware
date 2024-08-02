@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
@@ -14,6 +15,7 @@ import { PaginatedDTO } from '../../../paginationDTO/paginated.dto';
 import { ExportSalaryDTO } from '../dto/salaryDTO/export-salary.dto';
 import { EmployeeService } from 'src/employee/employe.service';
 import { Employee } from 'src/employee/schema/employe.schema';
+
 
 @Injectable()
 export class SalaryService {
@@ -31,6 +33,8 @@ export class SalaryService {
       });
       return await createdSalary.save();
     } catch (error) {
+      console.log(error);
+    
       if (error.code === 11000) {
         const duplicateKey = Object.keys(error.keyPattern).join(', ');
         throw new ConflictException(
@@ -41,12 +45,47 @@ export class SalaryService {
     }
   }
 
-  async deleteSalary(userId: string): Promise<Salary> {
+  async getAllSalaries(): Promise<Salary[]> {
     try {
-      return await this.salaryModel.findOneAndDelete({ employeeID: userId });
+      return await this.salaryModel.find();
     } catch (error) {
-      throw new InternalServerErrorException('Failed to delete salary');
+     
+      throw new ConflictException('Failed to fetch salaries');
     }
+  }
+
+  async find(id: string): Promise<Salary> {
+    try {
+      const salary = await this.salaryModel.findById(id,{isDeleted:false});
+      if (!salary) {
+        throw new NotFoundException('Salary not found');
+      }
+      return salary;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error('Failed to find salary');
+    }
+  }
+
+   async deleteSalary(userId: string): Promise<Salary> {
+     try {
+       return await this.salaryModel.findOneAndDelete({ employeeID: userId });
+     } catch (error) {
+       throw new Error('Failed to delete salary');
+     }
+   }
+
+  async softDeleteSalaryById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    return this.salaryModel.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deleteDate: currentDate }, 
+      { new: true }
+    )
   }
 
   async updateSalary(
@@ -176,6 +215,7 @@ export class SalaryService {
             grossSalary: prevSalaryData.grossSalary,
             total: prevSalaryData.total,
             paid: false,
+            isDeleted:false,
           };
 
           await this.create(newSalary);

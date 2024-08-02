@@ -27,10 +27,7 @@ export class AssetsController {
 
   @Delete(':id')
   async deleteByName(@Param('id') id: string) {
-    const result = await this.assetsService.deleteAssetsById(id);
-    if (result.deletedCount === 0) {
-      throw new HttpException('No assets found for the given user', 404);
-    }
+    const result = await this.assetsService.softDeleteAssetById(id);
     return result;
   }
 

@@ -58,4 +58,8 @@ export class SalaryDTO {
 
   @IsBoolean()
   readonly paid?: boolean;
+  
+
+    isDeleted:boolean;
+    deleteDate?:Date;
 }
