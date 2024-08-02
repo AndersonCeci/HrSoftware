@@ -12,7 +12,7 @@ import RecruitmentPage from "./Recruitments/RecruitmentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
 import RequestedLeavePage from "./DayOff/RequestedLeavePage";
-import CalendarLeavePage from "./CalendarLeavePage"
+import CalendarLeavePage from "./CalendarLeaves/CalendarLeavePage"
 import SettingsPage from "./Settings/SettingsPage";
 import ProfilePage from "./ProfilePage"
 

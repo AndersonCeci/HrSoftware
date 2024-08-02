@@ -1,7 +1,17 @@
+import { color } from "chart.js/helpers";
+
 export const selectOption = [
-  "Applied",
-  "Rejected",
-  "1st Interview",
-  "2nd Interview",
-  "Offer Made",
+	{ label: "Applied", color: "cyan" },
+	{ label: "Rejected", color: "red" },
+	{ label: "1st Interview", color: "gold" },
+	{ label: "2nd Interview", color: "lime" },
+	{ label: "Offer Made", color: "blue" },
+];
+
+export const references = [
+	{ value: "Linkedin", label: "LinkedIn" },
+	{ value: "Instagram", label: "Instagram" },
+	{ value: "Facebook", label: "Facebook" },
+	{ value: "Dua Pune", label: "Dua Pune" },
+	{ value: "Others", label: "Other" },
 ];

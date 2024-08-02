@@ -63,7 +63,7 @@ export function getFormValues(form: any) {
 		startingDate: form.getFieldValue("startingDate").format("D/M/YYYY"),
 		contract: "Permanent",
 		nID: form.getFieldValue("nID"),
-		username: form.getFieldValue("name") + form.getFieldValue("surname"),
+		username: form.getFieldValue("email").split("@")[0],
 		password: "codevider",
 		gender: form.getFieldValue("gender"),
 	};

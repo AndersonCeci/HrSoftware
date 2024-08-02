@@ -16,46 +16,46 @@ const { Content, Sider } = Layout;
 import { useState, useEffect } from "react";
 
 const RootLayout: React.FC = () => {
-  const [colapsed, setColapsed] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const token = localStorage.getItem("userData");
-  const navigate = useNavigate();
+	const [colapsed, setColapsed] = useState<boolean>(false);
+	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const token = localStorage.getItem("userData");
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
+	useEffect(() => {
+		if (!token) {
+			navigate("/");
+		}
+	}, [token, navigate]);
 
-  // useEffect(() => {
-  // 	const verifyToken = async (token: string) => {
-  // 	  try {
-  // 		const response = await fetch('http://localhost:3000/verify', {
-  // 		  method: 'GET',
-  // 		  headers: {
-  // 			'Authorization': `Bearer ${token}`,
-  // 		  },
-  // 		});
+	// useEffect(() => {
+	// 	const verifyToken = async (token: string) => {
+	// 	  try {
+	// 		const response = await fetch('http://localhost:3000/verify', {
+	// 		  method: 'GET',
+	// 		  headers: {
+	// 			'Authorization': `Bearer ${token}`,
+	// 		  },
+	// 		});
 
-  // 		if (!response.ok) {
-  // 		  throw new Error('Token is invalid or expired');
-  // 		}
+	// 		if (!response.ok) {
+	// 		  throw new Error('Token is invalid or expired');
+	// 		}
 
-  // 		const data = await response.json();
-  // 		return data;
-  // 	  } catch (error) {
-  // 		console.error(error);
-  // 		navigate('/');
-  // 	  }
-  // 	};
+	// 		const data = await response.json();
+	// 		return data;
+	// 	  } catch (error) {
+	// 		console.error(error);
+	// 		navigate('/');
+	// 	  }
+	// 	};
 
-  // 	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  // 	if (!userData.token) {
-  // 	  navigate("/");
-  // 	} else {
-  // 	  verifyToken(userData.token);
-  // 	}
-  //   }, []);
+	// 	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+	// 	if (!userData.token) {
+	// 	  navigate("/");
+	// 	} else {
+	// 	  verifyToken(userData.token);
+	// 	}
+	//   }, []);
 
 	function onCollapse() {
 		// console.log(collapsed);
@@ -95,15 +95,17 @@ const RootLayout: React.FC = () => {
 						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
 					>
 						{<LogedUserPanel colapsed={colapsed} />}
-						<NavigationMenu colapsed={colapsed}/>
+						<NavigationMenu colapsed={colapsed} />
 					</Sider>
 					<Content className="outlet-container">
 						<FloatButton
-							icon={<ExclamationCircleOutlined  />}
+							className="float-button "
+							icon={<ExclamationCircleOutlined />}
 							type="primary"
 							style={{ right: 12, bottom: 12 }}
 							onClick={() => navigate("/company-background")}
 						/>
+
 						<Outlet />
 					</Content>
 				</Layout>

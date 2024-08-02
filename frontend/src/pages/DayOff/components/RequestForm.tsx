@@ -1,97 +1,59 @@
-import { DatePicker, Form, Input, Layout, Select } from "antd";
+import { Form } from "antd";
+import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import Button from "../../../components/Shared/Button";
 
-import { Content } from "antd/es/layout/layout";
-import dayjs from "dayjs";
-import { GetProps } from "antd";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import TextArea from "antd/es/input/TextArea";
 import { ButtonType } from "../../../enums/Button";
-import { RequestedDataType } from "../../../types/RequestedLeave";
-import { RequestedTableProps } from "./RequestedTable";
+import { RequestedDataType } from "../types/RequestedLeave";
+import { useEffect, useState } from "react";
+import useHttp from "../../../hooks/useHttp";
 
+const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+const RequestForm = ({ onAdd }: any) => {
+	const [form] = Form.useForm<RequestedDataType>();
+	const [, , fetchData] = useHttp();
+	const [employee, setEmployee] = useState<any[]>([]);
 
-dayjs.extend(customParseFormat);
-const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-  return current && current < dayjs().startOf("day");
-};
+	useEffect(() => {
+		fetchData({ url: `${EMPLOYEE}/usernames` }, (data) => {
+			setEmployee(data);
+		});
+	}, []);
 
-const RequestForm = ({ onAdd }: RequestedTableProps) => {
-  const [form] = Form.useForm<RequestedDataType>();
+	const handleSubmit = (value: any) => {
+		const values = {
+			employeeId: "66acdd720919c203da4597ca",
+			StartTime: value.StartTime.format("YYYY-MM-DD"),
+			EndTime: value.EndTime ? value.EndTime.format("YYYY-MM-DD") : null,
+			leaveType: value.leaveType,
+			description: value.reason,
+		};
+		onAdd(values);
+	};
 
+	const type = [
+		{ label: "Annual Leave", value: "annual" },
+		{ label: "Sick Leave", value: "sick" },
+		{ label: "Other", value: "other" },
+	];
 
-  const handleSubmit = (values: any) => {
-    const newData = {
-      ...values,
-      id: Math.random(),
-      name:values.name,
-      leaveFrom: dayjs(values.leaveFrom).format("DD/MM/YYYY"),
-      leaveTo: dayjs(values.leaveTo).format("DD/MM/YYYY"),
-      reason: values.reason
-    };
-    if (onAdd) {
-      onAdd(newData);
-    }
-    form.resetFields();
-  };
-
-  const type = [
-    { label: "Annual Leave", value: "Annual Leave" },
-    { label: "Sick Leave", value: "Sick Leave" },
-    { label: "Other", value: "Other"}
-  ];
-  return (
-    <Layout style={{ width: "100%", background: "#fff" }}>
-      <Content>
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <h2>Leave Request Form</h2>
-          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-            <Input/>
-          </Form.Item>
-          <Form.Item
-            label="Leave From"
-            name="leaveFrom"
-            rules={[{ required: true }]}
-          >
-            <DatePicker
-              style={{ width: "100%" }}
-              format={"DD/MM/YYYY"}
-              disabledDate={disabledDate}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Leave To"
-            name="leaveTo"
-            rules={[{ required: true }]}
-          >
-            <DatePicker
-              style={{ width: "100%" }}
-              format={"DD/MM/YYYY"}
-              disabledDate={disabledDate}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Leave Type"
-            name="leaveType"
-            rules={[{ required: true }]}
-          >
-            <Select
-              style={{ width: "100%" }}
-              options={type}
-              placeholder="Choose a leave type"
-            ></Select>
-          </Form.Item>
-          <Form.Item label="Reason" name="reason">
-            <TextArea rows={4} />
-          </Form.Item>
-          <Button type={ButtonType.PRIMARY} htmlType="submit">
-            Apply
-          </Button>
-        </Form>
-      </Content>
-    </Layout>
-  );
+	return (
+		<Form form={form} name="basic" layout="vertical" onFinish={handleSubmit} autoComplete="off">
+			<FormInputs.AutoComplete
+				name="username"
+				label="Username"
+				required
+				options={employee}
+				isMatchWithOption
+			/>
+			<FormInputs.DatePicker name="StartTime" label="Leave From" required isDisabledDate />
+			<FormInputs.DatePicker name="EndTime" label="Leave To" isDisabledDate dependsOn="StartTime" />
+			<FormInputs.Select name="leaveType" label="Leave Type" options={type} required />
+			<FormInputs.Input name="reason" label="Reason" type="textarea" />
+			<Button type={ButtonType.PRIMARY} htmlType="submit">
+				Apply
+			</Button>
+		</Form>
+	);
 };
 export default RequestForm;

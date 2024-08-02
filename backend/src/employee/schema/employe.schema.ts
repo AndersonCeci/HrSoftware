@@ -20,7 +20,7 @@ export class Employee extends Document {
   email: string;
 
   @Prop({ required: true, unique: true })
-  @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
+  @Matches(/^[A-Z]\d{8}[A-Z]$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
   @Prop()
@@ -47,7 +47,7 @@ export class Employee extends Document {
   @Prop()
   contract: string;
 
-  @Prop({default:false})
+  @Prop({ default: false })
   deleteDate: string;
 }
 

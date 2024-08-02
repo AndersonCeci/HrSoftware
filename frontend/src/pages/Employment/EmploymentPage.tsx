@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { EmployeeDataType } from "./types/Employee";
 import { getColumns } from "./utils/EmployeeColumn";
 import useHttp from "../../hooks/useHttp";
+import Modal from "../../components/Shared/Modal";
 import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
@@ -54,27 +55,34 @@ const EmploymentPage: React.FC = () => {
     );
   }
 
-  function handleDeleteButtonClick(record: EmployeeDataType) {
-    sendRequest(
-      {
-        url: `${API_DELETE_EMPLOYEE}/${record._id}`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-		
-      },
-      () => {
-        setTableData((prev) => prev.filter((item) => item._id !== record._id));
-        setIsDeleting(false);
-      }
-    );
-  }
+	function handleDeleteButtonClick(record: EmployeeDataType) {
+		setIsDeleting(true);
+		setEditedData(record);
+	}
 
-  function handlClose() {
-    setOpen(false);
-    setEditedData(undefined);
-  }
+	function handleDeleteModalOk() {
+		sendRequest(
+			{
+				url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			() => {
+				setTableData((prev) => prev.filter((item) => item._id !== editedData?._id));
+				setIsDeleting(false);
+			},
+		);
+
+		setIsDeleting(false);
+		setEditedData(undefined);
+	}
+
+	function handlClose(fn: (arg: boolean) => void) {
+		fn(false);
+		setEditedData(undefined);
+	}
 
   const columns = getColumns(
     tableData,
@@ -82,25 +90,29 @@ const EmploymentPage: React.FC = () => {
     handleDeleteButtonClick
   );
 
-  return (
-    <>
-      <Drawer height={500} isOpen={open} onClose={handlClose}>
-        <AddEmployeeForm
-          selectedEmployee={editedData}
-          onAdd={handleAddNewEmployee}
-          onEdit={handleEditEmployee}
-        />
-      </Drawer>
-      <TableHeader title={t("employment")}  onClick={() => setOpen(true)} />
-      <section className="test">
-        {isLoading && !isDeleting ? (
-          <Loader />
-        ) : (
-          <Table columns={columns} data={tableData} fixed />
-        )}
-      </section>
-    </>
-  );
+	return (
+		<>
+			<Drawer height={500} isOpen={open} onClose={() => handlClose(setOpen)}>
+				<AddEmployeeForm
+					selectedEmployee={editedData}
+					onAdd={handleAddNewEmployee}
+					onEdit={handleEditEmployee}
+				/>
+			</Drawer>
+			<Modal
+				title="Are you sure"
+				isOpen={isDeleting}
+				onOk={handleDeleteModalOk}
+				onCancel={() => handlClose(setIsDeleting)}
+			>
+				Are you sure you want to delete {editedData?.name}?
+			</Modal>
+			<TableHeader title="Employment" onClick={() => setOpen(true)} />
+			<section className="test">
+				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
+			</section>
+		</>
+	);
 };
 
 export default EmploymentPage;

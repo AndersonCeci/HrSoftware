@@ -9,7 +9,7 @@ const SecondStep = () => {
 	const position = getDevRoles().map((role) => ({ label: role, value: role }));
 	console.log("position", position);
 	position.push({ label: "Project Manager", value: "projectManager" });
-
+	console.log("position", position);
 	return (
 		<Flex vertical>
 			<Row gutter={16}>

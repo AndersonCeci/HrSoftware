@@ -29,7 +29,7 @@ const DismissedPage: React.FC = () => {
 
     return (
         <>
-     <TableHeader title="Dismissed"/>
+     <TableHeader title="Dismissed" hideButton/>
 			<section className="test">
 				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
 			</section>
