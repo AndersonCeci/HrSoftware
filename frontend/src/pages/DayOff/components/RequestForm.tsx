@@ -22,9 +22,9 @@ const RequestForm = ({ onAdd }: any) => {
 
 	const handleSubmit = (value: any) => {
 		const values = {
-			employeeId: "66ab99397c84c52c5cfde9a6",
+			employeeId: "66acdd720919c203da4597ca",
 			StartTime: value.StartTime.format("YYYY-MM-DD"),
-			EndTime: value.EndTime.format("YYYY-MM-DD"),
+			EndTime: value.EndTime ? value.EndTime.format("YYYY-MM-DD") : null,
 			leaveType: value.leaveType,
 			description: value.reason,
 		};

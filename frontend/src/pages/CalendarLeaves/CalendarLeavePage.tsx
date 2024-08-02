@@ -12,7 +12,7 @@ const CalendarLeavePage: React.FC = () => {
 	useEffect(() => {
 		fetchData(
 			{
-				url: API,
+				url: `${API}/accepted`,
 			},
 			(data) => {
 				setDataSource(data);
