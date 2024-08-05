@@ -25,10 +25,9 @@ const beforeUpload = (file: FileType) => {
   return isJpgOrPng && isLt2M;
 };
 
-
+// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const EditProfile: React.FC = ({ visible, handleOk, handleCancel }) => {
-// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 //     const [isLoading, error, sendRequest] = useHttp();
 

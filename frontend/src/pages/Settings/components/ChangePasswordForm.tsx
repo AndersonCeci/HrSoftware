@@ -138,18 +138,21 @@ const ChangePasswordForm = () => {
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        // width: "auto",
+        // width:"750px",
+        margin:"20px"
         // justifyContent: 'center',
         // alignItems: 'center',
         // height: '100vh',
       }}
     >
-      <Card title={t(`changePassoword`)} style={{ width: 400 }}>
+      <Card title={t(`changePassoword`)}>
         <Form
           form={form}
           id="change-password-form"
           onFinish={onChangePassword}
-          layout="vertical"
+          layout="horizontal"
         >
           <Form.Item
             label="Old Password"
@@ -158,7 +161,7 @@ const ChangePasswordForm = () => {
               { required: true, message: "Please input your old password!" },
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{width:"400px", float:"right"}}/>
           </Form.Item>
           <Form.Item
             label="New Password"
@@ -170,7 +173,7 @@ const ChangePasswordForm = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{width:"400px", float:"right"}}/>
           </Form.Item>
           <Form.Item
             label="Confirm Password"
@@ -183,10 +186,10 @@ const ChangePasswordForm = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{width:"400px", float:"right"}}/>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button type="primary" htmlType="submit" style={{ float:"right" }}>
               {t(`changePassoword`)}
             </Button>
           </Form.Item>
