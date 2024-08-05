@@ -10,6 +10,8 @@ import {
   UsePipes,
   HttpException,
   Patch,
+  Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
@@ -30,9 +32,26 @@ export class EmployeeController {
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
+  @Get("/search")
+  async search(
+    @Query('name') name?: string,
+    @Query('surname') surname?: string,
+  ){
+    try {
+      const result = await this.employeeService.searchEmployee(name, surname);
+      if (!result) {
+        throw new NotFoundException('No employees found matching the given criteria.');
+      }
+      return result;
+    } catch (error) {
+      throw new NotFoundException(error.message || 'An error occurred while searching for employees.');
+    }
+  }
+
+
 
   @Get('usernames')
-  getUsernames(): Promise<string[]> {
+  getUsernames() {
     return this.employeeService.getUsernames();
   }
 
@@ -48,8 +67,6 @@ export class EmployeeController {
   ): Promise<Employee | null> {
     return this.employeeService.update(id, updateEmployeeDto);
   }
-
-  
 
   @Delete(':id')
   async softDeleteById(@Param('id') id: string) {

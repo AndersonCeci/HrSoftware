@@ -12,20 +12,21 @@ const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps, ref) => {
 	const formRef = useRef<any>();
 	const [form] = Form.useForm();
-	const [employeeList, setEmployeeList] = useState<any[]>([]);
+	const [employeeList, setEmployeeList] = useState([]);
 	const [, , sendRequest] = useHttp();
 
+	console.log(employeeList);
+
 	useEffect(() => {
+		console.log("Fetching employee list");
 		sendRequest({ url: `${EMPLOYEE}/usernames` }, (responseData: any) =>
 			setEmployeeList(responseData),
 		);
 	}, []);
 
-	console.log("HELLO", employeeList);
-
 	const initialValues = {
 		assetType: selectedElement ? selectedElement.assetType : "",
-		dateGiven: selectedElement ? dayjs(selectedElement.dateGiven, "D/M/YYYY") : dayjs(),
+		dateGiven: selectedElement ? dayjs(selectedElement.dateGiven) : dayjs(),
 		userName: selectedElement ? selectedElement.userName : "",
 	};
 
@@ -36,12 +37,10 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps
 	}));
 
 	function onFinish(values: any) {
-		const { dateGiven } = values;
-
 		const newAsset = {
 			_id: selectedElement?._id,
 			assetType: values.assetType,
-			dateGiven: dayjs(dateGiven).format("D/M/YYYY"),
+			dateGiven: values.dateGiven.format("YYYY-MM-DD"),
 			userName: values.userName,
 		};
 
@@ -75,7 +74,10 @@ const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps
 				label="Employee"
 				name="userName"
 				required
-				options={employeeList}
+				options={employeeList.map((employee: any) => ({
+					value: employee.username,
+					label: employee.username,
+				}))}
 				isMatchWithOption
 			/>
 		</Form>

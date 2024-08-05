@@ -8,11 +8,11 @@ export interface Salary {
   netSalary: number;
   dateTaken: Date;
   workDays: number;
-  bonuses: Bonus[];
+  bonuses?: Bonus[];
   socialSecurityContributions: number;
   healthInsurance: number;
   grossSalary: number;
   total: number;
-  paid: boolean;
+  paid?: boolean;
   employeeDetails?: EmployeeDetails;
 }

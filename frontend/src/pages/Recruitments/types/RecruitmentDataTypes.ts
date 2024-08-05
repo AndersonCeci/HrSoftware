@@ -1,9 +1,10 @@
 export interface RecrutmentDataType {
   _id: string;
   name: string;
+  surname: string;
   email: string;
   position: string;
-  applicationPhase: string;
-  dateSubmitted: string;
+  stage: string;
+  submittedDate: string;
   reference: string;
 }

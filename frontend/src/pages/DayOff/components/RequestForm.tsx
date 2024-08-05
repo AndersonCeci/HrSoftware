@@ -15,14 +15,16 @@ const RequestForm = ({ onAdd }: any) => {
 	const [employee, setEmployee] = useState<any[]>([]);
 
 	useEffect(() => {
-		fetchData({ url: `${EMPLOYEE}/usernames` }, (data) => {
-			setEmployee(data);
-		});
+		console.log("Fetching employee list");
+		fetchData({ url: `${EMPLOYEE}/usernames` }, (responseData: any) => setEmployee(responseData));
 	}, []);
+	console.log(employee);
 
 	const handleSubmit = (value: any) => {
+		const selected = employee.find((e) => e.username === value.username);
+				
 		const values = {
-			employeeId: "66acdd720919c203da4597ca",
+			employeeId: selected.id,
 			StartTime: value.StartTime.format("YYYY-MM-DD"),
 			EndTime: value.EndTime ? value.EndTime.format("YYYY-MM-DD") : null,
 			leaveType: value.leaveType,
@@ -43,7 +45,7 @@ const RequestForm = ({ onAdd }: any) => {
 				name="username"
 				label="Username"
 				required
-				options={employee}
+				options={employee.map((e) => ({ label: e.username, value: e.username }))}
 				isMatchWithOption
 			/>
 			<FormInputs.DatePicker name="StartTime" label="Leave From" required isDisabledDate />

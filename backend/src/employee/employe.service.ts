@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Employee } from './schema/employe.schema';
@@ -18,17 +18,14 @@ export class EmployeeService {
   findAll(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
   }
-  
 
   findLeft(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
   }
 
-
   findOne(id: string): Promise<Employee | null> {
     return this.employeeModel.findById(id).exec();
   }
-
 
   update(id: string, updateEmployeeDto: CreateEmployeeDto) {
     return this.employeeModel.findByIdAndUpdate(id, updateEmployeeDto, {
@@ -36,30 +33,60 @@ export class EmployeeService {
     });
   }
 
-   delete(id: string): Promise<Employee | null> {
-     return this.employeeModel.findByIdAndDelete(id);
-   }
-   async findNameById(id: string): Promise<string | null> {
+  delete(id: string): Promise<Employee | null> {
+    return this.employeeModel.findByIdAndDelete(id);
+  }
+
+  async findNameById(id: string): Promise<string | null> {
     const employee = await this.employeeModel.findById(id).exec();
     if (employee) {
       return employee.name;
     }
     return null;
   }
-   softDeleteEmployeeById(id: string): Promise<Event> {
+
+  softDeleteEmployeeById(id: string): Promise<Event> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    
+
     return this.employeeModel.findByIdAndUpdate(
-      id, 
-      { isDeleted: true, deleteDate: currentDate }, 
-      { new: true }
-    )
+      id,
+      { isDeleted: true, deleteDate: currentDate },
+      { new: true },
+    );
   }
 
-  async getUsernames(): Promise<string[]> {
-    const employees = await this.employeeModel.find( { isDeleted: false } ).select( 'username' ).exec();
-    const usernameArray = employees.map((employee) => employee.username);
-    return usernameArray;
+  async getUsernames(): Promise<{ id: string; username: string }[]> {
+    const employees = await this.employeeModel
+      .find({ deleteDate: false })
+      .select('_id username')
+      .exec();
+    const result = employees.map((employee) => {
+      return {
+        id: employee._id.toString(),
+        username: employee.username,
+      };
+    });
+
+    return result;
   }
-}
+
+  async searchEmployee(name?: string, surname?: string): Promise<Employee[] | null> {
+    try {
+      const query: any = {};
+      if (name) {
+        query.name = { $regex: new RegExp(name, 'i') };
+      }
+      if (surname) {
+        query.surname = { $regex: new RegExp(surname, 'i') };
+      }
+      const employees = await this.employeeModel.find(query);
+  
+      return employees.length > 0 ? employees : null;
+    } catch (error) {
+      throw new Error('An error occurred while searching for employees.');
+    }
+  }
+  
+  
+  }
