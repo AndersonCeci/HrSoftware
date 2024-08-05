@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Employee, EmployeeSchema } from './schema/employe.schema';
 import { EmployeeController } from './employe.controller';
 import { EmployeeService } from './employe.service';
+import { UsersModule } from 'src/users/users.module';
+import { UserService } from 'src/users/users.service';
 
 
 @Module({
@@ -12,7 +14,9 @@ import { EmployeeService } from './employe.service';
         name: Employee.name,
         schema: EmployeeSchema,
       },
+      ,
     ]),
+    UsersModule,
   ],
   providers: [EmployeeService],
   controllers: [EmployeeController],

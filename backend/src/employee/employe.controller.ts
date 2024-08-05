@@ -17,6 +17,7 @@ import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
+import { UserService } from 'src/users/users.service';
 
 @Controller('employees')
 export class EmployeeController {
@@ -50,10 +51,10 @@ export class EmployeeController {
 
 
 
-  @Get('usernames')
-  getUsernames() {
-    return this.employeeService.getUsernames();
-  }
+  // @Get('usernames')
+  // getUsernames() {
+  //   return this.employeeService.getUsernames();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Employee | null> {
@@ -69,13 +70,14 @@ export class EmployeeController {
   }
 
   @Delete(':id')
-  async softDeleteById(@Param('id') id: string) {
+  async softDeleteEmployById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     const result = await this.employeeService.softDeleteEmployeeById(id);
     if (!result) {
-      throw new HttpException('No assets found for the given ID', 404);
+      throw new HttpException('No employe found for the given ID', 404);
     }
+
     return result;
   }
 }
