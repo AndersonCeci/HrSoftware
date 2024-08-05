@@ -7,7 +7,7 @@ import { message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 const API = import.meta.env.REACT_APP_SALARY;
 
-interface EditSalaryValues {
+export interface EditSalaryValues {
   _id: string;
   dateTaken: Date;
   employeeID: string;
@@ -67,7 +67,7 @@ export const useSalaryHook = () => {
   ) => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/salary", {
+      const response = await axios.get(API, {
         params: { page, limit, ...filters },
       });
       const { data, meta } = response.data;
@@ -158,6 +158,7 @@ export const useSalaryHook = () => {
   };
 
   const handleEditSubmit = (values: EditSalaryValues) => {
+    getSelectedSalary(values._id);
     if (!selectedSalary) return;
     const salary: Salary = {
       _id: values._id,

@@ -3,7 +3,7 @@ import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
 import columns from "./components/TableColumns";
 import { useRef, useState, useEffect } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useSalaryHook } from "./context/hook";
 import { Salary } from "../../types/SalaryProps";
 import { Button, Col, DatePicker, Input, Row, Space } from "antd";
@@ -14,7 +14,7 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 
 const SalaryContent = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const addBonusRef = useRef<Salary>(null);
   const editFormRef = useRef<Salary>(null);
@@ -58,6 +58,7 @@ const SalaryContent = () => {
   };
 
   const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
+    console.log("dates:", dates);
     if (dates) {
       const [start, end] = dates;
       setSelectedRange([start!, end!]);
@@ -80,16 +81,20 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader title={"Salaries"} onClick={handleModal}></TableHeader>
-      {t("salariesTitle")}
-      <Row title="Filters" gutter={16} align="middle">
+      <TableHeader
+        title={t("salariesTitle")}
+        onClick={handleModal}
+      ></TableHeader>
+
+      <Row title="Filters" gutter={10}>
         <Col>
           <Space direction="vertical" size={12}>
             <RangePicker
               picker="month"
-              onChange={handleRangeChange}
               value={selectedRange}
               defaultValue={[startOfMonth, endOfMonth]}
+              onCalendarChange={handleRangeChange}
+              allowClear={false}
             />
           </Space>
         </Col>
@@ -102,10 +107,9 @@ const SalaryContent = () => {
             allowClear
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-          
           />
         </Col>
-        <Col flex="auto" style={{ textAlign: "right" }}>
+        <Col flex="auto" style={{ textAlign: "left" }}>
           <Button type="primary" onClick={handleResetFilters}>
             Reset filters
           </Button>
@@ -113,7 +117,12 @@ const SalaryContent = () => {
       </Row>
       <Table
         data={tableData}
-        columns={columns({ handleAddBonus, handleModal, tableData })}
+        columns={columns({
+          handleAddBonus,
+          handleModal,
+          tableData,
+          handleEditSubmit,
+        })}
         fixed
         pagination={{
           position: ["bottomRight"],

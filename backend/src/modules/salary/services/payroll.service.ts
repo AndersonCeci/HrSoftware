@@ -29,12 +29,11 @@ export class PayrollService {
       socialInsuranceEmployee -
       healthInsuranceEmployee -
       incomeTax;
-    return {
-      netSalary,
-      socialInsuranceEmployee,
-      healthInsuranceEmployee,
-      incomeTax,
-    };
+      return {
+        netSalary: this.roundToTwoDecimalPlaces(netSalary),
+        socialInsuranceEmployee: this.roundToTwoDecimalPlaces(socialInsuranceEmployee),
+        healthInsuranceEmployee: this.roundToTwoDecimalPlaces(healthInsuranceEmployee),
+        incomeTax: this.roundToTwoDecimalPlaces(incomeTax),};
   }
 
   private getHealthInsuranceEmployee(taxableSalary: number): number {
@@ -64,5 +63,8 @@ export class PayrollService {
         this.INCOME_TAX_COEFICIENT_2_23Percent +
       taxForInterval200000
     );
+  }
+   private roundToTwoDecimalPlaces(value: number): number {
+    return parseFloat(value.toFixed(2));
   }
 }
