@@ -16,7 +16,7 @@ const TableHeader = ({
 	const { t } = useTranslation();
 	return (
 		<Flex justify="space-between" align="center">
-			<Typography.Title>{title}</Typography.Title>
+			<Typography.Title level={2} >{title}</Typography.Title>
 			{!hideButton && (
 				<Button
 					icon={<PlusCircleOutlined />}

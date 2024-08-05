@@ -67,16 +67,13 @@ export class SalaryController {
     return await this.salaryService.updateSalary(salaryID, dto);
   }
 
-
-
-  @Delete(":userId")
-  async deleteSalary(
-    @Param('userId') userId: string,
-  ) {
+  @Delete(':userId')
+  async deleteSalary(@Param('userId') userId: string) {
     return await this.salaryService.softDeleteSalaryById(userId);
   }
-  @Post('net-salary')
-  async netSalary(@Body('grossSalary') grossSalary: number): Promise<Payroll> {
+
+  @Get('net-salary')
+  async netSalary(@Query('grossSalary') grossSalary: number): Promise<Payroll> {
     const res = this.payrollService.calculateNetSalary(grossSalary);
     return res;
   }
