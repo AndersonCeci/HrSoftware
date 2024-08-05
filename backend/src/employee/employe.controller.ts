@@ -32,7 +32,7 @@ export class EmployeeController {
   }
 
   @Get('usernames')
-  getUsernames(): Promise<string[]> {
+  getUsernames() {
     return this.employeeService.getUsernames();
   }
 
@@ -48,8 +48,6 @@ export class EmployeeController {
   ): Promise<Employee | null> {
     return this.employeeService.update(id, updateEmployeeDto);
   }
-
-  
 
   @Delete(':id')
   async softDeleteById(@Param('id') id: string) {

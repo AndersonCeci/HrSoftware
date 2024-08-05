@@ -18,17 +18,14 @@ export class EmployeeService {
   findAll(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
   }
-  
 
   findLeft(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
   }
 
-
   findOne(id: string): Promise<Employee | null> {
     return this.employeeModel.findById(id).exec();
   }
-
 
   update(id: string, updateEmployeeDto: CreateEmployeeDto) {
     return this.employeeModel.findByIdAndUpdate(id, updateEmployeeDto, {
@@ -36,30 +33,41 @@ export class EmployeeService {
     });
   }
 
-   delete(id: string): Promise<Employee | null> {
-     return this.employeeModel.findByIdAndDelete(id);
-   }
-   async findNameById(id: string): Promise<string | null> {
+  delete(id: string): Promise<Employee | null> {
+    return this.employeeModel.findByIdAndDelete(id);
+  }
+
+  async findNameById(id: string): Promise<string | null> {
     const employee = await this.employeeModel.findById(id).exec();
     if (employee) {
       return employee.name;
     }
     return null;
   }
-   softDeleteEmployeeById(id: string): Promise<Event> {
+
+  softDeleteEmployeeById(id: string): Promise<Event> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    
+
     return this.employeeModel.findByIdAndUpdate(
-      id, 
-      { isDeleted: true, deleteDate: currentDate }, 
-      { new: true }
-    )
+      id,
+      { isDeleted: true, deleteDate: currentDate },
+      { new: true },
+    );
   }
 
-  async getUsernames(): Promise<string[]> {
-    const employees = await this.employeeModel.find( { isDeleted: false } ).select( 'username' ).exec();
-    const usernameArray = employees.map((employee) => employee.username);
-    return usernameArray;
+  async getUsernames(): Promise<{ id: string; username: string }[]> {
+    const employees = await this.employeeModel
+      .find({ deleteDate: false })
+      .select('_id username')
+      .exec();
+    const result = employees.map((employee) => {
+      return {
+        id: employee._id.toString(),
+        username: employee.username,
+      };
+    });
+
+    return result;
   }
 }

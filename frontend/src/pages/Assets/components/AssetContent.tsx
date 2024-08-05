@@ -88,7 +88,7 @@ const AssetContent = () => {
 				/>
 			</Modal>
 			<TableHeader
-				title={t('assetsTitle')}
+				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}
