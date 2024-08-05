@@ -2,45 +2,46 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Types } from 'mongoose';
-import { Salary } from './schema/salary.schema';
-import { SalaryDTO } from './dto/salaryDTO/salary.dto';
-import { UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
-import { ValidationError } from 'class-validator';
-import { PaginatedDTO } from '../../paginationDTO/paginated.dto';
-import { ExportSalaryDTO } from './dto/salaryDTO/export-salary.dto';
+import { Salary } from '../schema/salary.schema';
+import { SalaryDTO } from '../dto/salaryDTO/salary.dto';
+import { UpdateSalaryDTO } from '../dto/salaryDTO/updateSalary.dto';
+import { PaginatedDTO } from '../../../paginationDTO/paginated.dto';
+import { ExportSalaryDTO } from '../dto/salaryDTO/export-salary.dto';
+import { EmployeeService } from 'src/employee/employe.service';
+import { Employee } from 'src/employee/schema/employe.schema';
+
 
 @Injectable()
 export class SalaryService {
   constructor(
     @InjectModel(Salary.name) private salaryModel: mongoose.Model<Salary>,
+    private readonly employeeService: EmployeeService,
   ) {}
 
   async create(createSalaryDto: SalaryDTO): Promise<Salary> {
     try {
-      const salarySchema = new this.salaryModel({
+      const createdSalary = new this.salaryModel({
         ...createSalaryDto,
         employeeID: new Types.ObjectId(createSalaryDto.employeeID),
+        dateTaken: new Date(createSalaryDto.dateTaken),
       });
-      const createdSalary = new this.salaryModel(salarySchema);
       return await createdSalary.save();
     } catch (error) {
       console.log(error);
     
-      if (error instanceof ValidationError) {
-        throw new ValidationError();
-      }
-
       if (error.code === 11000) {
         const duplicateKey = Object.keys(error.keyPattern).join(', ');
         throw new ConflictException(
           `A salary record with the same ${duplicateKey} already exists.`,
         );
       }
+      throw new InternalServerErrorException('Failed to create salary');
     }
   }
 
@@ -48,7 +49,8 @@ export class SalaryService {
     try {
       return await this.salaryModel.find();
     } catch (error) {
-      throw new Error('Failed to fetch salaries');
+     
+      throw new ConflictException('Failed to fetch salaries');
     }
   }
 
@@ -88,26 +90,36 @@ export class SalaryService {
 
   async updateSalary(
     salaryID: Types.ObjectId,
-    
     newSalary: UpdateSalaryDTO,
   ): Promise<Salary> {
     try {
-      return await this.salaryModel.findByIdAndUpdate(
-        {
-          _id: salaryID,
-         
-        },
-        { $set: newSalary },
+      const { employeeID, ...otherFields } = newSalary;
+      const updatedSalary = await this.salaryModel.findByIdAndUpdate(
+        salaryID,
+        { $set: otherFields },
         { new: true },
       );
+      if (!updatedSalary) {
+        throw new Error('Salary not found');
+      }
+      return updatedSalary;
     } catch (error) {
-      console.error('Failed to update salary:', error);
-      throw new Error('Failed to update salary');
+      throw new InternalServerErrorException('Failed to update salary');
     }
   }
 
-  async clearBonuses(): Promise<void> {
-    await this.salaryModel.updateMany({}, { $set: { bonuses: [] } });
+  async getPrevSalaryDataPerEmployee(
+    employeeID: Types.ObjectId,
+  ): Promise<Salary | null> {
+    try {
+      const { start, end } = this.getPreviousMonthDateRange();
+      return await this.salaryModel.findOne({
+        employeeID: employeeID,
+        dateTaken: { $gte: start, $lte: end },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`Not found: ${error.message}`);
+    }
   }
 
   async getSalariesWithEmployeeInfo(
@@ -138,7 +150,6 @@ export class SalaryService {
     }
 
     const skip = (page - 1) * limit;
-    console.log('matchStage', matchStage);
     const data = await this.salaryModel
       .aggregate([
         { $match: matchStage },
@@ -167,7 +178,7 @@ export class SalaryService {
             healthInsurance: 1,
             grossSalary: 1,
             total: 1,
-            paid:1,
+            paid: 1,
             'employeeDetails.name': 1,
             'employeeDetails.surname': 1,
           },
@@ -181,4 +192,55 @@ export class SalaryService {
 
     return new PaginatedDTO<ExportSalaryDTO[]>(data, page, limit, itemCount);
   }
-} 
+
+  async createSalariesPerMonth(): Promise<void> {
+    try {
+      const employees: Employee[] = await this.employeeService.findAll();
+
+      for (const employee of employees) {
+        const prevSalaryData = await this.getPrevSalaryDataPerEmployee(
+          employee._id as Types.ObjectId,
+        );
+
+        if (prevSalaryData) {
+          const newSalary: SalaryDTO = {
+            employeeID: employee._id as Types.ObjectId,
+            dateTaken: new Date(),
+            netSalary: prevSalaryData.netSalary,
+            workDays: prevSalaryData.workDays,
+            bonuses: [],
+            socialSecurityContributions:
+              prevSalaryData.socialSecurityContributions,
+            healthInsurance: prevSalaryData.healthInsurance,
+            grossSalary: prevSalaryData.grossSalary,
+            total: prevSalaryData.total,
+            paid: false,
+            isDeleted:false,
+          };
+
+          await this.create(newSalary);
+        } else {
+          console.warn(
+            `No previous salary data found for employee ${employee._id}`,
+          );
+        }
+      }
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to create salaries');
+    }
+  }
+
+  private getPreviousMonthDateRange(): { start: Date; end: Date } {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const startMonth = month === 0 ? 11 : month - 1;
+    const startYear = month === 0 ? year - 1 : year;
+
+    const startDate = new Date(startYear, startMonth, 1);
+    const endDate = new Date(startYear, month, 0);
+
+    return { start: startDate, end: endDate };
+  }
+}

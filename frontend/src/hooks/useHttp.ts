@@ -1,14 +1,36 @@
 import { useState } from "react";
 import { sendRequestType } from "../types/UseHttpTypes";
 
-export function postRequestHelper(url: string, body: any, headers?: any) {
+function POSTHelper(url: string, body: any, headers?: any) {
 	return {
-		url: "http://localhost:3000/" + url, 
+		url: url,
 		headers: {
 			"Content-Type": "application/json",
 			...headers,
 		},
 		method: "POST",
+		body: body,
+	};
+}
+
+function DELETEHelper(url: string, headers?: any) {
+	return {
+		url: url,
+		headers: {
+			...headers,
+		},
+		method: "DELETE",
+	};
+}
+
+function PATCHHelper(url: string, body: any, headers?: any) {
+	return {
+		url: url,
+		headers: {
+			"Content-Type": "application/json",
+			...headers,
+		},
+		method: "PATCH",
 		body: body,
 	};
 }
@@ -34,7 +56,7 @@ export default function useHttp() {
 				}
 
 				const responseData = await response.json();
-				applyData(responseData);
+				applyData ? applyData(responseData) : null;
 			} catch (err) {
 				setError("Something went wrong!");
 			}
@@ -45,3 +67,7 @@ export default function useHttp() {
 
 	return [isLoading, error, sendRequest] as const;
 }
+
+useHttp.postRequestHelper = POSTHelper;
+useHttp.deleteRequestHelper = DELETEHelper;
+useHttp.patchRequestHelper = PATCHHelper;

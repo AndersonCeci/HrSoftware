@@ -29,7 +29,13 @@ export function getColumns(
 			filters: getAllUniqueValues(tableData, "assetType"),
 			onFilter: (value, record) => record.assetType.indexOf(value) === 0,
 		}),
-		createTableColumns({ title: "Date", dataIndex: "dateGiven", key: "date", width: 150 }),
+		createTableColumns({
+			title: "Date",
+			dataIndex: "dateGiven",
+			key: "date",
+			width: 150,
+			displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
+		}),
 		createTableColumns({ title: "Code", dataIndex: "assetCode", key: "code", width: 150 }),
 		createTableColumns({
 			title: "Action",

@@ -6,14 +6,12 @@ import useHttp from "../../../hooks/useHttp";
 import Loader from "../../../components/Shared/Loader";
 import { getColumns } from "../utils/LeftColumn";
 
-
-
 const DismissedPage: React.FC = () => {
-    const [tableData, setTableData] = useState<LeftDataType[]>([]);
+	const [tableData, setTableData] = useState<LeftDataType[]>([]);
 	const [isLoading, error, sendRequest] = useHttp();
 	const [isDeleting, setIsDeleting] = useState(false);
 
-    useEffect(() => {
+	useEffect(() => {
 		sendRequest(
 			{
 				url: "http://localhost:3000/left",
@@ -25,17 +23,16 @@ const DismissedPage: React.FC = () => {
 		);
 	}, []);
 
-    const columns = getColumns(tableData);
+	const columns = getColumns(tableData);
 
-    return (
-        <>
-     <TableHeader title="Dismissed"/>
+	return (
+		<>
+			<TableHeader title="Dismissed" hideButton />
 			<section className="test">
 				{isLoading && !isDeleting ? <Loader /> : <Table columns={columns} data={tableData} fixed />}
 			</section>
-            </>
-    )
-
-}
+		</>
+	);
+};
 
 export default DismissedPage;

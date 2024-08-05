@@ -25,6 +25,7 @@ import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { DayoffModule } from './dayoff/dayoff.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
     UploadModule,
     FirebaseModule,
     TasksModule,
+    DayoffModule,
   ],
   controllers: [],
   providers: [AppService, UploadService],

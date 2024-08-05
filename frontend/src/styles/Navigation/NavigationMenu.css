@@ -16,6 +16,8 @@
 
 .logout-button-container{
 	/* margin-top: auto; */
+	display: flex;
+	justify-content: center;
 	margin-bottom: 20px;
 	width: 100%;
 

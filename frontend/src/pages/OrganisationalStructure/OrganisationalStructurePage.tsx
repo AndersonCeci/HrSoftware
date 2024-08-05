@@ -14,7 +14,7 @@ export default function SelectionDemo() {
       key: "person",
       className: "card ceo-card",
       data: {
-        image: { CEO },
+        image: "https://primefaces.org/cdn/primereact/images/avatar/stephenshaw.png",
         name: "Pasho Toska",
         title: "CEO",
       },
@@ -50,125 +50,89 @@ export default function SelectionDemo() {
           },
           children: [
             {
-              // expanded: true,
-              className: "card hr-card",
-              key: "label",
+              className: "card prj-card",
+              key: "person",
               data: {
-                name: "Project 1",
+                image:
+                  "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
+                name: "Jane Doe",
+                title: "Project Manager",
               },
               children: [
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "FullStack",
                   },
                 },
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "FrontEnd",
                   },
                 },
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "BackEnd",
                   },
                 },
               ],
             },
             {
-              // expanded: true,
-              className: "card hr-card",
-              key: "label",
+              className: "card prj-card",
+              key: "person",
               data: {
-                name: "Project 2",
+                image:
+                  "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
+                name: "Jane Doe",
+                title: "Project Manager",
               },
               children: [
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "FullStack",
                   },
                 },
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "FrontEnd",
                   },
                 },
                 {
-                  className: "card hr-card",
+                  className: "card w-card",
                   key: "person",
                   data: {
                     image:
                       "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-                    name: "Elizabeta Guri",
-                    title: "CMO",
+                    name: "Jane Doe",
+                    title: "BackEnd",
                   },
                 },
               ],
             },
-            // {
-            //   // expanded: true,
-            //   className: "card hr-card",
-            //   key: "label",
-            //   data: {
-            //     name: "Project 3",
-            //   },
-            //   children: [
-            //     {
-            //       className: "card hr-card",
-            //       key: "person",
-            //       data: {
-            //         image:
-            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-            //         name: "Elizabeta Guri",
-            //         title: "CMO",
-            //       },
-            //     },
-            //     {
-            //       className: "card hr-card",
-            //       key: "person",
-            //       data: {
-            //         image:
-            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-            //         name: "Elizabeta Guri",
-            //         title: "CMO",
-            //       },
-            //     },
-            //     {
-            //       className: "card hr-card",
-            //       key: "person",
-            //       data: {
-            //         image:
-            //           "https://primefaces.org/cdn/primereact/images/avatar/annafali.png",
-            //         name: "Elizabeta Guri",
-            //         title: "CMO",
-            //       },
-            //     },
-            //   ],
-            // },
           ],
         },
       ],

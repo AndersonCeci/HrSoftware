@@ -10,11 +10,14 @@ import {
   UsePipes,
   HttpException,
   Patch,
+  Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
+import { UserService } from 'src/users/users.service';
 
 @Controller('employees')
 export class EmployeeController {
@@ -30,11 +33,28 @@ export class EmployeeController {
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
-
-  @Get('usernames')
-  getUsernames(): Promise<string[]> {
-    return this.employeeService.getUsernames();
+  @Get("/search")
+  async search(
+    @Query('name') name?: string,
+    @Query('surname') surname?: string,
+  ){
+    try {
+      const result = await this.employeeService.searchEmployee(name, surname);
+      if (!result) {
+        throw new NotFoundException('No employees found matching the given criteria.');
+      }
+      return result;
+    } catch (error) {
+      throw new NotFoundException(error.message || 'An error occurred while searching for employees.');
+    }
   }
+
+
+
+  // @Get('usernames')
+  // getUsernames() {
+  //   return this.employeeService.getUsernames();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Employee | null> {
@@ -50,13 +70,14 @@ export class EmployeeController {
   }
 
   @Delete(':id')
-  async softDeleteById(@Param('id') id: string) {
+  async softDeleteEmployById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     const result = await this.employeeService.softDeleteEmployeeById(id);
     if (!result) {
-      throw new HttpException('No assets found for the given ID', 404);
+      throw new HttpException('No employe found for the given ID', 404);
     }
+
     return result;
   }
 }

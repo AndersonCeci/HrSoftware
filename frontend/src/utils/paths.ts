@@ -37,16 +37,16 @@ export const Paths = {
       },
     ],
   },
-  Settings: {
-    path: "settings",
-    icon: NavigationIcons.IoSettingsOutline,
-    children: [
-      {
-        path: "",
-        pageElement: PageRoutesComponents.SettingsPage,
-      },
-    ],
-  },
+  // Settings: {
+  //   path: "settings",
+  //   icon: NavigationIcons.IoSettingsOutline,
+  //   children: [
+  //     {
+  //       path: "",
+  //       pageElement: PageRoutesComponents.SettingsPage,
+  //     },
+  //   ],
+  // },
   Notifications: {
     path: "notifications",
     icon: NavigationIcons.BellOutlined,

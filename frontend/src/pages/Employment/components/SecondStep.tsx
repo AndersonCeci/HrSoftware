@@ -9,7 +9,7 @@ const SecondStep = () => {
 	const position = getDevRoles().map((role) => ({ label: role, value: role }));
 	console.log("position", position);
 	position.push({ label: "Project Manager", value: "projectManager" });
-
+	console.log("position", position);
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
@@ -36,24 +36,37 @@ const SecondStep = () => {
 					/>
 				</Col>
 
-				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }} lg={{ offset: 1, span: 5 }}>
-					<FormInputs.DatePicker label="Starting on" name="startingDate" required isDisabledDate />
-				</Col>
-				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 21 }} lg={{ offset: 0, span: 5 }}>
-					<Form.Item
-						label="Contract"
-						name="contract"
-						style={{ width: "100%" }}
-						// rules={[{ required: true, message: "Please enter a contract" }]}
-					>
-						<Button size={ButtonSize.LARGE} block icon={<UploadOutlined />}>
-							<Upload>Click to upload</Upload>
-						</Button>
-					</Form.Item>
-				</Col>
-			</Row>
-		</Flex>
-	);
+        <Col
+          xs={{ offset: 1, span: 23 }}
+          md={{ offset: 1, span: 10 }}
+          lg={{ offset: 1, span: 5 }}
+        >
+          <FormInputs.DatePicker
+            label="Starting on"
+            name="startingDate"
+            required
+            isDisabledDate
+          />
+        </Col>
+        <Col
+          xs={{ offset: 1, span: 23 }}
+          md={{ offset: 1, span: 21 }}
+          lg={{ offset: 0, span: 5 }}
+        >
+          <Form.Item
+            label="Contract"
+            name="contract"
+            style={{ width: "100%" }}
+            // rules={[{ required: true, message: "Please enter a contract" }]}
+          >
+            <Button size={ButtonSize.LARGE} block icon={<UploadOutlined />}>
+              <Upload>Click to upload</Upload>
+            </Button>
+          </Form.Item>
+        </Col>
+      </Row>
+    </Flex>
+  );
 };
 
 export default SecondStep;

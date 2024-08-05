@@ -2,15 +2,23 @@ import { Button, Checkbox, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
-import { getMonthName } from "../../../utils/generals";
+import { capitalizeFirstLetter, getMonthName } from "../../../utils/generals";
+import { EditSalaryValues } from "../context/hook";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
-  handleEdit: (employeeID: string) => void;
+  handleModal: (employeeID: string) => void;
+  handleEditSubmit: (salary: EditSalaryValues) => void;
   tableData: any;
 }
 
-const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
+
+
+const columns = ({
+  handleAddBonus,
+  handleModal,
+  handleEditSubmit,
+}: ColumnsParams) => [
   createTableColumns({
     dataIndex: "employeeDetails",
     title: "Employee Details",
@@ -21,7 +29,8 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
       }
       return (
         <span>
-          {employeeDetails.name} {employeeDetails.surname}
+          {capitalizeFirstLetter(employeeDetails.name)}{" "}
+          {capitalizeFirstLetter(employeeDetails.surname)}
         </span>
       );
     },
@@ -85,19 +94,21 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
   createTableColumns({
     dataIndex: "paid",
     title: "Compensated",
-    key: "paid",
-    displayAs: (paid: boolean) => {
-      const newPaid = paid;
+    key: "_id",
+    displayAs: (paid: boolean, record: any) => {
+      let newPaid = paid;
       return (
         <Checkbox
-          checked={newPaid}
           onChange={() => {
-            newPaid === !newPaid;
+            newPaid = !newPaid;
+            handleEditSubmit({ ...record, paid: newPaid });
           }}
+          checked={newPaid}
         ></Checkbox>
       );
     },
   }),
+
   createTableColumns({
     title: "Action",
     dataIndex: "_id",
@@ -111,6 +122,7 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
                 key: "Add Bonus",
                 label: (
                   <Button
+                    style={{ width: "80px" }}
                     type={ButtonType.TEXT}
                     onClick={() => {
                       handleAddBonus(salaryID);
@@ -124,8 +136,9 @@ const columns = ({ handleAddBonus, handleEdit }: ColumnsParams) => [
                 key: "Edit",
                 label: (
                   <Button
+                    style={{ width: "80px", alignItems: "center" }}
                     type={ButtonType.TEXT}
-                    onClick={() => handleEdit(salaryID)}
+                    onClick={() => handleModal(salaryID)}
                   >
                     Edit
                   </Button>

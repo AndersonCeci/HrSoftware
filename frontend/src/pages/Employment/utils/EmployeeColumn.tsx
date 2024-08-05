@@ -111,7 +111,7 @@ export function getColumns(
 					}}
 					trigger={["click"]}
 				>
-					<Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
+					<Button block type={ButtonType.TEXT} icon={<MoreOutlined />} />
 				</Dropdown>
 			),
 			fixed: "right",
