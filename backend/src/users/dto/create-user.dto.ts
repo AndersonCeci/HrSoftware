@@ -1,10 +1,8 @@
-import { IsString, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsString, IsEnum, IsNotEmpty, Matches } from 'class-validator';
 import { Role } from '../schemas/user.schema';
 import { ObjectId, Types } from 'mongoose';
 
-
-export class CreateUserDto
-{
+export class CreateUserDto {
   employID: Types.ObjectId;
 
   @IsNotEmpty()
@@ -19,11 +17,13 @@ export class CreateUserDto
   @IsEnum(Role)
   role: Role;
 
+  @IsString()
+  @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+    message: 'nID must be exactly 10 digits',
+  })
+  email: string;
 
   isDeleted: boolean;
-  
+
   deleteDate?: Date;
-  
-  @IsString()
-  email: string;
 }

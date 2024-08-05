@@ -1,4 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Matches } from 'class-validator';
 import { ObjectId, Types } from 'mongoose';
 import * as muv from 'mongoose-unique-validator';
 import { Employee } from 'src/employee/schema/employe.schema';
@@ -27,6 +28,9 @@ export class User {
   role: Role;
 
   @Prop()
+  @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+    message: 'nID must be exactly 10 digits',
+  })
   email: string;
 
   @Prop()

@@ -12,7 +12,7 @@ import "../styles/steps.css";
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const { Content, Sider } = Layout;
-const devRoles = exporter.getDevRoles();
+// const devRoles = exporter.getDevRoles();
 
 const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormProps) => {
 	const [current, setCurrent] = useState(0);
@@ -48,25 +48,25 @@ const AddEmployeeForm = ({ selectedEmployee, onAdd, onEdit }: AddEmployeeFormPro
 				},
 			);
 
-			if (!selectedEmployee) {
-				const userRole = devRoles.includes(data.position) ? "dev" : data.position.toLowerCase();
+			// if (!selectedEmployee) {
+			// 	const userRole = devRoles.includes(data.position) ? "dev" : data.position.toLowerCase();
 
-				sendRequest(
-					{
-						url: `${import.meta.env.REACT_APP_USER_API}`,
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: {
-							username: data.username,
-							password: data.password,
-							role: userRole,
-						},
-					},
-					(responseData: any) => {
-						console.log(responseData, "response data");
-					},
-				);
-			}
+			// 	sendRequest(
+			// 		{
+			// 			url: `${import.meta.env.REACT_APP_USER_API}`,
+			// 			method: "POST",
+			// 			headers: { "Content-Type": "application/json" },
+			// 			body: {
+			// 				username: data.username,
+			// 				password: data.password,
+			// 				role: userRole,
+			// 			},
+			// 		},
+			// 		(responseData: any) => {
+			// 			console.log(responseData, "response data");
+			// 		},
+			// 	);
+			// }
 		});
 	}
 

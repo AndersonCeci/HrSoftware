@@ -12,30 +12,35 @@ export interface Data {
   color: string;
   path: string;
 }
- 
-const DashboardPage: React.FC = () =>
-{
-   const initialData: Data[] = [
-     {
-       noEmployee: 300,
-       status: t("activestatus"),
-       color: "#ccffcc",
-       path: "/management/employment",
-     },
-     {
-       noEmployee: 100,
-       status: t("remoteEmployee"),
-       color: "#F0E6FA",
-       path: "/management/employment",
-     },
-     {
-       noEmployee: 50,
-       status: t("dismissed"),
-       color: "#ceebfd",
-       path: "/management/dismissed",
-     },
+
+const DashboardPage: React.FC = () => {
+  const initialData: Data[] = [
+    {
+      noEmployee: 300,
+      status: t("activestatus"),
+      color: "#ccffcc",
+      path: "/management/employment",
+    },
+    {
+      noEmployee: 100,
+      status: t("remoteEmployee"),
+      color: "#F0E6FA",
+      path: "/management/employment",
+    },
+    {
+      noEmployee: 50,
+      status: t("dismissed"),
+      color: "#ceebfd",
+      path: "/management/dismissed",
+    },
   ];
-  
+
+  const employID = JSON.parse(
+    localStorage.getItem("userData") || "{}"
+  ).employID;
+
+  console.log("EmployID:", employID);
+
   return (
     <Content
       className="site-layout-background"

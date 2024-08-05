@@ -90,17 +90,16 @@ export class UserService {
     return this.userModel.findOneAndDelete({ id }).exec();
   }
 
- 
-    async softDeleteUserById(id: string): Promise<Event> {
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        
-        return this.userModel.findByIdAndUpdate(
-          id, 
-          { isDeleted: true, deleteDate: currentDate }, 
-          { new: true }
-        )
-      }
+  async softDeleteUserById(id: string): Promise<Event> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    return this.userModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true, deleteDate: currentDate },
+      { new: true },
+    );
+  }
   async deleteUserByEmployID(employID: string): Promise<User | null> {
     return this.userModel.findByIdAndDelete(employID).exec();
   }

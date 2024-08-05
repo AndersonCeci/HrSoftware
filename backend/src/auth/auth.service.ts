@@ -1,3 +1,4 @@
+import { ObjectId, Types } from 'mongoose';
 import {
   Injectable,
   UnauthorizedException,
@@ -13,6 +14,7 @@ type SignInData = {
   username: string;
   role: Role;
   loginRole: Role;
+  employID: Types.ObjectId;
 };
 type AuthResult = {
   accessToken: string;
@@ -20,6 +22,7 @@ type AuthResult = {
   username: string;
   role: Role;
   loginRole: Role;
+  employID: Types.ObjectId;
 };
 
 @Injectable()
@@ -49,6 +52,7 @@ export class AuthService {
         username: user.username,
         role: user.role,
         loginRole: user.loginRole,
+        employID: user.employID
       };
     }
     return null;
@@ -70,6 +74,7 @@ export class AuthService {
       username: user.username,
       role: user.role,
       loginRole: user.loginRole,
+      employID: user.employID,
     };
   }
 
@@ -85,6 +90,8 @@ export class AuthService {
         username: user.username,
         role: user.role,
         loginRole: user.loginRole,
+        employID: user.employID
+
       };
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

@@ -16,7 +16,7 @@ const RecruitmentPage: React.FC = () =>
     null
   );
   const [form] = Form.useForm();
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [ isEditModalVisible, setIsEditModalVisible ] = useState( false );
   useEffect(() => {
     const fetchRecruitments = async () => {
       try {
