@@ -52,19 +52,19 @@ export function getDevRoles() {
 }
 
 export function getFormValues(form: any) {
-  return {
-    name: form.getFieldValue("name"),
-    surname: form.getFieldValue("surname"),
-    email: form.getFieldValue("email"),
-    phoneNumber: form.getFieldValue("phoneNumber"),
-    position: form.getFieldValue("position"),
-    salary: form.getFieldValue("salary"),
-    teamLeader: form.getFieldValue("teamLeader"),
-    startingDate: form.getFieldValue("startingDate").format("D/M/YYYY"),
-    contract: "Permanent",
-    nID: form.getFieldValue("nID"),
-    username: form.getFieldValue("name") + form.getFieldValue("surname"),
-    password: "codevider",
-    gender: form.getFieldValue("gender"),
-  };
+	return {
+		name: form.getFieldValue("name"),
+		surname: form.getFieldValue("surname"),
+		email: form.getFieldValue("email"),
+		phoneNumber: form.getFieldValue("phoneNumber"),
+		position: form.getFieldValue("position"),
+		salary: form.getFieldValue("salary"),
+		teamLeader: form.getFieldValue("teamLeader"),
+		startingDate: form.getFieldValue("startingDate").format("D/M/YYYY"),
+		contract: "Permanent",
+		nID: form.getFieldValue("nID"),
+		username: form.getFieldValue("email").split("@")[0],
+		password: "codevider",
+		gender: form.getFieldValue("gender"),
+	};
 }

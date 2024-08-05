@@ -6,40 +6,35 @@ import { ButtonSize } from "../../../enums/Button";
 import { getDevRoles } from "../utils/helperFunctions";
 
 const SecondStep = () => {
-  const position = getDevRoles().map((role) => ({ label: role, value: role }));
-  console.log("position", position);
-  position.push({ label: "Project Manager", value: "projectManager" });
-
-  return (
-    <Flex vertical>
-      <Row gutter={16}>
-        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-          <FormInputs.Select
-            label="Position"
-            name="position"
-            options={position}
-            required
-          />
-        </Col>
-        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-          <FormInputs.Input
-            label="Salary"
-            name="salary"
-            required
-            defaultValidateRule="number"
-            prefix={<EuroCircleOutlined />}
-          />
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-          <FormInputs.AutoComplete
-            label="Team Leader"
-            name="teamLeader"
-            options={[]}
-            // isMatchWithOption
-          />
-        </Col>
+	const position = getDevRoles().map((role) => ({ label: role, value: role }));
+	console.log("position", position);
+	position.push({ label: "Project Manager", value: "projectManager" });
+	console.log("position", position);
+	return (
+		<Flex vertical>
+			<Row gutter={16}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
+					<FormInputs.Select label="Position" name="position" options={position} required />
+				</Col>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
+					<FormInputs.Input
+						label="Salary"
+						name="salary"
+						required
+						defaultValidateRule="number"
+						prefix={<EuroCircleOutlined />}
+					/>
+				</Col>
+			</Row>
+			<Row gutter={16}>
+				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
+					<FormInputs.AutoComplete
+						label="Team Leader"
+						name="teamLeader"
+						options={[]}
+						// isMatchWithOption
+					/>
+				</Col>
 
         <Col
           xs={{ offset: 1, span: 23 }}
