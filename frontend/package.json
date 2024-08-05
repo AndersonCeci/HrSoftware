@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@esbuild/darwin-arm64": "^0.23.0",
-    "@rollup/rollup-darwin-arm64": "^4.19.2",
+    "@esbuild/win32-x64": "^0.23.0",
+    "@rollup/rollup-win32-x64-msvc": "^4.19.2",
     "@syncfusion/ej2-react-schedule": "^26.2.7",
     "antd": "^5.19.1",
     "axios": "^1.7.2",

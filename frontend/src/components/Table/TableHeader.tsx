@@ -29,6 +29,7 @@ const TableHeader = ({
 				style={{
 					margin: 0,
 				}}
+				level={2}
 			>
 				{title}
 			</Typography.Title>
