@@ -1,6 +1,5 @@
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
 import { MoreOutlined, SearchOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { AiFillFileUnknown } from "react-icons/ai";
 import { TableProps, Dropdown } from "antd";
 import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
 import { IoDocumentAttach } from "react-icons/io5";

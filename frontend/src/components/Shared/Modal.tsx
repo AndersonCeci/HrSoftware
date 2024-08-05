@@ -23,9 +23,6 @@ const Modal = ({ children, onOk, onCancel, isOpen, title, isLoading }: ModalProp
 			onCancel={onCancel}
 			onOk={onOk}
 			footer={null}
-			style={{ 
-				minWidth: "fit-content",
-			}}
 		>
 			{children}
 			<Flex justify="flex-end">

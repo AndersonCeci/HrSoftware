@@ -68,7 +68,7 @@ const AssetContent = () => {
 	const display = error ? <div>{error}</div> : <Table columns={columns} data={tableData} />;
 
 	return (
-		<section className="test">
+		<>
 			<Modal
 				title={selectedElement ? "Edit Asset" : "Assign New Asset"}
 				isOpen={isModalVisible}
@@ -88,13 +88,14 @@ const AssetContent = () => {
 				/>
 			</Modal>
 			<TableHeader
-				title={t('assetsTitle')}
+				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}
 			/>
+
 			{!isLoading ? display : <Loader />}
-		</section>
+		</>
 	);
 };
 

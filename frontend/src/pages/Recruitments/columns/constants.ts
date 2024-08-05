@@ -1,5 +1,3 @@
-import { color } from "chart.js/helpers";
-
 export const selectOption = [
 	{ label: "Applied", color: "cyan" },
 	{ label: "Rejected", color: "red" },
