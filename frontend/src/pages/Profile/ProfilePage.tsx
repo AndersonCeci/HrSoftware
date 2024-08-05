@@ -36,8 +36,6 @@ const ProfilePage: React.FC = () => {
     );
   }, []);
 
-  console.log(tableData, 'tsaaaaaa')
-
   const showModal = () => {
     setIsModalVisible(true);
   };
