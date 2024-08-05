@@ -59,14 +59,14 @@ export default function ChangeLanguage() {
             marginTop: "10px",
           }}
         >
-          <div style={{ fontSize: 15, fontWeight: "bold" }}>Theme:</div>
+          {/* <div style={{ fontSize: 15, fontWeight: "bold" }}>Theme:</div>
           <ConfigProvider
             theme={{
               algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
             }}
           >
             <Button onClick={handleClick}> Change Theme to {isDarkMode? "Light" : "Dark"}</Button>
-          </ConfigProvider>
+          </ConfigProvider> */}
         </div>
         <div
           style={{

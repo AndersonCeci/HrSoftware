@@ -14,18 +14,20 @@ import { EmployeeDataType } from "../Employment/types/Employee";
 import SettingsPage from "../Settings/SettingsPage";
 import Loader from "../../components/Shared/Loader";
 
-const API = import.meta.env.REACT_APP_USER_API;
+const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const ProfilePage: React.FC = () => {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+  const EmployeData = JSON.parse(localStorage.getItem("userData") || "{}").employID
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, error, sendRequest] = useHttp();
-  const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
+  const [tableData, setTableData] = useState<EmployeeDataType>();
+
 
   useEffect(() => {
     sendRequest(
       {
-        url: API,
+        url: `${API}/${EmployeData}`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -33,6 +35,8 @@ const ProfilePage: React.FC = () => {
       setTableData
     );
   }, []);
+
+  console.log(tableData, 'tsaaaaaa')
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -113,7 +117,7 @@ const ProfilePage: React.FC = () => {
                 marginBottom: "30px",
               }}
               title="Name"
-              description={userData.name}
+              description={`${tableData?.name} ${tableData?.surname}`}
             />
             <Meta
               avatar={
@@ -133,7 +137,7 @@ const ProfilePage: React.FC = () => {
                 marginBottom: "30px",
               }}
               title="Position"
-              description={userData.role.toUpperCase()}
+              description={tableData?.position}
             />
             <Meta
               avatar={
@@ -153,7 +157,7 @@ const ProfilePage: React.FC = () => {
                 marginBottom: "30px",
               }}
               title="Salary"
-              description={userData.role.toUpperCase()}
+              description={tableData?.salary}
             />
             <Meta
               avatar={
@@ -173,7 +177,7 @@ const ProfilePage: React.FC = () => {
                 marginBottom: "30px",
               }}
               title="Start Date"
-              description={userData.role.toUpperCase()}
+              description={tableData?.startingDate}
             />
             <Meta
               avatar={
@@ -193,7 +197,7 @@ const ProfilePage: React.FC = () => {
                 marginBottom: "30px",
               }}
               title="Email"
-              description={userData.role.toUpperCase()}
+              description={tableData?.email}
             />
             <Meta
               avatar={
@@ -212,7 +216,7 @@ const ProfilePage: React.FC = () => {
                 alignItems: "center",
               }}
               title="Phone Number"
-              description={userData.role.toUpperCase()}
+              description={tableData?.phoneNumber}
             />
           </Card>
         </Flex>
