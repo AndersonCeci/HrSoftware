@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Employee } from './schema/employe.schema';
+import { Employee, Position } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import { UserService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class EmployeeService {
@@ -14,19 +15,36 @@ export class EmployeeService {
   ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    const createdEmploy = await new this.employeeModel(
-      createEmployeeDto,
-    ).save();
+    let role: Role;
+
+    switch (createEmployeeDto.position) {
+      case Position.JuniorFrontEnd:
+      case Position.JuniorBackEnd:
+      case Position.SeniorFrontEnd:
+      case Position.SeniorBackEnd:
+      case Position.FullStack:
+      case Position.DevOps:
+        role = Role.Employee;
+        break;
+      case Position.ProjectManager:
+        role = Role.ProjectManager;
+        break;
+      default:
+        throw new Error('Invalid position');
+    }
+
+    const employeeData = { ...createEmployeeDto, role };
+
+    const createdEmploy = await new this.employeeModel(employeeData).save();
 
     const createUserDto: CreateUserDto = {
       employID: createdEmploy._id as Types.ObjectId,
-      username: createEmployeeDto.username,
-      password: createEmployeeDto.password,
+      username: createEmployeeDto.surname + 'codevider',
+      password: 'codevider',
       email: createEmployeeDto.email,
-      role: createEmployeeDto.position,
+      role: role,
       isDeleted: false,
     };
-
     await this.userService.createUser(createUserDto);
     return createdEmploy;
   }
@@ -69,18 +87,9 @@ export class EmployeeService {
     return updatedEmployee;
   }
 
-  // async getUsernames(): Promise<string[]> {
-  //   const employees = await this.employeeModel
-  //     .find({ isDeleted: false })
-  //     .select('username')
-  //     .exec();
-  //   const usernameArray = employees.map((employee) => employee.username);
-  //   return usernameArray;
-  // }
-
   async getUsernames(): Promise<{ id: string; username: string }[]> {
     const employees = await this.employeeModel
-      .find({ isDeleted: false })
+      .find({ deleteDate: false })
       .select('_id username')
       .exec();
 
