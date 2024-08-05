@@ -71,6 +71,8 @@ const LoginPage: React.FC = () => {
 					userId: responseData._id,
 					role: responseData.role,
 					loginRole: responseData.loginRole,
+					employID: responseData.employID
+
 				};
 
 				localStorage.setItem("userData", JSON.stringify(userData));

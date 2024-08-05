@@ -1,6 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsOptional, Matches } from 'class-validator';
+import { IsEnum, IsOptional, Matches } from 'class-validator';
 import { Document } from 'mongoose';
+import { Role } from 'src/users/schemas/user.schema';
+
+export enum Position {
+  JuniorFrontEnd = 'Junior FrontEnd',
+  JuniorBackEnd = 'Junior BackEnd',
+  SeniorFrontEnd = 'Senior FrontEnd',
+  SeniorBackEnd = 'Senior BackEnd',
+  FullStack = 'FullStack',
+  DevOps = 'DevOps',
+  ProjectManager = 'projectManager',
+}
 
 @Schema()
 export class Employee extends Document {
@@ -13,8 +24,8 @@ export class Employee extends Document {
   @Prop({ required: true })
   username: string;
 
-  @Prop({ required: true })
-  password: string;
+  // @Prop({ required: true })
+  // password: string;
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -24,7 +35,12 @@ export class Employee extends Document {
   nID: string;
 
   @Prop()
-  position: string;
+  @IsEnum(Position)
+  position: Position;
+
+  @Prop()
+  @IsEnum(Role)
+  role: Role;
 
   @Prop()
   startingDate: string;

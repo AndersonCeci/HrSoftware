@@ -14,7 +14,7 @@ import LoginPAge from "./LoginPage";
 import RequestedLeavePage from "./DayOff/RequestedLeavePage";
 import CalendarLeavePage from "./CalendarLeaves/CalendarLeavePage"
 import SettingsPage from "./Settings/SettingsPage";
-import ProfilePage from "./ProfilePage"
+import ProfilePage from "./Profile/ProfilePage"
 
 const PageRoutesComponents = {
 	LoginPAge,
