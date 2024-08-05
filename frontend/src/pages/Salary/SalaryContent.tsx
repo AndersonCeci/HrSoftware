@@ -3,22 +3,29 @@ import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
 import columns from "./components/TableColumns";
 import { useRef, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSalaryHook } from "./context/hook";
 import { Salary } from "../../types/SalaryProps";
 import { Button, Col, DatePicker, Input, Row, Space } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+import TableHeader from "../../components/Table/TableHeader";
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 
 const SalaryContent = () => {
+  const { t } = useTranslation();
+
   const addBonusRef = useRef<Salary>(null);
   const editFormRef = useRef<Salary>(null);
-  
+
   const startOfMonth = dayjs().startOf("month");
   const endOfMonth = dayjs().endOf("month");
-  
-  const [selectedRange, setSelectedRange] = useState<[Dayjs, Dayjs]>([startOfMonth, endOfMonth]);
+
+  const [selectedRange, setSelectedRange] = useState<[Dayjs, Dayjs]>([
+    startOfMonth,
+    endOfMonth,
+  ]);
   const [searchValue, setSearchValue] = useState<string>("");
 
   const {
@@ -28,12 +35,13 @@ const SalaryContent = () => {
     limit,
     handlePageChange,
     handleLimitChange,
-    handleEdit,
+    handleModal,
     handleAddBonus,
     handleAddBonusSubmit,
     handleEditSubmit,
     setFilters,
     filters,
+    createSalary,
   } = useSalaryHook();
 
   useEffect(() => {
@@ -49,8 +57,8 @@ const SalaryContent = () => {
     setFilters({ ...filters, name: value.trim() });
   };
 
- 
   const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
+    console.log("dates:", dates);
     if (dates) {
       const [start, end] = dates;
       setSelectedRange([start!, end!]);
@@ -73,15 +81,20 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <h1>Salaries</h1>
-      <Row title="Filters" gutter={16} align="middle">
+      <TableHeader
+        title={t("salariesTitle")}
+        onClick={handleModal}
+      ></TableHeader>
+
+      <Row title="Filters" gutter={10}>
         <Col>
           <Space direction="vertical" size={12}>
             <RangePicker
               picker="month"
-              onChange={handleRangeChange}
               value={selectedRange}
               defaultValue={[startOfMonth, endOfMonth]}
+              onCalendarChange={handleRangeChange}
+              allowClear={false}
             />
           </Space>
         </Col>
@@ -93,11 +106,10 @@ const SalaryContent = () => {
             enterButton
             allowClear
             value={searchValue}
-
             onChange={(e) => setSearchValue(e.target.value)}
           />
         </Col>
-        <Col flex="auto" style={{ textAlign: "right" }}>
+        <Col flex="auto" style={{ textAlign: "left" }}>
           <Button type="primary" onClick={handleResetFilters}>
             Reset filters
           </Button>
@@ -105,7 +117,12 @@ const SalaryContent = () => {
       </Row>
       <Table
         data={tableData}
-        columns={columns({ handleAddBonus, handleEdit, tableData })}
+        columns={columns({
+          handleAddBonus,
+          handleModal,
+          tableData,
+          handleEditSubmit,
+        })}
         fixed
         pagination={{
           position: ["bottomRight"],
@@ -123,6 +140,7 @@ const SalaryContent = () => {
       <EditSalaryModal
         editFormRef={editFormRef}
         handleEditSubmit={handleEditSubmit}
+        handleCreateSubmit={createSalary}
       />
     </div>
   );

@@ -1,12 +1,14 @@
 import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
-import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { TableProps, Dropdown } from "antd";
 import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
 import { IoDocumentAttach } from "react-icons/io5";
-import Select from "../../../components/Shared/Select";
 import Button from "../../../components/Shared/Button";
 import { selectOption } from "./constants";
+import { Tag } from "antd";
+
 import { Link } from "react-router-dom";
+import { ButtonType } from "../../../enums/Button";
 
 type GenerateColumnsParams = {
 	tableData: RecrutmentDataType[];
@@ -27,20 +29,29 @@ export const columns = ({
 		filterIcon: <SearchOutlined className="nav-menu-icon" />,
 		onFilter: (inputValue, filter) => filter.name.toLowerCase().includes(inputValue.toLowerCase()),
 	}),
-    createTableColumns({
-    title: "Surname",
-    dataIndex: "surname",
-    key: "surname",
-  }),
+	createTableColumns({
+		title: "Surname",
+		dataIndex: "surname",
+		key: "surname",
+	}),
+	createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
 	createTableColumns({
 		title: "Resume",
 		dataIndex: "cv",
 		key: "cv",
-		displayAs: (value) => (
-			<Link to={value} target="_blank" rel="noopener noreferrer">
-				<IoDocumentAttach />
-			</Link>
-		),
+		displayAs: (value) =>
+			value ? (
+				<Link to={value} target="_blank" rel="noopener noreferrer">
+					<Button size="large" type={ButtonType.LINK} icon={<IoDocumentAttach />}>
+						<span> View </span>
+					</Button>
+				</Link>
+			) : (
+				<span>No File</span>
+			),
+
+		align: "center",
+		width: 60,
 	}),
 	createTableColumns({
 		title: "Position",
@@ -54,30 +65,25 @@ export const columns = ({
 		dataIndex: "stage",
 		key: "stage",
 		displayAs: (value) => (
-			<Select
-				options={selectOption.map((option) => ({
-					value: option,
-					label: option,
-				}))}
-				placeholder="Select application phase"
-				onChange={(value) => console.log(value)}
-				value={value}
-			/>
+			<Tag color={selectOption.find((item) => item.label === value)?.color || "cyan"}>{value}</Tag>
 		),
-		filters: getAllUniqueValues(tableData, "applicationPhase"),
-		onFilter: (value, record) => record.applicationPhase.indexOf(value) === 0,
+		filters: getAllUniqueValues(tableData, "stage"),
+		align: "center",
+		width: 60,
+		onFilter: (value, record) => record.stage.indexOf(value) === 0,
 	}),
 	createTableColumns({
 		title: "Date Submitted",
-		dataIndex: "dateSubmitted",
-		key: "dateSubmitted",
+		dataIndex: "submittedDate",
+		key: "submittedDate",
+		displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
 	}),
 	createTableColumns({
 		title: "Reference",
 		dataIndex: "reference",
 		key: "reference",
 	}),
-	createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
+
 	createTableColumns({
 		title: "Action",
 		dataIndex: "_id",
@@ -89,12 +95,26 @@ export const columns = ({
 						items: [
 							{
 								key: "Edit",
-								label: <Button onClick={() => handleEdit(record)}>Edit</Button>,
+								label: (
+									<Button
+										type={ButtonType.TEXT}
+										block
+										icon={<EditOutlined />}
+										onClick={() => handleEdit(record)}
+									>
+										Edit
+									</Button>
+								),
 							},
 							{
 								key: "Delete",
 								label: (
-									<Button danger onClick={() => handleDelete(record._id)}>
+									<Button
+										type={ButtonType.TEXT}
+										danger
+										icon={<DeleteOutlined />}
+										onClick={() => handleDelete(record._id)}
+									>
 										Delete
 									</Button>
 								),
@@ -103,11 +123,12 @@ export const columns = ({
 					}}
 					trigger={["click"]}
 				>
-					<Button icon={<MoreOutlined />} />
+					<Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
 				</Dropdown>
 			);
 		},
 		fixed: "right",
-		width: 30,
+		align: "center",
+		width: 35,
 	}),
 ];

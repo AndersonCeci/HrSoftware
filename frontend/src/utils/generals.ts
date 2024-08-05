@@ -4,3 +4,7 @@ export const monthNames = [
 ];
 
 export const getMonthName = (date: Date) => monthNames[date.getMonth()];
+
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};

@@ -21,7 +21,7 @@ export class AssetsService {
   }
 
   async findAll(): Promise<Asset[]> {
-    return this.assetModel.find({isDeleted:false}).exec();
+    return this.assetModel.find({ isDeleted: false }).exec();
   }
 
   async findByName(name: string): Promise<Asset[]> {
@@ -29,18 +29,24 @@ export class AssetsService {
   }
 
   async softDeleteAssetById(id: string): Promise<Asset> {
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  
-  return this.assetModel.findByIdAndUpdate(
-    id, 
-    { isDeleted: true, deleteDate: currentDate }, 
-    { new: true }
-  ).exec();
-}
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
 
-   
-   async updateAsset(id: string, updateAssetDto: UpdateAssetDto): Promise<Asset> {
-    return this.assetModel.findByIdAndUpdate(id, updateAssetDto, { new: true }).exec();
+    return this.assetModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: true, deleteDate: currentDate },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async updateAsset(
+    id: string,
+    updateAssetDto: UpdateAssetDto,
+  ): Promise<Asset> {
+    return this.assetModel
+      .findByIdAndUpdate(id, updateAssetDto, { new: true })
+      .exec();
   }
 }

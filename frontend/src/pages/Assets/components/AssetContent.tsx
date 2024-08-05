@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
 
 import { getColumns } from "../utils/AssetsColumn";
+import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 
@@ -67,7 +68,7 @@ const AssetContent = () => {
 	const display = error ? <div>{error}</div> : <Table columns={columns} data={tableData} />;
 
 	return (
-		<section className="test">
+		<>
 			<Modal
 				title={selectedElement ? "Edit Asset" : "Assign New Asset"}
 				isOpen={isModalVisible}
@@ -87,13 +88,14 @@ const AssetContent = () => {
 				/>
 			</Modal>
 			<TableHeader
-				title="Assets"
+				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}
 			/>
+
 			{!isLoading ? display : <Loader />}
-		</section>
+		</>
 	);
 };
 

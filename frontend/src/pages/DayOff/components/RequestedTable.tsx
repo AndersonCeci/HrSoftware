@@ -1,113 +1,132 @@
-import React, { useState } from "react";
-import { Button, Modal, Space, TableProps } from "antd";
-import Table, { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
-import { RequestedDataType } from "../../../types/RequestedLeave";
+import { useEffect, useState } from "react";
+import { TableProps } from "antd";
+import Modal from "../../../components/Shared/Modal";
+import Table from "../../../components/Table/Table";
+import { RequestedDataType } from "../types/RequestedLeave";
 import TableHeader from "../../../components/Table/TableHeader";
 import Drawer from "../../../components/Shared/Drawer";
 import RequestForm from "../../DayOff/components/RequestForm";
+import { createColumns } from "../utils/tableColumns";
+import useHttp from "../../../hooks/useHttp";
 
 export interface RequestedTableProps {
-  data?: RequestedDataType[];
-  onAdd?: (newRequest: RequestedDataType) => void;
+	data?: RequestedDataType[];
+	onAdd?: (newRequest: RequestedDataType) => void;
 }
 
-const RequestedTable: React.FC<RequestedTableProps> = () => {
-  const [data, setData] = useState<RequestedDataType[]>([]);
-  const [open, setOpen] = useState(false);
-  const [approvedId, setApprovedId] = useState<string[]>([]);
+const API = import.meta.env.REACT_APP_DAYOFF_API;
 
-  function handleModalClose() {
-    setOpen(false);
-  }
+const RequestedTable = () => {
+	const [data, setData] = useState<RequestedDataType[]>([]);
+	const [isDrawerOpen, setisDrawerOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [, , fetchData] = useHttp();
+	const [selectedRecord, setSelectedRecord] = useState<RequestedDataType | undefined>(undefined);
 
-  function handleApprove(id: string) {
-      setApprovedId((prevApprovedId) => [...prevApprovedId, id]);
-  }
+	function handleDrawerClose() {
+		setisDrawerOpen(false);
+	}
 
-  const onDecline = (record:RequestedDataType) => {
-    console.log(record, 'recorddd')
-    Modal.confirm({
-      title: "Are you sure you wanna decline?",
-      okText:"Yes",
-      okType:"danger",
-      onOk: () =>{
-        setData((prev) => prev.filter((item) => item.id !== record.id))
-      }
-    })
-    // setData((prevData) => prevData.filter((item) => item.id !== record.id))
-  }
+	function handleApprove(id: string) {
+		fetchData(
+			{
+				url: `${API}/${id}/approve`,
+				method: "PATCH",
+			},
+			() => {
+				console.log("id", id, "was approved");
+				setData((prev) =>
+					prev.map((item) => {
+						if (item._id === id) {
+							return { ...item, isApproved: true };
+						}
+						return item;
+					}),
+				);
+			},
+		);
+	}
 
-  function handleAddNewRequest(newRequest: RequestedDataType) {
-    setData((prev) => [...prev, newRequest])
-    setOpen(false)
-  }
+	useEffect(() => {
+		fetchData({ url: API }, (data) => {
+			setData(data);
+		});
+	}, []);
 
-  const columns: TableProps<RequestedDataType>["columns"] = [
-    createTableColumns({
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    }),
-    createTableColumns({
-      title: "Leave Type",
-      dataIndex: "leaveType",
-      key: "leaveType",
-      filters: getAllUniqueValues(data, "leaveType"),
-      onFilter: (value, record) => record.leaveType.indexOf(value) === 0,
-    }),
-    createTableColumns({
-      title: "Leave From",
-      dataIndex: "leaveFrom",
-      key: "leaveFrom",
-    }),
-    createTableColumns({
-      title: "Leave To",
-      dataIndex: "leaveTo",
-      key: "leaveTo",
-    }),
-    createTableColumns({
-      title: "Reason",
-      dataIndex:"reason",
-      key: "reason"
-    }),
-    createTableColumns({
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      displayAs: (_, record) => (
-        <Space size="middle">
-          <Button
-            onClick={() => handleApprove(record.id)}
-            style={{
-              background: approvedId.includes(record.id) ? "green" : "#246AFE",
-              color: "white"
-            }}
-            disabled={approvedId.includes(record.id)}
-            ghost
-          >
-            {approvedId.includes(record.id) ? "Approved" : "Approve"}
-          </Button>
-          <Button
-            onClick={() => onDecline(record)}
-            style={{ background: "none", color: "red", border: "0" }}
-            ghost
-          >
-            Decline
-          </Button>
-        </Space>
-      ),
-    }),
-  ];
+	function handleDecline(id?: string) {
+		fetchData(
+			{
+				url: `${API}/${id}/soft-delete`,
+				method: "DELETE",
+			},
+			() => {
+				console.log("id", id, "was deleted");
+				setData((prev) => prev.filter((item) => item._id !== id));
+			},
+		);
+	}
 
-  return (
-    <>
-      <Drawer placement="right" isOpen={open} onClose={handleModalClose}>
-        <RequestForm onAdd={handleAddNewRequest} />
-      </Drawer>
-      <TableHeader title={"Requested Leave"} onClick={() => setOpen(true)} />
-      <Table columns={columns} data={data} />
-    </>
-  );
+	const onDecline = (record: RequestedDataType) => {
+		setIsModalOpen(true);
+		console.log("record", record);
+		setSelectedRecord(record);
+		// setData((prevData) => prevData.filter((item) => item.id !== record.id))
+	};
+
+	function handleAddNew(data: RequestedDataType) {
+		console.log("data", data);
+		setData((prev) => [...prev, data]);
+	}
+
+	function handleAddNewRequest(newRequest: RequestedDataType) {
+		console.log("RRERERER", newRequest);
+		fetchData(
+			{
+				url: API,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: newRequest,
+			},
+			(response) => {
+				handleAddNew(response);
+				setisDrawerOpen(false);
+			},
+		);
+	}
+
+	const columns: TableProps<RequestedDataType>["columns"] = createColumns(
+		data,
+		handleApprove,
+		onDecline,
+	);
+
+	return (
+		<>
+			<Drawer
+				placement="right"
+				title={"Leave Request Form"}
+				isOpen={isDrawerOpen}
+				onClose={handleDrawerClose}
+			>
+				<RequestForm onAdd={handleAddNewRequest} />
+			</Drawer>
+			<Modal
+				isOpen={isModalOpen}
+				onCancel={() => setIsModalOpen(false)}
+				onOk={() => {
+					handleDecline(selectedRecord?._id);
+					setIsModalOpen(false);
+				}}
+				title={"Delete Request"}
+			>
+				<p>Are you sure you want to decline this request? made by {selectedRecord?.EmployeeName}</p>
+			</Modal>
+			<TableHeader title={"Requested Leave"} onClick={() => setisDrawerOpen(true)} />
+			<Table columns={columns} data={data} />
+		</>
+	);
 };
 
 export default RequestedTable;
