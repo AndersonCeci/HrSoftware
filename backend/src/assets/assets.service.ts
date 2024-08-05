@@ -21,7 +21,7 @@ export class AssetsService {
   }
 
   async findAll(): Promise<Asset[]> {
-    return this.assetModel.find().exec();
+    return this.assetModel.find({isDeleted:false}).exec();
   }
 
   async findByName(name: string): Promise<Asset[]> {
