@@ -75,7 +75,7 @@ const InventaryContent = () => {
 			<Table
 				data={dummyData}
 				columns={columns}
-				expanded={{
+				expandable={{
 					expandedRowRender: expandedView,
 					defaultExpandedRowKeys: ["1"],
 					expandIcon : () => <>Hello</>,
