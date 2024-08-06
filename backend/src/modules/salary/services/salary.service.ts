@@ -209,13 +209,15 @@ export class SalaryService {
             netSalary: prevSalaryData.netSalary,
             workDays: prevSalaryData.workDays,
             bonuses: [],
-            socialSecurityContributions:
-              prevSalaryData.socialSecurityContributions,
+            socialSecurityContributions: prevSalaryData.socialSecurityContributions,
             healthInsurance: prevSalaryData.healthInsurance,
             grossSalary: prevSalaryData.grossSalary,
             total: prevSalaryData.total,
             paid: false,
-            isDeleted:false,
+            isDeleted: false,
+            incomeTaxes: 0,
+            healthInsuranceCompany: prevSalaryData.healthInsuranceCompany,
+            socialInsuranceCompany: prevSalaryData.socialInsuranceCompany
           };
 
           await this.create(newSalary);

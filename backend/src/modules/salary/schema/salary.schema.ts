@@ -17,6 +17,9 @@ export class Salary extends Document {
   @Prop({ required: true })
   workDays: number;
 
+  @Prop()
+  incomeTax?: number;
+
   @Prop({ type: [BonusSchema], required: true })
   bonuses?: Bonus[];
 
@@ -27,6 +30,12 @@ export class Salary extends Document {
   healthInsurance: number;
 
   @Prop({ required: true })
+  socialInsuranceCompany: number;
+
+  @Prop({ required: true })
+  healthInsuranceCompany: number;
+
+  @Prop({ required: true })
   grossSalary: number;
 
   @Prop({ required: true })
@@ -34,11 +43,12 @@ export class Salary extends Document {
 
   @Prop({ required: true, default: false, type: Boolean })
   paid?: boolean;
-  @Prop({default:false})
-  isDeleted:boolean
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
   @Prop()
   deleteDate: Date;
-
 }
 
 const SalarySchema = SchemaFactory.createForClass(Salary);
