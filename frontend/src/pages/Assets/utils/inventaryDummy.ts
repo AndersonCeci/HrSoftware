@@ -3,7 +3,7 @@ export const dummyData = [
 		_id: "1",
 		assetType: "Laptop",
 		quantity: 50,
-		reserved: 39,
+		reserved: 45,
 	},
 	{
 		_id: "2",
@@ -40,5 +40,36 @@ export const dummyData = [
 		assetType: "Desk",
 		quantity: 40,
 		reserved: 10,
+	},
+];
+
+export const dummyAssets = [
+	{
+		_id: "1",
+		assetType: "Laptop",
+		assetCode: "1234",
+		dateGiven: new Date(),
+		userName: "John Doe",
+	},
+	{
+		_id: "2",
+		assetType: "Monitor",
+		assetCode: "1235",
+		dateGiven: new Date(),
+		userName: "John Doe",
+	},
+	{
+		_id: "3",
+		assetType: "Keyboard",
+		assetCode: "1236",
+		dateGiven: new Date(),
+		userName: "John Doe",
+	},
+	{
+		_id: "4",
+		assetType: "Mouse",
+		assetCode: "1237",
+		dateGiven: new Date(),
+		userName: "John Doe",
 	},
 ];

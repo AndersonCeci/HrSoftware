@@ -1,13 +1,14 @@
 import { InventaryDataType } from "../types/InventaryDataType";
 import { createTableColumns } from "../../../components/Table/Table";
 import Button from "../../../components/Shared/Button";
-import { ConfigProvider, Flex, Progress, Typography } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { ConfigProvider, Flex, Typography, Input, InputNumber } from "antd";
 import { TableProps } from "antd";
-import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import Progress from "../../../components/Shared/Progress";
 
 type InventaryColumnType = (
 	data: InventaryDataType[],
-	onEdit: (id: string, value: number) => void,
+	onEdit: (id: InventaryDataType) => void,
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
@@ -26,27 +27,17 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			dataIndex: "reserved",
 			key: "reserved",
 			displayAs: (value, record) => {
-				const percentage = calcPercantage(record.quantity - record.reserved, record.quantity);
-				const available = record.quantity - record.reserved;
+				const quantity: number = data.find((item) => item._id === record._id)?.quantity || 0;
+				const percentage = calcPercantage(quantity - record.reserved, quantity);
+
+				const available = quantity - record.reserved;
 				return (
-					<ConfigProvider
-						theme={{
-							components: {
-								Progress: {
-									defaultColor: "#2A9BE6",
-								
-								},
-							},
-						}}
-					>
-						<Progress
-							percentPosition={{ align: "end", type: "inner" }}
-							format={(percent) => `${available} ${percent && percent > 20 ? "Available" : ""}`}
-							size={["100%", 20]}
-							percent={percentage}
-							status={percentage > 80 ? "success" : percentage <= 30 ? "exception" : "normal"}
-						/>
-					</ConfigProvider>
+					<Progress
+						percentPosition={{ align: "end", type: "inner" }}
+						format={(percent) => `${available} ${percent && percent > 20 ? "Available" : ""}`}
+						percentage={percentage}
+						status={percentage > 80 ? "success" : percentage <= 15 ? "exception" : "normal"}
+					/>
 				);
 			},
 			width: "40%",
@@ -59,12 +50,28 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 		}),
 		createTableColumns({
 			title: "Total quantity",
-			dataIndex: "quantity",
+			dataIndex: "_id",
 			key: "quantity",
 			displayAs: (value) => {
-				return <Typography.Text> {value} </Typography.Text>;
+				return (
+					<Typography.Text>{data.find((item) => item._id === value)?.quantity}</Typography.Text>
+				);
+			},
+			width: 10,
+		}),
+		createTableColumns({
+			title: "Edit",
+			dataIndex: "_id",
+			key: "quantity",
+			displayAs: (value, record) => {
+				return (
+					<Button type="text" icon={<PlusCircleOutlined />} onClick={() => onEdit(record)}>
+						Add
+					</Button>
+				);
 			},
 			align: "center",
+			width: 50,
 		}),
 	];
 };
