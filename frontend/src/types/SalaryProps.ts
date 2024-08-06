@@ -14,5 +14,7 @@ export interface Salary {
   grossSalary: number;
   total: number;
   paid?: boolean;
+  socialInsuranceCompany:number
+  healthInsuranceCompany:number
   employeeDetails?: EmployeeDetails;
 }

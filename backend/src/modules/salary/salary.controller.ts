@@ -15,7 +15,8 @@ import { UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
 import { Types } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Payroll, PayrollService } from './services/payroll.service';
+import { PayrollService } from './services/payroll.service';
+import { Payroll } from './dto/PayrollDTO/payroll.dto';
 
 @Controller('salary')
 export class SalaryController {
@@ -73,8 +74,11 @@ export class SalaryController {
   }
 
   @Get('net-salary')
-  async netSalary(@Query('grossSalary') grossSalary: number): Promise<Payroll> {
-    const res = this.payrollService.calculateNetSalary(grossSalary);
+  async netSalary(
+    @Query('grossSalary') grossSalary: number,
+    @Query('workDays') workDays: number = 22,
+  ): Promise<Payroll> {
+    const res = this.payrollService.calculateNetSalary(grossSalary, workDays);
     return res;
   }
 }
