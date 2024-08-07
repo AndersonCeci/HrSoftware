@@ -2,18 +2,15 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class Asset extends Document {
+export class Inventory extends Document {
   @Prop({ required: true })
   assetType: string;
 
-  @Prop()
-  dateGiven: Date;
+  @Prop({ required: true, unique: true })
+  assetCode: number ;
 
-  @Prop()
-  userName: string;
-
-  @Prop()
-  assetCode:number
+  @Prop({ default: 'Not Reserved' })  
+  status: string;
 
   @Prop({ default: false })
   isDeleted: boolean;
@@ -22,4 +19,4 @@ export class Asset extends Document {
   deleteDate: Date;
 }
 
-export const AssetSchema = SchemaFactory.createForClass(Asset);
+export const InventorySchema = SchemaFactory.createForClass(Inventory);

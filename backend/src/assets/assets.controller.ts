@@ -8,15 +8,20 @@ import { UpdateAssetDto } from './dto/updateAsset.dto';
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
-  @Post()
-  async create(@Body() createAssetDto: CreateAssetDto) {
-    return this.assetsService.createAsset(createAssetDto);
-  }
+   @Post()
+   async create(@Body() createAssetDto: CreateAssetDto) {
+     return this.assetsService.createAsset(createAssetDto);
+   }
 
   @Get()
   async findAll() {
     return this.assetsService.findAll();
   }
+
+  //  @Get('/lloji/:type')
+  //  async type(@Param('type') type: string){
+  //    return this.assetsService.type(type)
+  //  }
 
   @Get(':name')
   async findByName(@Param('name') name: string) {
@@ -37,6 +42,10 @@ export class AssetsController {
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.assetsService.updateAsset(id, updateAssetDto);
   }
-  
+
+  // @Patch('assign')
+  // async assignAsset(@Param('assetType') assetType: string, @Body('userName') userName: string) {
+  //   return this.assetsService.assignAssetToUser(assetType, userName);
+  // }
   
 }

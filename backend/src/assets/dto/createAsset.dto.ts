@@ -12,15 +12,15 @@ export class CreateAssetDto {
   @IsNotEmpty()
   assetType: string;
 
-  assetCode: string;
-
   @IsNotEmpty()
   dateGiven: string;
-
-  @IsOptional()
+ 
   @IsString()
-  userName?: string;
+  userName: string;
   
+
+  assetCode?:number
+
   isDeleted:boolean;
   deleteDate?:Date
 }

@@ -44,6 +44,6 @@ export class DayoffController {
   async updateUser(@Param('id') id: string, @Body() updateDayOffDto: UpdateDayOffDto) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
-    return this.dayoffService.updateAsset(id, updateDayOffDto);
+    return this.dayoffService.updateDayOff(id, updateDayOffDto);
   }
 }
