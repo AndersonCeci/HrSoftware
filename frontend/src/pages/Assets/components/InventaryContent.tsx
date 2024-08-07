@@ -7,6 +7,8 @@ import useHttp from "../../../hooks/useHttp";
 import { InventaryDataType } from "../types/InventaryDataType";
 import Modal from "../../../components/Shared/Modal";
 import QuantityForm from "./InventaryForm";
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import ExpandedRow from "./ExpandesRow";
 
 const InventaryContent = () => {
 	const [inventaryData, setInventaryData] = useState<InventaryDataType[]>(dummyData);
@@ -15,19 +17,6 @@ const InventaryContent = () => {
 	const formRef = useRef<any>();
 	const [isLoading, error, fetchData] = useHttp();
 	const columns = createColumns(inventaryData, handleQuantityChange);
-	const expandedView = () => {
-		return (
-			<Table
-				pageSize={3}
-				data={dummyAssets}
-				columns={[
-					{ title: "Asset Type", dataIndex: "assetType", key: "assetType" },
-					{ title: "Code", dataIndex: "assetCode", key: "code" },
-					{ title: "Description", dataIndex: "userName", key: "description" },
-				]}
-			/>
-		);
-	};
 
 	useEffect(() => {
 		setInventaryData(dummyData);
@@ -76,9 +65,8 @@ const InventaryContent = () => {
 				data={dummyData}
 				columns={columns}
 				expandable={{
-					expandedRowRender: expandedView,
-					defaultExpandedRowKeys: ["1"],
-					expandIcon : () => <>Hello</>,
+					expandedRowRender: (record) => <ExpandedRow record={record} />,
+					expandIcon: ({ expanded }) => (expanded ? <CaretUpOutlined /> : <CaretDownOutlined />),
 					expandRowByClick: true,
 				}}
 			/>

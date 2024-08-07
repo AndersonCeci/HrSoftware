@@ -2,8 +2,7 @@ import { InventaryDataType } from "../types/InventaryDataType";
 import { createTableColumns } from "../../../components/Table/Table";
 import Button from "../../../components/Shared/Button";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { ConfigProvider, Flex, Typography, Input, InputNumber } from "antd";
-import { TableProps } from "antd";
+import { TableProps, Typography } from "antd";
 import Progress from "../../../components/Shared/Progress";
 
 type InventaryColumnType = (
