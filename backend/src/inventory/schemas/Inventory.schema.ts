@@ -9,6 +9,9 @@ export class Inventory extends Document {
   @Prop({ required: true, unique: true })
   assetCode: number ;
 
+  @Prop({ default: 'Not Reserved' })  
+  status: string;
+
   @Prop({ default: false })
   isDeleted: boolean;
 

@@ -12,9 +12,10 @@ import {
     @IsNumber({}, { message: 'Asset Code must be a number' })
     assetCode: number;
 
-    
     count: number;
-    
+
+    status: string;
+      
     isDeleted:boolean;
     deleteDate?:Date
   }

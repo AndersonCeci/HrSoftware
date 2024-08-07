@@ -20,6 +20,16 @@ export class InventoryController {
     return this.inventoryService.findAll();
   }
 
+   @Patch(':id/:status')
+   async updateAssetStatus(@Param('id') id: string,@Param('status') status:string){
+     return this.inventoryService.updateAssetStatus(id,status)
+   }
+
+   @Get('lloji/:type')
+   async type(@Param('type') type: string){
+     return this.inventoryService.findAvailableAsset(type)
+   }
+
   @Get('counts')
   async getAssetCounts(): Promise<Inventory[]> {
     return this.inventoryService.getAssetCounts();

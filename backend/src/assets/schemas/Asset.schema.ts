@@ -6,14 +6,14 @@ export class Asset extends Document {
   @Prop({ required: true })
   assetType: string;
 
-  @Prop({ required: true, unique: true })
-  assetCode: number;
-
-  @Prop({ required: true })
+  @Prop()
   dateGiven: Date;
 
   @Prop()
   userName: string;
+
+  @Prop()
+  assetCode:number
 
   @Prop({ default: false })
   isDeleted: boolean;

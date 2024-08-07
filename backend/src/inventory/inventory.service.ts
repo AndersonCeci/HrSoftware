@@ -4,8 +4,6 @@ import { Inventory } from './schemas/Inventory.schema';
 import { Model } from 'mongoose';
 import { CreateInventoryDto } from './dto/createInventory.dto';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
-import { count } from 'console';
-
 
 @Injectable()
 export class InventoryService {
@@ -28,6 +26,20 @@ export class InventoryService {
     ]).exec();
   }
 
+  // async filter(): Promise<Inventory[]> {
+  //   return this.inventoryModel.aggregate([
+  //     { $match: { assetType:"Monitor" } },
+  //   ]).exec();
+  // }
+
+  async findAvailableAsset(type: string): Promise<Inventory | null> {
+    return this.inventoryModel.findOne({
+      isDeleted: false,
+      assetType: type,
+      status: 'Not Reserved'
+    }).exec();
+  }
+
   async softDeleteAssetById(id: string): Promise<Inventory> {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
@@ -38,8 +50,10 @@ export class InventoryService {
     { new: true }
   ).exec();
 }
+  async updateAssetStatus(id: string, status: string): Promise<Inventory> {
+    return this.inventoryModel.findByIdAndUpdate(id, { status }, { new: true }).exec();
+  }
 
-   
    async updateInventory(id: string, updateAssetDto: UpdateInventoryDto): Promise<Inventory> {
     return this.inventoryModel.findByIdAndUpdate(id, updateAssetDto, { new: true }).exec();
   }
