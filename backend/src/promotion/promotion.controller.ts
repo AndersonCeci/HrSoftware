@@ -1,0 +1,26 @@
+import { Position } from "src/employee/schema/employe.schema";
+import { PromotionService } from "./promotion.service";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+
+@Controller('promotions')
+export class PromotionController {
+  constructor(private promotionService: PromotionService) {}
+
+  @Post(':id/promote')
+  async promoteEmployee(
+    @Param('id') id: string,
+    @Body() promotionData: { newPosition: Position; newSalary: number; trainedBy: string }
+  ) {
+    return this.promotionService.promoteEmployee(
+      id,
+      promotionData.newPosition,
+      promotionData.newSalary,
+      promotionData.trainedBy
+    );
+  }
+
+  @Get(':id/promotion-history')
+  async getPromotionHistory(@Param('id') id: string) {
+    return this.promotionService.getEmployeePromotionHistory(id);
+  }
+}

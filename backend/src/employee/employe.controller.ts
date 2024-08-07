@@ -33,6 +33,7 @@ export class EmployeeController {
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
+  
   @Get("/search")
   async search(
     @Query('name') name?: string,
