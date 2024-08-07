@@ -12,7 +12,7 @@ import {
 import { PlusOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import moment from "moment"
-import "../../styles/Dashboard/TaskGrid.css";
+import "../../../styles/Dashboard/TaskGrid.css";
 import { useTranslation } from "react-i18next";
 
 const { Option } = Select;

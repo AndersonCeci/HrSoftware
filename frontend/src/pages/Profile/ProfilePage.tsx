@@ -13,16 +13,19 @@ import useHttp from "../../hooks/useHttp";
 import { EmployeeDataType } from "../Employment/types/Employee";
 import SettingsPage from "../Settings/SettingsPage";
 import Loader from "../../components/Shared/Loader";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const ProfilePage: React.FC = () => {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const EmployeData = JSON.parse(localStorage.getItem("userData") || "{}").employID
+  const EmployeData = JSON.parse(
+    localStorage.getItem("userData") || "{}"
+  ).employID;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, error, sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
-
+  const { t } = useTranslation();
 
   useEffect(() => {
     sendRequest(
@@ -31,9 +34,10 @@ const ProfilePage: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      }, 
+      },
       setTableData
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showModal = () => {
@@ -49,21 +53,29 @@ const ProfilePage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <Loader/>
+    return <Loader />;
   }
 
   if (error) {
-    return <div>Something went wrong!!</div>
+    return <div>Something went wrong!!</div>;
   }
 
 
+const bigcardStyle: React.CSSProperties = {
+  width: "1000px",
+  margin: "auto",
+  border: "2px solid #e6eeff",
+  marginTop: "30px",
+  marginBottom: "30px",
+  backgroundColor: "white",
+};
+
   return (
     <div>
-      <Flex>
+      <Card style={bigcardStyle}>
+      <Flex style={{display:"flex", justifyContent:"center"}}>
         <Flex vertical>
-          <Card
-            style={{ marginTop: "20px", alignItems: "center" }}
-          >
+          <Card style={{ marginTop: "20px", alignItems: "center" }}>
             <Meta
               avatar={
                 <Avatar
@@ -80,12 +92,13 @@ const ProfilePage: React.FC = () => {
               type={ButtonType.PRIMARY}
               onClick={showModal}
             >
-              Edit Profile
+              {t("editProfile")}
             </Button>
             <EditProfile
               visible={isModalVisible}
               handleOk={handleOk}
               handleCancel={handleCancel}
+              currentData={tableData}
             />
           </Card>
           <Card
@@ -94,8 +107,7 @@ const ProfilePage: React.FC = () => {
               flexDirection: "row",
               marginTop: "20px",
               marginBottom: "20px",
-              width: "300px",
-              height:"100%"
+              height: "100%",
             }}
           >
             <Meta
@@ -114,7 +126,7 @@ const ProfilePage: React.FC = () => {
                 alignItems: "center",
                 marginBottom: "30px",
               }}
-              title="Name"
+              title={t("name")}
               description={`${tableData?.name} ${tableData?.surname}`}
             />
             <Meta
@@ -134,7 +146,7 @@ const ProfilePage: React.FC = () => {
                 alignItems: "center",
                 marginBottom: "30px",
               }}
-              title="Position"
+              title={t("position")}
               description={tableData?.position}
             />
             <Meta
@@ -150,11 +162,11 @@ const ProfilePage: React.FC = () => {
               }
               style={{
                 marginLeft: "10px",
-                color: "wheat",
+                color: "white",
                 alignItems: "center",
                 marginBottom: "30px",
               }}
-              title="Salary"
+              title={t("salary")}
               description={tableData?.salary}
             />
             <Meta
@@ -174,7 +186,7 @@ const ProfilePage: React.FC = () => {
                 alignItems: "center",
                 marginBottom: "30px",
               }}
-              title="Start Date"
+              title={t("startingOn")}
               description={tableData?.startingDate}
             />
             <Meta
@@ -213,16 +225,16 @@ const ProfilePage: React.FC = () => {
                 color: "white",
                 alignItems: "center",
               }}
-              title="Phone Number"
+              title={t("phoneNumber")}
               description={tableData?.phoneNumber}
             />
           </Card>
         </Flex>
         <Flex>
-          <SettingsPage/>
-
+          <SettingsPage />
         </Flex>
       </Flex>
+      </Card>
     </div>
   );
 };

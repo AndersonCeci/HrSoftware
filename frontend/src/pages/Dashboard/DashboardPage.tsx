@@ -1,9 +1,9 @@
 import React from "react";
 import { Row, Col } from "antd";
 import { Content } from "antd/es/layout/layout";
-import WelcomeGrid from "../components/Dashboard/WelcomeGrid";
-import CalendarGrid from "../components/Dashboard/CalendarGrid";
-import TaskGrid from "../components/Dashboard/TaskGrid";
+import WelcomeGrid from "../Dashboard/components/WelcomeGrid";
+import CalendarGrid from "../Dashboard/components/CalendarGrid";
+import TaskGrid from "../Dashboard/components/TaskGrid";
 import { t } from "i18next";
 
 export interface Data {
@@ -19,19 +19,19 @@ const DashboardPage: React.FC = () => {
       noEmployee: 300,
       status: t("activestatus"),
       color: "#ccffcc",
-      path: "/management/employment",
+      path: "/managment/employment",
     },
     {
       noEmployee: 100,
       status: t("remoteEmployee"),
       color: "#F0E6FA",
-      path: "/management/employment",
+      path: "/managment/employment",
     },
     {
       noEmployee: 50,
       status: t("dismissed"),
       color: "#ceebfd",
-      path: "/management/dismissed",
+      path: "/managment/dismissed",
     },
   ];
 
