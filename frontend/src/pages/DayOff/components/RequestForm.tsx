@@ -16,7 +16,7 @@ const RequestForm = ({ onAdd }: any) => {
 
 	useEffect(() => {
 		console.log("Fetching employee list");
-		fetchData({ url: `${EMPLOYEE}/usernames` }, (responseData: any) => setEmployee(responseData));
+		fetchData({ url: `${EMPLOYEE}/search` }, (responseData: any) => setEmployee(responseData));
 	}, []);
 	console.log(employee);
 
@@ -24,7 +24,7 @@ const RequestForm = ({ onAdd }: any) => {
 		const selected = employee.find((e) => e.username === value.username);
 				
 		const values = {
-			employeeId: selected.id,
+			employeeId: selected._id,
 			StartTime: value.StartTime.format("YYYY-MM-DD"),
 			EndTime: value.EndTime ? value.EndTime.format("YYYY-MM-DD") : null,
 			leaveType: value.leaveType,
