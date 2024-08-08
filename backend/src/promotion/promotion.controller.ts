@@ -1,6 +1,7 @@
 import { Position } from "src/employee/schema/employe.schema";
 import { PromotionService } from "./promotion.service";
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Promotion } from "./schema/promotion.schema";
 
 @Controller('promotions')
 export class PromotionController {
@@ -22,5 +23,10 @@ export class PromotionController {
   @Get(':id/promotion-history')
   async getPromotionHistory(@Param('id') id: string) {
     return this.promotionService.getEmployeePromotionHistory(id);
+  }
+
+  @Get('/promotion-history')
+  async getAllPromotionHistories(): Promise<Promotion[]>{
+    return this.promotionService.getAllPromotionHistories()
   }
 }

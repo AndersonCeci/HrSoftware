@@ -51,4 +51,9 @@ export class PromotionService {
       .populate('promotionHistory');
     return employee.promotionHistory;
   }
+
+  async getAllPromotionHistories(): Promise<Promotion[]> {
+    return this.promotionModel.find().exec();
+  }
+
 }
