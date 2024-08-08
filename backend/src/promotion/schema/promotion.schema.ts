@@ -7,6 +7,9 @@ export class Promotion extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Employee', required: true })
   employee: Employee;
 
+  @Prop()
+  employeeName: string; 
+  
   @Prop({ required: true })
   oldPosition: Position;
 
