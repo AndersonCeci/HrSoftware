@@ -82,7 +82,7 @@ const SalaryContent = () => {
   return (
     <div style={{ margin: 20 }}>
       <TableHeader
-        title={t("salariesTitle")}
+        title={t("salarys")}
         onClick={handleModal}
       ></TableHeader>
 

@@ -1,52 +1,64 @@
-import { Card, Col, ConfigProvider, Row, Tag, Typography } from "antd";
+import { Typography, Input, Row, Col } from "antd";
+import useHttp from "../../hooks/useHttp";
+import PromoteCard from "./components/PromoteCard";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Arrow from "../../assets/right-arrow.gif";
+import Loader from "../../components/Shared/Loader";
 
-const { Title } = Typography;
+const { Search } = Input;
 
-const PromotionPage: React.FC = () => {
+
+const PromotionPage = () => {
   const { t } = useTranslation();
+  const [isLoading, error, sendRequest] = useHttp();
+  const [tableData, setTableData] = useState([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  useEffect(() => {
+    sendRequest(
+      {
+        url: `http://localhost:3000/promotions/promotion-history`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      setTableData
+    );
+  }, []);
+  console.log(tableData, "cvhjkl")
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+  if (error) {
+    return <div>Something went wrong!!</div>;
+  }
+
   return (
     <div>
+      <Row style={{display:"flex", justifyContent:"space-between"}}>
+        <Col>
       <Typography.Title level={3}>{t("promotions")}</Typography.Title>
-      <Row gutter={[8, 16]}>
-        <ConfigProvider
-          theme={{
-            components: {
-              Card: {
-                borderRadius: 10,
-              },
-            },
-          }}
-        >
-          <Col span={8}>
-            <Card
-              title="Jane Doe"
-              styles={{
-                header: { backgroundColor: "#33cccc", color: "white" },
-                body: { paddingTop: "0", paddingBottom: "0" },
-              }}
-              hoverable
-            >
-                <Tag color="#FFA500" style={{marginTop:"20px"}}>{t("promoted")}</Tag>
-              <p>Position: Senior FrontEnd</p>
-              <p>Date: 20/05/2020</p>
-              <p>Salary: 1000</p>
-              <p>Trainee: John Wick</p>
-            </Card>
-          </Col>
-          <Col
-            span={8}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "50px",
-            }}
-          >
-          </Col>
-        </ConfigProvider>
+      </Col>
+      <Col>
+      <Search
+        placeholder="Enter employee name"
+        style={{ width: 300, marginTop:"24px", marginRight:"20px" }}
+        onSearch={handleSearch}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        enterButton
+        allowClear
+      />
+      </Col>
       </Row>
+      {tableData.map((promote) => (
+        <PromoteCard promote={promote} />
+      ))}
     </div>
   );
 };

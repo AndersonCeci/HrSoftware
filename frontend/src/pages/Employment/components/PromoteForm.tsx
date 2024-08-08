@@ -33,10 +33,8 @@ const PromoteForm = forwardRef(
         newPosition:  values.position,
         newSalary: values.salary,
         trainedBy: values.trainedBy,
-        dateOfPromotion: dayjs(values.dateOfPromotion).toISOString()
+        dateOfPromotion: dayjs(values.dateOfPromotion).format("DD/MM/YYYY")
       }
-
-      console.log("ddddd", valuesToSubmit)
       onEdit(valuesToSubmit)
     };
 
@@ -66,6 +64,7 @@ const PromoteForm = forwardRef(
             label={t("promotedOn")}
             name="dateOfPromotion"
             required
+            isDisabledDate
           />
           <FormInputs.Input label={t("Trained By")} name="trainedBy" required />
         </Form>

@@ -1,6 +1,7 @@
 export const EnTranslation = {
   AddNew: "Add New",
   activestatus: "Active Employee",
+  action: "Action",
   assets: "Assets",
   assetsTitle: "Assets",
   attendanceOverview: "Attendance Overview",
@@ -12,6 +13,8 @@ export const EnTranslation = {
   contract: "Contract",
   dashboard: "Dashboard",
   dayoff: "Days Off",
+  dateOfHire: "Date of Hire",
+  dateOfPromotion: "Date of Promotion",
   dismissed: "Dissmised Employee",
   edit: "Edit",
   editProfile: "Edit Profile",
@@ -27,7 +30,7 @@ export const EnTranslation = {
   newPosition: "New Position",
   newStatus: "New Status",
   newSupervisor: "New Supervisor",
-  oldStatus: "Old Status",
+  oldPosition: "Old Position",
   organisationalStructure: "Organizational Structure",
   personalNumber: "Personal Number",
   phoneNumber: "Phone Number",
@@ -43,6 +46,7 @@ export const EnTranslation = {
   requestedLeave: "Requested Leave",
   salariesTitle: "Salaries",
   salary: "Salary",
+  salarys: "Salarys",
   startingOn: "Starting On",
   surname: "Surname",
   taskAction: "Action",
@@ -53,4 +57,5 @@ export const EnTranslation = {
   taskTitle: "Title",
   teamLeader: "Team Leader",
   timeOff: "Time Off",
+  trainedBy: "Trained By"
 };

@@ -90,7 +90,7 @@ const EmploymentPage: React.FC = () => {
         setIsDeleting(false);
       }
     );
-
+    console.log("hsaihsiiha")
     setIsDeleting(false);
     setEditedData(undefined);
   }
@@ -103,7 +103,6 @@ const EmploymentPage: React.FC = () => {
 
   function handlePromotionSubmit(value: any) {
     console.log(value);
-    console.log(promotedData, "gegehcg");
     sendRequest(
       {
         url: `http://localhost:3000/promotions/${promotedData?._id}/promote`,
@@ -115,7 +114,16 @@ const EmploymentPage: React.FC = () => {
       },
       () => {
         setTableData((prev) =>
-          prev.filter((item) => item._id !== editedData?._id)
+          prev.map((employee) => {
+            if(employee._id === promotedData?._id){
+              return {
+                ...employee,
+                salary: value.newSalary,
+                position: value.newPosition
+              }
+            }
+            return employee;
+          })
         );
         setIsPromoted(false);
       }

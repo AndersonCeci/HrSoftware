@@ -1,4 +1,4 @@
-import { Avatar, Card, Col, Flex, Row } from "antd";
+import { Avatar, Card, Flex } from "antd";
 import Meta from "antd/es/card/Meta";
 import "../Profile/style/ProfilePage.css";
 import Button from "../../components/Shared/Button";

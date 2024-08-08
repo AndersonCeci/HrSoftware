@@ -27,7 +27,7 @@ export function getColumns(
   const { t } = useTranslation();
   return [
     createTableColumns({
-      title: "Username",
+      title: t('name'),
       dataIndex: "username",
       key: "name",
       filterDropdown: true,
@@ -62,19 +62,19 @@ export function getColumns(
     // 	onFilter: (value, record) => record.status.indexOf(value) === 0,
     // }),
     createTableColumns({
-      title: "Phone",
+      title: t("phoneNumber"),
       dataIndex: "phoneNumber",
       key: "phoneNumber",
     }),
     createTableColumns({
-      title: "Poaition",
+      title: t("position"),
       dataIndex: "position",
       key: "position",
       filters: getAllUniqueValues(tableData, "position"),
       onFilter: (value, record) => record.position.indexOf(value) === 0,
     }),
     createTableColumns({
-      title: "Salary",
+      title: t("salary"),
       dataIndex: "salary",
       key: "salary",
       displayAs: (value) => {
@@ -82,12 +82,12 @@ export function getColumns(
       },
     }),
     createTableColumns({
-      title: "Start Date",
+      title: t("startingOn"),
       dataIndex: "startingDate",
       key: "startDate",
     }),
     createTableColumns({
-      title: "Action",
+      title: t("action"),
       dataIndex: "id",
       key: "action",
       displayAs: (text, record) => (
