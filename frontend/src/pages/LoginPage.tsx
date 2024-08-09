@@ -106,11 +106,11 @@ const LoginPage: React.FC = () => {
 					<Form.Item
 						name="username"
 						className="username-input"
-						rules={[{ required: true, message: "Please input your username" }]}
+						rules={[{ required: true, message: "Please input your email" }]}
 					>
 						<Input
 							prefix={<UserOutlined className="site-form-item-icon" />}
-							placeholder="Username"
+							placeholder="E-mail"
 							onChange={(e) => setUsername(e.target.value)}
 							required
 						/>

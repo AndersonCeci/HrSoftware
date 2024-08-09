@@ -31,10 +31,10 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
 }
 
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
-	return {
-		...selectedEmployee,
-		startingDate: dayjs(selectedEmployee["startingDate"], "D/M/YYYY"),
-	};
+  return {
+    ...selectedEmployee,
+    startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
+  };
 }
 
 export function validate(salary: number | null | undefined) {
@@ -61,7 +61,7 @@ export function getFormValues(form: any) {
 		position: form.getFieldValue("position"),
 		salary: form.getFieldValue("salary"),
 		teamLeader: form.getFieldValue("teamLeader"),
-		startingDate: form.getFieldValue("startingDate").format("D/M/YYYY"),
+		startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
 		contract: "Permanent",
 		nID: form.getFieldValue("nID"),
 		username: form.getFieldValue("email").split("@")[0],

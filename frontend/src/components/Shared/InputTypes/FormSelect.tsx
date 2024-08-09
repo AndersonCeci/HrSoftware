@@ -3,7 +3,7 @@ import { Form } from "antd";
 
 type FormSelectProps = {
 	name: string;
-	label?: string ;
+	label?: string;
 	options: {
 		value: string;
 		label: string | JSX.Element;

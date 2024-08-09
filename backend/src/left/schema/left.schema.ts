@@ -14,9 +14,6 @@ export class Left extends Document {
   username: string;
 
   @Prop({ required: true })
-  password: string;
-
-  @Prop({ required: true })
   email: string;
 
   @Prop({ required: true})

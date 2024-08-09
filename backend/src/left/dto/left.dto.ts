@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { IsOptional, Matches } from 'class-validator';
 
 @Schema()
@@ -11,9 +11,6 @@ export class LeftDto {
 
   @Prop({ required: true })
   username: string;
-
-  @Prop({ required: true })
-  password: string;
 
   @Prop({ required: true })
   email: string;
