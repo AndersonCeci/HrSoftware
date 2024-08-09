@@ -1,23 +1,22 @@
+import { Flex } from "antd";
 import Table from "../../../components/Table/Table";
-import { dummyAssets } from "../utils/inventaryDummy";
+import "../styles/styles.css";
+import { expandedColumns } from "../utils/ExpandesColumns";
 
-const ExpandedRow = ({ record }: any) => {
-    console.log(record);
-    const { assetType } = record;
-    const filteredAssets = dummyAssets.filter((asset) => asset.assetType === assetType);
-    
+const ExpandedRow = ({ record, assets }: any) => {
+	const { assetType } = record;
+	const filteredAssets = assets.filter((asset: any) => asset.assetType === assetType);
+
+	const columns = expandedColumns()
+
 	return (
-		<Table
-		
-    
-            pagination={false}
-			data={filteredAssets}
-			columns={[
-				{ title: "Code", dataIndex: "assetCode", key: "code" },
-				{ title: "Employee Name", dataIndex: "userName", key: "userName" },
-                { title: "Date", dataIndex: "dateGiven", key: "dateGiven" },
-			]}
-		/>
+		<Flex className="inner-table-container test">
+			<Table
+				pagination={false}
+				data={filteredAssets}
+				columns={columns}
+			/>
+		</Flex>
 	);
 };
 

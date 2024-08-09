@@ -6,6 +6,8 @@ import useHttp from "../../../hooks/useHttp";
 import Loader from "../../../components/Shared/Loader";
 import { getColumns } from "../utils/LeftColumn";
 
+const API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
+
 const DismissedPage: React.FC = () => {
 	const [tableData, setTableData] = useState<LeftDataType[]>([]);
 	const [isLoading, error, sendRequest] = useHttp();
@@ -14,10 +16,8 @@ const DismissedPage: React.FC = () => {
 	useEffect(() => {
 		sendRequest(
 			{
-				url: "http://localhost:3000/left",
-				headers: {
-					"Content-Type": "application/json",
-				},
+				url: API,
+			
 			},
 			setTableData,
 		);

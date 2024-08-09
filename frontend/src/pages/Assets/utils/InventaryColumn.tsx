@@ -49,11 +49,11 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 		}),
 		createTableColumns({
 			title: "Total quantity",
-			dataIndex: "_id",
+			dataIndex: "count",
 			key: "quantity",
 			displayAs: (value) => {
 				return (
-					<Typography.Text>{data.find((item) => item._id === value)?.quantity}</Typography.Text>
+					<Typography.Text>{value}</Typography.Text>
 				);
 			},
 			width: 10,

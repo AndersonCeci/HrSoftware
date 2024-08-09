@@ -57,8 +57,9 @@ export default function useHttp() {
 
 				const responseData = await response.json();
 				applyData ? applyData(responseData) : null;
-			} catch (err) {
-				setError("Something went wrong!");
+			} catch (err: any) {
+				console.log(err);
+				setError(err || "Something went wrong!");
 			}
 			setIsLoading(false);
 		}

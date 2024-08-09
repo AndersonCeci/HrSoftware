@@ -68,10 +68,11 @@ const Table = ({
 	pageSize,
 	pagination,
 	expandable,
+	identifier = "_id",
 }: TablePropsType) => {
 	return (
 		<T
-			rowKey={(record) => record._id}
+			rowKey={(record) => record[identifier]}
 			locale={{
 				emptyText: "No data available in table. Please check if you have added data to the table. ",
 			}}
