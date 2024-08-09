@@ -14,7 +14,7 @@ type SelectProps = {
 
 const Select = ({ options, ...props }: SelectProps) => {
 	return (
-		<S {...props} size="large" style={{ width: "100%" }}>
+		<S {...props} size="large" style={{ width: "100%",  }}>
 			{options.map((option) => (
 				<S.Option key={option.value} value={option.value}>
 					{option.label}

@@ -29,23 +29,23 @@ const EmploymentPage: React.FC = () => {
   >(undefined);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    sendRequest(
-      {
-        url: API,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      setTableData
-    );
-  }, []);
+	useEffect(() => {
+		sendRequest(
+			{
+				url: API,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			setTableData,
+		);
+	}, []);
 
-  function handleEditButtonClick(record: EmployeeDataType) {
-    console.log(record);
-    setEditedData(record);
-    setOpen(true);
-  }
+	function handleEditButtonClick(record: EmployeeDataType) {
+		console.log(record);
+		setEditedData(record);
+		setOpen(true);
+	}
 
   function handlePromoteButtonClick(record: EmployeeDataType) {
     console.log(record);
@@ -161,6 +161,7 @@ const EmploymentPage: React.FC = () => {
         onOk={() => promoteRef.current.submit()}
       >
         <PromoteForm
+        
           ref={promoteRef}
           selectedEmployee={promotedData}
           onEdit={handlePromotionSubmit}

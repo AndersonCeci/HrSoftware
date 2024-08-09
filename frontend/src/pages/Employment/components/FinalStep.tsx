@@ -1,22 +1,27 @@
 import { Result } from "antd";
 import Loader from "../../../components/Shared/Loader";
-import { ResultStatusType } from "antd/lib/result";
 import Button from "../../../components/Shared/Button";
 
 type FinalStepProps = {
 	isSubmitting: boolean;
-	error: string | null;
+	errorMsg: string | null;
+	onGoBackBtn: () => void;
 };
 
-const FinalStep = ({ isSubmitting, error }: FinalStepProps) => {
+const FinalStep = ({ isSubmitting, errorMsg, onGoBackBtn }: FinalStepProps) => {
 	return !isSubmitting ? (
 		<>
 			<Result
-				status={error ? "error" : "success"}
-				title={error ? "There was an error submitting the form" : "Your form has been submitted"}
-				extra={[]}
+				status={errorMsg ? "error" : "success"}
+				title={errorMsg ? errorMsg : "Your form has been submitted"}
+				extra={[
+					errorMsg && (
+						<Button danger onClick={onGoBackBtn}>
+							Go back
+						</Button>
+					),
+				]}
 			/>
-			{/* <Button></Button> */}
 		</>
 	) : (
 		<Loader />
