@@ -25,7 +25,7 @@ const Modal = ({ children, onOk, onCancel, isOpen, title, isLoading }: ModalProp
 			footer={null}
 		>
 			{children}
-			<Flex justify="flex-end">
+			<Flex justify="flex-start" style={{display: "flex", flexDirection:"row-reverse"}}>
 				{onCancel && (
 					<Button type={ButtonType.TEXT} danger onClick={onCancel}>
 						Cancel

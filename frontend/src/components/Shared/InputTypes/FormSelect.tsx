@@ -9,6 +9,7 @@ type FormSelectProps = {
 		label: string;
 	}[];
 	required?: boolean;
+	disabled?: boolean;
 };
 
 const FormSelect = ({ name, label, options, required }: FormSelectProps) => {
@@ -24,7 +25,7 @@ const FormSelect = ({ name, label, options, required }: FormSelectProps) => {
 			]}
 			style={{ width: "100%" }}
 		>
-			<Select  options={options} placeholder={`Select ${label}`} />
+			<Select  options={options} placeholder={`Select ${label}`} disabled={false}/>
 		</Form.Item>
 	);
 }; 
