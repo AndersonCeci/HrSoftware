@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
+    "@esbuild/linux-x64": "^0.23.0",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@rollup/rollup-linux-x64-gnu": "^4.19.2",
     "@syncfusion/ej2-react-schedule": "^26.2.7",
     "antd": "^5.19.1",
     "axios": "^1.7.2",

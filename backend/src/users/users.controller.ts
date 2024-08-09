@@ -19,9 +19,9 @@ export class UsersController {
         return await this.userService.getUsers();
     }
 
-    @Get(':username')
-    async getUserByUsername(@Param('username') username: string) {
-        return await this.userService.getUserByUsername(username);
+    @Get(':email')
+    async getUserByEmail(@Param('email') email: string) {
+        return await this.userService.getUserByEmail(email);
     }
     
     @UseGuards(AuthGuard)

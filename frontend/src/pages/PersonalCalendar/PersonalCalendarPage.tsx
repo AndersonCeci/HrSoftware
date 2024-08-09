@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/PersonalCalendarPage/PersonalCalendar.css";
 import {
-  Badge,
-  Calendar,
   Drawer,
   Space,
   Modal,
@@ -13,18 +11,20 @@ import {
   Button,
   Tooltip,
 } from "antd";
-import dayjs, { Dayjs } from "dayjs";
 import {
   DeleteOutlined,
   EditOutlined,
   StopOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import dayjs, { Dayjs } from "dayjs";
 import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
 import EditNewEventForm from "./components/EditNewEventForm";
-import useEvents, { Status, NewEvent } from './hooks/personalCalendarFetchHooks';
-import Item from "antd/es/list/Item";
+import useEvents, { Status, NewEvent } from "./hooks/personalCalendarFetchHooks";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
 const { Title } = Typography;
 
@@ -50,99 +50,23 @@ const PersonalCalendarPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  function onChanges(value: any, identifier: string) {
+  const onChanges = (value: any, identifier: string) => {
     setNewEvent((prev) => ({ ...prev, [identifier]: value }));
-  }
+  };
 
   const formatDateAndTime = (isoDateString: string) => {
     const date = new Date(isoDateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-
-    return `${day}-${month}-${year} ${hours}:${minutes}`;
+    return dayjs(date).format("DD-MM-YYYY HH:mm");
   };
 
-  const showDrawer = (value: Dayjs) => {
-    setSelectedDate(value);
+  const showDrawer = (arg:any) => {
+    setSelectedDate(dayjs(arg.date));
     setOpen(true);
   };
 
   const onClose = () => {
     setOpen(false);
     setSelectedDate(null);
-  };
-
-  const getListData = (value: Dayjs) => {
-    const eventsForDate = allEvents.filter((event) => {
-      const eventDate = dayjs(event.startDate);
-      return (
-        eventDate.date() === value.date() && eventDate.month() === value.month()
-      );
-    });
-
-    const listData = eventsForDate.map((allEvents: any) => {
-      let type: "error" | "success" | "warning" | "default" = "warning";
-      if (allEvents.status === Status.Cancelled) type = "error";
-      if (allEvents.status === Status.Finished) type = "success";
-      if (allEvents.status === Status.Ongoing) type = "warning";
-      if (allEvents.status === Status.Upcoming) type = "default";
-
-      return {
-        type: type,
-        content: allEvents.title,
-        status: allEvents.status,
-      };
-    });
-
-    return listData || [];
-  };
-
-
-  const getMonthData = (value: Dayjs) => {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  };
-  const monthCellRender = (value: Dayjs) => {
-    const num = getMonthData(value);
-    return num ? (
-      <div className="notes-month">
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
-  };
-
-  const dateCellRender = (value: Dayjs) => {
-    const listData = getListData(value);
-    const currentStatus = listData.map(item => item.status).join(", ");;
-    return (
-      <Tooltip title={`Current Status: ${currentStatus}`}>
-        <ul className="events">
-          {listData.map((item, index) => (
-            <li key={index}>
-              <Badge
-                status={
-                  item.type === "default"
-                    ? "default"
-                    : (item.type as "warning" | "success" | "error")
-                }
-                text={item.content}
-              />
-            </li>
-          ))}
-        </ul>
-      </Tooltip>
-    );
-  };
-
-  const cellRender = (current: Dayjs, info: { type: string }) => {
-    if (info.type === "date") return dateCellRender(current);
-    if (info.type === "month") return monthCellRender(current);
-    return null;
   };
 
   const handleAddNewEvent = async () => {
@@ -176,16 +100,49 @@ const PersonalCalendarPage: React.FC = () => {
         invitee: [],
       });
       setOpen(false);
-
     }
   };
+
   return (
     <>
-      <Space>
+      <div>
         <section className="calendar-container">
           <TableHeader title="Personal Calendar" onClick={showModal} />
-          <Calendar cellRender={cellRender} onSelect={showDrawer} />
-          </section>
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={allEvents.map(event => ({
+              id: event._id,
+              title: event.title,
+              start: event.startDate,
+              end: event.endDate,
+              extendedProps: {
+                description: event.description,
+                location: event.location,
+                status: event.status,
+                startTime: event.startTime,
+                endTime: event.endTime
+              }
+              
+            }))}
+            dateClick={showDrawer}
+            eventClick={(info) => {
+              const event = info.event.extendedProps;
+              setEditEventId(info.event.id);
+              setNewEvent({
+                title: info.event.title,
+                description: event.description,
+                startDate: dayjs(info.event.start),
+                endDate: dayjs(info.event.end),
+                startTime: dayjs(event.startTime),
+                endTime: dayjs(event.endTime),
+                location: event.location,
+                invitee: [],
+              });
+              showModal();
+            }}
+          />
+        </section>
         <Drawer
           placement="bottom"
           closable={false}
@@ -203,37 +160,38 @@ const PersonalCalendarPage: React.FC = () => {
                 .filter((event) => dayjs(event.startDate).isSame(selectedDate, "day"))
                 .map((event) => (
                   <Card
-                  key={event._id}
-                  className="card-container"
-                  actions={[
-                    <DeleteOutlined
-                      key="delete"
-                      onClick={() => handleDeleteEvent(event._id)}
-                      className="delete-icon-card"
-                    />,
-                    <EditOutlined
-                      key="edit"
-                      onClick={() => {
-                        setEditEventId(event._id);
-                        setNewEvent({
-                          title: event.title,
-                          description: event.description,
-                          startDate: dayjs(event.startDate),
-                          endDate: dayjs(event.endDate),
-                          startTime: dayjs(event.startTime),
-                          endTime: dayjs(event.endTime),
-                          location: event.location,
-                        });
-                        showModal();
-                      }}
-                      className="edit-icon-card"
-                    />,
-                    <StopOutlined
-                      key="cancel"
-                      onClick={() => handleCancelEvent(event._id)}
-                    />,
-                  ]}
-                >
+                    key={event._id}
+                    className="card-container"
+                    actions={[
+                      <DeleteOutlined
+                        key="delete"
+                        onClick={() => handleDeleteEvent(event._id)}
+                        className="delete-icon-card"
+                      />,
+                      <EditOutlined
+                        key="edit"
+                        onClick={() => {
+                          setEditEventId(event._id);
+                          setNewEvent({
+                            title: event.title,
+                            description: event.description,
+                            startDate: dayjs(event.startDate),
+                            endDate: dayjs(event.endDate),
+                            startTime: dayjs(event.startTime),
+                            endTime: dayjs(event.endTime),
+                            location: event.location,
+                            invitee: [],
+                          });
+                          showModal();
+                        }}
+                        className="edit-icon-card"
+                      />,
+                      <StopOutlined
+                        key="cancel"
+                        onClick={() => handleCancelEvent(event._id)}
+                      />,
+                    ]}
+                  >
                     <Meta
                       avatar={
                         <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
@@ -264,37 +222,38 @@ const PersonalCalendarPage: React.FC = () => {
           )}
         </Drawer>
         <Modal
-        open={isModalOpen}
-        onCancel={() => {
-          setIsModalOpen(false);
-          setEditEventId(null);
-          setNewEvent({
-            title: "",
-            description: "",
-            startDate: null,
-            endDate: null,
-            startTime: null,
-            endTime: null,
-            location: "",
-          });
-        }}
-        title={editEventId ? "Edit Event" : "Add New Event"}
-        footer={[
-          editEventId ? (
-            <Button key="submit" type="primary" onClick={handleEditEventClick}>
-              <CheckCircleOutlined key="save" className="save-icon" />
-              Save Changes
-            </Button>
-          ) : (
-            <Button key="submit" type="primary" onClick={handleAddNewEvent}>
-              Add Event
-            </Button>
-          )
-        ]}
-      >
-        <EditNewEventForm newEvent={newEvent} onChanges={onChanges} />
-      </Modal>
-      </Space>
+          open={isModalOpen}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setEditEventId(null);
+            setNewEvent({
+              title: "",
+              description: "",
+              startDate: null,
+              endDate: null,
+              startTime: null,
+              endTime: null,
+              location: "",
+              invitee: [],
+            });
+          }}
+          title={editEventId ? "Edit Event" : "Add New Event"}
+          footer={[
+            editEventId ? (
+              <Button key="submit" type="primary" onClick={handleEditEventClick}>
+                <CheckCircleOutlined key="save" className="save-icon" />
+                Save Changes
+              </Button>
+            ) : (
+              <Button key="submit" type="primary" onClick={handleAddNewEvent}>
+                Add Event
+              </Button>
+            )
+          ]}
+        >
+          <EditNewEventForm newEvent={newEvent} onChanges={onChanges} />
+        </Modal>
+      </div>
     </>
   );
 };
