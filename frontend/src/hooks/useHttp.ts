@@ -57,8 +57,8 @@ export default function useHttp() {
 
 				const responseData = await response.json();
 				applyData ? applyData(responseData) : null;
-			} catch (err) {
-				setError("Something went wrong!");
+			} catch (err :any) {
+				setError(err.message || "Something went wrong ILVIO !");
 			}
 			setIsLoading(false);
 		}

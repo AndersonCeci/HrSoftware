@@ -61,6 +61,7 @@ const Input = ({
 	type,
 	required = false,
 	defaultValidateRule,
+
 	...prop
 }: InputProps) => {
 	const Input = type === "password" ? I.Password : type === "textarea" ? I.TextArea : I;

@@ -57,7 +57,6 @@ const SecondStep = () => {
             label="Contract"
             name="contract"
             style={{ width: "100%" }}
-            // rules={[{ required: true, message: "Please enter a contract" }]}
           >
             <Button size={ButtonSize.LARGE} block icon={<UploadOutlined />}>
               <Upload>Click to upload</Upload>

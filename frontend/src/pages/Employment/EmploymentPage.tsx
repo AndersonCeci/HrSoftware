@@ -14,46 +14,44 @@ const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
 
 const EmploymentPage: React.FC = () => {
-  const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
-  const [open, setOpen] = useState(false);
-  const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(
-    undefined
-  );
-  const [isLoading, error, sendRequest] = useHttp();
-  const [isDeleting, setIsDeleting] = useState(false);
+	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
+	const [open, setOpen] = useState(false);
+	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
+	const [isLoading, error, sendRequest] = useHttp();
+	const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    sendRequest(
-      {
-        url: API,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      setTableData
-    );
-  }, []);
+	useEffect(() => {
+		sendRequest(
+			{
+				url: API,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+			setTableData,
+		);
+	}, []);
 
-  function handleEditButtonClick(record: EmployeeDataType) {
-    console.log(record);
-    setEditedData(record);
-    setOpen(true);
-  }
+	function handleEditButtonClick(record: EmployeeDataType) {
+		console.log(record);
+		setEditedData(record);
+		setOpen(true);
+	}
 
-  function handleAddNewEmployee(newEmployee: EmployeeDataType) {
-    setTableData((prev) => [...prev, newEmployee]);
-  }
+	function handleAddNewEmployee(newEmployee: EmployeeDataType) {
+		setTableData((prev) => [...prev, newEmployee]);
+	}
 
-  function handleEditEmployee(editedEmployee: EmployeeDataType) {
-    setTableData((prev) =>
-      prev.map((item) => {
-        if (item._id === editedEmployee._id) {
-          return editedEmployee;
-        }
-        return item;
-      })
-    );
-  }
+	function handleEditEmployee(editedEmployee: EmployeeDataType) {
+		setTableData((prev) =>
+			prev.map((item) => {
+				if (item._id === editedEmployee._id) {
+					return editedEmployee;
+				}
+				return item;
+			}),
+		);
+	}
 
 	function handleDeleteButtonClick(record: EmployeeDataType) {
 		setIsDeleting(true);
@@ -84,15 +82,16 @@ const EmploymentPage: React.FC = () => {
 		setEditedData(undefined);
 	}
 
-  const columns = getColumns(
-    tableData,
-    handleEditButtonClick,
-    handleDeleteButtonClick
-  );
+	const columns = getColumns(tableData, handleEditButtonClick, handleDeleteButtonClick);
 
 	return (
 		<>
-			<Drawer height={500} isOpen={open} onClose={() => handlClose(setOpen)}>
+			<Drawer
+				height={500}
+				isOpen={open}
+				onClose={() => handlClose(setOpen)}
+				title={editedData ? t("Edit Employee") : t("Add Employee")}
+			>
 				<AddEmployeeForm
 					selectedEmployee={editedData}
 					onAdd={handleAddNewEmployee}
