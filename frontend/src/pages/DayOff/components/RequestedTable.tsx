@@ -8,6 +8,7 @@ import Drawer from "../../../components/Shared/Drawer";
 import RequestForm from "../../DayOff/components/RequestForm";
 import { createColumns } from "../utils/tableColumns";
 import useHttp from "../../../hooks/useHttp";
+import { useTranslation } from "react-i18next";
 
 export interface RequestedTableProps {
 	data?: RequestedDataType[];
@@ -17,6 +18,7 @@ export interface RequestedTableProps {
 const API = import.meta.env.REACT_APP_DAYOFF_API;
 
 const RequestedTable = () => {
+	const { t } = useTranslation();
 	const [data, setData] = useState<RequestedDataType[]>([]);
 	const [isDrawerOpen, setisDrawerOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,7 +108,7 @@ const RequestedTable = () => {
 		<>
 			<Drawer
 				placement="right"
-				title={"Leave Request Form"}
+				title={t("leaveRequestForm")}
 				isOpen={isDrawerOpen}
 				onClose={handleDrawerClose}
 			>
@@ -119,11 +121,11 @@ const RequestedTable = () => {
 					handleDecline(selectedRecord?._id);
 					setIsModalOpen(false);
 				}}
-				title={"Delete Request"}
+				title={t("deleteRequest")}
 			>
-				<p>Are you sure you want to decline this request? made by {selectedRecord?.EmployeeName}</p>
+				<p>{t("Areyousureyouwanttodeclinethisrequest")}? {t("madeby")} {selectedRecord?.EmployeeName}</p>
 			</Modal>
-			<TableHeader title={"Requested Leave"} onClick={() => setisDrawerOpen(true)} />
+			<TableHeader title={t("requestedLeave")} onClick={() => setisDrawerOpen(true)} />
 			<Table columns={columns} data={data} />
 		</>
 	);

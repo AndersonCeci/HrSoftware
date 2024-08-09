@@ -1,17 +1,17 @@
-import { Typography, Input, Row, Col } from "antd";
+import { Typography, Input, Row, Col, Flex } from "antd";
 import useHttp from "../../hooks/useHttp";
 import PromoteCard from "./components/PromoteCard";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Loader from "../../components/Shared/Loader";
+import { PromoteType } from "./types/PromoteType";
 
 const { Search } = Input;
 
-
-const PromotionPage = () => {
+const PromotionPage: React.FC = () => {
   const { t } = useTranslation();
   const [isLoading, error, sendRequest] = useHttp();
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<PromoteType[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(() => {
@@ -25,11 +25,14 @@ const PromotionPage = () => {
       setTableData
     );
   }, []);
-  console.log(tableData, "cvhjkl")
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
+
+  const filteredData = tableData.filter((promote) =>
+    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -40,25 +43,28 @@ const PromotionPage = () => {
 
   return (
     <div>
-      <Row style={{display:"flex", justifyContent:"space-between"}}>
-        <Col>
       <Typography.Title level={3}>{t("promotions")}</Typography.Title>
-      </Col>
-      <Col>
+      <p style={{ fontWeight: "lighter" }}>
+        {t("viewPromotionRecordsForEmployees")}
+      </p>
+      <div >
       <Search
-        placeholder="Enter employee name"
-        style={{ width: 300, marginTop:"24px", marginRight:"20px" }}
+        placeholder={t("enterEmployeeName")}
+        style={{ width: "100%", marginBottom: "20px", color: "red" }}
+        styles={{ affixWrapper: { backgroundColor: "#e6f4ff" } }}
         onSearch={handleSearch}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         enterButton
         allowClear
+        size="large"
       />
-      </Col>
-      </Row>
-      {tableData.map((promote) => (
-        <PromoteCard promote={promote} />
-      ))}
+      </div>
+      <Flex>
+        {filteredData.map((promote) => (
+          <PromoteCard key={promote._id} promote={promote} />
+        ))}
+      </Flex>
     </div>
   );
 };

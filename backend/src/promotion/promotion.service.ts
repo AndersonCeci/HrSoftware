@@ -25,6 +25,7 @@ export class PromotionService {
 
     const promotion = new this.promotionModel({
       employee: new Types.ObjectId(employeeId),
+      employeeName: `${employee.name} ${employee.surname}`,
       oldPosition: employee.position,
       newPosition: newPosition,
       oldSalary: employee.salary,
@@ -55,5 +56,4 @@ export class PromotionService {
   async getAllPromotionHistories(): Promise<Promotion[]> {
     return this.promotionModel.find().exec();
   }
-
 }

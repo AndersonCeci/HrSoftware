@@ -1,11 +1,10 @@
 export type PromoteType = {
   _id: string;
-  name: string;
-  surname: string;
+  employeeName: string;
   oldPosition: string;
   newPosition: string;
-  newSalary: string;
-  oldSalary: string;
+  newSalary: number;
+  oldSalary: number;
   trainedBy: string;
   dateOfPromotion: string;
 };

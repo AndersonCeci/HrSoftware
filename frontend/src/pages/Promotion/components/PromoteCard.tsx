@@ -1,12 +1,13 @@
-import { Card, Col, ConfigProvider, Row } from "antd";
+import { Card, Col, ConfigProvider, Flex, Row, Tag } from "antd";
 import { PromoteType } from "../types/PromoteType";
-import { RightOutlined } from "@ant-design/icons";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import { useEffect, useState } from "react";
 import useHttp from "../../../hooks/useHttp";
 import Loader from "../../../components/Shared/Loader";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
+import Button from "../../../components/Shared/Button";
+import ReactCardFlip from "react-card-flip";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
@@ -20,6 +21,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   const EmployeData = JSON.parse(
     localStorage.getItem("userData") || "{}"
   ).employID;
+  const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
     sendRequest(
@@ -38,87 +40,111 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
     return <Loader />;
   }
 
+  if (error) {
+    return <div>Something went wrong!!</div>;
+  }
+
+  const handleClick = () => {
+    setIsFlipped(!isFlipped);
+  };
+
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
         marginBottom: "20px",
+        marginRight: "20px",
+        width: "300px",
       }}
     >
-      <Row gutter={12}>
-        <ConfigProvider
-          theme={{
-            components: {
-              Card: {
-                borderRadius: 10,
-              },
+      <ConfigProvider
+        theme={{
+          components: {
+            Card: {
+              borderRadius: 10,
             },
-          }}
-        >
-          <Col>
-            <Card
-              title={`${promote?.name} ${promote?.surname}`}
-              style={{ width: "375px" }}
-              styles={{
-                header: { backgroundColor: "#3581B8", color: "white" },
-                body: {
-                  paddingTop: "0",
-                  paddingBottom: "0",
-                  display: "flex",
-                  flexDirection: "column",
-                },
-              }}
-              hoverable
-            >
-              <p>
-                <b>{t("oldPosition")}:</b> {promote?.oldPosition}
-              </p>
-              <p>
-                <b>{t("dateOfHire")}:</b> {tableData?.startingDate}
-              </p>
-              <p>
-                <b>{t("salary")}:</b> {promote?.oldSalary}
-              </p>
-              <p>
-                <b>{t("trainedBy")}:</b> {promote?.trainedBy}
-              </p>
-            </Card>
-          </Col>
-          <Col style={{ display: "flex" }}>
-            <RightOutlined style={{ fontSize: "20px" }} />
-          </Col>
-          <Col>
-            <Card
-              title={`${tableData?.name} ${tableData?.surname}`}
-              style={{ width: "370px" }}
-              styles={{
-                header: { backgroundColor: "#F4D03F", color: "white" },
-                body: {
-                  paddingTop: "0",
-                  paddingBottom: "0",
-                  display: "flex",
-                  flexDirection: "column",
-                },
-              }}
-              hoverable
-            >
-              <p>
-                <b>{t("newPosition")}:</b> {promote?.newPosition}
-              </p>
-              <p>
-                <b>{t("dateOfPromotion")}:</b> {moment(promote?.dateOfPromotion).format("DD/MM/YYYY")}
-              </p>
-              <p>
-                <b>{t("salary")}:</b> {promote?.newSalary}
-              </p>
-              <p>
-                <b>{t("trainedBy")}:</b> {promote?.trainedBy}
-              </p>
-            </Card>
-          </Col>
-        </ConfigProvider>
-      </Row>
+          },
+        }}
+      >
+        <div style={{ width: "300px" }}>
+          <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+            <div>
+              <Card
+                title={promote?.employeeName}
+                style={{ width: "100%" }}
+                styles={{
+                  header: { backgroundColor: "#24A2FE", color: "white" },
+                  body: {
+                    paddingTop: "0",
+                    paddingBottom: "0",
+                    display: "flex",
+                    flexDirection: "column",
+                  },
+                }}
+                hoverable
+              >
+                <p>
+                  <b>{t("oldPosition")}:</b> {promote?.oldPosition}
+                </p>
+                <p>
+                  <b>{t("dateOfHire")}:</b> {tableData?.startingDate}
+                </p>
+                <p>
+                  <b>{t("salary")}:</b> {promote?.oldSalary}
+                </p>
+                <p>
+                  <b>{t("trainedBy")}:</b> {promote?.trainedBy}
+                </p>
+                <Button
+                  type="primary"
+                  onClick={handleClick}
+                  style={{ marginBottom: "10px" }}
+                >
+                  {t("viewNewPromotion")}
+                </Button>
+              </Card>
+            </div>
+            <div style={{ width: "300px" }}>
+              <Card
+                title={promote?.employeeName}
+                style={{ width: "300px" }}
+                styles={{
+                  header: { backgroundColor: "#30D3CB", color: "white" },
+                  body: {
+                    paddingTop: "0",
+                    paddingBottom: "0",
+                    display: "flex",
+                    flexDirection: "column",
+                  },
+                }}
+                hoverable
+              >
+                <Tag style={{width:"70px", marginTop:"10px"}} color="gold">Promoted</Tag>
+                <p>
+                  <b>{t("newPosition")}:</b> {promote?.newPosition}
+                </p>
+                <p>
+                  <b>{t("dateOfPromotion")}:</b>{" "}
+                  {moment(promote?.dateOfPromotion).format("DD/MM/YYYY")}
+                </p>
+                <p>
+                  <b>{t("salary")}:</b> {promote?.newSalary}
+                </p>
+                <p>
+                  <b>{t("trainedBy")}:</b> {promote?.trainedBy}
+                </p>
+                <Button
+                  type="primary"
+                  onClick={handleClick}
+                  style={{ marginBottom: "10px" }}
+                >
+                  {t("viewOldPosition")}
+                </Button>
+              </Card>
+            </div>
+          </ReactCardFlip>
+        </div>
+      </ConfigProvider>
     </div>
   );
 };
