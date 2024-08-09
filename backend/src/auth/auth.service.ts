@@ -8,13 +8,14 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/users.service';
 import { Role } from 'src/users/schemas/user.schema';
 
-type AuthInput = { username: string; password: string };
+type AuthInput = { email: string; password: string };
 type SignInData = {
   _id: string;
   username: string;
   role: Role;
   loginRole: Role;
   employID: Types.ObjectId;
+  email: string
 };
 type AuthResult = {
   accessToken: string;
@@ -23,6 +24,7 @@ type AuthResult = {
   role: Role;
   loginRole: Role;
   employID: Types.ObjectId;
+  email: string;
 };
 
 @Injectable()
@@ -42,7 +44,7 @@ export class AuthService {
   }
 
   async validateUser(input: AuthInput): Promise<SignInData | null> {
-    const user = await this.usersService.getUserByUsername(input.username);
+    const user = await this.usersService.getUserByEmail(input.email);
     if (
       user &&
       (await this.usersService.validatePassword(user.password, input.password))
@@ -52,7 +54,8 @@ export class AuthService {
         username: user.username,
         role: user.role,
         loginRole: user.loginRole,
-        employID: user.employID
+        employID: user.employID,
+        email: user.email
       };
     }
     return null;
@@ -75,13 +78,14 @@ export class AuthService {
       role: user.role,
       loginRole: user.loginRole,
       employID: user.employID,
+      email: user.email,
     };
   }
 
   async verifyToken(token: string): Promise<SignInData | null> {
     try {
       const decoded = this.jwtService.verify(token);
-      const user = await this.usersService.getUserByUsername(decoded.username);
+      const user = await this.usersService.getUserByEmail(decoded.email);
       if (!user) {
         throw new UnauthorizedException('Invalid token');
       }
@@ -90,7 +94,8 @@ export class AuthService {
         username: user.username,
         role: user.role,
         loginRole: user.loginRole,
-        employID: user.employID
+        employID: user.employID,
+        email: user.email
 
       };
     } catch (error) {
