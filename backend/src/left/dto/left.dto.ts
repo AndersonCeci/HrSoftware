@@ -15,7 +15,7 @@ export class LeftDto {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
@@ -43,8 +43,6 @@ export class LeftDto {
   @Prop()
   contract: string;
 
-  // @Prop()
-  // daletedAt: {type: Date}
-
+  @Prop()
+  daletedAt: string;
 }
-
