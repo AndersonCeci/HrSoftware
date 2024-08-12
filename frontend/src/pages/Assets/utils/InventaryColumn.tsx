@@ -25,7 +25,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			title: "Available",
 			dataIndex: "reserved",
 			key: "reserved",
-			displayAs: (value, record) => {
+			displayAs: (_, record) => {
 				const quantity: number = data.find((item) => item._id === record._id)?.quantity || 0;
 				const percentage = calcPercantage(quantity - record.reserved, quantity);
 
@@ -52,9 +52,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			dataIndex: "count",
 			key: "quantity",
 			displayAs: (value) => {
-				return (
-					<Typography.Text>{value}</Typography.Text>
-				);
+				return <Typography.Text>{value}</Typography.Text>;
 			},
 			width: 10,
 		}),
@@ -62,7 +60,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			title: "Edit",
 			dataIndex: "_id",
 			key: "quantity",
-			displayAs: (value, record) => {
+			displayAs: (_, record) => {
 				return (
 					<Button type="text" icon={<PlusCircleOutlined />} onClick={() => onEdit(record)}>
 						Add

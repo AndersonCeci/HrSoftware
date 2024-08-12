@@ -57,6 +57,8 @@ const EventPage: React.FC = () =>
 		);
 	}, []);
 
+	console.log(loadedEvents, "JONIIIII");
+
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (

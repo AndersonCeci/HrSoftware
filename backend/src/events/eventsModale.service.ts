@@ -17,9 +17,9 @@ export class EventsService {
   }
 
   async getEvent(query: Query): Promise<Event[]> {
-    const resPerPage = 2; 
-    const currentPage = Number(query.page) || 1; 
-    const skip = resPerPage * (currentPage - 1);
+    // const resPerPage = 1; 
+    // const currentPage = Number(query.page) || 1; 
+    // const skip = resPerPage * (currentPage - 1);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
   
@@ -28,9 +28,9 @@ export class EventsService {
         eventDate: { $gte: currentDate },
         isDeleted: false
       })
-      .limit(resPerPage)
-      .skip(skip)
-      .exec();
+      // .limit(resPerPage)
+      // .skip(skip)
+      // .exec();
   
     return events;
   }

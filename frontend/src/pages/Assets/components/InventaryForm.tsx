@@ -45,13 +45,6 @@ const QuantityForm = forwardRef(
 								if (!values || values.length < 1) {
 									return Promise.reject(new Error("At least 1 Asset is required"));
 								}
-								// dont add same code twice
-
-								// if (values.length !== new Set(values).size) {
-								// 	console.log(values, "values", new Set(values), "set");
-
-								// 	return Promise.reject(new Error("Asset Type already exists"));
-								// }
 							},
 						},
 					]}
