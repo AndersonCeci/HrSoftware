@@ -1,4 +1,3 @@
-// create-recruitment.dto.ts
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,6 +6,7 @@ import {
   IsEnum,
   IsNumber,
 } from 'class-validator';
+import { RecruitmentStage } from '../schemas/recruitment.schema';
 
 export class CreateRecruitmentDto {
   @IsNotEmpty()
@@ -28,14 +28,11 @@ export class CreateRecruitmentDto {
   readonly surname: string;
 
   @IsNotEmpty()
-  @IsEnum(
-    ['Applied', 'Rejected', '1st Interview', '2nd Interview', 'Offer Made'],
-    {
-      message:
-        'Stage must be one of the following: Approved, Rejected, 1st Interview, 2nd Interview',
-    },
-  )
-  readonly stage: 'Approved' | 'Rejected' | '1st Interview' | '2nd Interview';
+  @IsEnum(RecruitmentStage, {
+    message:
+      'Stage must be one of the following: Applied ,Approved, Rejected, 1st Interview, 2nd Interview',
+  })
+  readonly stage: RecruitmentStage;
 
   @IsOptional()
   @IsString()
@@ -43,11 +40,19 @@ export class CreateRecruitmentDto {
 
   @IsOptional()
   @IsString()
-  readonly cv?: string;
+   cv?: string;
 
   submittedDate: Date;
 
-
-  isDeleted:boolean;
+  isDeleted: boolean;
   deleteDate?: Date;
+}
+
+
+
+export class RecruitmentWithFileDto extends CreateRecruitmentDto {
+  file?: {
+    filename: string;
+    data: string;
+  };
 }

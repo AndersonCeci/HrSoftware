@@ -53,6 +53,7 @@ export const useSalaryHook = () => {
         params: { page, limit, ...filters },
       });
       const { data, meta } = response.data;
+      console.log("Fetched salaries", data);
       setTableData(data);
       setItemCount(meta.itemCount);
     } catch (error) {
@@ -154,6 +155,7 @@ export const useSalaryHook = () => {
         values.socialSecurityContributions.toString(),
         10
       ),
+      incomeTax: parseInt(values.incomeTax.toString()),
       healthInsurance: parseInt(values.healthInsurance.toString(), 10),
       healthInsuranceCompany: parseInt(
         values.healthInsuranceCompany.toString()
@@ -184,6 +186,7 @@ export const useSalaryHook = () => {
           values.socialSecurityContributions.toString(),
           10
         ),
+        incomeTax: parseInt(values.incomeTax.toString()),
         healthInsurance: parseInt(values.healthInsurance.toString(), 10),
         grossSalary: parseInt(values.grossSalary.toString(), 10),
         total: parseInt(values.total.toString(), 10),

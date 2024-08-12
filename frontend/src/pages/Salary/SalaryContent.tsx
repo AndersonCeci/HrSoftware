@@ -78,8 +78,6 @@ const SalaryContent = () => {
     });
   };
 
-
-
   return (
     <div style={{ margin: 20 }}>
       <TableHeader title={t("salariesTitle")} onClick={handleModal} />
@@ -131,6 +129,8 @@ const SalaryContent = () => {
           onShowSizeChange: handleLimitChange,
         }}
         expandable={{
+          columnTitle: "Show Taxes",
+          showExpandColumn: false,
           rowExpandable: () => true,
           expandedRowRender,
         }}

@@ -34,7 +34,7 @@ export class SalaryController {
     }
     console.log(dto);
     return await this.salaryService.create(dto);
-  }
+    }
 
   @Get()
   async getAllNew(

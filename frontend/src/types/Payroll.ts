@@ -7,3 +7,4 @@ export interface Payroll {
     healthInsuranceCompany: number;
     grossSalary: number;
   }
+  

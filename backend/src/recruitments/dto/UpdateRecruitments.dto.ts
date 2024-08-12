@@ -5,6 +5,7 @@ import {
   IsString,
   IsEnum,
 } from 'class-validator';
+import { RecruitmentStage } from '../schemas/recruitment.schema';
 
 export class UpdateRecruitmentDto {
   @IsOptional()
@@ -23,15 +24,12 @@ export class UpdateRecruitmentDto {
   readonly position?: string;
 
   @IsOptional()
-  @IsEnum(
-    ['Applied', 'Rejected', '1st Interview', '2nd Interview', 'Offer Made'],
-    {
-      message:
-        'Stage must be one of the following: Approved, Rejected, 1st Interview, 2nd Interview',
-    },
-  )
+  @IsEnum(RecruitmentStage, {
+    message:
+      'Stage must be one of the following: Applied, Approved, Rejected, 1st Interview, 2nd Interview',
+  })
   @IsNotEmpty()
-  readonly stage?: 'Approved' | 'Rejected' | '1st Interview' | '2nd Interview';
+  readonly stage?: RecruitmentStage;
 
   @IsOptional()
   @IsString()
