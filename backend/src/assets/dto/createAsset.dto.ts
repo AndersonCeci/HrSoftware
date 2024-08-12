@@ -1,26 +1,9 @@
-import {
-  IsString,
-  IsNumber,
-  IsNotEmpty,
-  IsDate,
-  IsOptional,
-  IsDateString,
-} from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateAssetDto {
-  @IsString()
-  @IsNotEmpty()
-  assetType: string;
 
-  @IsNotEmpty()
-  dateGiven: string;
- 
-  @IsString()
-  userName: string;
-  
+  assetName:string;
 
-  assetCode?:number
-
-  isDeleted:boolean;
-  deleteDate?:Date
+  isDeleted?: boolean;
+  deleteDate?: Date;
 }

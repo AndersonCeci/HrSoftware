@@ -1,19 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import * as muv from 'mongoose-unique-validator';
 
-@Schema()
+@Schema({timestamps:true})
 export class Asset extends Document {
-  @Prop({ required: true })
-  assetType: string;
+  // @Prop({ required: true})
+  // assetType: Types.ObjectId;
 
-  @Prop()
-  dateGiven: Date;
-
-  @Prop()
-  userName: string;
-
-  @Prop()
-  assetCode:number
+  @Prop({unique:true})
+  assetName:string
 
   @Prop({ default: false })
   isDeleted: boolean;
@@ -22,4 +17,6 @@ export class Asset extends Document {
   deleteDate: Date;
 }
 
-export const AssetSchema = SchemaFactory.createForClass(Asset);
+const AssetSchema = SchemaFactory.createForClass(Asset).plugin(muv);
+export {AssetSchema}
+
