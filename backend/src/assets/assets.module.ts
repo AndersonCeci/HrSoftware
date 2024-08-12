@@ -7,10 +7,10 @@ import { InventoryModule } from 'src/inventory/inventory.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Asset.name, schema: AssetSchema }]),
-    InventoryModule
+    MongooseModule.forFeature([{ name: Asset.name, schema: AssetSchema }])
   ],
   providers: [AssetsService],
   controllers: [AssetsController],
+  exports:[AssetsService]
 })
 export class AssetsModule {}

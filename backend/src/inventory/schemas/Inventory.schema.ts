@@ -1,16 +1,43 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import * as muv  from 'mongoose-unique-validator';
+import { Asset } from 'src/assets/schemas/Asset.schema';
 
-@Schema()
+export enum InventoryStatus {
+  Available = 'Available',
+  Assigned = 'Assigned',
+  Broken = 'Broken',
+  OnRepair = 'OnRepair'
+}
+
+@Schema({timestamps:true})
 export class Inventory extends Document {
-  @Prop({ required: true })
-  assetType: string;
+  @Prop({ type: Types.ObjectId, ref: 'Asset' })
+  assetID: Types.ObjectId;
 
-  @Prop({ required: true, unique: true })
-  assetCode: number ;
+  @Prop({ unique: true })
+  assetCodes: string;
 
-  @Prop({ default: 'Not Reserved' })  
-  status: string;
+  @Prop({
+    type: String,
+    enum: InventoryStatus,
+    required: true,
+  })
+  status: InventoryStatus;
+
+  @Prop({ type: Types.ObjectId, ref: 'Employee' })
+  employeeID:Types.ObjectId
+
+  @Prop()
+  employeeName:string
+
+  @Prop()
+  assetName:string
+
+
+
+  // @Prop()
+  // quantity:number
 
   @Prop({ default: false })
   isDeleted: boolean;
@@ -18,5 +45,5 @@ export class Inventory extends Document {
   @Prop()
   deleteDate: Date;
 }
-
-export const InventorySchema = SchemaFactory.createForClass(Inventory);
+ const InventorySchema = SchemaFactory.createForClass(Inventory)
+export {InventorySchema}

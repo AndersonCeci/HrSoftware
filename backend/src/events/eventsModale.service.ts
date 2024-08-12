@@ -17,7 +17,7 @@ export class EventsService {
   }
 
   async getEvent(query: Query): Promise<Event[]> {
-    const resPerPage = 2; 
+    const resPerPage = 10; 
     const currentPage = Number(query.page) || 1; 
     const skip = resPerPage * (currentPage - 1);
     const currentDate = new Date();

@@ -7,13 +7,12 @@ import { Inventory } from './schemas/Inventory.schema';
 
 @Controller('inventory')
 export class InventoryController {
-
     constructor(private readonly inventoryService: InventoryService) {}
 
-  @Post()
-  async create(@Body() createInventoryDto: CreateInventoryDto) {
-    return this.inventoryService.createInventory(createInventoryDto);
-  }
+   @Post()
+   async create(@Body() createInventoryDto: CreateInventoryDto) {
+     return this.inventoryService.createInventory(createInventoryDto);
+   }
 
   @Get()
   async findAll() {
@@ -22,17 +21,12 @@ export class InventoryController {
 
    @Patch(':id/:status')
    async updateAssetStatus(@Param('id') id: string,@Param('status') status:string){
-     return this.inventoryService.updateAssetStatus(id,status)
+     return this.inventoryService.updateStatus(id,status)
    }
 
-   @Get('lloji/:type')
-   async type(@Param('type') type: string){
-     return this.inventoryService.findAvailableAsset(type)
-   }
-
-  @Get('counts')
-  async getAssetCounts(): Promise<Inventory[]> {
-    return this.inventoryService.getAssetCounts();
+   @Get('quantity')
+  async getAssetQuantities() {
+    return this.inventoryService.getAssetQuantities();
   }
 
   @Delete(':id')
