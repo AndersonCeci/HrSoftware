@@ -67,6 +67,6 @@ export class EventsService {
       }
 
     async update(id: string, updateEventDto: UpdateEventDto): Promise<Events> {
-        return this.eventsModel.findByIdAndUpdate(id, updateEventDto, { new: true }).exec();
+        return this.eventsModel.findByIdAndUpdate().exec();
     }
 }

@@ -6,10 +6,16 @@ import { InventoryController } from './inventory.controller';
 import { Inventory,InventorySchema } from './schemas/Inventory.schema';
 import { AssetsModule } from 'src/assets/assets.module';
 import { EmployeeModule } from 'src/employee/employe.module';
+import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Inventory.name, schema: InventorySchema }]),AssetsModule,EmployeeModule
+    MongooseModule.forFeature([
+      { name: Inventory.name, schema: InventorySchema },
+      { name: Employee.name, schema: EmployeeSchema }
+    ]),
+    AssetsModule,
+    EmployeeModule
   ],
   controllers: [InventoryController],
   providers: [InventoryService],

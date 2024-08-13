@@ -4,24 +4,14 @@ import { InventoryStatus } from '../schemas/inventory.schema';
 export class UpdateInventoryDto {
   @IsOptional()
   @IsString()
-  assetType?: string;
+  assetName?:string
 
   @IsOptional()
   @IsString({ each: true })
-  assetCodes?: string;
+  assetCodes: string[];
 
   @IsEnum(InventoryStatus)
   @IsOptional()
   status?: InventoryStatus;
-
-  // @IsOptional()
-  // quantity?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  isDeleted?: boolean;
-
-  @IsOptional()
-  deleteDate?: Date;
 
 }
