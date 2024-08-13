@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEnum, IsOptional, Matches } from 'class-validator';
-import { Document } from 'mongoose';
 import { Role } from 'src/users/schemas/user.schema';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Promotion } from 'src/promotion/schema/promotion.schema';
 
 export enum Position {
   JuniorFrontEnd = 'Junior FrontEnd',
@@ -37,6 +38,10 @@ export class Employee extends Document {
   @Prop()
   @IsEnum(Position)
   position: Position;
+
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }] })
+  promotionHistory: Promotion[];
+
 
   @Prop()
   @IsEnum(Role)

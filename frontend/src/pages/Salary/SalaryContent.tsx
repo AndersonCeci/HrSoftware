@@ -80,7 +80,7 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader title={t("salariesTitle")} onClick={handleModal} />
+      <TableHeader title={t("salarys")} onClick={handleModal}/>
 
       <Row title="Filters" gutter={10}>
         <Col>
@@ -96,7 +96,7 @@ const SalaryContent = () => {
         </Col>
         <Col>
           <Search
-            placeholder="Enter employee name"
+            placeholder={t("enterEmployeeName")}
             style={{ width: 300 }}
             onSearch={handleSearch}
             enterButton
@@ -107,7 +107,7 @@ const SalaryContent = () => {
         </Col>
         <Col flex="auto" style={{ textAlign: "left" }}>
           <Button type="primary" onClick={handleResetFilters}>
-            Reset filters
+            {t("resetFilters")}
           </Button>
         </Col>
       </Row>

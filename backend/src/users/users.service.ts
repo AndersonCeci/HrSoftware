@@ -40,16 +40,16 @@ export class UserService {
     return this.userModel.find();
   }
 
-  async getUserByUsername(username: string) {
-    return this.userModel.findOne({ username });
+  async getUserByEmail(email: string) {
+    return this.userModel.findOne({ email });
   }
 
   async updatePassword(
-    username: string,
+    email: string,
     oldPassword: string,
     newPassword: string,
   ) {
-    const user = await this.getUserByUsername(username);
+    const user = await this.getUserByEmail(email);
 
     if (!user) {
       throw new NotFoundException('User not found');

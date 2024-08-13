@@ -7,7 +7,7 @@ import { MdOutlineEmail } from "react-icons/md";
 
 const SettingsPage: React.FC = () => {
   return (
-    <div>
+    <div style={{width:"650px"}}>
       <PasswordProvider children={<ChangePasswordForm />} />
       <ChangeLanguage />
       <Card

@@ -17,26 +17,31 @@ type StepItem = {
 
 type StepItemProps = (
 	current: number,
+	setCurrent: (value: number) => void,
 	form: any,
 	isLoading: boolean,
 	error: string | null,
 ) => StepItem[];
 
-const getStepItems: StepItemProps = (current, form, isLoading, error) => {
+const getStepItems: StepItemProps = (current, setCurrent, form, isLoading, error) => {
+	function resetOnError() {
+		setCurrent(0);
+	}
+
 	return [
 		{
 			subTitle: "Create Account",
-			content: <FirstPanel  />,
+			content: <FirstPanel />,
 			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
 		},
 		{
 			subTitle: "Add Information",
-			content: <SecondStep form={form} />,
+			content: <SecondStep />,
 			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
 		},
 		{
 			subTitle: "Finalize Account",
-			content: <FinalStep isSubmitting={isLoading} error={error} />,
+			content: <FinalStep isSubmitting={isLoading} errorMsg={error} onGoBackBtn={resetOnError} />,
 			icon: current === 2 ? error ? <BiSolidError /> : <FaCircleCheck /> : <CiCircleCheck />,
 		},
 	];

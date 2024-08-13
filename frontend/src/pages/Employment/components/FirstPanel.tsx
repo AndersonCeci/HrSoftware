@@ -1,24 +1,33 @@
-import { Flex, Form, Row, Col } from "antd";
+import { Flex, Row, Col } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
+import flagOpt from "../utils/flags";
+import { useTranslation } from "react-i18next";
 
 const FirstPanel = () => {
+	const { t } = useTranslation();
 	return (
 		<Flex vertical>
 			<Row gutter={16}>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<FormInputs.Input label="Name" name="name" required />
+					<FormInputs.Input label={t("name")} name="name" required />
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<FormInputs.Input label="Surname" name="surname" required />
+					<FormInputs.Input label={t("surname")} name="surname" required />
 				</Col>
 			</Row>
 			<Row>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
-					<FormInputs.Input label="Email" name="email" required defaultValidateRule="email" />
+					<FormInputs.Input
+						label="Email"
+						addonAfter="@codevider.com"
+						name="email"
+						required
+						// defaultValidateRule="email"
+					/>
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<FormInputs.Input
-						label="Phone Number"
+						label={t("phoneNumber")}
 						name="phoneNumber"
 						required
 						defaultValidateRule="phoneNumber"
@@ -28,7 +37,7 @@ const FirstPanel = () => {
 			<Row>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<FormInputs.Input
-						label="Personal Number"
+						label={t("personalNumber")}
 						name="nID"
 						required
 						defaultValidateRule="personalNumber"
@@ -36,7 +45,7 @@ const FirstPanel = () => {
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<FormInputs.Select
-						label="Gender"
+						label={t("gender")}
 						name="gender"
 						options={[
 							{ label: "Male", value: "Male" },

@@ -25,6 +25,7 @@ import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
+import { PromotionModule } from './promotion/promotion.module';
 
 @Module({
   imports: [
@@ -72,7 +73,8 @@ import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
     FirebaseModule,
     TasksModule,
     DayoffModule,
-    GmailApiModule
+    GmailApiModule,
+    PromotionModule
   ],
   controllers: [],
   providers: [AppService, UploadService],
