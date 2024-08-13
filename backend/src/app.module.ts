@@ -52,7 +52,7 @@ import { InventoryModule } from './inventory/inventory.module';
           from: '"No Reply" <no-reply@hrsofware.com>',
         },
         template: {
-          dir: join(__dirname, '..','src', 'modules', 'mail', 'templates'),
+          dir: join(__dirname, '..', 'src', 'modules', 'mail', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -86,4 +86,3 @@ export class AppModule implements NestModule {
     console.log('Middleware Applied');
   }
 }
-

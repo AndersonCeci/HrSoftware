@@ -1,16 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import * as muv  from 'mongoose-unique-validator';
+import * as muv from 'mongoose-unique-validator';
 import { Asset } from 'src/assets/schemas/Asset.schema';
 
 export enum InventoryStatus {
   Available = 'Available',
   Assigned = 'Assigned',
   Broken = 'Broken',
-  OnRepair = 'OnRepair'
+  OnRepair = 'OnRepair',
 }
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Inventory extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Asset' })
   assetID: Types.ObjectId;
@@ -26,18 +26,13 @@ export class Inventory extends Document {
   status: InventoryStatus;
 
   @Prop({ type: Types.ObjectId, ref: 'Employee' })
-  employeeID:Types.ObjectId
+  employeeID: Types.ObjectId;
 
   @Prop()
-  employeeName:string
+  assignedDate: Date;
 
   @Prop()
-  assetName:string
-
-
-
-  // @Prop()
-  // quantity:number
+  assetName: string;
 
   @Prop({ default: false })
   isDeleted: boolean;
@@ -45,5 +40,6 @@ export class Inventory extends Document {
   @Prop()
   deleteDate: Date;
 }
- const InventorySchema = SchemaFactory.createForClass(Inventory)
-export {InventorySchema}
+
+const InventorySchema = SchemaFactory.createForClass(Inventory);
+export { InventorySchema };

@@ -23,11 +23,6 @@ export class AssetsController {
     return this.assetsService.findName(name);
   }
 
-  @Delete(':id')
-  async deleteByName(@Param('id') id: string) {
-    const result = await this.assetsService.softDeleteAssetById(id);
-    return result;
-  }
 
   @Patch(':id')
   async updateUser(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
