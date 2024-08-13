@@ -1,9 +1,9 @@
-import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
+import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import { MoreOutlined, SearchOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import Button from "../../../components/Shared/Button";
+import Button from "../../../../components/Shared/Button";
 import { TableProps, Dropdown } from "antd";
-import { ButtonType } from "../../../enums/Button";
-import { AssetDatatype } from "../types/AssetsDataType";
+import { ButtonType } from "../../../../enums/Button";
+import { AssetDatatype } from "../../types/AssetsDataType";
 
 export function getColumns(
 	tableData: AssetDatatype[],

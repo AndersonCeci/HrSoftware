@@ -67,6 +67,7 @@ const Table = ({
 	fixed = false,
 	pageSize,
 	pagination,
+	showHeader = true,
 	expandable,
 	identifier = "_id",
 }: TablePropsType) => {
@@ -85,7 +86,9 @@ const Table = ({
 			columns={columns}
 			dataSource={data}
 			bordered
+			showHeader={showHeader}
 			size="small"
+			
 			scroll={{ x: fixed ? 1500 : undefined }}
 			expandable={expandable ? expandable : undefined}
 		/>

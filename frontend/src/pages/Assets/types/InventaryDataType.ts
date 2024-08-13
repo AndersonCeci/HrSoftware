@@ -1,6 +1,6 @@
 export type InventaryDataType = {
 	_id: string;
-	assetType: string;
+	assetName: string;
 	quantity: number;
-	reserved: number;
+	reserve: number;
 };

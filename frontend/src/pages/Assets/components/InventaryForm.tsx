@@ -19,7 +19,7 @@ const QuantityForm = forwardRef(
 
 		function onFinish(values: any, identifier: string) {
 			selectedAsset
-				? onAddQuantity(values[identifier], selectedAsset.assetType)
+				? onAddQuantity(values[identifier], selectedAsset.assetName)
 				: onAddAssetType(values[identifier]);
 		}
 
@@ -35,23 +35,16 @@ const QuantityForm = forwardRef(
 				ref={formRef}
 				layout="vertical"
 				autoComplete="off"
-				onFinish={(values) => onFinish(values, selectedAsset ? "codes" : "assetTypes")}
+				onFinish={(values) => onFinish(values, selectedAsset ? "codes" : "assetName")}
 			>
 				<Form.List
-					name={selectedAsset ? "codes" : "assetTypes"}
+					name={selectedAsset ? "codes" : "assetName"}
 					rules={[
 						{
 							validator: async (_, values) => {
 								if (!values || values.length < 1) {
 									return Promise.reject(new Error("At least 1 Asset is required"));
 								}
-								// dont add same code twice
-
-								// if (values.length !== new Set(values).size) {
-								// 	console.log(values, "values", new Set(values), "set");
-
-								// 	return Promise.reject(new Error("Asset Type already exists"));
-								// }
 							},
 						},
 					]}
@@ -62,7 +55,7 @@ const QuantityForm = forwardRef(
 								<Form.Item
 									label={
 										index === 0
-											? `${selectedAsset ? `Add ${selectedAsset.assetType}'s Code` : "Add Asset"}`
+											? `${selectedAsset ? `Add ${selectedAsset.assetName}'s Code` : "Add Asset"}`
 											: ""
 									}
 									required={false}
@@ -76,7 +69,7 @@ const QuantityForm = forwardRef(
 												required: true,
 												whitespace: true,
 												message: selectedAsset
-													? `Please input ${selectedAsset?.assetType}'s code or delete this field.`
+													? `Please input ${selectedAsset?.assetName}'s code or delete this field.`
 													: "Please input asset type or delete this field.",
 											},
 										]}
@@ -85,7 +78,7 @@ const QuantityForm = forwardRef(
 										<Input
 											size="large"
 											placeholder={
-												selectedAsset ? `${selectedAsset.assetType}'s Code` : "Asset Type"
+												selectedAsset ? `${selectedAsset.assetName}'s Code` : "Asset Type"
 											}
 											style={{ width: "100%" }}
 											suffix={
@@ -105,7 +98,7 @@ const QuantityForm = forwardRef(
 									style={{ width: "100%" }}
 									icon={<PlusOutlined />}
 								>
-									{`Add ${selectedAsset ? `${selectedAsset.assetType}'s Code` : "Asset Type"}`}
+									{`Add ${selectedAsset ? `${selectedAsset.assetName}'s Code` : "Asset Type"}`}
 								</Button>
 								<Form.ErrorList errors={errors} />
 							</Form.Item>

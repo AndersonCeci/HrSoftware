@@ -14,9 +14,7 @@ const AssetsPage: React.FC = () => {
 				}}
 			>
 				<Tabs.TabPane tab="Assets" key="1">
-					<>
-						<AssetContent />
-					</>
+					<AssetContent />
 				</Tabs.TabPane>
 				<Tabs.TabPane tab="Inventary" key="2">
 					<InventaryContent />

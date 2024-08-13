@@ -7,7 +7,7 @@ import { AssetDatatype } from "../types/AssetsDataType";
 import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
 
-import { getColumns } from "../utils/AssetsColumn";
+import { getColumns } from "./columns/AssetsColumn";
 import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
