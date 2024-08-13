@@ -29,12 +29,17 @@ export class SalaryDTO {
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
-  @Max(30)
+  @Max(22)
   readonly workDays: number;
 
   @ValidateNested({ each: true })
   @Type(() => BonusDTO)
   readonly bonuses?: BonusDTO[];
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  readonly incomeTax: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -49,6 +54,16 @@ export class SalaryDTO {
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
+  readonly healthInsuranceCompany: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  readonly socialInsuranceCompany: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
   readonly grossSalary: number;
 
   @IsNotEmpty()
@@ -58,8 +73,7 @@ export class SalaryDTO {
 
   @IsBoolean()
   readonly paid?: boolean;
-  
 
-    isDeleted:boolean;
-    deleteDate?:Date;
+  isDeleted: boolean;
+  deleteDate?: Date;
 }

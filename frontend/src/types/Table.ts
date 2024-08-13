@@ -7,6 +7,7 @@ export type TablePropsType = {
 	fixed?: boolean;
 	pageSize?: number;
   pagination?: TableProps<any>['pagination'];
+  expandable?: TableProps<any>['expandable']
 };
 
 export type createTableColumns = {

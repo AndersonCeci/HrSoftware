@@ -1,5 +1,4 @@
 import { RecruitmentService } from './recruitments.service';
-import { RecruimentsModule } from 'src/recruitments/recruitments.module';
 import {
   Body,
   Controller,
@@ -12,16 +11,15 @@ import {
   Patch,
   HttpException,
 } from '@nestjs/common';
-import { CreateRecruitmentDto } from './dto/Recruiments.dto';
+import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import mongoose from 'mongoose';
-import { UpdateRecruitmentDto } from './dto/UpdateRecruiments.dto';
+import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 
 @Controller('recruiments')
 export class RecruimentsController {
   constructor(private recruitmentService: RecruitmentService) {}
 
   @Post()
-  @UsePipes(new ValidationPipe())
   createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
     return this.recruitmentService.createRecruitment(createRecruitmentDto);
   }

@@ -7,24 +7,6 @@ import { message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 const API = import.meta.env.REACT_APP_SALARY;
 
-export interface EditSalaryValues {
-  _id: string;
-  dateTaken: Date;
-  employeeID: string;
-  NSSH: string;
-  netSalary: number;
-  workDays: number;
-  socialSecurityContributions: number;
-  healthInsurance: number;
-  grossSalary: number;
-  total: number;
-  paid: boolean;
-  employeeDetails?: {
-    name: string;
-    surname: string;
-  };
-}
-
 interface Filter {
   name?: string;
   startDate?: Dayjs;
@@ -71,6 +53,7 @@ export const useSalaryHook = () => {
         params: { page, limit, ...filters },
       });
       const { data, meta } = response.data;
+      console.log("Fetched salaries", data);
       setTableData(data);
       setItemCount(meta.itemCount);
     } catch (error) {
@@ -157,7 +140,7 @@ export const useSalaryHook = () => {
     setSelectedSalary(undefined);
   };
 
-  const handleEditSubmit = (values: EditSalaryValues) => {
+  const handleEditSubmit = (values: Salary) => {
     getSelectedSalary(values._id);
     if (!selectedSalary) return;
     const salary: Salary = {
@@ -166,13 +149,20 @@ export const useSalaryHook = () => {
       NSSH: values.NSSH,
       dateTaken: values.dateTaken,
       netSalary: parseInt(values.netSalary.toString(), 10),
-      workDays: parseInt(values.workDays.toString(), 10),
+      workDays: parseInt(values.workDays.toString(), 22),
       bonuses: selectedSalary.bonuses,
       socialSecurityContributions: parseInt(
         values.socialSecurityContributions.toString(),
         10
       ),
+      incomeTax: parseInt(values.incomeTax.toString()),
       healthInsurance: parseInt(values.healthInsurance.toString(), 10),
+      healthInsuranceCompany: parseInt(
+        values.healthInsuranceCompany.toString()
+      ),
+      socialInsuranceCompany: parseInt(
+        values.socialInsuranceCompany.toString()
+      ),
       grossSalary: parseInt(values.grossSalary.toString(), 10),
       total: parseInt(values.total.toString(), 10),
       paid: values.paid,
@@ -183,7 +173,7 @@ export const useSalaryHook = () => {
     setSelectedSalary(undefined);
   };
 
-  const createSalary = async (values: EditSalaryValues) => {
+  const createSalary = async (values: Salary) => {
     try {
       const salary: Salary = {
         _id: values._id,
@@ -196,9 +186,16 @@ export const useSalaryHook = () => {
           values.socialSecurityContributions.toString(),
           10
         ),
+        incomeTax: parseInt(values.incomeTax.toString()),
         healthInsurance: parseInt(values.healthInsurance.toString(), 10),
         grossSalary: parseInt(values.grossSalary.toString(), 10),
         total: parseInt(values.total.toString(), 10),
+        healthInsuranceCompany: parseInt(
+          values.healthInsuranceCompany.toString()
+        ),
+        socialInsuranceCompany: parseInt(
+          values.socialInsuranceCompany.toString()
+        ),
         paid: false,
       };
 

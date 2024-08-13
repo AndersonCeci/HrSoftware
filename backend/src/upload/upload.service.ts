@@ -8,7 +8,7 @@ import { Stream } from 'stream';
 export class UploadService {
   constructor(private readonly firebaseService: FirebaseService) {}
 
-  async uploadFile(file): Promise<string> {
+  async uploadFile(file ): Promise<string> {
     const storage = this.firebaseService.getStorageInstance();
     const bucket = storage.bucket();
 

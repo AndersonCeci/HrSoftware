@@ -1,11 +1,23 @@
 import React, { MutableRefObject, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
 import Form from "antd/es/form";
-import { DatePicker, Input, message, Spin, Select, InputNumber } from "antd";
+import {
+  DatePicker,
+  Input,
+  message,
+  Spin,
+  Select,
+  InputNumber,
+  Button,
+  Row,
+  Col,
+} from "antd";
 import { ModalContext, SalaryContext } from "../context";
 import moment from "moment";
 import axios, { AxiosError } from "axios";
 import { EmployeeDataType } from "../../Employment/types/Employee";
+import { Bonus } from "../../../types/BonusProps";
+import { Payroll } from "../../../types/Payroll";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API;
 const SALARY_API = import.meta.env.REACT_APP_SALARY;
@@ -15,13 +27,6 @@ interface EditSalaryProps {
   editFormRef: MutableRefObject<any>;
   handleEditSubmit: (values: any) => void;
   handleCreateSubmit: (values: any) => void;
-}
-
-export interface Payroll {
-  netSalary: number;
-  socialInsuranceEmployee: number;
-  healthInsuranceEmployee: number;
-  incomeTax: number;
 }
 
 const fetchEmployee = async (name: string, surname: string) => {
@@ -36,10 +41,13 @@ const fetchEmployee = async (name: string, surname: string) => {
   }
 };
 
-const getPayroll = async (grossSalary: number): Promise<Payroll | null> => {
+const getPayroll = async (
+  grossSalary: number,
+  workDays: number
+): Promise<Payroll | null> => {
   try {
     const res = await axios.get(`${SALARY_API}/net-salary`, {
-      params: { grossSalary },
+      params: { grossSalary, workDays },
     });
     return res.data;
   } catch (error) {
@@ -97,23 +105,30 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
     editFormRef.current.resetFields();
   };
 
-  const handleGrossSalaryChange = (value: number | null) => {
-    editFormRef.current.setFieldsValue({
-      grossSalary: value,
-    });
-    const grossSalary = value;
-    if (grossSalary) {
-      getPayroll(parseInt(grossSalary.toString())).then((payroll) => {
-        if (payroll) {
-          editFormRef.current.setFieldsValue({
-            netSalary: payroll.netSalary,
-            socialSecurityContributions: payroll.socialInsuranceEmployee,
-            healthInsurance: payroll.healthInsuranceEmployee,
-            incomeTax: payroll.incomeTax,
-            total: grossSalary,
-          });
-        }
-      });
+  const calculatePayroll = async () => {
+    const { inGrossSalary, workDays, bonuses } =
+      editFormRef.current.getFieldsValue();
+    if (inGrossSalary && workDays) {
+      const payroll = await getPayroll(
+        parseInt(inGrossSalary),
+        parseInt(workDays)
+      );
+      if (payroll) {
+        editFormRef.current.setFieldsValue({
+          netSalary: payroll.netSalary,
+          socialSecurityContributions: payroll.socialInsuranceEmployee,
+          healthInsurance: payroll.healthInsuranceEmployee,
+          incomeTax: payroll.incomeTax,
+          socialInsuranceCompany: payroll.socialInsuranceCompany,
+          healthInsuranceCompany: payroll.healthInsuranceCompany,
+          grossSalary: payroll.grossSalary,
+          total:
+            bonuses?.reduce(
+              (total: number, bonus: Bonus) => total + bonus.amount,
+              0
+            ) + payroll.netSalary,
+        });
+      }
     }
   };
 
@@ -124,7 +139,9 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
         setIsEditModalOpen(false);
         editFormRef.current.resetFields();
       }}
+      title={title}
       onOk={handleModalOk}
+      width={700}
     >
       <Form
         ref={editFormRef}
@@ -140,23 +157,34 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
             NSSH: selectedSalary?.employeeDetails?.NSSH,
           },
           dateTaken: defaultDate,
+          bonusesTotal:
+            selectedSalary?.bonuses?.reduce(
+              (total, bonus) => total + bonus.amount,
+              0
+            ) || 0,
         }}
         style={{ padding: 35 }}
+        layout="vertical"
       >
-        <h2>{title}</h2>
         <Spin spinning={loading}>
           <div>
             {selectedSalary?.employeeDetails ? (
               <>
-                <Form.Item label="Name" name={["employeeDetails", "name"]}>
-                  <Input disabled />
-                </Form.Item>
-                <Form.Item
-                  label="Surname"
-                  name={["employeeDetails", "surname"]}
-                >
-                  <Input disabled />
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item label="Name" name={["employeeDetails", "name"]}>
+                      <Input disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Surname"
+                      name={["employeeDetails", "surname"]}
+                    >
+                      <Input disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </>
             ) : (
               <Form.Item
@@ -188,75 +216,177 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
             )}
             {(selectedSalary || employeeDet) && (
               <>
-                <Form.Item
-                  label="Gross Salary"
-                  name="grossSalary"
-                  rules={[
-                    { required: true, message: "Gross Salary is required" },
-                  ]}
-                >
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    onChange={handleGrossSalaryChange}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Date taken"
-                  name="dateTaken"
-                  rules={[
-                    { required: true, message: "Date taken is required" },
-                  ]}
-                >
-                  <DatePicker picker="month" />
-                </Form.Item>
-                <Form.Item
-                  label="Work Days"
-                  name="workDays"
-                  rules={[{ required: true, message: "Work days is required" }]}
-                >
-                  <Input type="number" />
-                </Form.Item>
-                <Form.Item
-                  label="Net Salary"
-                  name="netSalary"
-                  rules={[
-                    { required: true, message: "Net Salary is required" },
-                  ]}
-                >
-                  <Input type="number" disabled />
-                </Form.Item>
-                <Form.Item label="Income Tax" name="incomeTax">
-                  <Input type="number" disabled />
-                </Form.Item>
-               
-                <Form.Item
-                  label="Health Insurance"
-                  name="healthInsurance"
-                  rules={[
-                    { required: true, message: "Health Insurance is required" },
-                  ]}
-                >
-                  <Input type="number" disabled />
-                </Form.Item>
-                <Form.Item
-                  label="Social Security Contributions"
-                  name="socialSecurityContributions"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Social Security Contributions is required",
-                    },
-                  ]}
-                >
-                  <Input type="number" disabled />
-                </Form.Item>
-                <Form.Item
-                  label="Total"
-                  name="total"
-                  rules={[{ required: true, message: "Total is required" }]}
-                >
-                  <Input type="number" disabled />
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Gross Salary"
+                      name="inGrossSalary"
+                      rules={[
+                        { required: true, message: "Gross Salary is required" },
+                      ]}
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Date taken"
+                      name="dateTaken"
+                      rules={[
+                        { required: true, message: "Date taken is required" },
+                      ]}
+                    >
+                      <DatePicker picker="month" style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Work Days"
+                      name="workDays"
+                      rules={[
+                        { required: true, message: "Work days are required" },
+                      ]}
+                    >
+                      <Input
+                        type="number"
+                        style={{ width: "100%" }}
+                        defaultValue={22}
+                        min={0}
+                        max={22}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Button
+                      type="text"
+                      style={{ marginTop: "32px", width: "100%" }}
+                      onClick={calculatePayroll}
+                      color="primary"
+                    >
+                      Calculate Payroll
+                    </Button>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="New Gross Salary"
+                      name="grossSalary"
+                      rules={[
+                        {
+                          required: true,
+                          message: "New Gross Salary is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Income Tax"
+                      name="incomeTax"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Income Tax is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Health Insurance"
+                      name="healthInsurance"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Health Insurance is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Social Security Contributions"
+                      name="socialSecurityContributions"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Social Security Contributions is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Social Insurance Company"
+                      name="socialInsuranceCompany"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Social Insurance Company is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Health Insurance Company"
+                      name="healthInsuranceCompany"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Health Insurance Company is required",
+                        },
+                      ]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Net Salary"
+                      name="netSalary"
+                      rules={[
+                        { required: true, message: "Net Salary is required" },
+                      ]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item label="Bonuses Total" name="bonusesTotal">
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Total"
+                      name="total"
+                      rules={[{ required: true, message: "Total is required" }]}
+                    >
+                      <Input type="number" disabled style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </>
             )}
           </div>

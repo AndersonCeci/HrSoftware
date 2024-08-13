@@ -7,7 +7,7 @@ import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './modules/events/events.module';
-import { RecruimentsModule } from './recruitments/recruitments.module';
+import {  RecruitmentsModule } from './recruitments/recruitments.module';
 import { EmployeeModule } from './employee/employe.module';
 import { LeftModule } from './left/left.module';
 import { AssetsModule } from './assets/assets.module';
@@ -18,14 +18,13 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailModule } from './modules/mail/mail.module';
-import { LeftService } from './left/left.service';
 import { EventsModuleModale } from './events/eventsModale.module';
-
 import { UploadModule } from './upload/upload.module';
 import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
+import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
 
 @Module({
@@ -61,7 +60,7 @@ import { PromotionModule } from './promotion/promotion.module';
       inject: [ConfigService],
     }),
     UsersModule,
-    RecruimentsModule,
+    RecruitmentsModule,
     AuthModule,
     SalaryModule,
     EventsModule,
@@ -74,6 +73,7 @@ import { PromotionModule } from './promotion/promotion.module';
     FirebaseModule,
     TasksModule,
     DayoffModule,
+    GmailApiModule,
     PromotionModule
   ],
   controllers: [],

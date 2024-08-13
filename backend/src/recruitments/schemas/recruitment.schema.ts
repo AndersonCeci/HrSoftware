@@ -1,6 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
+export enum RecruitmentStage {
+  Applied = 'Applied',
+  Rejected = 'Rejected',
+  FirstInterview = '1st Interview',
+  SecondInterview = '2nd Interview',
+  OfferMade = 'Offer Made',
+}
 @Schema()
 export class Recruitment extends Document {
   @Prop({ required: true })
@@ -9,7 +15,7 @@ export class Recruitment extends Document {
   @Prop({ required: true })
   surname: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, })
   email: string;
 
   @Prop()
@@ -20,13 +26,8 @@ export class Recruitment extends Document {
 
   @Prop({
     required: true,
-    enum: [
-      'Applied',
-      'Rejected',
-      '1st Interview',
-      '2nd Interview',
-      'Offer Made',
-    ],
+    enum: RecruitmentStage,
+    default: RecruitmentStage.Applied,
   })
   stage: string;
 
