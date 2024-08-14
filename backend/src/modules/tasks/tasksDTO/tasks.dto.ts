@@ -10,12 +10,13 @@ export class CreateTaskDto {
     description: string;
 
     @IsNotEmpty()
-    due_date: string;
+    due_date: Date;
 
     @IsNotEmpty()
     status: TaskStatus;
 
-    isDeleted:boolean;
+    isDeleted: boolean;
+    
     deleteDate:Date
 
 }

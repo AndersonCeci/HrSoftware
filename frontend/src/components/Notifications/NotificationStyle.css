@@ -1,0 +1,15 @@
+.ant-popover-inner {
+    width: 400px;
+   }
+/* .ant-list {
+    width: fit-content
+   } */
+
+.markAsRead {
+    color:blue;
+    cursor: pointer;
+}
+
+.nav-menu-icon {
+    cursor: pointer;
+}

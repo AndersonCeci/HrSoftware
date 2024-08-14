@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import "../../styles/Shared/NavigationLink.css"
+import "../../styles/Shared/NavigationLink.css";
 import { NavigationLinkProps } from "../../types/NavigationLinkProps";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +11,10 @@ const NavigationLink = ({
   handleClick,
 }: NavigationLinkProps) => {
   const { t } = useTranslation();
+
+  if (!linkTo) {
+    return <div>{icon}</div>;
+  }
 
   return (
     <div>

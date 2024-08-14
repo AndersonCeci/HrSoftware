@@ -26,6 +26,9 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
+import { NotificationsGatewayModule } from './notificationsGateway/notificationgateAway.module';
+import { NotificationsModule } from './notificationsGateway/notification.module';
+
 
 @Module({
   imports: [
@@ -50,7 +53,7 @@ import { PromotionModule } from './promotion/promotion.module';
           from: '"No Reply" <no-reply@hrsofware.com>',
         },
         template: {
-          dir: join(__dirname, '..','src', 'modules', 'mail', 'templates'),
+          dir: join(__dirname, '..', 'src', 'modules', 'mail', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -74,7 +77,9 @@ import { PromotionModule } from './promotion/promotion.module';
     TasksModule,
     DayoffModule,
     GmailApiModule,
-    PromotionModule
+    PromotionModule,
+    NotificationsGatewayModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [AppService, UploadService],
@@ -85,4 +90,3 @@ export class AppModule implements NestModule {
     console.log('Middleware Applied');
   }
 }
-

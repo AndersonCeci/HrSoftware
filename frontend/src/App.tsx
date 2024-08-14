@@ -8,7 +8,6 @@ import "./App.css";
 const iterationRoutes = [
 	Paths.Dashboard,
 	Paths.PersonalCalendar,
-	Paths.Notifications,
 	Paths.Company,
 	Paths.Employee,
 	Paths.Background,
