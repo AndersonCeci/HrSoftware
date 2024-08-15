@@ -36,7 +36,7 @@ const DashboardPage: React.FC = () => {
   ];
 
   const employID = JSON.parse(
-    localStorage.getItem("userData") || "{}"
+    localStorage.getItem("userData") || "{}",
   ).employID;
 
   console.log("EmployID:", employID);

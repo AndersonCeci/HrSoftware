@@ -2,12 +2,12 @@ import type { TableProps } from "antd";
 import { createTableColumns } from "../components/Table/Table";
 
 export type TablePropsType = {
-	data: any[];
-	columns: TableProps<any>["columns"];
-	fixed?: boolean;
-	pageSize?: number;
-  pagination?: TableProps<any>['pagination'];
-  expandable?: TableProps<any>['expandable']
+  data: any[];
+  columns: TableProps<any>["columns"];
+  fixed?: boolean;
+  pageSize?: number;
+  pagination?: TableProps<any>["pagination"];
+  expandable?: TableProps<any>["expandable"];
 };
 
 export type createTableColumns = {

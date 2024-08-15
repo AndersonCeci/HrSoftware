@@ -1,4 +1,4 @@
-.overflow-x-auto{
+.overflow-x-auto {
   margin-top: 20px;
   overflow-x: scroll;
 }
@@ -9,12 +9,12 @@
   border-radius: 12px;
 }
 
-.label{
+.label {
   color: white;
 }
 
 .ceo-card {
-  background-color: #246AFE;
+  background-color: #246afe;
 }
 
 .flex {
@@ -34,7 +34,7 @@
 }
 
 .hr-department {
-  background-color:#b878ed;
+  background-color: #b878ed;
 }
 
 .it-department {
@@ -54,10 +54,10 @@
   border-radius: 5px;
 }
 
-.prj-card{
+.prj-card {
   background-color: #9fdfae;
 }
 
-.w-card{
+.w-card {
   background-color: #9ab9fe;
 }

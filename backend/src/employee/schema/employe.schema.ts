@@ -42,7 +42,6 @@ export class Employee extends Document {
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }] })
   promotionHistory: Promotion[];
 
-
   @Prop()
   @IsEnum(Role)
   role: Role;

@@ -11,7 +11,6 @@ type ModalProps = {
   isOpen: true | false;
   title?: string;
   width?: number;
-  
 };
 
 const Modal = ({
@@ -32,7 +31,8 @@ const Modal = ({
       onOk={onOk}
       footer={null}
       width={width}
-      style={{ top: 20 }}    >
+      style={{ top: 20 }}
+    >
       {children}
       <Flex justify="flex-end">
         {onCancel && (

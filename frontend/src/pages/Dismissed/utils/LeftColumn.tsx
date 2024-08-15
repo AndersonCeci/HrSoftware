@@ -9,13 +9,13 @@ import { capitalizeFirstLetter } from "../../../utils/paths";
 import { useTranslation } from "react-i18next";
 
 export function getColumns(
-  tableData: LeftDataType[]
+  tableData: LeftDataType[],
 ): TableProps<LeftDataType>["columns"] {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation();
   return [
     createTableColumns({
-      title: t('name'),
+      title: t("name"),
       dataIndex: "username",
       key: "name",
       filterDropdown: true,

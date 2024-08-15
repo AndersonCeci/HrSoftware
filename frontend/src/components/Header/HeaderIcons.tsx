@@ -14,19 +14,32 @@ const logout = () => {
 
 const navigationLinkList = [
   {
-    icon: <Paths.PersonalCalendar.icon style={{color:"white"}} className="nav-menu-icon white-icon" />,
+    icon: (
+      <Paths.PersonalCalendar.icon
+        style={{ color: "white" }}
+        className="nav-menu-icon white-icon"
+      />
+    ),
     linkTo: `${Paths.PersonalCalendar.path}`,
   },
   {
     icon: (
       <Badge count={10} size="small">
-        <Paths.Notifications.icon style={{color:"white"}} className="nav-menu-icon white-icon" />
+        <Paths.Notifications.icon
+          style={{ color: "white" }}
+          className="nav-menu-icon white-icon"
+        />
       </Badge>
     ),
     linkTo: `${Paths.Notifications.path}`,
   },
   {
-    icon: <Paths.Profile.icon style={{color:"white"}} className="nav-menu-icon white-icon" />,
+    icon: (
+      <Paths.Profile.icon
+        style={{ color: "white" }}
+        className="nav-menu-icon white-icon"
+      />
+    ),
     linkTo: `${Paths.Profile.path}`,
   },
 

@@ -1,14 +1,14 @@
 .information-table-of-doom-and-despair-des-pa-sito {
-	width: 100%;
-	margin: 20px 0;
+  width: 100%;
+  margin: 20px 0;
 }
 
 .information-table-of-doom-and-despair-des-pa-sito tr:nth-child(odd) {
-	background-color: #e6f4ffc9;
+  background-color: #e6f4ffc9;
 }
 
 .test {
-	/* margin: 15px; */
-	overflow-x: scroll;
-	margin-top: 30px;
+  /* margin: 15px; */
+  overflow-x: scroll;
+  margin-top: 30px;
 }

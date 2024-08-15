@@ -20,7 +20,7 @@ export class CreateAssetDto {
   @IsOptional()
   @IsString()
   userName?: string;
-  
-  isDeleted:boolean;
-  deleteDate?:Date
+
+  isDeleted: boolean;
+  deleteDate?: Date;
 }

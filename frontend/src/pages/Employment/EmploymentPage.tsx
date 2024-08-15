@@ -10,6 +10,8 @@ import useHttp from "../../hooks/useHttp";
 import Modal from "../../components/Shared/Modal";
 import PromoteForm from "./components/PromoteForm";
 import { useTranslation } from "react-i18next";
+import FormInputs from "../../components/Shared/InputTypes/FormInputs";
+import { Form } from "antd";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
@@ -18,34 +20,36 @@ const EmploymentPage: React.FC = () => {
   const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
   const [open, setOpen] = useState(false);
   const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(
-    undefined
+    undefined,
   );
   const promoteRef = useRef();
   const [isLoading, error, sendRequest] = useHttp();
+  const [form] = Form.useForm();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPromoted, setIsPromoted] = useState(false);
   const [promotedData, setPromotedData] = useState<
     EmployeeDataType | undefined
   >(undefined);
+
   const { t } = useTranslation();
 
-	useEffect(() => {
-		sendRequest(
-			{
-				url: API,
-				headers: {
-					"Content-Type": "application/json",
-				},
-			},
-			setTableData,
-		);
-	}, []);
+  useEffect(() => {
+    sendRequest(
+      {
+        url: API,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      setTableData,
+    );
+  }, []);
 
-	function handleEditButtonClick(record: EmployeeDataType) {
-		console.log(record);
-		setEditedData(record);
-		setOpen(true);
-	}
+  function handleEditButtonClick(record: EmployeeDataType) {
+    console.log(record);
+    setEditedData(record);
+    setOpen(true);
+  }
 
   function handlePromoteButtonClick(record: EmployeeDataType) {
     console.log(record);
@@ -61,7 +65,7 @@ const EmploymentPage: React.FC = () => {
           return editedEmployee;
         }
         return item;
-      })
+      }),
     );
   }
 
@@ -75,6 +79,8 @@ const EmploymentPage: React.FC = () => {
   }
 
   function handleDeleteModalOk() {
+    const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
+    console.log(date);
     sendRequest(
       {
         url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
@@ -82,15 +88,16 @@ const EmploymentPage: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        body: { deletedAt: date },
       },
       () => {
         setTableData((prev) =>
-          prev.filter((item) => item._id !== editedData?._id)
+          prev.filter((item) => item._id !== editedData?._id),
         );
         setIsDeleting(false);
-      }
+      },
     );
-    console.log("hsaihsiiha")
+    console.log("hsaihsiiha");
     setIsDeleting(false);
     setEditedData(undefined);
   }
@@ -115,18 +122,18 @@ const EmploymentPage: React.FC = () => {
       () => {
         setTableData((prev) =>
           prev.map((employee) => {
-            if(employee._id === promotedData?._id){
+            if (employee._id === promotedData?._id) {
               return {
                 ...employee,
                 salary: value.newSalary,
-                position: value.newPosition
-              }
+                position: value.newPosition,
+              };
             }
             return employee;
-          })
+          }),
         );
         setIsPromoted(false);
-      }
+      },
     );
   }
 
@@ -134,7 +141,7 @@ const EmploymentPage: React.FC = () => {
     tableData,
     handleEditButtonClick,
     handleDeleteButtonClick,
-    handlePromoteButtonClick
+    handlePromoteButtonClick,
   );
 
   return (
@@ -146,6 +153,7 @@ const EmploymentPage: React.FC = () => {
           onEdit={handleEditEmployee}
         />
       </Drawer>
+
       <Modal
         title="Are you sure"
         isOpen={isDeleting}
@@ -153,7 +161,15 @@ const EmploymentPage: React.FC = () => {
         onCancel={() => handlClose(setIsDeleting)}
       >
         Are you sure you want to delete {editedData?.name}?
+        <Form layout="vertical" form={form} autoComplete="off">
+          <FormInputs.DatePicker
+            label={t("Leaving Date")}
+            name="deletedAt"
+            required
+          />
+        </Form>
       </Modal>
+
       <Modal
         title={t("promote")}
         isOpen={isPromoted}
@@ -161,7 +177,6 @@ const EmploymentPage: React.FC = () => {
         onOk={() => promoteRef.current.submit()}
       >
         <PromoteForm
-        
           ref={promoteRef}
           selectedEmployee={promotedData}
           onEdit={handlePromotionSubmit}

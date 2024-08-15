@@ -80,7 +80,7 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader title={t("salarys")} onClick={handleModal}/>
+      <TableHeader title={t("salarys")} onClick={handleModal} />
 
       <Row title="Filters" gutter={10}>
         <Col>

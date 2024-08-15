@@ -1,5 +1,12 @@
-import { ArgumentsHost, ExceptionFilter, HttpException, Logger, Catch, HttpStatus } from "@nestjs/common";
-import { Request, Response } from "express";
+import {
+  ArgumentsHost,
+  ExceptionFilter,
+  HttpException,
+  Logger,
+  Catch,
+  HttpStatus,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -53,7 +60,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       case HttpStatus.REQUEST_TIMEOUT:
         return 'Request Timeout: The server timed out waiting for the request.';
       default:
-        return typeof errorDetails === 'string' ? errorDetails : 'An unexpected error occurred.';
+        return typeof errorDetails === 'string'
+          ? errorDetails
+          : 'An unexpected error occurred.';
     }
   }
 }

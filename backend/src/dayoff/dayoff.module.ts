@@ -8,9 +8,9 @@ import { EmployeeModule } from 'src/employee/employe.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: DayOff.name, schema: DayOffSchema }]),
-    EmployeeModule
+    EmployeeModule,
   ],
   providers: [DayoffService],
-  controllers: [DayoffController]
+  controllers: [DayoffController],
 })
 export class DayoffModule {}

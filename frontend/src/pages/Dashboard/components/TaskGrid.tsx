@@ -159,8 +159,8 @@ const TaskGrid: React.FC = () => {
 
     setDataSource((prev) =>
       prev.map((task) =>
-        task.id === editedTask.id ? (updatedTask as Task) : task
-      )
+        task.id === editedTask.id ? (updatedTask as Task) : task,
+      ),
     );
     setIsEditable(false);
   };
@@ -222,7 +222,7 @@ const TaskGrid: React.FC = () => {
                 validator: (_, value) => {
                   if (value && value < moment().startOf("day")) {
                     return Promise.reject(
-                      new Error("Due date cannot be earlier than today")
+                      new Error("Due date cannot be earlier than today"),
                     );
                   }
                   return Promise.resolve();
@@ -289,7 +289,7 @@ const TaskGrid: React.FC = () => {
                 validator: (_, value) => {
                   if (value && value < moment().startOf("day")) {
                     return Promise.reject(
-                      new Error("Due date cannot be earlier than today")
+                      new Error("Due date cannot be earlier than today"),
                     );
                   }
                   return Promise.resolve();
