@@ -7,8 +7,8 @@ export class UpdateInventoryDto {
   assetName?:string
 
   @IsOptional()
-  @IsString({ each: true })
-  assetCodes: string[];
+  @IsString()
+  assetCodes?: string;
 
   @IsEnum(InventoryStatus)
   @IsOptional()

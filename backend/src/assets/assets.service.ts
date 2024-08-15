@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class AssetsService {
@@ -15,16 +16,75 @@ export class AssetsService {
   }
 
   async findAll(): Promise<Asset[]> {
-    return this.assetModel.find().exec();
+    const data = await this.assetModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: '_id',
+            foreignField: 'assetID',
+            as: 'inventories',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            assetName: '$assetName',
+            quantity: { $size: '$inventories' },
+
+            reserved: {
+              $size: {
+                $filter: {
+                  input: '$inventories',
+                  as: 'inventory',
+                  cond: { $eq: ['$$inventory.status', 'Assigned'] },
+                },
+              },
+            },
+            onRepair: {
+              $size: {
+                $filter: {
+                  input: '$inventories',
+                  as: 'inventory',
+                  cond: { $eq: ['$$inventory.status', 'OnRepair'] },
+                },
+              },
+            },
+
+            inventories: '$inventories',
+          },
+        },
+        {
+          $sort: { assetName: 1 },
+        },
+      ])
+      .exec();
+    return data;
   }
 
   async findName(name: string): Promise<Asset | null> {
-    return await this.assetModel.findOne({assetName:name}).exec();
+    return await this.assetModel.findOne({ assetName: name }).exec();
   }
 
-  async updateAsset(id: string, updateAssetDto: UpdateAssetDto): Promise<Asset> {
+  async updateAsset(
+    id: string,
+    updateAssetDto: UpdateAssetDto,
+  ): Promise<Asset> {
     return this.assetModel
       .findByIdAndUpdate(id, updateAssetDto, { new: true })
+      .exec();
+  }
+
+  async softDeleteAssetById(id: string): Promise<Asset> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    return this.assetModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: true, deleteDate: currentDate },
+        { new: true },
+      )
       .exec();
   }
 }

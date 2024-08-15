@@ -5,7 +5,9 @@ import {
 } from 'class-validator';
 
 export class UpdateAssetDto {
+  @IsString()
 
+  assetType?: string;
 
 }
 
