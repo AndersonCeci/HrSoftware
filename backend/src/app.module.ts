@@ -7,7 +7,7 @@ import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './modules/events/events.module';
-import {  RecruitmentsModule } from './recruitments/recruitments.module';
+import { RecruitmentsModule } from './recruitments/recruitments.module';
 import { EmployeeModule } from './employee/employe.module';
 import { LeftModule } from './left/left.module';
 import { AssetsModule } from './assets/assets.module';
@@ -50,7 +50,7 @@ import { PromotionModule } from './promotion/promotion.module';
           from: '"No Reply" <no-reply@hrsofware.com>',
         },
         template: {
-          dir: join(__dirname, '..','src', 'modules', 'mail', 'templates'),
+          dir: join(__dirname, '..', 'src', 'modules', 'mail', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -74,7 +74,7 @@ import { PromotionModule } from './promotion/promotion.module';
     TasksModule,
     DayoffModule,
     GmailApiModule,
-    PromotionModule
+    PromotionModule,
   ],
   controllers: [],
   providers: [AppService, UploadService],
@@ -85,4 +85,3 @@ export class AppModule implements NestModule {
     console.log('Middleware Applied');
   }
 }
-

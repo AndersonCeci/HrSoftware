@@ -15,7 +15,7 @@ export class Recruitment extends Document {
   @Prop({ required: true })
   surname: string;
 
-  @Prop({ required: true, })
+  @Prop({ required: true })
   email: string;
 
   @Prop()

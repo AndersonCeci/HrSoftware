@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
-import { SalaryDTO } from "./salary.dto";
+import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { SalaryDTO } from './salary.dto';
 
 export class EmployeeDetailsDTO {
   @IsNotEmpty()

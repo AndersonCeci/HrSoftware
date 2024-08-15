@@ -19,9 +19,11 @@ interface TableDataProps {
 }
 
 export const SalaryContext = createContext<SalaryContextProps | undefined>(
-  undefined
+  undefined,
 );
 export const ModalContext = createContext<ModalContextProps | undefined>(
-  undefined
+  undefined,
 );
-export const TableContext = createContext<TableDataProps| undefined>(undefined);
+export const TableContext = createContext<TableDataProps | undefined>(
+  undefined,
+);

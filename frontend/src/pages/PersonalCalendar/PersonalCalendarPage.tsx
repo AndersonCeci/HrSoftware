@@ -21,7 +21,10 @@ import dayjs, { Dayjs } from "dayjs";
 import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
 import EditNewEventForm from "./components/EditNewEventForm";
-import useEvents, { Status, NewEvent } from "./hooks/personalCalendarFetchHooks";
+import useEvents, {
+  Status,
+  NewEvent,
+} from "./hooks/personalCalendarFetchHooks";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -44,7 +47,13 @@ const PersonalCalendarPage: React.FC = () => {
   });
   const [editEventId, setEditEventId] = useState<string | null>(null);
 
-  const { allEvents, addNewEvent, handleDeleteEvent, handleCancelEvent, handleEditEvent } = useEvents();
+  const {
+    allEvents,
+    addNewEvent,
+    handleDeleteEvent,
+    handleCancelEvent,
+    handleEditEvent,
+  } = useEvents();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -59,7 +68,7 @@ const PersonalCalendarPage: React.FC = () => {
     return dayjs(date).format("DD-MM-YYYY HH:mm");
   };
 
-  const showDrawer = (arg:any) => {
+  const showDrawer = (arg: any) => {
     setSelectedDate(dayjs(arg.date));
     setOpen(true);
   };
@@ -111,7 +120,7 @@ const PersonalCalendarPage: React.FC = () => {
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
-            events={allEvents.map(event => ({
+            events={allEvents.map((event) => ({
               id: event._id,
               title: event.title,
               start: event.startDate,
@@ -121,9 +130,8 @@ const PersonalCalendarPage: React.FC = () => {
                 location: event.location,
                 status: event.status,
                 startTime: event.startTime,
-                endTime: event.endTime
-              }
-              
+                endTime: event.endTime,
+              },
             }))}
             dateClick={showDrawer}
             eventClick={(info) => {
@@ -157,7 +165,9 @@ const PersonalCalendarPage: React.FC = () => {
             <>
               <h3>Your Events</h3>
               {allEvents
-                .filter((event) => dayjs(event.startDate).isSame(selectedDate, "day"))
+                .filter((event) =>
+                  dayjs(event.startDate).isSame(selectedDate, "day"),
+                )
                 .map((event) => (
                   <Card
                     key={event._id}
@@ -200,13 +210,17 @@ const PersonalCalendarPage: React.FC = () => {
                       description={event.description}
                     />
                     <Divider orientation="left">Start Date:</Divider>
-                    <Title level={5}>{formatDateAndTime(event.startDate)}</Title>
+                    <Title level={5}>
+                      {formatDateAndTime(event.startDate)}
+                    </Title>
 
                     <Divider orientation="left">End Date:</Divider>
                     <Title level={5}>{formatDateAndTime(event.endDate)}</Title>
 
                     <Divider orientation="left">Start Time:</Divider>
-                    <Title level={5}>{formatDateAndTime(event.startTime)}</Title>
+                    <Title level={5}>
+                      {formatDateAndTime(event.startTime)}
+                    </Title>
 
                     <Divider orientation="left">End Time:</Divider>
                     <Title level={5}>{formatDateAndTime(event.endTime)}</Title>
@@ -240,7 +254,11 @@ const PersonalCalendarPage: React.FC = () => {
           title={editEventId ? "Edit Event" : "Add New Event"}
           footer={[
             editEventId ? (
-              <Button key="submit" type="primary" onClick={handleEditEventClick}>
+              <Button
+                key="submit"
+                type="primary"
+                onClick={handleEditEventClick}
+              >
                 <CheckCircleOutlined key="save" className="save-icon" />
                 Save Changes
               </Button>
@@ -248,7 +266,7 @@ const PersonalCalendarPage: React.FC = () => {
               <Button key="submit" type="primary" onClick={handleAddNewEvent}>
                 Add Event
               </Button>
-            )
+            ),
           ]}
         >
           <EditNewEventForm newEvent={newEvent} onChanges={onChanges} />

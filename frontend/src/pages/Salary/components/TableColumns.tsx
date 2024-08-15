@@ -73,7 +73,7 @@ const columns = ({
     displayAs: (bonuses: { desc: string; amount: number }[]) => {
       const totalBonuses = bonuses.reduce(
         (acc, bonus) => acc + bonus.amount,
-        0
+        0,
       );
       return <span>{totalBonuses}</span>;
     },

@@ -4,12 +4,16 @@ import { Employee, Position } from 'src/employee/schema/employe.schema';
 
 @Schema()
 export class Promotion extends Document {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Employee', required: true })
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Employee',
+    required: true,
+  })
   employee: Employee;
 
   @Prop()
-  employeeName: string; 
-  
+  employeeName: string;
+
   @Prop({ required: true })
   oldPosition: Position;
 

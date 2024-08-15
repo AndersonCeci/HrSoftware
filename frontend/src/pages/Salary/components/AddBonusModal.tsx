@@ -13,7 +13,8 @@ const AddBonusModal: React.FC<AddBonusProps> = ({
   handleAddBonusSubmit,
 }) => {
   const { selectedSalary } = useContext(SalaryContext)!;
-  const { isAddBonusModalOpen, setIsAddBonusModalOpen } = useContext(ModalContext)!;
+  const { isAddBonusModalOpen, setIsAddBonusModalOpen } =
+    useContext(ModalContext)!;
 
   if (!selectedSalary) {
     return null;
@@ -32,10 +33,11 @@ const AddBonusModal: React.FC<AddBonusProps> = ({
         style={{ padding: 40 }}
         initialValues={{
           ...selectedSalary,
-          bonuses: selectedSalary.bonuses?.map((bonus, index) => ({
-            ...bonus,
-            key: index.toString(),
-          })) || [],
+          bonuses:
+            selectedSalary.bonuses?.map((bonus, index) => ({
+              ...bonus,
+              key: index.toString(),
+            })) || [],
         }}
       >
         <h2>Add bonuses</h2>

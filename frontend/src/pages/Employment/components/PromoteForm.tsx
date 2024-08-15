@@ -23,22 +23,19 @@ const PromoteForm = forwardRef(
     useImperativeHandle(ref, () => ({
       submit: () => {
         formRef.current.submit();
-
       },
     }));
 
     const onFinish = (values: any) => {
-      console.log(values)
+      console.log(values);
       const valuesToSubmit = {
-        newPosition:  values.position,
+        newPosition: values.position,
         newSalary: values.salary,
         trainedBy: values.trainedBy,
-        dateOfPromotion: dayjs(values.dateOfPromotion).format("DD/MM/YYYY")
-      }
-      onEdit(valuesToSubmit)
+        dateOfPromotion: dayjs(values.dateOfPromotion).format("DD/MM/YYYY"),
+      };
+      onEdit(valuesToSubmit);
     };
-
-
 
     return (
       <div>
@@ -54,7 +51,7 @@ const PromoteForm = forwardRef(
             name="position"
             options={position}
           />
-          <FormInputs.Input 
+          <FormInputs.Input
             label="Salary"
             name="salary"
             defaultValidateRule="number"
@@ -70,9 +67,7 @@ const PromoteForm = forwardRef(
         </Form>
       </div>
     );
-  }
+  },
 );
 
 export default PromoteForm;
-
-

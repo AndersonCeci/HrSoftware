@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 type InventaryColumnType = (
   data: InventaryDataType[],
-  onEdit: (id: string, value: number) => void
+  onEdit: (id: string, value: number) => void,
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
@@ -29,7 +29,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
       displayAs: (value, record) => {
         const percentage = calcPercantage(
           record.quantity - record.reserved,
-          record.quantity
+          record.quantity,
         );
         const available = record.quantity - record.reserved;
         return (
@@ -53,8 +53,8 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
                 percentage > 80
                   ? "success"
                   : percentage <= 30
-                  ? "exception"
-                  : "normal"
+                    ? "exception"
+                    : "normal"
               }
             />
           </ConfigProvider>

@@ -6,8 +6,8 @@ import { UploadModule } from 'src/upload/upload.module';
 import { RecruitmentsModule } from 'src/recruitments/recruitments.module';
 
 @Module({
-  imports: [RecruitmentsModule,UploadModule],
+  imports: [RecruitmentsModule, UploadModule],
   providers: [GmailApiService],
-  controllers: [GmailApiController,AuthController]
+  controllers: [GmailApiController, AuthController],
 })
 export class GmailApiModule {}

@@ -87,7 +87,9 @@ const CompanyBackgroundPage: React.FC = () => {
         <Col span={12}>
           <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
             <Meta
-              avatar={<Avatar className="aboutus-avatar" size={"large"} src={CEO} />}
+              avatar={
+                <Avatar className="aboutus-avatar" size={"large"} src={CEO} />
+              }
               title="Pasho Toska"
               description="CEO"
             />
@@ -97,7 +99,9 @@ const CompanyBackgroundPage: React.FC = () => {
         <Col span={12}>
           <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
             <Meta
-              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              avatar={
+                <Avatar className="aboutus-avatar" size={"large"} src={""} />
+              }
               title="Ervin Ziko"
               description="Finance Manager"
             />
@@ -109,7 +113,9 @@ const CompanyBackgroundPage: React.FC = () => {
         <Col span={12}>
           <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
             <Meta
-              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              avatar={
+                <Avatar className="aboutus-avatar" size={"large"} src={""} />
+              }
               title="Erion Domi"
               description="Multinational Manager"
             />
@@ -119,7 +125,9 @@ const CompanyBackgroundPage: React.FC = () => {
         <Col span={12}>
           <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
             <Meta
-              avatar={<Avatar className="aboutus-avatar" size={"large"} src={""} />}
+              avatar={
+                <Avatar className="aboutus-avatar" size={"large"} src={""} />
+              }
               title="Altin Luli"
               description="Outsorcing Manager"
             />
@@ -193,22 +201,22 @@ export default CompanyBackgroundPage;
 //         console.error("Empty base64url string provided");
 //         return "";
 //       }
-  
+
 //       console.log("Original base64url string:", base64url.substring(0, 50) + "...");
-  
+
 //       const base64 = base64url
 //         .replace(/-/g, "+")
 //         .replace(/_/g, "/")
 //         .padEnd(base64url.length + ((4 - (base64url.length % 4)) % 4), "=");
-  
+
 //       console.log("Converted base64 string:", base64.substring(0, 50) + "...");
-  
+
 //       const binaryString = atob(base64);
 //       const byteArray = new Uint8Array(binaryString.length);
 //       for (let i = 0; i < binaryString.length; i++) {
 //         byteArray[i] = binaryString.charCodeAt(i);
 //       }
-  
+
 //       const blob = new Blob([byteArray], { type: "application/pdf" });
 //       return URL.createObjectURL(blob);
 //     } catch (error) {
@@ -216,7 +224,6 @@ export default CompanyBackgroundPage;
 //       return "";
 //     }
 //   };
-  
 
 //   return (
 //     <div>

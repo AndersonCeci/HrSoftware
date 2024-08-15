@@ -1,4 +1,4 @@
-import { Table as T, Input } from "antd";
+import { Table as T, Input, TableProps } from "antd";
 import "../../styles/Table/Table.css";
 import type { TablePropsType, createTableColumns } from "../../types/Table";
 
@@ -62,6 +62,10 @@ export function createTableColumns({
   };
 }
 
+interface ExtendedTablePropsType extends TablePropsType {
+  onChange?: TableProps<any>["onChange"];
+}
+
 const Table = ({
   data,
   columns,
@@ -69,7 +73,8 @@ const Table = ({
   pageSize,
   pagination,
   expandable,
-}: TablePropsType) => {
+  onChange,
+}: ExtendedTablePropsType) => {
   return (
     <T
       rowKey={(record) => record._id}
@@ -79,7 +84,7 @@ const Table = ({
       }}
       pagination={
         pagination
-          ? pagination
+          ? { ...pagination, position: ["bottomLeft"] }
           : { position: ["bottomLeft"], pageSize: pageSize ? pageSize : 10 }
       }
       className="information-table-of-doom-and-despair-des-pa-sito "
@@ -89,6 +94,7 @@ const Table = ({
       size="small"
       scroll={{ x: fixed ? 1500 : undefined }}
       expandable={expandable ? expandable : undefined}
+      onChange={onChange}
     />
   );
 };

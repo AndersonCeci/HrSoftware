@@ -1,6 +1,9 @@
 import { google } from 'googleapis';
 import { RecruitmentService } from 'src/recruitments/recruitments.service';
-import { CreateRecruitmentDto, RecruitmentWithFileDto } from 'src/recruitments/dto/Recruitments.dto';
+import {
+  CreateRecruitmentDto,
+  RecruitmentWithFileDto,
+} from 'src/recruitments/dto/Recruitments.dto';
 import { RecruitmentStage } from 'src/recruitments/schemas/recruitment.schema';
 import { Injectable } from '@nestjs/common';
 
@@ -63,8 +66,11 @@ export class GmailApiService {
 
         const emailData = msg.data;
 
-        const fromHeader = emailData.payload?.headers?.find((h) => h.name === 'From')?.value;
-        const [name, email] = fromHeader?.match(/(.*) <(.*)>/)?.slice(1, 3) || [];
+        const fromHeader = emailData.payload?.headers?.find(
+          (h) => h.name === 'From',
+        )?.value;
+        const [name, email] =
+          fromHeader?.match(/(.*) <(.*)>/)?.slice(1, 3) || [];
         const [surname, firstName] = name?.split(' ').reverse() || [];
 
         const createRecruitmentDto: RecruitmentWithFileDto = {
@@ -73,7 +79,10 @@ export class GmailApiService {
           email: email,
           position: 'Unknown',
           stage: RecruitmentStage.Applied,
-          submittedDate: new Date(emailData.payload?.headers?.find((h) => h.name === 'Date')?.value || new Date()),
+          submittedDate: new Date(
+            emailData.payload?.headers?.find((h) => h.name === 'Date')?.value ||
+              new Date(),
+          ),
           cv: '',
           phoneNumber: null,
           isDeleted: false,

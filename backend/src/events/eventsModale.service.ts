@@ -7,9 +7,7 @@ import { Query } from 'express-serve-static-core';
 
 @Injectable()
 export class EventsService {
-  constructor(
-    @InjectModel(Event.name) private eventModel: Model<Event>,
-  ) {}
+  constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(createEventDto);
@@ -17,36 +15,34 @@ export class EventsService {
   }
 
   async getEvent(query: Query): Promise<Event[]> {
-    const resPerPage = 2; 
-    const currentPage = Number(query.page) || 1; 
+    const resPerPage = 2;
+    const currentPage = Number(query.page) || 1;
     const skip = resPerPage * (currentPage - 1);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-  
+
     const events = await this.eventModel
-      .find({ 
+      .find({
         eventDate: { $gte: currentDate },
-        isDeleted: false
+        isDeleted: false,
       })
       .limit(resPerPage)
       .skip(skip)
       .exec();
-  
+
     return events;
   }
 
-
-  
   async softDeleteEventById(id: string): Promise<Event> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    
-    return this.eventModel.findByIdAndUpdate(
-      id, 
-      { isDeleted: true, deleteDate: currentDate }, 
-      { new: true }
-    ).exec();
+
+    return this.eventModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: true, deleteDate: currentDate },
+        { new: true },
+      )
+      .exec();
   }
 }
-
-

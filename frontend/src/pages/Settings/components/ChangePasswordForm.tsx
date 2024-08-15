@@ -110,16 +110,16 @@
 // };
 
 // export default ChangePasswordForm;
-import { Form, Input, Button, Card } from 'antd';
-import { usePassword } from '../context';
-import { usePasswordValidation } from '../context/hook';
-import { useTranslation } from 'react-i18next';
-
+import { Form, Input, Button, Card } from "antd";
+import { usePassword } from "../context";
+import { usePasswordValidation } from "../context/hook";
+import { useTranslation } from "react-i18next";
 
 const ChangePasswordForm = () => {
   const [form] = Form.useForm();
   const { changePassword } = usePassword();
-  const { validateConfirmPassword, validateNewPasswordNotOldPassword } = usePasswordValidation(form);
+  const { validateConfirmPassword, validateNewPasswordNotOldPassword } =
+    usePasswordValidation(form);
 
   const onChangePassword = async (values: any) => {
     const { oldPassword, newPassword } = values;
@@ -128,20 +128,20 @@ const ChangePasswordForm = () => {
       await changePassword(oldPassword, newPassword);
       form.resetFields();
     } catch (error) {
-     console.log(error);
+      console.log(error);
     }
   };
 
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         // width: "auto",
         // width:"750px",
-        margin:"20px"
+        margin: "20px",
         // justifyContent: 'center',
         // alignItems: 'center',
         // height: '100vh',
@@ -161,7 +161,7 @@ const ChangePasswordForm = () => {
               { required: true, message: "Please input your old password!" },
             ]}
           >
-            <Input.Password style={{width:"400px", float:"right"}}/>
+            <Input.Password style={{ width: "400px", float: "right" }} />
           </Form.Item>
           <Form.Item
             label="New Password"
@@ -173,7 +173,7 @@ const ChangePasswordForm = () => {
               },
             ]}
           >
-            <Input.Password style={{width:"400px", float:"right"}}/>
+            <Input.Password style={{ width: "400px", float: "right" }} />
           </Form.Item>
           <Form.Item
             label="Confirm Password"
@@ -186,10 +186,10 @@ const ChangePasswordForm = () => {
               },
             ]}
           >
-            <Input.Password style={{width:"400px", float:"right"}}/>
+            <Input.Password style={{ width: "400px", float: "right" }} />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ float:"right" }}>
+            <Button type="primary" htmlType="submit" style={{ float: "right" }}>
               {t(`changePassoword`)}
             </Button>
           </Form.Item>

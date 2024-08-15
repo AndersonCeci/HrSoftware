@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 export function getColumns(
   tableData: AssetDatatype[],
   handleDataDelete: (id: string) => void,
-  handleDataEdit: (id: string) => void
+  handleDataEdit: (id: string) => void,
 ): TableProps<AssetDatatype>["columns"] {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation();

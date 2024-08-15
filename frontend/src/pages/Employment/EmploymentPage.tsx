@@ -20,7 +20,7 @@ const EmploymentPage: React.FC = () => {
   const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
   const [open, setOpen] = useState(false);
   const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(
-    undefined
+    undefined,
   );
   const promoteRef = useRef();
   const [isLoading, error, sendRequest] = useHttp();
@@ -41,7 +41,7 @@ const EmploymentPage: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-      setTableData
+      setTableData,
     );
   }, []);
 
@@ -65,7 +65,7 @@ const EmploymentPage: React.FC = () => {
           return editedEmployee;
         }
         return item;
-      })
+      }),
     );
   }
 
@@ -92,10 +92,10 @@ const EmploymentPage: React.FC = () => {
       },
       () => {
         setTableData((prev) =>
-          prev.filter((item) => item._id !== editedData?._id)
+          prev.filter((item) => item._id !== editedData?._id),
         );
         setIsDeleting(false);
-      }
+      },
     );
     console.log("hsaihsiiha");
     setIsDeleting(false);
@@ -130,10 +130,10 @@ const EmploymentPage: React.FC = () => {
               };
             }
             return employee;
-          })
+          }),
         );
         setIsPromoted(false);
-      }
+      },
     );
   }
 
@@ -141,7 +141,7 @@ const EmploymentPage: React.FC = () => {
     tableData,
     handleEditButtonClick,
     handleDeleteButtonClick,
-    handlePromoteButtonClick
+    handlePromoteButtonClick,
   );
 
   return (

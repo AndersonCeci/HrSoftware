@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body,Param, HttpException,Delete,Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import mongoose from 'mongoose';
@@ -32,11 +41,12 @@ export class AssetsController {
   }
 
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateAssetDto: UpdateAssetDto,
+  ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.assetsService.updateAsset(id, updateAssetDto);
   }
-  
-  
 }

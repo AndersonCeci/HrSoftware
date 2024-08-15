@@ -16,18 +16,17 @@ import { capitalizeFirstLetter } from "../../../utils/paths";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 
-
 export function getColumns(
   tableData: EmployeeDataType[],
   onEdit: (record: EmployeeDataType) => void,
   onDelete: (id: EmployeeDataType) => void,
-  onPromote: (record: EmployeeDataType) => void
+  onPromote: (record: EmployeeDataType) => void,
 ): TableProps<EmployeeDataType>["columns"] {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation();
   return [
     createTableColumns({
-      title: t('name'),
+      title: t("name"),
       dataIndex: "username",
       key: "name",
       filterDropdown: true,

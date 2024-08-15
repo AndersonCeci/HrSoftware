@@ -16,15 +16,15 @@ const navElements = [
 ];
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
-	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-		useLocation()
-			.pathname.split("/")
-			.filter((x) => x),
-	);
+  const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+    useLocation()
+      .pathname.split("/")
+      .filter((x) => x),
+  );
 
-	const location = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
-  
+
   const { t } = useTranslation();
 
   const items: any = navElements.map((element) => {
@@ -47,17 +47,17 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
     };
   });
 
-	useEffect(() => {
-		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-	}, [location.pathname]);
+  useEffect(() => {
+    setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+  }, [location.pathname]);
 
-	const handleClick = () => {
-		localStorage.removeItem("userData");
-		console.log("Cleared?", localStorage.getItem("token"));
-		navigate("/");
-	};
+  const handleClick = () => {
+    localStorage.removeItem("userData");
+    console.log("Cleared?", localStorage.getItem("token"));
+    navigate("/");
+  };
 
-	return (
+  return (
     <div className="navmenu-container">
       <Menu
         // onClick={onClick}/
