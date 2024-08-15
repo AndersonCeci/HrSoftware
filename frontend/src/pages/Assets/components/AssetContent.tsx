@@ -80,19 +80,14 @@ const AssetContent = () => {
 					editFormRef.current?.submit();
 				}}
 			>
-				<AssetForm
-					ref={editFormRef}
-					selectedElement={selectedElement}
-					onAdd={handleAssetAdd}
-					onEdit={handleAssetEdit}
-				/>
+				<AssetForm ref={editFormRef} onAdd={handleAssetAdd} />
 			</Modal>
-			<TableHeader
+			{/* <TableHeader
 				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}
-			/>
+			/> */}
 
 			{!isLoading ? display : <Loader />}
 		</>

@@ -86,9 +86,9 @@ const Table = ({
 			columns={columns}
 			dataSource={data}
 			bordered
+			rowClassName="table-row"
 			showHeader={showHeader}
 			size="small"
-			
 			scroll={{ x: fixed ? 1500 : undefined }}
 			expandable={expandable ? expandable : undefined}
 		/>

@@ -1,21 +1,20 @@
-import { InventaryDataType } from "../types/InventaryDataType";
+import { AssetDatatype } from "../types/AssetsDataType";
 import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useImperativeHandle, useRef, forwardRef } from "react";
 
 type QuantityFormProps = {
-	selectedAsset?: InventaryDataType | null;
+	selectedAsset?: AssetDatatype | null;
 	onAddAssetType: (values: string[]) => void;
 	onAddQuantity: (values: string[], assetType: string) => void;
 };
-
-const API = import.meta.env.REACT_APP_INVENTARY_API;
 
 const QuantityForm = forwardRef(
 	({ selectedAsset, onAddAssetType, onAddQuantity }: QuantityFormProps, ref) => {
 		const [form] = Form.useForm();
 		const formRef = useRef<any>();
+		// console.log(selectedAsset, "selectedAsset");
 
 		function onFinish(values: any, identifier: string) {
 			selectedAsset

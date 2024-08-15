@@ -1,92 +1,84 @@
 import Table from "../../../components/Table/Table";
-import TableHeader from "../../../components/Table/TableHeader";
+import Loader from "../../../components/Shared/Loader";
 import createColumns from "./columns/InventaryColumn";
 import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
-import { InventaryDataType } from "../types/InventaryDataType";
-import { AssetDatatype, AssetStatus } from "../types/AssetsDataType";
+import { AssetDatatype, AssetStatus, InventaryDataType } from "../types/AssetsDataType";
 import Modal from "../../../components/Shared/Modal";
 import QuantityForm from "./InventaryForm";
-import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import ExpandedRow from "./ExpandesRow";
 
-const INVENTARY_FUCKING_API = import.meta.env.REACT_APP_INVENTORY_API;
-const ASSETS_FUCKING_API = import.meta.env.REACT_APP_ASSET_API;
+const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
+const ASSETS_API = import.meta.env.REACT_APP_ASSET_API;
 
-const InventaryContent = () => {
-	const [inventaryData, setInventaryData] = useState<InventaryDataType[]>([]);
-	const [allAssets, setAllAssets] = useState<AssetDatatype[]>([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [selectedInventaryData, setSelectedAsset] = useState<InventaryDataType | null>(null);
+type InventaryContentProps = {
+	isModalOpen: boolean;
+	setIsModalOpen: (value: boolean) => void;
+};
+
+const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps) => {
+	const [assetsData, setAssetsData] = useState<AssetDatatype[]>([]);
+	// const [isModalOpen, setIsModalOpen] = useState(false);
+	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
-	const [, , fetchData] = useHttp();
-	const columns = createColumns(inventaryData, handleQuantityChange);
+	const [isLoading, , fetchData] = useHttp();
+
+	console.log(isModalOpen, "assetsData");
 
 	useEffect(() => {
-		fetchData({ url: `${ASSETS_FUCKING_API}` }, (data) => {
-			setInventaryData(data);
-		});
-
-		fetchData({ url: `${INVENTARY_FUCKING_API}` }, (data) => {
-			setAllAssets(data);
-		});
+		fetchData(
+			{
+				url: `${ASSETS_API}`,
+			},
+			(response) => setAssetsData(response),
+		);
 	}, []);
 
-	function handleQuantityChange(record: InventaryDataType) {
+	// console.log(assetsData, "inventaryData");
+
+	const columns = createColumns(assetsData, handleQuantityChange);
+
+	function handleQuantityChange(record: AssetDatatype) {
 		setSelectedAsset(record);
 		setIsModalOpen(true);
 	}
 
-	function handleAssignAssetClick(){
-		
-	}
-
-	function handleStatusChange(newStatus: AssetStatus, record: AssetDatatype) {
-		console.log(newStatus, "HELLO MOm");
-		console.log(record, "ILVI IDJICEINevijrvwsivbe");
-		setAllAssets((prev) =>
-			prev.map((asset) => {
-				if (asset._id === record._id) {
-					console.log("YOU ARE HERE");
-					const updatedAsset = {
-						...asset,
-						status: newStatus,
-					};
-					console.log(updatedAsset);
-					return updatedAsset;
-				}
-				return asset;
-			}),
-		);
-	}
-
 	function handleAddAssetType(values: string[]) {
-		console.log(values, "values i posted");
-		const valueToSubmit = {
-			assetName: values[0],
-		};
-		fetchData(useHttp.postRequestHelper(ASSETS_FUCKING_API, valueToSubmit), (data) => {
-			setInventaryData((prev) => {
-				return [...prev, data];
-			});
-			setIsModalOpen(false);
-		});
+		const valueToSend = values[0].charAt(0).toUpperCase() + values[0].slice(1).toLowerCase();
+		fetchData(
+			useHttp.postRequestHelper(ASSETS_API, {
+				assetName: valueToSend,
+			}),
+			(response) => {
+				console.log(response, "response");
+				setAssetsData((prev) => [...prev, response]);
+				setIsModalOpen(false);
+			},
+		);
 	}
 
 	function handleAddQuantity(values: string[], assetType: string) {
 		console.log(values, assetType, "values i posted");
 		fetchData(
-			useHttp.postRequestHelper(INVENTARY_FUCKING_API, {
+			useHttp.postRequestHelper(INVENTARY_API, {
 				assetName: assetType,
 				assetCodes: values,
 			}),
-			(data) => {
-				console.log(data, "response");
-				setAllAssets((prev) => {
-					return [...prev, ...data];
+			(response) => {
+				setAssetsData((prev) => {
+					const updatedAssets = prev.map((asset) => {
+						if (asset.assetName === assetType) {
+							return {
+								...asset,
+								quantity: asset.quantity + response.length,
+								inventories: [...asset.inventories, ...response],
+							};
+						}
+						return asset;
+					});
+					return updatedAssets;
 				});
 				setIsModalOpen(false);
-				setSelectedAsset(null);
 			},
 		);
 	}
@@ -107,6 +99,7 @@ const InventaryContent = () => {
 				onOk={() => {
 					formRef.current.submit();
 				}}
+				isLoading={isLoading}
 			>
 				<QuantityForm
 					selectedAsset={selectedInventaryData}
@@ -115,25 +108,20 @@ const InventaryContent = () => {
 					ref={formRef}
 				/>
 			</Modal>
-			<TableHeader
-				title="Inventary"
-				onClick={() => {
-					setIsModalOpen(true);
-				}}
-			/>
-			<Table
-				data={inventaryData}
-				columns={columns}
-				expandable={{
-					expandedRowRender: (record) => (
-						<div className="treee">
-							<ExpandedRow record={record} assets={allAssets} onChangeStatus={handleStatusChange} />
-						</div>
-					),
-					expandIcon: ({ expanded }) => (expanded ? <CaretUpOutlined /> : <CaretDownOutlined />),
-					expandRowByClick: true,
-				}}
-			/>
+			{!isLoading ? (
+				<Table
+					// identifier="assetID"
+					data={assetsData}
+					columns={columns}
+					expandable={{
+						expandedRowRender: (record) => <ExpandedRow record={record} />,
+						// rowExpandable: (record) => record.inventories.length > 0,
+						expandRowByClick: true,
+					}}
+				/>
+			) : (
+				<Loader />
+			)}
 		</>
 	);
 };

@@ -54,7 +54,6 @@ export default function useHttp() {
 				if (!response.ok) {
 					throw new Error("Request failed!");
 				}
-
 				const responseData = await response.json();
 				applyData ? applyData(responseData) : null;
 			} catch (err: any) {

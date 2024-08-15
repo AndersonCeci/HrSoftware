@@ -1,14 +1,19 @@
 import { Tag, Typography, Dropdown } from "antd";
 import { AssetStatus } from "../../types/AssetsDataType";
-import { createTableColumns } from "../../../../components/Table/Table";
+import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
-
+import { InventaryDataType } from "../../types/AssetsDataType";
 import { DeleteOutlined, MoreOutlined, ToolOutlined } from "@ant-design/icons";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import { BsFillPersonDashFill } from "react-icons/bs";
 
-export function expandedColumns(onChangeStatus: (newStatus: AssetStatus, record: any) => void) {
+export function expandedColumns(
+	inventaryData: InventaryDataType[],
+	onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
+	onAddAsset: (record: InventaryDataType) => void,
+	onDeleteAsset: (id: string) => void,
+) {
 	return [
 		createTableColumns({
 			title: "Code",
@@ -17,7 +22,7 @@ export function expandedColumns(onChangeStatus: (newStatus: AssetStatus, record:
 		}),
 		createTableColumns({
 			title: "Employee Name",
-			dataIndex: "userName",
+			dataIndex: "employeeID",
 			key: "userName",
 			displayAs: (text: string) => {
 				return <Typography.Text>{text ? text : "Not assigned"}</Typography.Text>;
@@ -25,10 +30,14 @@ export function expandedColumns(onChangeStatus: (newStatus: AssetStatus, record:
 		}),
 		createTableColumns({
 			title: "Date",
-			dataIndex: "dateGiven",
+			dataIndex: "assignDate",
 			key: "dateGiven",
 			displayAs: (text: string) => {
-				return <Typography.Text>{text ? text : "Not assigned"}</Typography.Text>;
+				return (
+					<Typography.Text>
+						{text ? new Date(text).toLocaleDateString() : "Not assigned"}
+					</Typography.Text>
+				);
 			},
 		}),
 		createTableColumns({
@@ -39,11 +48,15 @@ export function expandedColumns(onChangeStatus: (newStatus: AssetStatus, record:
 				const isAvailable = record.status === AssetStatus.Available;
 				const isOnRepair = record.status === AssetStatus.OnRepair;
 				return (
-					<Tag color={isAvailable ? "green" : isOnRepair ? "orange" : "red"}>{record.status}</Tag>
+					<Tag color={isAvailable ? "success" : isOnRepair ? "warning" : "red"}>{record.status}</Tag>
 				);
 			},
 			align: "center",
 			width: 20,
+			filters: getAllUniqueValues(inventaryData, "status"),
+			onFilter: (value, record) => {
+				return record.status === value;
+			},
 		}),
 		createTableColumns({
 			title: "Actions",
@@ -68,11 +81,8 @@ export function expandedColumns(onChangeStatus: (newStatus: AssetStatus, record:
 													block
 													icon={isAvailable ? <BsFillPersonCheckFill /> : <BsFillPersonDashFill />}
 													iconPosition="end"
-													onClick={() =>
-														onChangeStatus(
-															isAvailable ? AssetStatus.Assigned : AssetStatus.Available,
-															record,
-														)
+													onClick={
+														isAvailable ? () => onAddAsset(record) : () => onDeleteAsset(record._id)
 													}
 												>
 													{isAvailable ? "Assign" : "Unassign"}

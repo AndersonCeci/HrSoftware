@@ -1,13 +1,14 @@
-import { InventaryDataType } from "../../types/InventaryDataType";
+import { AssetDatatype, InventaryDataType } from "../../types/AssetsDataType";
 import { createTableColumns } from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { TableProps, Typography } from "antd";
 import Progress from "../../../../components/Shared/Progress";
+import create from "@ant-design/icons/lib/components/IconFont";
 
 type InventaryColumnType = (
-	data: InventaryDataType[],
-	onEdit: (id: InventaryDataType) => void,
+	data: AssetDatatype[],
+	onEdit: (record: AssetDatatype) => void,
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
@@ -41,21 +42,26 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 		// 	},
 		// 	width: "40%",
 		// }),
-		// createTableColumns({
-		// 	title: "Reserved",
-		// 	dataIndex: "reserved",
-		// 	key: "reserved",
-		// 	width: 10,
-		// }),
-		// createTableColumns({
-		// 	title: "Total quantity",
-		// 	dataIndex: "count",
-		// 	key: "quantity",
-		// 	displayAs: (value) => {
-		// 		return <Typography.Text>{value}</Typography.Text>;
-		// 	},
-		// 	width: 10,
-		// }),
+		createTableColumns({
+			title: "Reserved",
+			dataIndex: "reserved",
+			key: "reserved",
+			width: 10,
+		}),
+		createTableColumns({
+			title: "On Repair",
+			dataIndex: "onRepair",
+			key: "onRepair",
+		}),
+		createTableColumns({
+			title: "Total quantity",
+			dataIndex: "quantity",
+			key: "quantity",
+			displayAs: (value) => {
+				return <Typography.Text>{value}</Typography.Text>;
+			},
+			width: 10,
+		}),
 		createTableColumns({
 			title: "Edit",
 			dataIndex: "_id",

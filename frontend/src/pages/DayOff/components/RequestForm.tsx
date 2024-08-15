@@ -16,9 +16,8 @@ const RequestForm = ({ onAdd }: any) => {
 
 	useEffect(() => {
 		console.log("Fetching employee list");
-		fetchData({ url: `${EMPLOYEE}/usernames` }, (responseData: any) => setEmployee(responseData));
+		fetchData({ url: `${EMPLOYEE}/search` }, (responseData: any) => setEmployee(responseData));
 	}, []);
-	console.log(employee);
 
 	const handleSubmit = (value: any) => {
 		const selected = employee.find((e) => e.username === value.username);
