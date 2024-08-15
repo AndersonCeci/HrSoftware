@@ -22,36 +22,33 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			dataIndex: "assetName",
 			key: "assetType",
 		}),
-		// createTableColumns({
-		// 	title: "Available",
-		// 	dataIndex: "reserved",
-		// 	key: "reserved",
-		// 	displayAs: (value, record) => {
-		// 		const quantity: number = data.find((item) => item._id === record._id)?.quantity || 0;
-		// 		const percentage = calcPercantage(quantity - record.reserved, quantity);
-
-		// 		const available = quantity - record.reserved;
-		// 		return (
-		// 			<Progress
-		// 				percentPosition={{ align: "end", type: "inner" }}
-		// 				format={(percent) => `${available} ${percent && percent > 20 ? "Available" : ""}`}
-		// 				percentage={percentage}
-		// 				status={percentage > 80 ? "success" : percentage <= 15 ? "exception" : "normal"}
-		// 			/>
-		// 		);
-		// 	},
-		// 	width: "40%",
-		// }),
 		createTableColumns({
-			title: "Reserved",
-			dataIndex: "reserved",
+			title: "Available",
+			dataIndex: "_id",
 			key: "reserved",
-			width: 10,
-		}),
-		createTableColumns({
-			title: "On Repair",
-			dataIndex: "onRepair",
-			key: "onRepair",
+			displayAs: (_, record) => {
+				const quantity: number = data.find((item) => item._id === record._id)?.quantity || 0;
+				const percentage = calcPercantage(quantity - record.reserved - record.onRepair, quantity);
+
+				const available = quantity - record.reserved - record.onRepair;
+				return (
+					<Progress
+						percentPosition={{ align: "end", type: "inner" }}
+						format={(percent) =>
+							`${available} / ${quantity} ${percent && percent > 20 ? "Available" : ""}`
+						}
+						percentage={percentage}
+						status={
+							percentage > 80
+								? "success"
+								: percentage <= 15 || quantity === 0
+								? "exception"
+								: "normal"
+						}
+					/>
+				);
+			},
+			width: "40%",
 		}),
 		createTableColumns({
 			title: "Total quantity",
@@ -60,8 +57,18 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			displayAs: (value) => {
 				return <Typography.Text>{value}</Typography.Text>;
 			},
-			width: 10,
 		}),
+		createTableColumns({
+			title: "Reserved",
+			dataIndex: "reserved",
+			key: "reserved",
+		}),
+		createTableColumns({
+			title: "On Repair",
+			dataIndex: "onRepair",
+			key: "onRepair",
+		}),
+
 		createTableColumns({
 			title: "Edit",
 			dataIndex: "_id",

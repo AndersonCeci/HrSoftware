@@ -1,12 +1,13 @@
 import Table from "../../../components/Table/Table";
 import Loader from "../../../components/Shared/Loader";
 import createColumns from "./columns/InventaryColumn";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import useHttp from "../../../hooks/useHttp";
 import { AssetDatatype, AssetStatus, InventaryDataType } from "../types/AssetsDataType";
 import Modal from "../../../components/Shared/Modal";
 import QuantityForm from "./InventaryForm";
 import ExpandedRow from "./ExpandesRow";
+import { AssetInventaryContext } from "../context/AssetInventaryContext";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
 const ASSETS_API = import.meta.env.REACT_APP_ASSET_API;
@@ -17,26 +18,22 @@ type InventaryContentProps = {
 };
 
 const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps) => {
-	const [assetsData, setAssetsData] = useState<AssetDatatype[]>([]);
-	// const [isModalOpen, setIsModalOpen] = useState(false);
+	const { assetData, getAssetData, addAssetTypeHandler, addQuantityHandler } =
+		useContext(AssetInventaryContext);
 	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
 	const [isLoading, , fetchData] = useHttp();
-
-	console.log(isModalOpen, "assetsData");
 
 	useEffect(() => {
 		fetchData(
 			{
 				url: `${ASSETS_API}`,
 			},
-			(response) => setAssetsData(response),
+			(response) => getAssetData(response),
 		);
 	}, []);
 
-	// console.log(assetsData, "inventaryData");
-
-	const columns = createColumns(assetsData, handleQuantityChange);
+	const columns = createColumns(assetData, handleQuantityChange);
 
 	function handleQuantityChange(record: AssetDatatype) {
 		setSelectedAsset(record);
@@ -50,34 +47,20 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 				assetName: valueToSend,
 			}),
 			(response) => {
-				console.log(response, "response");
-				setAssetsData((prev) => [...prev, response]);
+				addAssetTypeHandler(response);
 				setIsModalOpen(false);
 			},
 		);
 	}
 
 	function handleAddQuantity(values: string[], assetType: string) {
-		console.log(values, assetType, "values i posted");
 		fetchData(
 			useHttp.postRequestHelper(INVENTARY_API, {
 				assetName: assetType,
 				assetCodes: values,
 			}),
 			(response) => {
-				setAssetsData((prev) => {
-					const updatedAssets = prev.map((asset) => {
-						if (asset.assetName === assetType) {
-							return {
-								...asset,
-								quantity: asset.quantity + response.length,
-								inventories: [...asset.inventories, ...response],
-							};
-						}
-						return asset;
-					});
-					return updatedAssets;
-				});
+				addQuantityHandler(response, assetType);
 				setIsModalOpen(false);
 			},
 		);
@@ -111,7 +94,7 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 			{!isLoading ? (
 				<Table
 					// identifier="assetID"
-					data={assetsData}
+					data={assetData}
 					columns={columns}
 					expandable={{
 						expandedRowRender: (record) => <ExpandedRow record={record} />,

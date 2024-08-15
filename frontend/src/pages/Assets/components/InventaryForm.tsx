@@ -1,14 +1,9 @@
 import { AssetDatatype } from "../types/AssetsDataType";
+import { QuantityFormProps } from "../types/AddAssetsForm";
 import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useImperativeHandle, useRef, forwardRef } from "react";
-
-type QuantityFormProps = {
-	selectedAsset?: AssetDatatype | null;
-	onAddAssetType: (values: string[]) => void;
-	onAddQuantity: (values: string[], assetType: string) => void;
-};
 
 const QuantityForm = forwardRef(
 	({ selectedAsset, onAddAssetType, onAddQuantity }: QuantityFormProps, ref) => {

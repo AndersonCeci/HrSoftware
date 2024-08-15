@@ -3,6 +3,7 @@ export type AssetDatatype = {
 	assetName: string;
 	quantity: number;
 	reserved: number;
+	onRepair: number;
 	inventories: InventaryDataType[];
 };
 

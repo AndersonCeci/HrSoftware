@@ -3,7 +3,7 @@ import { AssetStatus } from "../../types/AssetsDataType";
 import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
 import { InventaryDataType } from "../../types/AssetsDataType";
-import { DeleteOutlined, MoreOutlined, ToolOutlined } from "@ant-design/icons";
+import { DeleteOutlined, MoreOutlined, SearchOutlined, ToolOutlined } from "@ant-design/icons";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import { BsFillPersonDashFill } from "react-icons/bs";
@@ -19,6 +19,11 @@ export function expandedColumns(
 			title: "Code",
 			dataIndex: "assetCodes",
 			key: "code",
+			filterDropdown: true,
+			filterIcon: <SearchOutlined className="nav-menu-icon" />,
+			onFilter(value, record) {
+				return record.assetCodes.includes(value);
+			},
 		}),
 		createTableColumns({
 			title: "Employee Name",
@@ -48,14 +53,25 @@ export function expandedColumns(
 				const isAvailable = record.status === AssetStatus.Available;
 				const isOnRepair = record.status === AssetStatus.OnRepair;
 				return (
-					<Tag color={isAvailable ? "success" : isOnRepair ? "warning" : "red"}>{record.status}</Tag>
+					<Tag color={isAvailable ? "success" : isOnRepair ? "warning" : "red"}>
+						{record.status}
+					</Tag>
 				);
 			},
 			align: "center",
 			width: 20,
 			filters: getAllUniqueValues(inventaryData, "status"),
 			onFilter: (value, record) => {
-				return record.status === value;
+				return record.status.includes(value as string);
+			},
+		}),
+		createTableColumns({
+			title: "Date of Purchase",
+			dataIndex: "createdAt",
+			key: "assetName",
+			displayAs: (text) => {
+				const date = new Date(text);
+				return <Typography.Text>{date.toLocaleDateString()}</Typography.Text>;
 			},
 		}),
 		createTableColumns({

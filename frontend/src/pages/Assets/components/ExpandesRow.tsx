@@ -2,30 +2,25 @@ import { Flex } from "antd";
 import Table from "../../../components/Table/Table";
 import "../styles/styles.css";
 import { expandedColumns } from "./columns/ExpandesColumns";
-import Button from "../../../components/Shared/Button";
 import Modal from "../../../components/Shared/Modal";
 import AssetForm from "./AssetForm";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { AssetInventaryContext } from "../context/AssetInventaryContext";
 import useHttp from "../../../hooks/useHttp";
 
 import { AssetDatatype, InventaryDataType } from "../types/AssetsDataType";
-type ExpandedRowProps = {
-	record: AssetDatatype;
-};
+import Button from "../../../components/Shared/Button";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
 
-const ExpandedRow = ({ record }: ExpandedRowProps) => {
-	const [showInitialData, setShowInitialData] = useState(10);
+const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [inventaryData, setInventaryData] = useState<InventaryDataType[]>(record.inventories);
+	const { updateInventaryItemHandler } = useContext(AssetInventaryContext);
 	const [selectedAsset, setSelectedAsset] = useState<InventaryDataType | null>(null);
 	const formRef = useRef<any>();
-	const { quantity } = record;
 	const [, , fetchData] = useHttp();
 
 	const handleOnRepairClick = (newStatus: string, updatedRecord: InventaryDataType) => {
-		console.log(newStatus, "HELLO Mom", updatedRecord);
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/${updatedRecord._id}`, {
 				assetName: record.assetName,
@@ -33,30 +28,30 @@ const ExpandedRow = ({ record }: ExpandedRowProps) => {
 				status: newStatus,
 			}),
 			(response) => {
-				console.log(response, "response");
-				setInventaryData((prev) => {
-					console.log(response, "response");
-					return prev.map((item) => (item._id === updatedRecord._id ? response : item));
+				updateInventaryItemHandler(response, {
+					onRepairModifier: response.status === "OnRepair" ? 1 : -1,
+					reservedModifier: 0,
 				});
 			},
 		);
 	};
 
-	const handleOnAdd = (dataToSubmit: { employeeID: string; dateGiven: string }) => {
+	const filterData = record.inventories;
+
+	const handleOnAssign = (dataToSubmit: { employeeID: string; dateGiven: string }) => {
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/assign/${selectedAsset?._id}`, dataToSubmit),
 			(response) => {
-				setInventaryData((prev) =>
-					prev.map((item) => (item._id === response._id ? response : item)),
-				);
+				updateInventaryItemHandler(response, {
+					onRepairModifier: 0,
+					reservedModifier: response.status === "Assigned" ? 1 : -1,
+				});
 			},
 		);
 	};
 
 	function handleDeleteFromInventary(id: string) {
-		fetchData(useHttp.deleteRequestHelper(`${INVENTARY_API}/${id}`), () => {
-			setInventaryData((prev) => prev.filter((item) => item._id !== id));
-		});
+		fetchData(useHttp.deleteRequestHelper(`${INVENTARY_API}/${id}`), () => {});
 	}
 
 	const handleAddAsset = (record: InventaryDataType) => {
@@ -74,31 +69,25 @@ const ExpandedRow = ({ record }: ExpandedRowProps) => {
 		setIsModalOpen(false);
 	};
 
-	const handleShowMore = () => {
-		setShowInitialData((prev) => prev + 10);
-	};
-
 	const columns = expandedColumns(
-		inventaryData,
+		record.inventories,
 		handleOnRepairClick,
 		handleAddAsset,
 		handleDeleteFromInventary,
 	);
+
 	return (
 		<Flex vertical align="center" className="inner-table-container test">
 			<Modal isOpen={isModalOpen} onCancel={handleModalClose} onOk={handleSubmit}>
-				<AssetForm onAdd={handleOnAdd} selectedElement={selectedAsset} ref={formRef} />
+				<AssetForm onAdd={handleOnAssign} selectedElement={selectedAsset} ref={formRef} />
 			</Modal>
 			<Table
 				pagination={false}
-				data={inventaryData}
+				data={filterData}
 				columns={columns}
 				rowClassName="inner-table-row"
-				// showHeader={false}
 			/>
-			<Button type="link" disabled={quantity <= showInitialData} onClick={handleShowMore}>
-				{quantity > showInitialData ? "Show More" : "No More Data"}
-			</Button>
+			<Button type="link">Scroll To Top</Button>
 		</Flex>
 	);
 };

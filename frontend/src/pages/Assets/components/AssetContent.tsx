@@ -1,14 +1,11 @@
 import Table from "../../../components/Table/Table";
-import TableHeader from "../../../components/Table/TableHeader";
 import Modal from "../../../components/Shared/Modal";
 import Loader from "../../../components/Shared/Loader";
 import AssetForm from "./AssetForm";
 import { AssetDatatype } from "../types/AssetsDataType";
 import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
-
 import { getColumns } from "./columns/AssetsColumn";
-import { t } from "i18next";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 

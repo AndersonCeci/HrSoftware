@@ -1,7 +1,8 @@
 import TableHeader from "../../components/Table/TableHeader";
 import AssetContent from "./components/AssetContent";
 import InventaryContent from "./components/InventaryContent";
-import { Tabs } from "antd";
+import AssetInventaryContextProvider from "./context/AssetInventaryContext";
+import { ConfigProvider, Tabs } from "antd";
 import { useState } from "react";
 const AssetsPage: React.FC = () => {
 	const [activeTab, setActiveTab] = useState("Inventary");
@@ -26,16 +27,23 @@ const AssetsPage: React.FC = () => {
 				hideButton={activeTab !== "Inventary"}
 				onClick={handleModalOpen}
 			/>
-			<Tabs  onChange={(key) => handleTabChange(key)} indicator={{
-				size: 100
-			}}>
-				<Tabs.TabPane tab="Inventary" key="Inventary">
-					<InventaryContent isModalOpen={isMoalOpen} setIsModalOpen={setIsModalOpen} />
-				</Tabs.TabPane>
-				<Tabs.TabPane tab="Assets" key="Assets">
-					<AssetContent />
-				</Tabs.TabPane>
-			</Tabs>
+			<ConfigProvider>
+				<Tabs
+					onChange={(key) => handleTabChange(key)}
+					activeKey={activeTab}
+					size="large"
+					type="line"
+				>
+					<Tabs.TabPane tab="Inventary" key="Inventary">
+						<AssetInventaryContextProvider>
+							<InventaryContent isModalOpen={isMoalOpen} setIsModalOpen={setIsModalOpen} />
+						</AssetInventaryContextProvider>
+					</Tabs.TabPane>
+					<Tabs.TabPane tab="Assets" key="Assets">
+						<AssetContent />
+					</Tabs.TabPane>
+				</Tabs>
+			</ConfigProvider>
 		</section>
 	);
 };
