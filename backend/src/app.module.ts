@@ -26,6 +26,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
+import { SchedulerModule } from './schedule/scheduler.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { PromotionModule } from './promotion/promotion.module';
     DayoffModule,
     GmailApiModule,
     PromotionModule,
+    SchedulerModule,
   ],
   controllers: [],
   providers: [AppService, UploadService],
