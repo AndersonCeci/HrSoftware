@@ -16,8 +16,8 @@ export class CreateInventoryDto {
 
   //employeeName:string
 
-  // @IsOptional()
-  // quantity?: number;
+  //  @IsOptional()
+  //  quantity?: number;
 
   @IsBoolean()
   @IsOptional()

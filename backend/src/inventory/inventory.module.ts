@@ -12,14 +12,12 @@ import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
   imports: [
     MongooseModule.forFeature([
       { name: Inventory.name, schema: InventorySchema },
-      { name: Employee.name, schema: EmployeeSchema }
+      { name: Employee.name, schema: EmployeeSchema },
     ]),
     AssetsModule,
-    EmployeeModule
+    EmployeeModule,
   ],
   controllers: [InventoryController],
-  providers: [InventoryService],
-
-  
+  providers: [InventoryService]
 })
 export class InventoryModule {}

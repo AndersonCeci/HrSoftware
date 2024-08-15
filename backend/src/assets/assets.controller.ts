@@ -23,11 +23,18 @@ export class AssetsController {
     return this.assetsService.findName(name);
   }
 
-
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateAssetDto: UpdateAssetDto,
+  ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.assetsService.updateAsset(id, updateAssetDto);
+  }
+
+  @Delete(':id')
+  async deleteCode(@Param('id') id: string) {
+    return this.assetsService.softDeleteAssetById(id);
   }
 }

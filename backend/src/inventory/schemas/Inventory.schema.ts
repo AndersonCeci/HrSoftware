@@ -29,10 +29,13 @@ export class Inventory extends Document {
   employeeID: Types.ObjectId;
 
   @Prop()
-  assignedDate: Date;
+  assignDate: Date;
 
   @Prop()
   assetName: string;
+
+  // @Prop()
+  // quantity:number
 
   @Prop({ default: false })
   isDeleted: boolean;

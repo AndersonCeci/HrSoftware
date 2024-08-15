@@ -68,28 +68,29 @@ export class InventoryService {
   async assignToEmployee(
     inventoryID: string,
     employeeID: string,
-    assignedDate: string,
+    assignDate: string,
+    status : InventoryStatus
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeID);
 
-    if (!foundEmployee) {
-      throw new NotFoundException(
-        `Employee with name ${foundEmployee.username} not found`,
-      );
-    }
+    // if (!foundEmployee) {
+    //   throw new NotFoundException(
+    //     `Employee with name ${foundEmployee.username} not found`,
+    //   );
+    // }
+    
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeID: foundEmployee._id,
-      assignedDate: new Date(assignedDate),
+      assignDate: new Date(assignDate),
+      status: InventoryStatus.Assigned,
     });
 
     return await this.inventoryModel.findById(inventoryID);
   }
 
   async findAll(): Promise<any> {
-    return this.inventoryModel
-      .find({ isDeleted: false })
-      .populate('assetID')
-      .exec();
+    return this.assetsService.findAll()
+      
   }
 
   async getAssetQuantities(): Promise<any> {

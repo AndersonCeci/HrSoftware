@@ -13,6 +13,7 @@ import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import mongoose from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
+import { InventoryStatus } from './schemas/Inventory.schema';
 
 @Controller('inventory')
 export class InventoryController {
@@ -55,6 +56,7 @@ export class InventoryController {
       id,
       assignEmployeeDto.employeeID,
       assignEmployeeDto.assignDate,
+      assignEmployeeDto.status
     );
   }
 
@@ -66,5 +68,10 @@ export class InventoryController {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.inventoryService.updateInventory(id, updateInventoryDto);
+  }
+
+  @Delete(':id')
+  async deleteCode(@Param('id') id:string){
+    return this.inventoryService.softDeleteAssetById(id)
   }
 }
