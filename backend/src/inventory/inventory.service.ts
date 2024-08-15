@@ -69,7 +69,7 @@ export class InventoryService {
     inventoryID: string,
     employeeID: string,
     assignDate: string,
-    status : InventoryStatus
+    status: InventoryStatus,
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeID);
 
@@ -78,7 +78,7 @@ export class InventoryService {
     //     `Employee with name ${foundEmployee.username} not found`,
     //   );
     // }
-    
+
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeID: foundEmployee._id,
       assignDate: new Date(assignDate),
@@ -89,8 +89,7 @@ export class InventoryService {
   }
 
   async findAll(): Promise<any> {
-    return this.assetsService.findAll()
-      
+    return this.assetsService.findAll();
   }
 
   async getAssetQuantities(): Promise<any> {
@@ -152,6 +151,16 @@ export class InventoryService {
         },
       ])
       .exec();
+  }
+
+  async delete(id: string): Promise<Inventory> {
+    const deletedInventory = await this.inventoryModel.findByIdAndDelete(id);
+
+    if (!deletedInventory) {
+      throw new NotFoundException(`Inventory item with ID ${id} not found`);
+    }
+
+    return deletedInventory;
   }
 
   async softDeleteAssetById(id: string): Promise<Inventory> {

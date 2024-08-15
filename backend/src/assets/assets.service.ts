@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
-import { InventoryService } from 'src/inventory/inventory.service';
+
 
 @Injectable()
 export class AssetsService {

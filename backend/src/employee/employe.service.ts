@@ -100,14 +100,17 @@ export class EmployeeService {
   //     .find({ deleteDate: false })
   //     .select('_id username')
   //     .exec();
-  
+
   //   return {employees._id, employees.username};
   // }
   async findName(name: string): Promise<Employee | null> {
-    return await this.employeeModel.findOne({username:name}).exec();
+    return await this.employeeModel.findOne({ username: name }).exec();
   }
 
-  async searchEmployee(name?: string, surname?: string): Promise<Employee[] | null> {
+  async searchEmployee(
+    name?: string,
+    surname?: string,
+  ): Promise<Employee[] | null> {
     try {
       const query: any = {};
       if (name) {
@@ -117,12 +120,10 @@ export class EmployeeService {
         query.surname = { $regex: new RegExp(surname, 'i') };
       }
       const employees = await this.employeeModel.find(query);
-  
+
       return employees.length > 0 ? employees : null;
     } catch (error) {
       throw new Error('An error occurred while searching for employees.');
     }
   }
-  
-  
-  }
+}
