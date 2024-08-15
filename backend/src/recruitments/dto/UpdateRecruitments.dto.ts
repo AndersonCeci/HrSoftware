@@ -14,6 +14,11 @@ export class UpdateRecruitmentDto {
   readonly name?: string;
 
   @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  readonly surname?: string;
+
+  @IsOptional()
   @IsEmail()
   @IsNotEmpty()
   readonly email?: string;

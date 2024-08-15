@@ -1,8 +1,14 @@
 import { google } from 'googleapis';
 import { RecruitmentService } from 'src/recruitments/recruitments.service';
-import { CreateRecruitmentDto, RecruitmentWithFileDto } from 'src/recruitments/dto/Recruitments.dto';
+import {
+  CreateRecruitmentDto,
+  RecruitmentWithFileDto,
+} from 'src/recruitments/dto/Recruitments.dto';
 import { RecruitmentStage } from 'src/recruitments/schemas/recruitment.schema';
 import { Injectable } from '@nestjs/common';
+import { UploadService } from 'src/upload/upload.service';
+import * as mime from 'mime-types';
+import * as path from 'path';
 
 @Injectable()
 export class GmailApiService {
@@ -12,7 +18,10 @@ export class GmailApiService {
     process.env.GOOGLE_REDIRECT_URI,
   );
 
-  constructor(private recruitmentService: RecruitmentService) {
+  constructor(
+    private recruitmentService: RecruitmentService,
+    private uploadService: UploadService,
+  ) {
     this.oauth2Client.setCredentials({
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
@@ -28,6 +37,36 @@ export class GmailApiService {
     });
 
     return google.gmail({ version: 'v1', auth: this.oauth2Client });
+  }
+
+  private getBufferFromBase64Url(base64url: string): Buffer {
+    const base64 = base64url
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+      .padEnd(base64url.length + ((4 - (base64url.length % 4)) % 4), '=');
+
+    return Buffer.from(base64, 'base64');
+  }
+
+  private createMulterFile(
+    buffer: Buffer,
+    filename: string,
+    mimeType: string,
+  ): Express.Multer.File {
+    const sanitizedFilename = filename.replace(/\s+/g, '_');
+
+    return {
+      fieldname: 'file',
+      originalname: sanitizedFilename,
+      encoding: '7bit',
+      mimetype: mimeType,
+      buffer,
+      size: buffer.length,
+      stream: null,
+      destination: '',
+      filename: path.basename(sanitizedFilename),
+      path: '',
+    } as Express.Multer.File;
   }
 
   public async fetchAndSaveEmails(
@@ -48,7 +87,7 @@ export class GmailApiService {
       const response = await gmail.users.messages.list({
         userId: 'me',
         q: query.trim(),
-        maxResults: 10,
+        maxResults: 50,
         labelIds: ['INBOX'],
       });
 
@@ -63,17 +102,23 @@ export class GmailApiService {
 
         const emailData = msg.data;
 
-        const fromHeader = emailData.payload?.headers?.find((h) => h.name === 'From')?.value;
-        const [name, email] = fromHeader?.match(/(.*) <(.*)>/)?.slice(1, 3) || [];
+        const fromHeader = emailData.payload?.headers?.find(
+          (h) => h.name === 'From',
+        )?.value;
+        const [name, email] =
+          fromHeader?.match(/(.*) <(.*)>/)?.slice(1, 3) || [];
         const [surname, firstName] = name?.split(' ').reverse() || [];
 
-        const createRecruitmentDto: RecruitmentWithFileDto = {
+        const createRecruitmentDto: CreateRecruitmentDto = {
           name: firstName,
           surname: surname,
           email: email,
           position: 'Unknown',
           stage: RecruitmentStage.Applied,
-          submittedDate: new Date(emailData.payload?.headers?.find((h) => h.name === 'Date')?.value || new Date()),
+          submittedDate: new Date(
+            emailData.payload?.headers?.find((h) => h.name === 'Date')?.value ||
+              new Date(),
+          ),
           cv: '',
           phoneNumber: null,
           isDeleted: false,
@@ -81,6 +126,9 @@ export class GmailApiService {
         };
 
         let recruitmentWithFile = { ...createRecruitmentDto };
+
+        const applicant =
+          await this.recruitmentService.createRecruitment(createRecruitmentDto);
 
         const parts = emailData.payload?.parts || [];
         for (const part of parts) {
@@ -100,13 +148,22 @@ export class GmailApiService {
             } else {
               const cvExtensions = ['pdf', 'doc', 'docx'];
               if (cvExtensions.includes(fileExtension!)) {
-                recruitmentWithFile = {
-                  ...recruitmentWithFile,
-                  file: {
-                    filename: part.filename,
-                    data: attachmentData,
-                  },
-                };
+                const buffer = this.getBufferFromBase64Url(attachmentData);
+                const file = this.createMulterFile(
+                  buffer,
+                  part.filename,
+                  mime.lookup(fileExtension) || 'application/octet-stream',
+                );
+
+                if (file) {
+                  const fileUrl = await this.uploadService.uploadFile(file);
+                  recruitmentWithFile.cv = fileUrl;
+                  await this.recruitmentService.updateRecruitment(
+                    applicant._id as string,
+                    recruitmentWithFile,
+                  );
+                }
+
                 break;
               }
             }
