@@ -103,6 +103,9 @@ export class EmployeeService {
 
   //   return {employees._id, employees.username};
   // }
+  async findName(name: string): Promise<Employee | null> {
+    return await this.employeeModel.findOne({ username: name }).exec();
+  }
 
   async searchEmployee(
     name?: string,

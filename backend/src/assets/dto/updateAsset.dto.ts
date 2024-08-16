@@ -6,14 +6,8 @@ import {
 
 export class UpdateAssetDto {
   @IsString()
-  @IsNotEmpty()
-  assetType: string;
-  
-  dateGiven?: Date;
- 
-  @IsString()
-  userName: string;
-  
-  isDeleted:boolean;
-  deleteDate?:Date
+
+  assetType?: string;
+
 }
+

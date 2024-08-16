@@ -51,10 +51,9 @@ export default function useHttp() {
           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
         });
 
-        if (!response.ok) {
-          throw new Error("Request failed!");
-        }
-
+				if (!response.ok) {
+					throw new Error("Request failed!");
+				}
 				const responseData = await response.json();
 				applyData ? applyData(responseData) : null;
 			} catch (err: any) {

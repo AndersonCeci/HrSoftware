@@ -17,32 +17,19 @@ import { UpdateAssetDto } from './dto/updateAsset.dto';
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
-   @Post()
-   async create(@Body() createAssetDto: CreateAssetDto) {
-     return this.assetsService.createAsset(createAssetDto);
-   }
+  @Post()
+  async create(@Body() createAssetDto: CreateAssetDto) {
+    return this.assetsService.createAsset(createAssetDto);
+  }
 
   @Get()
   async findAll() {
     return this.assetsService.findAll();
   }
 
-  //  @Get('/lloji/:type')
-  //  async type(@Param('type') type: string){
-  //    return this.assetsService.type(type)
-  //  }
-
   @Get(':name')
-  async findByName(@Param('name') name: string) {
-    const findUserAssets = await this.assetsService.findByName(name);
-    if (!findUserAssets) throw new HttpException('User not found', 404);
-    return findUserAssets;
-  }
-
-  @Delete(':id')
-  async deleteByName(@Param('id') id: string) {
-    const result = await this.assetsService.softDeleteAssetById(id);
-    return result;
+  async findById(@Param('name') name: string) {
+    return this.assetsService.findName(name);
   }
 
   @Patch(':id')
@@ -55,9 +42,8 @@ export class AssetsController {
     return this.assetsService.updateAsset(id, updateAssetDto);
   }
 
-  // @Patch('assign')
-  // async assignAsset(@Param('assetType') assetType: string, @Body('userName') userName: string) {
-  //   return this.assetsService.assignAssetToUser(assetType, userName);
-  // }
-  
+  @Delete(':id')
+  async deleteCode(@Param('id') id: string) {
+    return this.assetsService.softDeleteAssetById(id);
+  }
 }

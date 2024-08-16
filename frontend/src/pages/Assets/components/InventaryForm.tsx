@@ -1,25 +1,19 @@
-import { InventaryDataType } from "../types/InventaryDataType";
+import { AssetDatatype } from "../types/AssetsDataType";
+import { QuantityFormProps } from "../types/AddAssetsForm";
 import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useImperativeHandle, useRef, forwardRef } from "react";
 
-type QuantityFormProps = {
-	selectedAsset?: InventaryDataType | null;
-	onAddAssetType: (values: string[]) => void;
-	onAddQuantity: (values: string[], assetType: string) => void;
-};
-
-const API = import.meta.env.REACT_APP_INVENTARY_API;
-
 const QuantityForm = forwardRef(
 	({ selectedAsset, onAddAssetType, onAddQuantity }: QuantityFormProps, ref) => {
 		const [form] = Form.useForm();
 		const formRef = useRef<any>();
+		// console.log(selectedAsset, "selectedAsset");
 
 		function onFinish(values: any, identifier: string) {
 			selectedAsset
-				? onAddQuantity(values[identifier], selectedAsset.assetType)
+				? onAddQuantity(values[identifier], selectedAsset.assetName)
 				: onAddAssetType(values[identifier]);
 		}
 
@@ -35,10 +29,10 @@ const QuantityForm = forwardRef(
 				ref={formRef}
 				layout="vertical"
 				autoComplete="off"
-				onFinish={(values) => onFinish(values, selectedAsset ? "codes" : "assetTypes")}
+				onFinish={(values) => onFinish(values, selectedAsset ? "codes" : "assetName")}
 			>
 				<Form.List
-					name={selectedAsset ? "codes" : "assetTypes"}
+					name={selectedAsset ? "codes" : "assetName"}
 					rules={[
 						{
 							validator: async (_, values) => {
@@ -55,7 +49,7 @@ const QuantityForm = forwardRef(
 								<Form.Item
 									label={
 										index === 0
-											? `${selectedAsset ? `Add ${selectedAsset.assetType}'s Code` : "Add Asset"}`
+											? `${selectedAsset ? `Add ${selectedAsset.assetName}'s Code` : "Add Asset"}`
 											: ""
 									}
 									required={false}
@@ -69,7 +63,7 @@ const QuantityForm = forwardRef(
 												required: true,
 												whitespace: true,
 												message: selectedAsset
-													? `Please input ${selectedAsset?.assetType}'s code or delete this field.`
+													? `Please input ${selectedAsset?.assetName}'s code or delete this field.`
 													: "Please input asset type or delete this field.",
 											},
 										]}
@@ -78,7 +72,7 @@ const QuantityForm = forwardRef(
 										<Input
 											size="large"
 											placeholder={
-												selectedAsset ? `${selectedAsset.assetType}'s Code` : "Asset Type"
+												selectedAsset ? `${selectedAsset.assetName}'s Code` : "Asset Type"
 											}
 											style={{ width: "100%" }}
 											suffix={
@@ -98,7 +92,7 @@ const QuantityForm = forwardRef(
 									style={{ width: "100%" }}
 									icon={<PlusOutlined />}
 								>
-									{`Add ${selectedAsset ? `${selectedAsset.assetType}'s Code` : "Asset Type"}`}
+									{`Add ${selectedAsset ? `${selectedAsset.assetName}'s Code` : "Asset Type"}`}
 								</Button>
 								<Form.ErrorList errors={errors} />
 							</Form.Item>

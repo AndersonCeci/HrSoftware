@@ -9,6 +9,8 @@ export type TablePropsType = {
 	pagination?: TableProps<any>["pagination"] | false;
 	expandable?: TableProps<any>["expandable"];
 	identifier?: string;
+	showHeader?: boolean;
+	rowClassName?: string;
 };
 
 export type createTableColumns = {
@@ -23,5 +25,5 @@ export type createTableColumns = {
 	filterSearch?: boolean | ((inputValue: string, filter: any) => boolean);
 	filterIcon?: JSX.Element;
 	filterDropdown?: boolean;
-	onFilter?: (value: any, record: any) => boolean;
+	onFilter?: (value: any, record: any) => boolean ;
 };

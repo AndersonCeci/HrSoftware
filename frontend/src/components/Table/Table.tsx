@@ -71,6 +71,7 @@ const Table = ({
 	fixed = false,
 	pageSize,
 	pagination,
+	showHeader = true,
 	expandable,
 	onChange,
 	identifier = "_id",
@@ -90,6 +91,8 @@ const Table = ({
 			columns={columns}
 			dataSource={data}
 			bordered
+			rowClassName="table-row"
+			showHeader={showHeader}
 			size="small"
 			scroll={{ x: fixed ? 1500 : undefined }}
 			expandable={expandable ? expandable : undefined}
