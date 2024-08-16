@@ -11,61 +11,63 @@ export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-    createAssetDto.quantity = null;
     const createAsset = new this.assetModel(createAssetDto);
     return createAsset.save();
   }
 
-  async findAll(): Promise<Asset[]> {
-    const data = await this.assetModel
-      .aggregate([
-        {
-          $lookup: {
-            from: 'inventories',
-            localField: '_id',
-            foreignField: 'assetID',
-            as: 'inventories',
-          },
+  
+
+ async findAll(): Promise<Asset[]> {
+  const data = await this.assetModel
+    .aggregate([
+      {
+        $lookup: {
+          from: 'inventories',
+          localField: '_id',
+          foreignField: 'assetID',
+          as: 'inventories',
         },
-        {
-          $unwind: {
-            path: '$inventories',
-            preserveNullAndEmptyArrays: true,
-          },
+      },
+      {
+        $unwind: {
+          path: '$inventories',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: 'employees', // The collection name where employees are stored
+          localField: 'inventories.employeeID',
+          foreignField: '_id',
+          as: 'inventories.employeeDetails',
         },
-        {
-          $lookup: {
-            from: 'employees', 
-            localField: 'inventories.employeeID',
-            foreignField: '_id',
-            as: 'inventories.employeeDetails',
-          },
-        },
-        {
-          $group: {
-            _id: '$_id',
-            assetName: { $first: '$assetName' },
-            quantity: { $sum: 1 },
-            inventories: { $push: '$inventories' },
-            reserved: {
-              $sum: {
-                $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
-              },
-            },
-            onRepair: {
-              $sum: {
-                $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
-              },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          assetName: { $first: '$assetName' },
+          quantity: { $sum: 1 },
+          inventories: { $push: '$inventories' },
+          reserved: {
+            $sum: {
+              $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
             },
           },
+          onRepair: {
+            $sum: {
+              $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
+            },
+          },
         },
-        {
-          $sort: { assetName: 1 },
-        },
-      ])
-      .exec();
-    return data;
-  }
+      },
+      {
+        $sort: { assetName: 1 },
+      },
+    ])
+    .exec();
+  return data;
+}
+
 
   async findName(name: string): Promise<Asset | null> {
     return await this.assetModel.findOne({ assetName: name }).exec();

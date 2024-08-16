@@ -42,10 +42,8 @@ export class InventoryService {
 
     const inventoryEntries = assetCodes.map((code) => ({
       assetID: foundAsset._id,
-      quantity:null,
-      onRepair:null,
-      employeeID:null,
-      assignDate:null,
+      employeeID: null,
+      assignDate: null,
       assetCodes: code,
       status,
       isDeleted,
@@ -79,10 +77,17 @@ export class InventoryService {
       status: InventoryStatus.Assigned,
     });
 
-    // Use populate to return the employee details instead of just the ID
-    return await this.inventoryModel
+    const updatedInventory = await this.inventoryModel
       .findById(inventoryID)
       .populate('employeeID');
+
+    
+    const response = {
+      ...updatedInventory.toObject(),
+      employeeID: [updatedInventory.employeeID], 
+    };
+
+    return response as unknown as Inventory; 
   }
 
   async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
@@ -94,12 +99,16 @@ export class InventoryService {
       );
     }
 
-    foundInventory.employeeID = null; 
-    foundInventory.status = InventoryStatus.Available; 
-    foundInventory.assignDate = null; 
+    foundInventory.employeeID = null;
+    foundInventory.status = InventoryStatus.Available;
+    foundInventory.assignDate = null;
 
-    await foundInventory.save();
-    return foundInventory;
+    const updatedInventory = await foundInventory.save();
+    const response = {
+      ...updatedInventory.toObject(),
+      employeeID: [updatedInventory.employeeID],
+    };
+   return response as unknown as Inventory; 
   }
 
   async findAll(): Promise<any> {

@@ -4,7 +4,7 @@ export class CreateAssetDto {
   assetName: string;
 
   quantity?: number;
-
+  reserved?: number;
 
   @IsBoolean()
   @IsOptional()
