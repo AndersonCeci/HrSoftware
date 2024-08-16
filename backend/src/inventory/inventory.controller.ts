@@ -34,15 +34,6 @@ export class InventoryController {
     return this.inventoryService.findAll();
   }
 
-  @Get('reserved')
-  async findReserved() {
-    return this.inventoryService.calculateReservedQuantity();
-  }
-
-  @Get('quantity')
-  async getAssetQuantities() {
-    return this.inventoryService.getAssetQuantities();
-  }
 
   @Delete(':id')
   async deleteInventory(@Param('id') id: string) {
@@ -66,23 +57,23 @@ export class InventoryController {
     }
 
     
-    if (!mongoose.Types.ObjectId.isValid(assignEmployeeDto.employeeID)) {
+    if (!mongoose.Types.ObjectId.isValid(assignEmployeeDto.employeeDetails)) {
       throw new BadRequestException('Invalid Employee ID');
     }
 
     
     return this.inventoryService.assignToEmployee(
       id,
-      assignEmployeeDto.employeeID,
+      assignEmployeeDto.employeeDetails,
       assignEmployeeDto.assignDate,
       assignEmployeeDto.status,
     );
   }
 
-  @Patch('unassign/:id')
-  async unassignFromEmployee(@Param('id') id: string) {
-    return this.inventoryService.unassignFromEmployee(id);
-  }
+  // @Patch('unassign/:id')
+  // async unassignFromEmployee(@Param('id') id: string) {
+  //   return this.inventoryService.unassignFromEmployee(id);
+  // }
 
   @Patch(':id')
   async updateUser(
