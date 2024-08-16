@@ -8,7 +8,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LogedUserPanel from "./LogedUserPanel";
 
-const navElements = [Paths.Dashboard, Paths.Employee, Paths.DayOff, Paths.Company];
+const navElements = [
+	Paths.Dashboard,
+	Paths.Recruitment,
+	Paths.Employee,
+	Paths.Management,
+	Paths.DayOff,
+	Paths.Company,
+];
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
@@ -49,7 +56,16 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	};
 
 	return (
-		<Flex vertical align="stretch" justify="stretch">
+		<Flex
+			vertical
+			align="stretch"
+			justify="stretch"
+			style={{
+				height: "100%",
+				width: "100%",
+				overflow: "scroll",
+			}}
+		>
 			<div className="top-menu-elements">
 				<LogedUserPanel colapsed={colapsed} />
 				<Menu

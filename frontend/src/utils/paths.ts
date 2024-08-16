@@ -18,6 +18,30 @@ export const Paths = {
 			},
 		],
 	},
+	Recruitment: {
+		path: "",
+		type: "group",
+		icon: null,
+		children: [
+			{
+				path: "recruitment",
+				icon: NavigationIcons.MdOutlinePersonSearch,
+				pageElement: PageRoutesComponents.RecruitmentPage,
+			},
+		],
+	},
+	Employee: {
+		path: "",
+		type: "group",
+		icon: null,
+		children: [
+			{
+				path: "employment",
+				icon: NavigationIcons.MdOutlineBadge,
+				pageElement: PageRoutesComponents.EmploymentPage,
+			},
+		],
+	},
 	PersonalCalendar: {
 		path: "personal-calendar",
 		icon: NavigationIcons.CalendarOutlined,
@@ -68,16 +92,16 @@ export const Paths = {
 			},
 		],
 	},
-	Employee: {
+	Management: {
 		path: "managment",
 		type: "",
 		icon: NavigationIcons.Management,
 		children: [
-			{
-				path: "recruitment",
-				icon: NavigationIcons.MdOutlinePersonSearch,
-				pageElement: PageRoutesComponents.RecruitmentPage,
-			},
+			// {
+			// 	path: "recruitment",
+			// 	icon: NavigationIcons.MdOutlinePersonSearch,
+			// 	pageElement: PageRoutesComponents.RecruitmentPage,
+			// },
 			{
 				path: "salary",
 				icon: NavigationIcons.RiMoneyEuroCircleLine,
@@ -88,11 +112,11 @@ export const Paths = {
 				icon: NavigationIcons.PiChartLineUpBold,
 				pageElement: PageRoutesComponents.PromotionPage,
 			},
-			{
-				path: "employment",
-				icon: NavigationIcons.MdOutlineBadge,
-				pageElement: PageRoutesComponents.EmploymentPage,
-			},
+			// {
+			// 	path: "employment",
+			// 	icon: NavigationIcons.MdOutlineBadge,
+			// 	pageElement: PageRoutesComponents.EmploymentPage,
+			// },
 			{
 				path: "dismissed",
 				icon: NavigationIcons.TbUserCancel,

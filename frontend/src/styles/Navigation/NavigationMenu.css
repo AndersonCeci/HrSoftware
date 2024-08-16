@@ -33,6 +33,7 @@
 	flex: 2;
 	display: flex;
 	justify-content: center;
+	align-items: end;
 	margin-bottom: 30px;
 	width: 100%;
 

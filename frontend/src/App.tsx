@@ -7,14 +7,16 @@ import "./App.css";
 
 const iterationRoutes = [
 	Paths.Dashboard,
+	Paths.Recruitment,
 	Paths.PersonalCalendar,
 	Paths.Notifications,
 	Paths.Company,
+	Paths.Management,
 	Paths.Employee,
 	Paths.Background,
 	Paths.DayOff,
 	// Paths.Settings,
-	Paths.Profile
+	Paths.Profile,
 ];
 
 const router = createBrowserRouter([
