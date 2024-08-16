@@ -271,14 +271,7 @@ const TaskGrid: React.FC = () => {
           >
             <Input placeholder="Enter the title" />
           </Form.Item>
-          <Form.Item
-            label="Description"
-            name="description"
-            rules={[
-              { required: true, message: "Please enter the description" },
-              { max: 1000 },
-            ]}
-          >
+          <Form.Item label="Description" name="description">
             <Input.TextArea placeholder="Enter the description" />
           </Form.Item>
           <Form.Item

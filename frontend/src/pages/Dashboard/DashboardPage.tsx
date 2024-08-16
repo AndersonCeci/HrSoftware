@@ -5,6 +5,7 @@ import WelcomeGrid from "../Dashboard/components/WelcomeGrid";
 import CalendarGrid from "../Dashboard/components/CalendarGrid";
 import TaskGrid from "../Dashboard/components/TaskGrid";
 import { t } from "i18next";
+import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
 
 export interface Data {
   noEmployee: number;
@@ -18,19 +19,19 @@ const DashboardPage: React.FC = () => {
     {
       noEmployee: 300,
       status: t("activestatus"),
-      color: "#ccffcc",
+      color: "#136F63",
       path: "/managment/employment",
     },
     {
       noEmployee: 100,
       status: t("remoteEmployee"),
-      color: "#F0E6FA",
+      color: "#474CCC",
       path: "/managment/employment",
     },
     {
       noEmployee: 50,
       status: t("dismissed"),
-      color: "#ceebfd",
+      color: "#CA054D",
       path: "/managment/dismissed",
     },
   ];
@@ -51,15 +52,16 @@ const DashboardPage: React.FC = () => {
         color: "grey",
       }}
     >
-      <Row gutter={[16, 16]} className="dashboard-main">
+      {/* <Row gutter={[16, 16]} className="dashboard-main">
         <Col span={12}>
-          <WelcomeGrid initialData={initialData} />
-        </Col>
+          <WelcomeGrid initialData={initialData} /> */}
+          <EmployeeWelcomeGrid/>
+        {/* </Col>
         <Col span={12}>
           <CalendarGrid />
         </Col>
       </Row>
-      <TaskGrid />
+      <TaskGrid /> */}
     </Content>
   );
 };

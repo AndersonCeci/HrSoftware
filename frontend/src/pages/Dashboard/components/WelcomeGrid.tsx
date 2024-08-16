@@ -44,10 +44,10 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
                       className="active-dashboard"
                       style={{ backgroundColor: data.color }}
                     >
-                      <Title style={{ margin: 0, color: "#666666" }}>
+                      <Title style={{ margin: 0, color: "white" }}>
                         {data.noEmployee}
                       </Title>
-                      <Text style={{ fontSize: 20, color: "#666666" }}>
+                      <Text style={{ fontSize: 20, color: "white" }}>
                         {data.status}
                       </Text>
                     </Button>
