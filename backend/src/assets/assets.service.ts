@@ -27,31 +27,35 @@ export class AssetsService {
           },
         },
         {
-          $project: {
-            _id: 1,
-            assetName: '$assetName',
-            quantity: { $size: '$inventories' },
-
+          $unwind: {
+            path: '$inventories',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: 'employees', 
+            localField: 'inventories.employeeID',
+            foreignField: '_id',
+            as: 'inventories.employeeDetails',
+          },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            assetName: { $first: '$assetName' },
+            quantity: { $sum: 1 },
+            inventories: { $push: '$inventories' },
             reserved: {
-              $size: {
-                $filter: {
-                  input: '$inventories',
-                  as: 'inventory',
-                  cond: { $eq: ['$$inventory.status', 'Assigned'] },
-                },
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
               },
             },
             onRepair: {
-              $size: {
-                $filter: {
-                  input: '$inventories',
-                  as: 'inventory',
-                  cond: { $eq: ['$$inventory.status', 'OnRepair'] },
-                },
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
               },
             },
-
-            inventories: '$inventories',
           },
         },
         {
