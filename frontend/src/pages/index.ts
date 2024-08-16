@@ -1,4 +1,4 @@
-import DashboardPage from "./DashboardPage";
+import DashboardPage from "./Dashboard/DashboardPage";
 import PersonalCalendarPage from "./PersonalCalendar/PersonalCalendarPage";
 import CompanyBackgroundPage from "./CompanyBackground/CompanyBackgroundPage";
 import NotificationPage from "./NotificationPage";
@@ -12,9 +12,9 @@ import RecruitmentPage from "./Recruitments/RecruitmentPage";
 import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
 import RequestedLeavePage from "./DayOff/RequestedLeavePage";
-import CalendarLeavePage from "./CalendarLeaves/CalendarLeavePage"
+import CalendarLeavePage from "./CalendarLeaves/CalendarLeavePage";
 import SettingsPage from "./Settings/SettingsPage";
-import ProfilePage from "./Profile/ProfilePage"
+import ProfilePage from "./Profile/ProfilePage";
 
 const PageRoutesComponents = {
 	LoginPAge,
@@ -33,7 +33,7 @@ const PageRoutesComponents = {
 	RequestedLeavePage,
 	CalendarLeavePage,
 	SettingsPage,
-	ProfilePage
+	ProfilePage,
 };
 
 export default PageRoutesComponents;

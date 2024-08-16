@@ -1,4 +1,4 @@
-import { Flex, Typography, Tabs } from "antd";
+import { Flex, Typography } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import Button from "../Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";

@@ -1,7 +1,7 @@
 import Table from "../../components/Table/Table";
 import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
-import columns from "./components/TableColumns";
+import columns, { expandedRowRender } from "./components/TableColumns";
 import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSalaryHook } from "./context/hook";
@@ -58,7 +58,6 @@ const SalaryContent = () => {
   };
 
   const handleRangeChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
-    console.log("dates:", dates);
     if (dates) {
       const [start, end] = dates;
       setSelectedRange([start!, end!]);
@@ -79,12 +78,11 @@ const SalaryContent = () => {
     });
   };
 
+
+
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader
-        title={t("salariesTitle")}
-        onClick={handleModal}
-      ></TableHeader>
+      <TableHeader title={t("salariesTitle")} onClick={handleModal} />
 
       <Row title="Filters" gutter={10}>
         <Col>
@@ -120,8 +118,8 @@ const SalaryContent = () => {
         columns={columns({
           handleAddBonus,
           handleModal,
-          tableData,
           handleEditSubmit,
+          tableData,
         })}
         fixed
         pagination={{
@@ -131,6 +129,10 @@ const SalaryContent = () => {
           total: itemCount,
           onChange: handlePageChange,
           onShowSizeChange: handleLimitChange,
+        }}
+        expandable={{
+          rowExpandable: () => true,
+          expandedRowRender,
         }}
       />
       <AddBonusModal

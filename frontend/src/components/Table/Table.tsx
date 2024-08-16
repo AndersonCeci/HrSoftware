@@ -61,20 +61,36 @@ export function createTableColumns({
 	};
 }
 
-const Table = ({ data, columns, fixed = false, pageSize , pagination}: TablePropsType) => {
+const Table = ({
+	data,
+	columns,
+	fixed = false,
+	pageSize,
+	pagination,
+	showHeader = true,
+	expandable,
+	identifier = "_id",
+}: TablePropsType) => {
 	return (
 		<T
-			rowKey={(record) => record.id}
+			rowKey={(record) => record[identifier]}
 			locale={{
 				emptyText: "No data available in table. Please check if you have added data to the table. ",
 			}}
-			pagination= {pagination? pagination :{ position: ["bottomLeft"], pageSize: pageSize? pageSize : 10}}
-			className="information-table-of-doom-and-despair-des-pa-sito "
+			pagination={
+				pagination !== undefined
+					? pagination
+					: { position: ["bottomLeft"], pageSize: pageSize ? pageSize : 10 }
+			}
+			className="information-table-of-doom-and-despair-des-pa-sito"
 			columns={columns}
 			dataSource={data}
 			bordered
+			rowClassName="table-row"
+			showHeader={showHeader}
 			size="small"
 			scroll={{ x: fixed ? 1500 : undefined }}
+			expandable={expandable ? expandable : undefined}
 		/>
 	);
 };

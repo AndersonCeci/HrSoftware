@@ -1,14 +1,11 @@
 import Table from "../../../components/Table/Table";
-import TableHeader from "../../../components/Table/TableHeader";
 import Modal from "../../../components/Shared/Modal";
 import Loader from "../../../components/Shared/Loader";
 import AssetForm from "./AssetForm";
 import { AssetDatatype } from "../types/AssetsDataType";
 import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
-
-import { getColumns } from "../utils/AssetsColumn";
-import { t } from "i18next";
+import { getColumns } from "./columns/AssetsColumn";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 
@@ -80,19 +77,14 @@ const AssetContent = () => {
 					editFormRef.current?.submit();
 				}}
 			>
-				<AssetForm
-					ref={editFormRef}
-					selectedElement={selectedElement}
-					onAdd={handleAssetAdd}
-					onEdit={handleAssetEdit}
-				/>
+				<AssetForm ref={editFormRef} onAdd={handleAssetAdd} />
 			</Modal>
-			<TableHeader
+			{/* <TableHeader
 				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);
 				}}
-			/>
+			/> */}
 
 			{!isLoading ? display : <Loader />}
 		</>

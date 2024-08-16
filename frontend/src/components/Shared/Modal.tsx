@@ -22,6 +22,7 @@ const Modal = ({ children, onOk, onCancel, isOpen, title, isLoading }: ModalProp
 			open={isOpen}
 			onCancel={onCancel}
 			onOk={onOk}
+		
 			footer={null}
 		>
 			{children}

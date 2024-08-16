@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
 import Form from "antd/es/form";
-import { DatePicker, Input, message, Spin, Select, InputNumber } from "antd";
+import { DatePicker, Input, message, Spin, Select, InputNumber, Button } from "antd";
 import { ModalContext, SalaryContext } from "../context";
 import moment from "moment";
 import axios, { AxiosError } from "axios";
@@ -22,6 +22,9 @@ export interface Payroll {
   socialInsuranceEmployee: number;
   healthInsuranceEmployee: number;
   incomeTax: number;
+  socialInsuranceCompany: number;
+  healthInsuranceCompany: number;
+  newGrossSalary: number;
 }
 
 const fetchEmployee = async (name: string, surname: string) => {
@@ -36,10 +39,13 @@ const fetchEmployee = async (name: string, surname: string) => {
   }
 };
 
-const getPayroll = async (grossSalary: number): Promise<Payroll | null> => {
+const getPayroll = async (
+  grossSalary: number,
+  workDays: number
+): Promise<Payroll | null> => {
   try {
     const res = await axios.get(`${SALARY_API}/net-salary`, {
-      params: { grossSalary },
+      params: { grossSalary, workDays },
     });
     return res.data;
   } catch (error) {
@@ -97,23 +103,22 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
     editFormRef.current.resetFields();
   };
 
-  const handleGrossSalaryChange = (value: number | null) => {
-    editFormRef.current.setFieldsValue({
-      grossSalary: value,
-    });
-    const grossSalary = value;
-    if (grossSalary) {
-      getPayroll(parseInt(grossSalary.toString())).then((payroll) => {
-        if (payroll) {
-          editFormRef.current.setFieldsValue({
-            netSalary: payroll.netSalary,
-            socialSecurityContributions: payroll.socialInsuranceEmployee,
-            healthInsurance: payroll.healthInsuranceEmployee,
-            incomeTax: payroll.incomeTax,
-            total: grossSalary,
-          });
-        }
-      });
+  const calculatePayroll = async () => {
+    const { grossSalary, workDays } = editFormRef.current.getFieldsValue();
+    if (grossSalary && workDays) {
+      const payroll = await getPayroll(parseInt(grossSalary), parseInt(workDays));
+      if (payroll) {
+        editFormRef.current.setFieldsValue({
+          netSalary: payroll.netSalary,
+          socialSecurityContributions: payroll.socialInsuranceEmployee,
+          healthInsurance: payroll.healthInsuranceEmployee,
+          incomeTax: payroll.incomeTax,
+          socialInsuranceCompany: payroll.socialInsuranceCompany,
+          healthInsuranceCompany: payroll.healthInsuranceCompany,
+          newGrossSalary: payroll.newGrossSalary,
+          total: grossSalary,
+        });
+      }
     }
   };
 
@@ -126,7 +131,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
       }}
       onOk={handleModalOk}
     >
-      <Form
+      <Form  
         ref={editFormRef}
         id="edit-salary-form"
         onFinish={handleFinish}
@@ -195,10 +200,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                     { required: true, message: "Gross Salary is required" },
                   ]}
                 >
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    onChange={handleGrossSalaryChange}
-                  />
+                  <InputNumber style={{ width: "100%" }} />
                 </Form.Item>
                 <Form.Item
                   label="Date taken"
@@ -216,6 +218,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                 >
                   <Input type="number" />
                 </Form.Item>
+                <Button onClick={calculatePayroll}>Calculate Payroll</Button>
                 <Form.Item
                   label="Net Salary"
                   name="netSalary"
@@ -228,7 +231,6 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                 <Form.Item label="Income Tax" name="incomeTax">
                   <Input type="number" disabled />
                 </Form.Item>
-               
                 <Form.Item
                   label="Health Insurance"
                   name="healthInsurance"
@@ -244,8 +246,36 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                   rules={[
                     {
                       required: true,
-                      message: "Social Security Contributions is required",
+                      message:
+                        "Social Security Contributions is required",
                     },
+                  ]}
+                >
+                  <Input type="number" disabled />
+                </Form.Item>
+                <Form.Item
+                  label="Social Insurance Company"
+                  name="socialInsuranceCompany"
+                  rules={[
+                    { required: true, message: "Social Insurance Company is required" },
+                  ]}
+                >
+                  <Input type="number" disabled />
+                </Form.Item>
+                <Form.Item
+                  label="Health Insurance Company"
+                  name="healthInsuranceCompany"
+                  rules={[
+                    { required: true, message: "Health Insurance Company is required" },
+                  ]}
+                >
+                  <Input type="number" disabled />
+                </Form.Item>
+                <Form.Item
+                  label="New Gross Salary"
+                  name="newGrossSalary"
+                  rules={[
+                    { required: true, message: "New Gross Salary is required" },
                   ]}
                 >
                   <Input type="number" disabled />
@@ -253,7 +283,9 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                 <Form.Item
                   label="Total"
                   name="total"
-                  rules={[{ required: true, message: "Total is required" }]}
+                  rules={[
+                    { required: true, message: "Total is required" },
+                  ]}
                 >
                   <Input type="number" disabled />
                 </Form.Item>
