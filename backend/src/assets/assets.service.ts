@@ -15,59 +15,62 @@ export class AssetsService {
     return createAsset.save();
   }
 
-  
-
- async findAll(): Promise<Asset[]> {
-  const data = await this.assetModel
-    .aggregate([
-      {
-        $lookup: {
-          from: 'inventories',
-          localField: '_id',
-          foreignField: 'assetID',
-          as: 'inventories',
-        },
-      },
-      {
-        $unwind: {
-          path: '$inventories',
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $lookup: {
-          from: 'employees', // The collection name where employees are stored
-          localField: 'inventories.employeeID',
-          foreignField: '_id',
-          as: 'inventories.employeeDetails',
-        },
-      },
-      {
-        $group: {
-          _id: '$_id',
-          assetName: { $first: '$assetName' },
-          quantity: { $sum: 1 },
-          inventories: { $push: '$inventories' },
-          reserved: {
-            $sum: {
-              $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
-            },
-          },
-          onRepair: {
-            $sum: {
-              $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
-            },
+  async findAll(): Promise<Asset[]> {
+    const data = await this.assetModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: '_id',
+            foreignField: 'assetID',
+            as: 'inventories',
           },
         },
-      },
-      {
-        $sort: { assetName: 1 },
-      },
-    ])
-    .exec();
-  return data;
-}
-
+        {
+          $unwind: {
+            path: '$inventories',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'inventories.employeeDetails', // Here, use employeeDetails for the local field
+            foreignField: '_id',
+            as: 'inventories.employeeDetails', // Alias as employeeDetails for the frontend
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories.employeeDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            assetName: { $first: '$assetName' },
+            quantity: { $sum: 1 },
+            inventories: { $push: '$inventories' },
+            reserved: {
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
+              },
+            },
+            onRepair: {
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
+              },
+            },
+          },
+        },
+        {
+          $sort: { assetName: 1 },
+        },
+      ])
+      .exec();
+    return data;
+  }
 
   async findName(name: string): Promise<Asset | null> {
     return await this.assetModel.findOne({ assetName: name }).exec();

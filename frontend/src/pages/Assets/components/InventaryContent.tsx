@@ -65,6 +65,7 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 				assetCodes: values,
 			}),
 			(response) => {
+				console.log(response, "response");
 				addQuantityHandler(response, assetType);
 				setIsModalOpen(false);
 			},

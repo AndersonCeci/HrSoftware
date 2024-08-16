@@ -30,9 +30,12 @@ export function expandedColumns(
 			dataIndex: "_id",
 			key: "userName",
 			displayAs: (_: string, record: InventaryDataType) => {
+				console.log(record, "OBJEKTI NGA UNE MARR DATA");
+				const employee = record.employeeDetails;
+				console.log(employee, "EMPLOYEES");
 				return (
 					<Typography.Text>
-						{record.employeeDetails[0] ? record.employeeDetails[0].username : " Not Assigned"}
+						{employee ? employee.username : " Not Assigned"}
 					</Typography.Text>
 				);
 			},

@@ -26,7 +26,7 @@ export class Inventory extends Document {
   status: InventoryStatus;
 
   @Prop({ type: Types.ObjectId, ref: 'Employee' })
-  employeeID: Types.ObjectId;
+  employeeDetails: Types.ObjectId;
 
   @Prop()
   assignDate: Date;

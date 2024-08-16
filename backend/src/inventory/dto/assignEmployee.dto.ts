@@ -4,7 +4,7 @@ import { InventoryStatus } from "../schemas/Inventory.schema";
 
 export class AssignEmployeeDto {
   @IsString()
-  employeeID?: string;
+  employeeDetails?: string;
 
   @IsString()
   assignDate?: string;

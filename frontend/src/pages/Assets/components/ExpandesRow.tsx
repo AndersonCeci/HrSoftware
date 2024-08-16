@@ -40,7 +40,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const filterData = record.inventories;
 
 	const handleOnAssign = (dataToSubmit: {
-		employeeID: string | undefined;
+		employeeDetails: string | undefined;
 		dateGiven: string | undefined;
 	}) => {
 		fetchData(

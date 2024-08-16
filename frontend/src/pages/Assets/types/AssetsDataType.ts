@@ -13,7 +13,7 @@ export type InventaryDataType = {
 	_id: string;
 	assetCodes: string;
 	assetID: string;
-	employeeDetails: EmployeeDataType[];
+	employeeDetails: EmployeeDataType;
 	
 	assignedDate: Date;
 	status: AssetStatus;
