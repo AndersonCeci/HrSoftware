@@ -1,10 +1,17 @@
-import { IsDateString, IsOptional, IsString, IsNumber } from 'class-validator';
+import {ArrayNotEmpty, IsArray, IsBoolean, IsEnum, IsOptional, IsString} from 'class-validator';
+import { InventoryStatus } from '../schemas/inventory.schema';
 
 export class UpdateInventoryDto {
   @IsOptional()
-  assetType?: string;
-  
+  @IsString()
+  assetName?:string
+
   @IsOptional()
-  status?: string;
+  @IsString()
+  assetCodes?: string;
+
+  @IsEnum(InventoryStatus)
+  @IsOptional()
+  status?: InventoryStatus;
 
 }

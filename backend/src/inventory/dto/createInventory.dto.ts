@@ -1,21 +1,28 @@
-import {
-    IsString,
-    IsNumber,
-    IsNotEmpty,
-  } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsBoolean, IsOptional, IsArray, ArrayNotEmpty } from 'class-validator';
+import { InventoryStatus } from '../schemas/inventory.schema';
+
+export class CreateInventoryDto {
   
-  export class CreateInventoryDto {
-    @IsString()
-    @IsNotEmpty()
-    assetType: string;
-    
-    @IsNumber({}, { message: 'Asset Code must be a number' })
-    assetCode: number;
+  assetName:string
 
-    count: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  assetCodes: string[];
 
-    status: string;
-      
-    isDeleted:boolean;
-    deleteDate?:Date
-  }
+  @IsEnum(InventoryStatus)
+  @IsOptional()
+  status?: InventoryStatus;
+
+  //employeeName:string
+
+  //  @IsOptional()
+  //  quantity?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  isDeleted?: boolean;
+
+  @IsOptional()
+  deleteDate?: Date;
+}

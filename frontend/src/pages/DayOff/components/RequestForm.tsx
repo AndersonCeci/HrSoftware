@@ -15,12 +15,10 @@ const RequestForm = ({ onAdd }: any) => {
   const [employee, setEmployee] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log("Fetching employee list");
     fetchData({ url: `${EMPLOYEE}/search` }, (responseData: any) =>
       setEmployee(responseData),
     );
   }, []);
-  console.log(employee);
 
   const handleSubmit = (value: any) => {
     const selected = employee.find((e) => e.username === value.username);
