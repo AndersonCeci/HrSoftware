@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -14,10 +15,14 @@ import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import mongoose from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
 import { InventoryStatus } from './schemas/Inventory.schema';
+import { EmployeeService } from 'src/employee/employe.service';
 
 @Controller('inventory')
 export class InventoryController {
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    private readonly inventoryService: InventoryService,
+    private readonly employeeService: EmployeeService,
+  ) {}
 
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
@@ -55,14 +60,28 @@ export class InventoryController {
     @Param('id') id: string,
     @Body() assignEmployeeDto: AssignEmployeeDto,
   ) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Invalid ID', 404);
+   
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid Asset ID');
+    }
+
+    
+    if (!mongoose.Types.ObjectId.isValid(assignEmployeeDto.employeeID)) {
+      throw new BadRequestException('Invalid Employee ID');
+    }
+
+    
     return this.inventoryService.assignToEmployee(
       id,
       assignEmployeeDto.employeeID,
       assignEmployeeDto.assignDate,
       assignEmployeeDto.status,
     );
+  }
+
+  @Patch('unassign/:id')
+  async unassignFromEmployee(@Param('id') id: string) {
+    return this.inventoryService.unassignFromEmployee(id);
   }
 
   @Patch(':id')
