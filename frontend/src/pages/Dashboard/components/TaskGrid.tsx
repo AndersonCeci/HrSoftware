@@ -192,107 +192,117 @@ const TaskGrid: React.FC = () => {
 						<Input />
 					</Form.Item>
 
-					<Form.Item label="Description" name="description">
-						<Input />
-					</Form.Item>
-					<Form.Item
-						label="Due Date"
-						name="due"
-						rules={[
-							{
-								validator: (_, value) => {
-									if (value && value < moment().startOf("day")) {
-										return Promise.reject(new Error("Due date cannot be earlier than today"));
-									}
-									return Promise.resolve();
-								},
-							},
-						]}
-					>
-						<DatePicker format={"MM/DD/YYYY"} />
-					</Form.Item>
-					<Form.Item
-						name="status"
-						label="Status"
-						rules={[{ required: true, message: "Please choose the status" }]}
-					>
-						<Select placeholder="Select status">
-							{statusOptions.map((status) => (
-								<Option key={status.value} value={status.value}>
-									{status.label}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item>
-						<Button className="Submit-btn" type="primary" htmlType="submit">
-							Submit
-						</Button>
-					</Form.Item>
-				</Form>
-			</Modal>
-			<Modal
-				open={isVisible}
-				footer={null}
-				onCancel={() => {
-					setIsVisible(false);
-				}}
-				title="Add New Task"
-			>
-				<Form form={form2} layout="vertical" onFinish={handleSubmit}>
-					<Form.Item
-						label="Title"
-						name="title"
-						rules={[{ required: true, message: "Please enter the title" }, { max: 100 }]}
-					>
-						<Input placeholder="Enter the title" />
-					</Form.Item>
-					<Form.Item
-						label="Description"
-						name="description"
-						rules={[{ required: true, message: "Please enter the description" }, { max: 1000 }]}
-					>
-						<Input.TextArea placeholder="Enter the description" />
-					</Form.Item>
-					<Form.Item
-						label="Due Date"
-						name="due"
-						rules={[
-							{
-								validator: (_, value) => {
-									if (value && value < moment().startOf("day")) {
-										return Promise.reject(new Error("Due date cannot be earlier than today"));
-									}
-									return Promise.resolve();
-								},
-							},
-						]}
-					>
-						<DatePicker format={"MM/DD/YYYY"} />
-					</Form.Item>
-					<Form.Item
-						name="status"
-						label="Status"
-						initialValue="TO DO"
-						rules={[{ required: true, message: "Please choose the status" }]}
-					>
-						<Select placeholder="Select status">
-							{statusOptions.map((status) => (
-								<Option key={status.value} value={status.value}>
-									{status.label}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item>
-						<Button className="Submit-btn" type="primary" htmlType="submit">
-							Submit
-						</Button>
-					</Form.Item>
-				</Form>
-			</Modal>
-		</div>
-	);
+          <Form.Item label="Description" name="description">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Due Date"
+            name="due"
+            rules={[
+              {
+                validator: (_, value) => {
+                  if (value && value < moment().startOf("day")) {
+                    return Promise.reject(
+                      new Error("Due date cannot be earlier than today")
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <DatePicker format={"MM/DD/YYYY"} />
+          </Form.Item>
+          <Form.Item
+            name="status"
+            label="Status"
+            rules={[{ required: true, message: "Please choose the status" }]}
+          >
+            <Select placeholder="Select status">
+              {statusOptions.map((status) => (
+                <Option key={status.value} value={status.value}>
+                  {status.label}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button className="Submit-btn" type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal
+        open={isVisible}
+        footer={null}
+        onCancel={() => {
+          setIsVisible(false);
+        }}
+        title="Add New Task"
+      >
+        <Form form={form2} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[
+              { required: true, message: "Please enter the title" },
+              { max: 100 },
+            ]}
+          >
+            <Input placeholder="Enter the title" />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[
+              { required: true, message: "Please enter the description" },
+              { max: 1000 },
+            ]}
+          >
+            <Input.TextArea placeholder="Enter the description" />
+          </Form.Item>
+          <Form.Item
+            label="Due Date"
+            name="due"
+            rules={[
+              {
+                validator: (_, value) => {
+                  if (value && value < moment().startOf("day")) {
+                    return Promise.reject(
+                      new Error("Due date cannot be earlier than today")
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <DatePicker format={"MM/DD/YYYY"} />
+          </Form.Item>
+          <Form.Item
+            name="status"
+            label="Status"
+            initialValue="TO DO"
+            rules={[{ required: true, message: "Please choose the status" }]}
+          >
+            <Select placeholder="Select status">
+              {statusOptions.map((status) => (
+                <Option key={status.value} value={status.value}>
+                  {status.label}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button className="Submit-btn" type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
+  );
 };
 
 export default TaskGrid;
