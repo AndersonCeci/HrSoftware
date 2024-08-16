@@ -1,4 +1,13 @@
-import { Controller, Post, Body,Get,Delete, HttpException, Param ,Query} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Delete,
+  HttpException,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { EventsService } from './eventsModale.service';
 import mongoose from 'mongoose';
@@ -13,8 +22,8 @@ export class EventsController {
   }
 
   @Get()
-  async getEvent(@Query() query){
-    return this.eventsService.getEvent(query)
+  async getEvent(@Query() query) {
+    return this.eventsService.getEvent(query);
   }
 
   @Delete(':id')

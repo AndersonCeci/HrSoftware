@@ -4,26 +4,26 @@ import InventaryContent from "./components/InventaryContent";
 import { Tabs } from "antd";
 
 const AssetsPage: React.FC = () => {
-	return (
-		<section className="test">
-			<Tabs
-				defaultActiveKey="2"
-				centered
-				onTabClick={() => {
-					console.log("Assets tab clicked");
-				}}
-			>
-				<Tabs.TabPane tab="Assets" key="1">
-					<>
-						<AssetContent />
-					</>
-				</Tabs.TabPane>
-				<Tabs.TabPane tab="Inventary" key="2">
-					<InventaryContent />
-				</Tabs.TabPane>
-			</Tabs>
-		</section>
-	);
+  return (
+    <section className="test">
+      <Tabs
+        defaultActiveKey="2"
+        centered
+        onTabClick={() => {
+          console.log("Assets tab clicked");
+        }}
+      >
+        <Tabs.TabPane tab="Assets" key="1">
+          <>
+            <AssetContent />
+          </>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Inventary" key="2">
+          <InventaryContent />
+        </Tabs.TabPane>
+      </Tabs>
+    </section>
+  );
 };
 
 export default AssetsPage;

@@ -11,8 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
 
-const EventPage: React.FC = () =>
-{
+const EventPage: React.FC = () => {
 	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
@@ -56,8 +55,6 @@ const EventPage: React.FC = () =>
 			},
 		);
 	}, []);
-
-	console.log(loadedEvents, "JONIIIII");
 
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 

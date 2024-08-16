@@ -1,4 +1,10 @@
-import { useRef, useImperativeHandle, forwardRef, useEffect, useState } from "react";
+import {
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
 import { Form } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import dayjs from "dayjs";
@@ -9,79 +15,91 @@ import { AssetFormProps } from "../types/AddAssetsForm";
 const API = import.meta.env.REACT_APP_ASSET_API;
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
-const AssetForm = forwardRef(({ selectedElement, onAdd, onEdit }: AssetFormProps, ref) => {
-	const formRef = useRef<any>();
-	const [form] = Form.useForm();
-	const [employeeList, setEmployeeList] = useState([]);
-	const [, , sendRequest] = useHttp();
+const AssetForm = forwardRef(
+  ({ selectedElement, onAdd, onEdit }: AssetFormProps, ref) => {
+    const formRef = useRef<any>();
+    const [form] = Form.useForm();
+    const [employeeList, setEmployeeList] = useState([]);
+    const [, , sendRequest] = useHttp();
 
-	console.log(employeeList);
+    console.log(employeeList);
 
-	useEffect(() => {
-		console.log("Fetching employee list");
-		sendRequest({ url: `${EMPLOYEE}/usernames` }, (responseData: any) =>
-			setEmployeeList(responseData),
-		);
-	}, []);
+    useEffect(() => {
+      console.log("Fetching employee list");
+      sendRequest({ url: `${EMPLOYEE}/usernames` }, (responseData: any) =>
+        setEmployeeList(responseData),
+      );
+    }, []);
 
-	const initialValues = {
-		assetType: selectedElement ? selectedElement.assetType : "",
-		dateGiven: selectedElement ? dayjs(selectedElement.dateGiven) : dayjs(),
-		userName: selectedElement ? selectedElement.userName : "",
-	};
+    const initialValues = {
+      assetType: selectedElement ? selectedElement.assetType : "",
+      dateGiven: selectedElement ? dayjs(selectedElement.dateGiven) : dayjs(),
+      userName: selectedElement ? selectedElement.userName : "",
+    };
 
-	useImperativeHandle(ref, () => ({
-		submit: () => {
-			formRef.current.submit();
-		},
-	}));
+    useImperativeHandle(ref, () => ({
+      submit: () => {
+        formRef.current.submit();
+      },
+    }));
 
-	function onFinish(values: any) {
-		const newAsset = {
-			_id: selectedElement?._id,
-			assetType: values.assetType,
-			dateGiven: values.dateGiven.format("YYYY-MM-DD"),
-			userName: values.userName,
-		};
+    function onFinish(values: any) {
+      const newAsset = {
+        _id: selectedElement?._id,
+        assetType: values.assetType,
+        dateGiven: values.dateGiven.format("YYYY-MM-DD"),
+        userName: values.userName,
+      };
 
-		sendRequest(
-			{
-				url: `${API}/${selectedElement ? selectedElement._id : ""}`,
-				method: selectedElement ? "PATCH" : "POST",
-				headers: { "Content-Type": "application/json" },
-				body: newAsset,
-			},
-			(responseData: any) => {
-				console.log(responseData);
-				// onEdit(responseData);
-				selectedElement ? onEdit(responseData) : onAdd(responseData);
-			},
-		);
-	}
+      sendRequest(
+        {
+          url: `${API}/${selectedElement ? selectedElement._id : ""}`,
+          method: selectedElement ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newAsset,
+        },
+        (responseData: any) => {
+          console.log(responseData);
+          // onEdit(responseData);
+          selectedElement ? onEdit(responseData) : onAdd(responseData);
+        },
+      );
+    }
 
-	return (
-		<Form
-			form={form}
-			ref={formRef}
-			layout="vertical"
-			initialValues={initialValues}
-			autoComplete="off"
-			onFinish={onFinish}
-		>
-			<FormInputs.Select label="Type" name="assetType" required options={availableAssets} />
-			<FormInputs.DatePicker label="Date Given" name="dateGiven" required isDisabledDate />
-			<FormInputs.AutoComplete
-				label="Employee"
-				name="userName"
-				required
-				options={employeeList.map((employee: any) => ({
-					value: employee.username,
-					label: employee.username,
-				}))}
-				isMatchWithOption
-			/>
-		</Form>
-	);
-});
+    return (
+      <Form
+        form={form}
+        ref={formRef}
+        layout="vertical"
+        initialValues={initialValues}
+        autoComplete="off"
+        onFinish={onFinish}
+      >
+        <FormInputs.Select
+          label="Type"
+          name="assetType"
+          required
+          options={availableAssets}
+        />
+        <FormInputs.DatePicker
+          label="Date Given"
+          name="dateGiven"
+          required
+          isDisabledDate
+        />
+        <FormInputs.AutoComplete
+          label="Employee"
+          name="userName"
+          required
+          options={employeeList.map((employee: any) => ({
+            value: employee.username,
+            label: employee.username,
+          }))}
+          isMatchWithOption
+        />
+      </Form>
+    );
+  },
+);
 
 export default AssetForm;

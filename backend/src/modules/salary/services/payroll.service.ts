@@ -4,9 +4,7 @@ import { Payroll } from '../dto/PayrollDTO/payroll.dto';
 @Injectable()
 export class PayrollService {
   private readonly SOCIAL_INSURANCES_COMPANY_COEFICIENT = 0.15;
-  private readonly SOCIAL_INSURANCES_COMPANY_COEFICIENT_SELF = 0.23;
   private readonly SOCIAL_INSURANCES_EMPLOYEE_COEFICIENT = 0.095;
-  private readonly HEALTH_INSURANCES_COMPANY_COEFICIENT_SELF = 0.034;
   private readonly HEALTH_INSURANCES_COMPANY_COEFICIENT = 0.017;
   private readonly HEALTH_INSURANCES_EMPLOYEE_COEFICIENT = 0.017;
   private readonly INCOME_TAX_INTERVAL_1_30000 = 30000;
@@ -59,7 +57,7 @@ export class PayrollService {
       healthInsuranceCompany: this.roundToTwoDecimalPlaces(
         healthInsuranceCompany,
       ),
-      newGrossSalary: this.roundToTwoDecimalPlaces(newGrossSalary),
+      grossSalary: this.roundToTwoDecimalPlaces(newGrossSalary),
     };
   }
 

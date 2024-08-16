@@ -12,125 +12,44 @@ import ExpandedRow from "./ExpandesRow";
 const API = import.meta.env.REACT_APP_INVENTORY_API;
 
 const InventaryContent = () => {
-	const [inventaryData, setInventaryData] = useState<InventaryDataType[]>([]);
-	const [allAssets, setAllAssets] = useState<InventaryDataType[]>([]);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [selectedAsset, setSelectedAsset] = useState<InventaryDataType | null>(null);
-	const formRef = useRef<any>();
-	const [isLoading, error, fetchData] = useHttp();
+  const [inventaryData, setInventaryData] =
+    useState<InventaryDataType[]>(dummyData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [quantityModifier, setQuantityModifier] = useState<number>(0);
+  const [isLoading, error, fetchData] = useHttp();
+  const columns = createColumns(inventaryData, handleQuantityChange);
 
-	useEffect(() => {
-		fetchData({ url: `${API}/counts` }, (data) => {
-			setInventaryData(data);
-		});
+  useEffect(() => {
+    setInventaryData(dummyData);
+  }, []);
 
-		fetchData({ url: `${API}` }, (data) => {
-			setAllAssets(data);
-		});
-	}, []);
+  function handleQuantityChange(id: string, value: number) {
+    setInventaryData((prev) => {
+      return prev.map((item) => {
+        if (item._id === id) {
+          console.log(item);
+          return { ...item, quantity: item.quantity + value };
+        }
+        return item;
+      });
+    });
+  }
 
-	const columns = createColumns(inventaryData, handleQuantityChange);
-
-	function handleQuantityChange(record: InventaryDataType) {
-		setSelectedAsset(record);
-		setIsModalOpen(true);
-	}
-
-	// function handleAddAsset(values: string[]) {
-	// 	setInventaryData((prev) => {
-	// 		return prev.map((asset) => {
-	// 			console.log(asset, selectedAsset);
-
-	// 			if (asset._id === selectedAsset?._id) {
-	// 				return { ...asset, count: asset.quantity + values.length };
-	// 			}
-	// 			return asset;
-	// 		});
-	// 	});
-	// 	setIsModalOpen(false);
-	// 	setSelectedAsset(null);
-	// }
-
-	function handleAddQuantity(values: string[], assetType: string) {
-		fetchData(
-			useHttp.postRequestHelper(API, {
-				assetType,
-				assetCode: parseInt(values[0]),
-			}),
-			(data) => {
-				console.log(data, "response");
-				setAllAssets((prev) => {
-					return [...prev, data];
-				});
-				setInventaryData((prev) => {
-					return prev.map((asset) => {
-						console.log(asset, assetType, "asset");
-						if (asset.assetType === assetType) {
-							return { ...asset, count: asset.count + 1 };
-						}
-						return asset;
-					});
-				});
-			},
-		);
-	}
-
-	// function createTestAsset() {
-	// 	fetchData(
-	// 		useHttp.postRequestHelper(API, {
-	// 			assetType: "Table",
-	// 			assetCode: 13256535579671,
-	// 		}),
-	// 		(data) => {
-	// 			setInventaryData((prev) => {
-	// 				return [...prev, data];
-	// 			});
-	// 		},
-	// 	);
-	// }
-
-	return (
-		<>
-			<Modal
-				title={selectedAsset ? `Add ${selectedAsset.assetType} to inventary` : "Add Asset Type"}
-				isOpen={isModalOpen}
-				onCancel={() => {
-					setIsModalOpen(false);
-					setSelectedAsset(null);
-				}}
-				onOk={() => {
-					formRef.current.submit();
-				}}
-			>
-				<QuantityForm
-					selectedAsset={selectedAsset}
-					onAddAssetType={() => {}}
-					onAddQuantity={handleAddQuantity}
-					ref={formRef}
-				/>
-			</Modal>
-			<TableHeader
-				title="Inventary"
-				onClick={() => {
-					setIsModalOpen(true);
-				}}
-			/>
-			<Table
-				identifier="assetType"
-				data={inventaryData}
-				columns={columns}
-				expandable={{
-					expandedRowRender: (record) => (
-						<div className="treee">
-							<ExpandedRow record={record} assets={allAssets} />
-						</div>
-					),
-					expandIcon: ({ expanded }) => (expanded ? <CaretUpOutlined /> : <CaretDownOutlined />),
-					expandRowByClick: true,
-				}}
-			/>
-		</>
-	);
+  return (
+    <>
+      <Modal title="Add Asset to inventary" isOpen={isModalOpen}>
+        <p>Modal Content</p>
+      </Modal>
+      <TableHeader
+        title="Inventary"
+        // onClick={() => {
+        // 	setIsModalOpen(true);
+        // }}
+        hideButton
+      />
+      <Table data={dummyData} columns={columns} />
+    </>
+  );
 };
 
 export default InventaryContent;

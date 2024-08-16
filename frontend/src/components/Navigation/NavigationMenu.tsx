@@ -18,16 +18,16 @@ const navElements = [
 ];
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
-	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-		useLocation()
-			.pathname.split("/")
-			.filter((x) => x),
-	);
+  const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+    useLocation()
+      .pathname.split("/")
+      .filter((x) => x),
+  );
 
-	const location = useLocation();
-	const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-	const { t } = useTranslation();
+  const { t } = useTranslation();
 
 	const items: any = navElements.map((element) => {
 		return {
@@ -45,15 +45,15 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		};
 	});
 
-	useEffect(() => {
-		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-	}, [location.pathname]);
+  useEffect(() => {
+    setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+  }, [location.pathname]);
 
-	const handleClick = () => {
-		localStorage.removeItem("userData");
-		console.log("Cleared?", localStorage.getItem("token"));
-		navigate("/");
-	};
+  const handleClick = () => {
+    localStorage.removeItem("userData");
+    console.log("Cleared?", localStorage.getItem("token"));
+    navigate("/");
+  };
 
 	return (
 		<Flex

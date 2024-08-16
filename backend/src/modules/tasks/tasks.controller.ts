@@ -1,45 +1,54 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
-import { TasksService } from "./tasks.service";
-import { CreateTaskDto } from "./tasksDTO/tasks.dto";
-import { Types } from "mongoose";
-
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './tasksDTO/tasks.dto';
+import { Types } from 'mongoose';
 
 @Controller('tasks')
-export class TasksController { 
-    constructor(private readonly tasksService: TasksService) {}
+export class TasksController {
+  constructor(private readonly tasksService: TasksService) {}
 
-    @Post()
-    createTask(@Body() createTaskDto: CreateTaskDto){
-        return this.tasksService.createTask(createTaskDto);
+  @Post()
+  createTask(@Body() createTaskDto: CreateTaskDto) {
+    return this.tasksService.createTask(createTaskDto);
+  }
+
+  @Get()
+  findAllTasks() {
+    return this.tasksService.findAllTasks();
+  }
+
+  @Get(':id')
+  findTaskById(@Param('id') id: string) {
+    return this.tasksService.findTaskById(id);
+  }
+
+  @Delete(':id')
+  async deleteTask(@Param('id') id: string) {
+    console.log('Received ID:', id);
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid ID format');
     }
 
-    @Get()
-    findAllTasks(){
-        return this.tasksService.findAllTasks();
+    const result = await this.tasksService.softDeleteTaskById(id);
+    if (!result) {
+      throw new NotFoundException('Task not found');
     }
 
-    @Get(':id')
-    findTaskById(@Param('id') id: string){
-        return this.tasksService.findTaskById(id);
-    }
+    return { message: 'Task deleted successfully' };
+  }
 
-    @Delete(':id')
-    async deleteTask(@Param('id') id: string) {
-        console.log('Received ID:', id);
-      if (!Types.ObjectId.isValid(id)) {
-        throw new BadRequestException('Invalid ID format');
-      }
-  
-      const result = await this.tasksService.softDeleteTaskById(id);
-      if (!result) {
-        throw new NotFoundException('Task not found');
-      }
-  
-      return { message: 'Task deleted successfully' };
-    }
-
-    @Put(':id')
-    editTask(@Param('id') id: string, @Body() updateTaskDto: CreateTaskDto){
-        return this.tasksService.editTask(id, updateTaskDto);
-    }
+  @Put(':id')
+  editTask(@Param('id') id: string, @Body() updateTaskDto: CreateTaskDto) {
+    return this.tasksService.editTask(id, updateTaskDto);
+  }
 }

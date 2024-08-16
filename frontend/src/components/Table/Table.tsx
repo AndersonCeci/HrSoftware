@@ -1,4 +1,4 @@
-import { Table as T, Input } from "antd";
+import { Table as T, Input, TableProps } from "antd";
 import "../../styles/Table/Table.css";
 import type { TablePropsType, createTableColumns } from "../../types/Table";
 
@@ -61,6 +61,10 @@ export function createTableColumns({
 	};
 }
 
+interface ExtendedTablePropsType extends TablePropsType {
+	onChange?: TableProps<any>["onChange"];
+}
+
 const Table = ({
 	data,
 	columns,
@@ -68,8 +72,9 @@ const Table = ({
 	pageSize,
 	pagination,
 	expandable,
+	onChange,
 	identifier = "_id",
-}: TablePropsType) => {
+}: ExtendedTablePropsType) => {
 	return (
 		<T
 			rowKey={(record) => record[identifier]}
@@ -77,17 +82,18 @@ const Table = ({
 				emptyText: "No data available in table. Please check if you have added data to the table. ",
 			}}
 			pagination={
-				pagination !== undefined
-					? pagination
+				pagination
+					? { ...pagination, position: ["bottomLeft"] }
 					: { position: ["bottomLeft"], pageSize: pageSize ? pageSize : 10 }
 			}
-			className="information-table-of-doom-and-despair-des-pa-sito"
+			className="information-table-of-doom-and-despair-des-pa-sito "
 			columns={columns}
 			dataSource={data}
 			bordered
 			size="small"
 			scroll={{ x: fixed ? 1500 : undefined }}
 			expandable={expandable ? expandable : undefined}
+			onChange={onChange}
 		/>
 	);
 };

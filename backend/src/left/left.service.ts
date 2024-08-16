@@ -15,35 +15,36 @@ export class LeftService {
     private leftModel: mongoose.Model<Left>,
   ) {}
 
-  async findAll(): Promise<Employee[]> {
-    return this.leftModel.find();
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: Left[]; total: number }> {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      this.leftModel.find().skip(skip).limit(limit).exec(),
+      this.leftModel.countDocuments(),
+    ]);
+    return { data, total };
   }
 
   getByID(id: string): Promise<Employee | null> {
     return this.employeeService.findOne(id);
   }
 
-  deleteEmployee(id:string) : Promise<Employee | null>{
-     return this.employeeService.delete(id)
+  deleteEmployee(id: string): Promise<Employee | null> {
+    return this.employeeService.delete(id);
   }
- 
-  async copyEmployeeData(id: string): Promise<Left> {
+
+  async copyEmployeeData(id: string, deletedAt: string): Promise<Left> {
     const employeeData = await this.employeeService.findOne(id);
-    
+
     if (!employeeData) {
       throw new Error('Employee not found');
     }
 
-
-    const dateObj = new Date();
-    const month   = dateObj.getUTCMonth() + 1;
-    const day     = dateObj.getUTCDate();
-    const year    = dateObj.getUTCFullYear();
-    const newDate = `${day}/${month}/${year}`;
-
     const leftData = new this.leftModel({
       ...employeeData.toObject(),
-      deletedAt: newDate,
+      deletedAt: deletedAt,
     });
 
     await leftData.save();
