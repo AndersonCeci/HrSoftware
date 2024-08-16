@@ -1,4 +1,4 @@
-import { Typography, Input, Row, Col, Flex } from "antd";
+import { Typography, Input, Flex } from "antd";
 import useHttp from "../../hooks/useHttp";
 import PromoteCard from "./components/PromoteCard";
 import { useEffect, useState } from "react";
@@ -60,7 +60,7 @@ const PromotionPage: React.FC = () => {
           size="large"
         />
       </div>
-      <Flex>
+      <Flex wrap="wrap" justify="center">
         {filteredData.map((promote) => (
           <PromoteCard key={promote._id} promote={promote} />
         ))}

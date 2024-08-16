@@ -119,9 +119,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 }}
                 hoverable
               >
-                <Tag style={{ width: "70px", marginTop: "10px" }} color="gold">
-                  Promoted
-                </Tag>
+                {/* <Tag style={{width:"70px", marginTop:"10px"}} color="gold">Promoted</Tag> */}
                 <p>
                   <b>{t("newPosition")}:</b> {promote?.newPosition}
                 </p>

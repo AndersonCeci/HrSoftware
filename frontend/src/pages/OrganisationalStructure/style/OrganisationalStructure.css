@@ -14,7 +14,7 @@
 }
 
 .ceo-card {
-  background-color: #246afe;
+  background-color: #474CCC;
 }
 
 .flex {
@@ -30,15 +30,15 @@
 }
 
 .hr-card {
-  background-color: #dcbcf6;
+  background-color: #fc83af;
 }
 
 .hr-department {
-  background-color: #b878ed;
+  background-color:#CA054D;
 }
 
 .it-department {
-  background-color: #3fbf5d;
+  background-color: #136F63;
 }
 
 .flex-label {
@@ -54,8 +54,8 @@
   border-radius: 5px;
 }
 
-.prj-card {
-  background-color: #9fdfae;
+.prj-card{
+  background-color: #25dac2;
 }
 
 .w-card {

@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/PersonalCalendarPage/PersonalCalendar.css";
-import {
-  Drawer,
-  Space,
-  Modal,
-  Typography,
-  Card,
-  Avatar,
-  Divider,
-  Button,
-  Tooltip,
-} from "antd";
+import { Drawer, Modal, Typography, Card, Avatar, Divider, Button } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -28,6 +18,7 @@ import useEvents, {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import "./components/PersonalCalendarPage.css";
 
 const { Title } = Typography;
 

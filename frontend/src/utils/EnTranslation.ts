@@ -81,4 +81,8 @@ export const EnTranslation = {
   viewOldPosition: "View Old Position",
   enterEmployeeName: "Enter Employee Name",
   viewPromotionRecordsForEmployees: "View Promotion Records For Employees",
+  projectManager: "Project Manager",
+  holidayEntitlement: "Holiday Entitlement",
+  currentSalary: "Current Salary",
+  dailyQuote: "Daily qoute",
 };
