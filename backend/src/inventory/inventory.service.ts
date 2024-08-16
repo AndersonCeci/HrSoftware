@@ -28,17 +28,10 @@ export class InventoryService {
     const foundAsset = await this.assetsService.findName(
       createInventoryDto.assetName,
     );
-    //const foundEmployee = await this.employeeService.findName(createInventoryDto.employeeName)
 
     if (!foundAsset) {
-      throw new NotFoundException(
-        `AssetType with name ${createInventoryDto.assetName} not found`,
-      );
+      throw new NotFoundException();
     }
-
-    // if (!foundEmployee) {
-    //   throw new NotFoundException(`Employee with name ${createInventoryDto.employeeName} not found`);
-    // }
 
     const {
       assetCodes,
@@ -49,7 +42,6 @@ export class InventoryService {
 
     const inventoryEntries = assetCodes.map((code) => ({
       assetID: foundAsset._id,
-      //employeeID: foundEmployee._id,
       assetCodes: code,
       status,
       isDeleted,
@@ -73,11 +65,9 @@ export class InventoryService {
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeID);
 
-    // if (!foundEmployee) {
-    //   throw new NotFoundException(
-    //     `Employee with name ${foundEmployee.username} not found`,
-    //   );
-    // }
+    if (!foundEmployee) {
+      throw new NotFoundException(`Employee with ID ${employeeID} not found`);
+    }
 
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeID: foundEmployee._id,
@@ -85,7 +75,27 @@ export class InventoryService {
       status: InventoryStatus.Assigned,
     });
 
-    return await this.inventoryModel.findById(inventoryID);
+    // Use populate to return the employee details instead of just the ID
+    return await this.inventoryModel
+      .findById(inventoryID)
+      .populate('employeeID');
+  }
+
+  async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
+    const foundInventory = await this.inventoryModel.findById(inventoryID);
+
+    if (!foundInventory) {
+      throw new NotFoundException(
+        `Inventory item with ID ${inventoryID} not found`,
+      );
+    }
+
+    foundInventory.employeeID = null; 
+    foundInventory.status = InventoryStatus.Available; 
+    foundInventory.assignDate = null; 
+
+    await foundInventory.save();
+    return foundInventory;
   }
 
   async findAll(): Promise<any> {
