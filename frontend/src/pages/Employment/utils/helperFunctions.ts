@@ -24,6 +24,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
         position: "",
         startingDate: "",
         nID: "",
+        gender: "",
       };
 
   return initialValues;
@@ -52,19 +53,19 @@ export function getDevRoles() {
 }
 
 export function getFormValues(form: any) {
-	return {
-		name: form.getFieldValue("name"),
-		surname: form.getFieldValue("surname"),
-		email: form.getFieldValue("email"),
-		phoneNumber: form.getFieldValue("phoneNumber"),
-		position: form.getFieldValue("position"),
-		salary: form.getFieldValue("salary"),
-		teamLeader: form.getFieldValue("teamLeader"),
-		startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
-		contract: "Permanent",
-		nID: form.getFieldValue("nID"),
-		username: form.getFieldValue("email").split("@")[0],
-		password: "codevider",
-		gender: form.getFieldValue("gender"),
-	};
+  return {
+    name: form.getFieldValue("name"),
+    surname: form.getFieldValue("surname"),
+    email: form.getFieldValue("email") + "@codevider.com",
+    phoneNumber: form.getFieldValue("phoneNumber"),
+    position: form.getFieldValue("position"),
+    salary: form.getFieldValue("salary"),
+    teamLeader: form.getFieldValue("teamLeader"),
+    startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
+    contract: "Permanent",
+    nID: form.getFieldValue("nID"),
+    username: form.getFieldValue("email").split("@")[0],
+    password: "codevider",
+    gender: form.getFieldValue("gender"),
+  };
 }

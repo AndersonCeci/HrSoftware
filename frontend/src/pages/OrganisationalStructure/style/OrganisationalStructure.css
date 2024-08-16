@@ -1,4 +1,4 @@
-.overflow-x-auto{
+.overflow-x-auto {
   margin-top: 20px;
   overflow-x: scroll;
 }
@@ -9,7 +9,7 @@
   border-radius: 12px;
 }
 
-.label{
+.label {
   color: white;
 }
 
@@ -58,6 +58,6 @@
   background-color: #25dac2;
 }
 
-.w-card{
+.w-card {
   background-color: #9ab9fe;
 }

@@ -4,10 +4,10 @@ import {
   Post,
   Body,
   Param,
-  Put,
   Delete,
   Query,
   BadRequestException,
+  Patch,
 } from '@nestjs/common';
 import { SalaryService } from './services/salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
@@ -15,13 +15,16 @@ import { UpdateSalaryDTO } from './dto/salaryDTO/updateSalary.dto';
 import { Types } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Payroll, PayrollService } from './services/payroll.service';
+import { PayrollService } from './services/payroll.service';
+import { Payroll } from './dto/PayrollDTO/payroll.dto';
+import { SchedulerService } from 'src/schedule/scheduler.service';
 
 @Controller('salary')
 export class SalaryController {
   constructor(
     private readonly salaryService: SalaryService,
     private readonly payrollService: PayrollService,
+    private readonly scheduler: SchedulerService,
   ) {}
 
   @Post()
@@ -53,7 +56,7 @@ export class SalaryController {
     );
   }
 
-  @Put(':salaryID')
+  @Patch(':salaryID')
   async updateSalary(
     @Param('salaryID') salaryID: Types.ObjectId,
     @Body() updateSalaryDto: UpdateSalaryDTO,
@@ -73,8 +76,45 @@ export class SalaryController {
   }
 
   @Get('net-salary')
-  async netSalary(@Query('grossSalary') grossSalary: number): Promise<Payroll> {
-    const res = this.payrollService.calculateNetSalary(grossSalary);
+  async netSalary(
+    @Query('grossSalary') grossSalary: number,
+    @Query('workDays') workDays: number = 22,
+  ): Promise<Payroll> {
+    const res = this.payrollService.calculateNetSalary(grossSalary, workDays);
     return res;
+  }
+  @Post('schedule')
+  async handleCron(
+    @Body('startDate') startDateStr: string,
+    @Body('endDate') endDateStr: string,
+    @Body('step') step: string,
+  ) {
+    try {
+      const startDate = new Date(startDateStr);
+      const endDate = new Date(endDateStr);
+
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new Error('Invalid date format.');
+      }
+
+      if (startDate >= endDate) {
+        throw new Error('Start date must be before end date.');
+      }
+
+      const task = async () => this.salaryService.createSalariesPerMonth();
+      const jobName = 'salary-job';
+
+      this.scheduler.scheduleJob({
+        startDate,
+        endDate,
+        step,
+        jobName,
+        task,
+      });
+
+      return { message: `Job '${jobName}' scheduled successfully.` };
+    } catch (error) {
+      return { message: `Error scheduling job: ${error.message}` };
+    }
   }
 }

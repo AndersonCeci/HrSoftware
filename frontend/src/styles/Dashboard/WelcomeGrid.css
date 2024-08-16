@@ -12,29 +12,28 @@
 }
 
 .remote {
-    background-color: white;
-
+  background-color: white;
 }
 
 .dismissed {
-    background-color: white;
+  background-color: white;
 }
 .welcome-grid {
-    display: flex;
+  display: flex;
 }
-.pie-chart{
-    background-color: white;
-    margin-left: 20px;
-    width: 250px;
-    height: 330px;
-    border-radius: 10px;
+.pie-chart {
+  background-color: white;
+  margin-left: 20px;
+  width: 250px;
+  height: 330px;
+  border-radius: 10px;
 }
 
-.dashboard-main{
-    flex-direction: row;
+.dashboard-main {
+  flex-direction: row;
 }
-@media (max-width:1024px){
-    .dashboard-main{
-        flex-direction: column !important;
-    }
+@media (max-width: 1024px) {
+  .dashboard-main {
+    flex-direction: column !important;
+  }
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
+import { useState, useEffect } from "react";
+import dayjs, { Dayjs } from "dayjs";
 
 export enum Status {
   Cancelled = "cancelled",
@@ -19,15 +19,18 @@ export interface NewEvent {
   invitee?: string[];
 }
 interface User {
-    _id: string;
-    username: string;
-  }
+  _id: string;
+  username: string;
+}
 const fetchEventsByCriteria = async (endpoint: string, userId: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/events/${endpoint}/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `http://localhost:3000/events/${endpoint}/${userId}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.message || `Failed to fetch ${endpoint} events`);
@@ -59,10 +62,12 @@ const useEvents = () => {
 
   useEffect(() => {
     const fetchAllEvents = async () => {
-      const userId = JSON.parse(localStorage.getItem("userData") || "{}").userId;
+      const userId = JSON.parse(
+        localStorage.getItem("userData") || "{}",
+      ).userId;
       const [creatorEvents, inviteeEvents] = await Promise.all([
-        fetchEventsByCriteria('byCreator', userId),
-        fetchEventsByCriteria('invitee', userId),
+        fetchEventsByCriteria("byCreator", userId),
+        fetchEventsByCriteria("invitee", userId),
       ]);
       setAllEvents([...creatorEvents, ...inviteeEvents]);
     };
@@ -72,7 +77,9 @@ const useEvents = () => {
 
   const addNewEvent = async (newEvent: NewEvent) => {
     try {
-      const userId = JSON.parse(localStorage.getItem("userData") || "{}").userId;
+      const userId = JSON.parse(
+        localStorage.getItem("userData") || "{}",
+      ).userId;
       const response = await fetch(`http://localhost:3000/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,7 +100,6 @@ const useEvents = () => {
       }
       const updatedEvent = updateEventStatus(data);
       setAllEvents((prev) => [...prev, updatedEvent]);
-
     } catch (error) {
       console.error("Error adding event:", error);
     }
@@ -127,7 +133,7 @@ const useEvents = () => {
         throw new Error(data.message || "Failed to cancel event");
       }
       const updatedEvents = allEvents.map((event) =>
-        event._id === eventId ? { ...event, status: Status.Cancelled } : event
+        event._id === eventId ? { ...event, status: Status.Cancelled } : event,
       );
       setAllEvents(updatedEvents);
     } catch (error) {
@@ -137,20 +143,17 @@ const useEvents = () => {
 
   const handleEditEvent = async (eventId: string, updatedEvent: any) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/events/${eventId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedEvent),
-        }
-      );
+      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedEvent),
+      });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Failed to update event");
       }
       const updatedEvents = allEvents.map((event) =>
-        event._id === eventId ? { ...event, ...data } : event
+        event._id === eventId ? { ...event, ...data } : event,
       );
       setAllEvents(updatedEvents);
     } catch (error) {
@@ -158,7 +161,13 @@ const useEvents = () => {
     }
   };
 
-  return { allEvents, addNewEvent, handleDeleteEvent, handleCancelEvent, handleEditEvent };
+  return {
+    allEvents,
+    addNewEvent,
+    handleDeleteEvent,
+    handleCancelEvent,
+    handleEditEvent,
+  };
 };
 
 export default useEvents;

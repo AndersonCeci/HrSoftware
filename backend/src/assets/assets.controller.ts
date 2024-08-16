@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body,Param, HttpException,Delete,Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import mongoose from 'mongoose';
@@ -8,15 +17,20 @@ import { UpdateAssetDto } from './dto/updateAsset.dto';
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
-  @Post()
-  async create(@Body() createAssetDto: CreateAssetDto) {
-    return this.assetsService.createAsset(createAssetDto);
-  }
+   @Post()
+   async create(@Body() createAssetDto: CreateAssetDto) {
+     return this.assetsService.createAsset(createAssetDto);
+   }
 
   @Get()
   async findAll() {
     return this.assetsService.findAll();
   }
+
+  //  @Get('/lloji/:type')
+  //  async type(@Param('type') type: string){
+  //    return this.assetsService.type(type)
+  //  }
 
   @Get(':name')
   async findByName(@Param('name') name: string) {
@@ -32,11 +46,18 @@ export class AssetsController {
   }
 
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateAssetDto: UpdateAssetDto,
+  ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.assetsService.updateAsset(id, updateAssetDto);
   }
-  
+
+  // @Patch('assign')
+  // async assignAsset(@Param('assetType') assetType: string, @Body('userName') userName: string) {
+  //   return this.assetsService.assignAssetToUser(assetType, userName);
+  // }
   
 }

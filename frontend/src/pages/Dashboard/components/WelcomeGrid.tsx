@@ -4,32 +4,24 @@ import "../../../styles/Dashboard/WelcomeGrid.css";
 import { Row, Col, Typography, Button } from "antd";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { NavLink } from "react-router-dom";
+import EmployeeCard from "./EmployeeCard";
 import { useTranslation } from "react-i18next";
+import Title from "antd/es/typography/Title";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const { Title, Text } = Typography;
+
 
 interface WelcomeGridProps {
-  initialData: Data[];
+	initialData: Data[];
 }
 
 export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
-  const data = {
-    datasets: [
-      {
-        label: "Days",
-        data: [6, 1],
-        backgroundColor: ["#73dbfe", "#fe7570"],
-        borderColor: ["#73dbfe", "#fe7570"],
-      },
-    ],
-    labels: ["At work", "Leaves"],
-  };
+	
 
-  const options = {};
+	const options = {};
 
-  const { t } = useTranslation();
+	const { t } = useTranslation();
 
   return (
     <>

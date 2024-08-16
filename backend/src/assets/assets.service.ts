@@ -4,26 +4,40 @@ import { Model } from 'mongoose';
 import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
+import { InventoryService } from 'src/inventory/inventory.service';
+import { Inventory } from 'src/inventory/schemas/Inventory.schema';
 
-function generateUniqueNumericCode(): string {
-  const code = Math.floor(Math.random() * 1000000); // Generates a random number between 0 and 999999
-  return code.toString();
-}
+
 
 @Injectable()
 export class AssetsService {
-  constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
+  constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>,
+  private readonly inventoryService: InventoryService) {}
 
-  async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-    createAssetDto.assetCode = generateUniqueNumericCode();
-    const createdAsset = new this.assetModel(createAssetDto);
-    return createdAsset.save();
-  }
+   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
+     const availableAsset = await this.inventoryService.findAvailableAsset(createAssetDto.assetType);
+     if (!availableAsset) {
+       throw new Error('No available asset of this type.');
+     }
+
+     const createdAsset = new this.assetModel({
+       ...createAssetDto,
+       assetCode: availableAsset.assetCode,
+     });
+
+     await this.inventoryService.updateAssetStatus(availableAsset._id.toString(), 'Reserved');
+     return createdAsset.save();
+   }
+  
 
   async findAll(): Promise<Asset[]> {
     return this.assetModel.find({ isDeleted: false }).exec();
   }
 
+  // type(type:string): Promise<Inventory[]> {
+  //       return this.inventoryService.type(type)
+  //  }
+  
   async findByName(name: string): Promise<Asset[]> {
     return this.assetModel.find({ userName: name }).exec();
   }
@@ -40,6 +54,8 @@ export class AssetsService {
       )
       .exec();
   }
+ 
+  
 
   async updateAsset(
     id: string,

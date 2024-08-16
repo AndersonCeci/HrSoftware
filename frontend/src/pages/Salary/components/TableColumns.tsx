@@ -1,18 +1,23 @@
-import { Button, Checkbox, Dropdown } from "antd";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Popconfirm,
+  Table,
+  TableColumnsType,
+} from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
 import { capitalizeFirstLetter, getMonthName } from "../../../utils/generals";
-import { EditSalaryValues } from "../context/hook";
+import { Salary } from "../../../types/SalaryProps";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
   handleModal: (employeeID: string) => void;
-  handleEditSubmit: (salary: EditSalaryValues) => void;
-  tableData: any;
+  handleEditSubmit: (salary: Salary) => void;
+  tableData: any[];
 }
-
-
 
 const columns = ({
   handleAddBonus,
@@ -22,7 +27,7 @@ const columns = ({
   createTableColumns({
     dataIndex: "employeeDetails",
     title: "Employee Details",
-    key: "employeeDetails",
+    key: "_id",
     displayAs: (employeeDetails) => {
       if (!employeeDetails) {
         return <span>No Details</span>;
@@ -38,7 +43,7 @@ const columns = ({
   createTableColumns({
     dataIndex: "dateTaken",
     title: "Date Taken",
-    key: "dateTaken",
+    key: "_id",
     displayAs: (dateTaken) => {
       const dateObj = new Date(dateTaken);
       if (dateObj instanceof Date && !isNaN(dateObj.getTime())) {
@@ -52,31 +57,23 @@ const columns = ({
   createTableColumns({
     dataIndex: "netSalary",
     title: "Net Salary",
-    key: "netSal",
+    key: "_id",
   }),
+
   createTableColumns({
     dataIndex: "workDays",
     title: "Work Days",
-    key: "workDays",
+    key: "_id",
   }),
-  createTableColumns({
-    dataIndex: "healthInsurance",
-    title: "Health Insurance",
-    key: "healthInsurance",
-  }),
-  createTableColumns({
-    dataIndex: "socialSecurityContributions",
-    title: "Social Security Contributions",
-    key: "socialSecurityContributions",
-  }),
+  Table.EXPAND_COLUMN,
   createTableColumns({
     dataIndex: "bonuses",
     title: "Bonuses Total",
-    key: "bonuses",
+    key: "_id",
     displayAs: (bonuses: { desc: string; amount: number }[]) => {
       const totalBonuses = bonuses.reduce(
         (acc, bonus) => acc + bonus.amount,
-        0
+        0,
       );
       return <span>{totalBonuses}</span>;
     },
@@ -84,31 +81,29 @@ const columns = ({
   createTableColumns({
     dataIndex: "grossSalary",
     title: "Gross Salary",
-    key: "grossSalary",
+    key: "_id",
   }),
   createTableColumns({
     dataIndex: "total",
     title: "Total",
-    key: "total",
+    key: "_id",
   }),
   createTableColumns({
     dataIndex: "paid",
     title: "Compensated",
     key: "_id",
     displayAs: (paid: boolean, record: any) => {
-      let newPaid = paid;
+      const handleConfirm = () => {
+        handleEditSubmit({ ...record, paid: !paid });
+      };
+
       return (
-        <Checkbox
-          onChange={() => {
-            newPaid = !newPaid;
-            handleEditSubmit({ ...record, paid: newPaid });
-          }}
-          checked={newPaid}
-        ></Checkbox>
+        <Popconfirm title="Sure to confirm?" onConfirm={handleConfirm}>
+          <Checkbox checked={paid}></Checkbox>
+        </Popconfirm>
       );
     },
   }),
-
   createTableColumns({
     title: "Action",
     dataIndex: "_id",
@@ -124,9 +119,7 @@ const columns = ({
                   <Button
                     style={{ width: "80px" }}
                     type={ButtonType.TEXT}
-                    onClick={() => {
-                      handleAddBonus(salaryID);
-                    }}
+                    onClick={() => handleAddBonus(salaryID)}
                   >
                     Add Bonus
                   </Button>
@@ -158,3 +151,48 @@ const columns = ({
 ];
 
 export default columns;
+
+export const expandedRowRender = (record: any) => {
+  const columns: TableColumnsType<any> = [
+    {
+      title: "Tax Income",
+      dataIndex: "taxIncome",
+      key: "_id",
+      render: (data: any) => {
+        if (data) {
+          return <span>data</span>;
+        }
+        return <span>0</span>;
+      },
+    },
+    {
+      title: "Social Security Contributions",
+      dataIndex: "socialSecurityContributions",
+      key: "_id",
+    },
+    {
+      title: "Health Insurance",
+      dataIndex: "healthInsurance",
+      key: "_id",
+    },
+    {
+      title: "Health Insurance Company",
+      dataIndex: "healthInsuranceCompany",
+      key: "_id",
+    },
+    {
+      title: "Social Insurance Company",
+      dataIndex: "socialInsuranceCompany",
+      key: "_id",
+    },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={[record]}
+      pagination={false}
+      style={{ margin: "0px" }}
+    />
+  );
+};

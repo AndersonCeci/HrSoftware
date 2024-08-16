@@ -11,7 +11,10 @@ import dayjs, { Dayjs } from "dayjs";
 import TableHeader from "../../components/Table/TableHeader";
 import Meta from "antd/es/card/Meta";
 import EditNewEventForm from "./components/EditNewEventForm";
-import useEvents, { NewEvent } from "./hooks/personalCalendarFetchHooks";
+import useEvents, {
+  Status,
+  NewEvent,
+} from "./hooks/personalCalendarFetchHooks";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -154,7 +157,7 @@ const PersonalCalendarPage: React.FC = () => {
               <h3>Your Events</h3>
               {allEvents
                 .filter((event) =>
-                  dayjs(event.startDate).isSame(selectedDate, "day")
+                  dayjs(event.startDate).isSame(selectedDate, "day"),
                 )
                 .map((event) => (
                   <Card

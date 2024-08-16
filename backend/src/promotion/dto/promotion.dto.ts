@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsEnum, IsString, IsDateString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsEnum,
+  IsString,
+  IsDateString,
+} from 'class-validator';
 import { Position } from 'src/employee/schema/employe.schema';
 
 export class PromotionDto {
@@ -14,6 +20,6 @@ export class PromotionDto {
   newWage: number;
 
   @IsNotEmpty()
-  @IsEnum(Position) 
+  @IsEnum(Position)
   newPosition: Position;
 }

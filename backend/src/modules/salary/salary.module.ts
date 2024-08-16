@@ -6,11 +6,13 @@ import { Salary, SalarySchema } from './schema/salary.schema';
 import { ScheduleService } from './services/shedule.service';
 import { EmployeeModule } from 'src/employee/employe.module';
 import { PayrollService } from './services/payroll.service';
+import { SchedulerModule } from 'src/schedule/scheduler.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Salary.name, schema: SalarySchema }]),
     EmployeeModule,
+    SchedulerModule,
   ],
   controllers: [SalaryController],
   providers: [SalaryService, ScheduleService, PayrollService],

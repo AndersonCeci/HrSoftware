@@ -19,7 +19,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   const [isLoading, error, sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}"
+    localStorage.getItem("userData") || "{}",
   ).employID;
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -31,7 +31,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
           "Content-Type": "application/json",
         },
       },
-      setTableData
+      setTableData,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

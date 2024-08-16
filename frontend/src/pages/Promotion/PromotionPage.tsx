@@ -22,7 +22,7 @@ const PromotionPage: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-      setTableData
+      setTableData,
     );
   }, []);
 
@@ -31,7 +31,7 @@ const PromotionPage: React.FC = () => {
   };
 
   const filteredData = tableData.filter((promote) =>
-    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase())
+    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   if (isLoading) {

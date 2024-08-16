@@ -1,17 +1,18 @@
-import React from "react";
-import { Row, Col } from "antd";
-import { Content } from "antd/es/layout/layout";
-import WelcomeGrid from "../Dashboard/components/WelcomeGrid";
-import CalendarGrid from "../Dashboard/components/CalendarGrid";
-import TaskGrid from "../Dashboard/components/TaskGrid";
+import { Row, Col, Typography } from "antd";
+import { Doughnut } from "react-chartjs-2";
+import WelcomeGrid from "./components/WelcomeGrid";
+import CalendarGrid from "./components/CalendarGrid";
+import TaskGrid from "./components/TaskGrid";
+import "./styles/Dashboard.css";
 import { t } from "i18next";
 import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
+import { Content } from "antd/es/layout/layout";
 
 export interface Data {
-  noEmployee: number;
-  status: string;
-  color: string;
-  path: string;
+	noEmployee: number;
+	status: string;
+	color: string;
+	path: string;
 }
 
 const DashboardPage: React.FC = () => {
@@ -36,11 +37,8 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-  const employID = JSON.parse(
-    localStorage.getItem("userData") || "{}"
-  ).employID;
-
-  console.log("EmployID:", employID);
+// const DELETED_API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
+// const EMPLOYEE_API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
   return (
     <Content
