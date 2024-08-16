@@ -42,6 +42,10 @@ export class InventoryService {
 
     const inventoryEntries = assetCodes.map((code) => ({
       assetID: foundAsset._id,
+      quantity:null,
+      onRepair:null,
+      employeeID:null,
+      assignDate:null,
       assetCodes: code,
       status,
       isDeleted,
