@@ -11,6 +11,7 @@ export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
+    createAssetDto.quantity = null;
     const createAsset = new this.assetModel(createAssetDto);
     return createAsset.save();
   }

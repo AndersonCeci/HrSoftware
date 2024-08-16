@@ -5,6 +5,7 @@ export class CreateAssetDto {
 
   quantity?: number;
 
+
   @IsBoolean()
   @IsOptional()
   isDeleted?: boolean;
