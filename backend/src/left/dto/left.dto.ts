@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { IsOptional, Matches } from 'class-validator';
 
 @Schema()
@@ -13,12 +13,9 @@ export class LeftDto {
   username: string;
 
   @Prop({ required: true })
-  password: string;
-
-  @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 
@@ -46,8 +43,6 @@ export class LeftDto {
   @Prop()
   contract: string;
 
-  // @Prop()
-  // daletedAt: {type: Date}
-
+  @Prop()
+  daletedAt: string;
 }
-

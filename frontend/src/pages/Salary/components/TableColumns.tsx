@@ -65,6 +65,7 @@ const columns = ({
     title: "Work Days",
     key: "_id",
   }),
+  Table.EXPAND_COLUMN,
   createTableColumns({
     dataIndex: "bonuses",
     title: "Bonuses Total",
@@ -72,9 +73,9 @@ const columns = ({
     displayAs: (bonuses: { desc: string; amount: number }[]) => {
       const totalBonuses = bonuses.reduce(
         (acc, bonus) => acc + bonus.amount,
-        0
+        0,
       );
-      return <span>{totalBonuses},</span>;
+      return <span>{totalBonuses}</span>;
     },
   }),
   createTableColumns({
@@ -172,6 +173,16 @@ export const expandedRowRender = (record: any) => {
     {
       title: "Health Insurance",
       dataIndex: "healthInsurance",
+      key: "_id",
+    },
+    {
+      title: "Health Insurance Company",
+      dataIndex: "healthInsuranceCompany",
+      key: "_id",
+    },
+    {
+      title: "Social Insurance Company",
+      dataIndex: "socialInsuranceCompany",
       key: "_id",
     },
   ];

@@ -12,7 +12,7 @@ type InventaryColumnType = (
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
-	return parseFloat(((reserved / quantity) * 100).toFixed(1));
+  return parseFloat(((reserved / quantity) * 100).toFixed(1));
 }
 
 const createColumns: InventaryColumnType = (data, onEdit) => {

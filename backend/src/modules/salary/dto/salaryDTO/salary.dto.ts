@@ -39,7 +39,7 @@ export class SalaryDTO {
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
-  readonly incomeTaxes: number;
+  readonly incomeTax: number;
 
   @IsNotEmpty()
   @IsNumber()

@@ -14,12 +14,9 @@ export class Left extends Document {
   username: string;
 
   @Prop({ required: true })
-  password: string;
-
-  @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   @Matches(/^\d{10}$/, { message: 'nID must be exactly 10 digits' })
   nID: string;
 

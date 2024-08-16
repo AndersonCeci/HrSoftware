@@ -6,7 +6,7 @@ import EventPage from "./Events/EventPage";
 import AssetsPage from "./Assets/AssetsPage";
 import OrganisationalStructurePage from "./OrganisationalStructure/OrganisationalStructurePage";
 import SalariesPage from "./Salary/SalariesPage";
-import PromotionPage from "./PromotionPage";
+import PromotionPage from "./Promotion/PromotionPage";
 import EmploymentPage from "./Employment/EmploymentPage";
 import RecruitmentPage from "./Recruitments/RecruitmentPage";
 import DismissedPage from "./DismissedPage";

@@ -14,7 +14,8 @@ export default function SelectionDemo() {
       key: "person",
       className: "card ceo-card",
       data: {
-        image: "https://primefaces.org/cdn/primereact/images/avatar/stephenshaw.png",
+        image:
+          "https://primefaces.org/cdn/primereact/images/avatar/stephenshaw.png",
         name: "Pasho Toska",
         title: "CEO",
       },

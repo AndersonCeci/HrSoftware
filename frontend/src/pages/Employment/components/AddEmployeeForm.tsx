@@ -12,7 +12,6 @@ import "../styles/steps.css";
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const { Content, Sider } = Layout;
-// const devRoles = exporter.getDevRoles();
 
 const AddEmployeeForm = ({
   selectedEmployee,
@@ -26,6 +25,7 @@ const AddEmployeeForm = ({
 
   function handleStepChanges(changer: number) {
     if (changer > 0) {
+      console.log("Validated", form.getFieldsValue());
       form.validateFields().then(() => {
         setCurrent((prev) => prev + changer);
       });
@@ -37,24 +37,24 @@ const AddEmployeeForm = ({
   function handleFinish() {
     form.validateFields().then(() => {
       const data = exporter.getFormValues(form);
-
       setCurrent((prev) => prev + 1);
       form.submit();
+      const submitFN = selectedEmployee
+        ? useHttp.patchRequestHelper
+        : useHttp.postRequestHelper;
       sendRequest(
-        {
-          url: selectedEmployee ? `${API}/${selectedEmployee._id}` : API,
-          method: selectedEmployee ? "PATCH" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: data,
-        },
+        submitFN(
+          `${API}/${selectedEmployee ? selectedEmployee._id : ""}`,
+          data,
+        ),
         (responseData: any) => {
           selectedEmployee ? onEdit(responseData) : onAdd(responseData);
-        }
+        },
       );
     });
   }
 
-  const item = getStepItems(current, form, isLoading, error);
+  const item = getStepItems(current, setCurrent, form, isLoading, error);
 
   return (
     <Layout style={{ height: "100%", background: "#fff" }}>
