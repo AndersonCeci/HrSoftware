@@ -4,7 +4,7 @@ import { Calendar, Badge, theme } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import "../../../styles/Dashboard/CalendarGrid.css";
+// import "../../../styles/Dashboard/CalendarGrid.css";
 
 interface Event {
   id: string;

@@ -1,11 +1,15 @@
 import Table from "../../../components/Table/Table";
 import TableHeader from "../../../components/Table/TableHeader";
 import createColumns from "../utils/InventaryColumn";
-import { dummyData } from "../utils/inventaryDummy";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useHttp from "../../../hooks/useHttp";
 import { InventaryDataType } from "../types/InventaryDataType";
 import Modal from "../../../components/Shared/Modal";
+import QuantityForm from "./InventaryForm";
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import ExpandedRow from "./ExpandesRow";
+
+const API = import.meta.env.REACT_APP_INVENTORY_API;
 
 const InventaryContent = () => {
   const [inventaryData, setInventaryData] =

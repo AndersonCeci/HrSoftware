@@ -55,15 +55,16 @@ export default function useHttp() {
           throw new Error("Request failed!");
         }
 
-        const responseData = await response.json();
-        applyData ? applyData(responseData) : null;
-      } catch (err: any) {
-        setError(err.message || "Something went wrong ILVIO !");
-      }
-      setIsLoading(false);
-    }
-    fetchData();
-  };
+				const responseData = await response.json();
+				applyData ? applyData(responseData) : null;
+			} catch (err: any) {
+				console.log(err);
+				setError(err || "Something went wrong!");
+			}
+			setIsLoading(false);
+		}
+		fetchData();
+	};
 
   return [isLoading, error, sendRequest] as const;
 }
