@@ -1,4 +1,4 @@
-import { Flex } from "antd";
+import { Flex, Typography } from "antd";
 import Table from "../../../components/Table/Table";
 import "../styles/styles.css";
 import { expandedColumns } from "./columns/ExpandesColumns";
@@ -8,14 +8,15 @@ import { useState, useRef, useContext } from "react";
 import { AssetInventaryContext } from "../context/AssetInventaryContext";
 import useHttp from "../../../hooks/useHttp";
 
-import { AssetDatatype, InventaryDataType } from "../types/AssetsDataType";
+import { AssetDatatype, InventaryDataType, AssetStatus } from "../types/AssetsDataType";
 import Button from "../../../components/Shared/Button";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
 
 const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { updateInventaryItemHandler } = useContext(AssetInventaryContext);
+	const { updateInventaryItemHandler, deleteFromInventaryHandler } =
+		useContext(AssetInventaryContext);
 	const [selectedAsset, setSelectedAsset] = useState<InventaryDataType | null>(null);
 	const formRef = useRef<any>();
 	const [, , fetchData] = useHttp();
@@ -29,7 +30,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			}),
 			(response) => {
 				updateInventaryItemHandler(response, {
-					onRepairModifier: response.status === "OnRepair" ? 1 : -1,
+					onRepairModifier: response.status === AssetStatus.OnRepair ? 1 : -1,
 					reservedModifier: 0,
 				});
 			},
@@ -38,20 +39,25 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 
 	const filterData = record.inventories;
 
-	const handleOnAssign = (dataToSubmit: { employeeID: string; dateGiven: string }) => {
+	const handleOnAssign = (dataToSubmit: {
+		employeeID: string | undefined;
+		dateGiven: string | undefined;
+	}) => {
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/assign/${selectedAsset?._id}`, dataToSubmit),
 			(response) => {
 				updateInventaryItemHandler(response, {
 					onRepairModifier: 0,
-					reservedModifier: response.status === "Assigned" ? 1 : -1,
+					reservedModifier: response.status === AssetStatus.Assigned ? 1 : -1,
 				});
 			},
 		);
 	};
 
-	function handleDeleteFromInventary(id: string) {
-		fetchData(useHttp.deleteRequestHelper(`${INVENTARY_API}/${id}`), () => {});
+	function handleDeleteFromInventary(deletedInventary: InventaryDataType) {
+		fetchData(useHttp.deleteRequestHelper(`${INVENTARY_API}/${deletedInventary._id}`), () => {
+			deleteFromInventaryHandler(deletedInventary);
+		});
 	}
 
 	const handleAddAsset = (record: InventaryDataType) => {
@@ -81,13 +87,14 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			<Modal isOpen={isModalOpen} onCancel={handleModalClose} onOk={handleSubmit}>
 				<AssetForm onAdd={handleOnAssign} selectedElement={selectedAsset} ref={formRef} />
 			</Modal>
+			<Typography.Text>{`View info about Laptop ${record.assetName}`}</Typography.Text>
 			<Table
 				pagination={false}
 				data={filterData}
 				columns={columns}
 				rowClassName="inner-table-row"
 			/>
-			<Button type="link">Scroll To Top</Button>
+			{/* <Button type="link">Scroll To Top</Button> */}
 		</Flex>
 	);
 };

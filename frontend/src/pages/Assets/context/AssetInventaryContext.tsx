@@ -13,6 +13,7 @@ export const AssetInventaryContext = createContext({
 			reservedModifier: number;
 		},
 	) => {},
+	deleteFromInventaryHandler: (_deletedINventart: InventaryDataType) => {},
 });
 
 export default function AssetInventaryContextProvider({ children }: { children: React.ReactNode }) {
@@ -23,7 +24,16 @@ export default function AssetInventaryContextProvider({ children }: { children: 
 	}
 
 	function addAssetTypeHandler(newAssets: AssetDatatype) {
-		setAssetsData((prev) => [...prev, newAssets]);
+		setAssetsData((prev) => [
+			...prev,
+			{
+				...newAssets,
+				quantity: 0,
+				onRepair: 0,
+				reserved: 0,
+				inventories: [],
+			},
+		]);
 	}
 
 	function addQuantityHandler(newAssets: InventaryDataType[], assetType: string) {
@@ -34,6 +44,25 @@ export default function AssetInventaryContextProvider({ children }: { children: 
 						...asset,
 						quantity: asset.quantity + newAssets.length,
 						inventories: [...asset.inventories, ...newAssets],
+					};
+				}
+				return asset;
+			});
+			return updatedAssets;
+		});
+	}
+
+	function deleteFromInventaryHandler(deletedInventary: InventaryDataType) {
+		setAssetsData((prev) => {
+			const updatedAssets = prev.map((asset) => {
+				if (asset._id === deletedInventary.assetID) {
+					const deletedInventaryStatus = deletedInventary.status;
+					return {
+						...asset,
+						quantity: asset.quantity - 1,
+						onRepair: deletedInventaryStatus === "OnRepair" ? asset.onRepair - 1 : asset.onRepair,
+						reserved: deletedInventaryStatus === "Assigned" ? asset.reserved - 1 : asset.reserved,
+						inventories: asset.inventories.filter((item) => item._id !== deletedInventary._id),
 					};
 				}
 				return asset;
@@ -73,6 +102,7 @@ export default function AssetInventaryContextProvider({ children }: { children: 
 		addAssetTypeHandler,
 		addQuantityHandler,
 		updateInventaryItemHandler,
+		deleteFromInventaryHandler,
 	};
 
 	return (

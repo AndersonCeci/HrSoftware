@@ -12,7 +12,7 @@ export function expandedColumns(
 	inventaryData: InventaryDataType[],
 	onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
 	onAddAsset: (record: InventaryDataType) => void,
-	onDeleteAsset: (id: string) => void,
+	onDeleteAsset: (id: InventaryDataType) => void,
 ) {
 	return [
 		createTableColumns({
@@ -97,9 +97,7 @@ export function expandedColumns(
 													block
 													icon={isAvailable ? <BsFillPersonCheckFill /> : <BsFillPersonDashFill />}
 													iconPosition="end"
-													onClick={
-														isAvailable ? () => onAddAsset(record) : () => onDeleteAsset(record._id)
-													}
+													onClick={isAvailable ? () => onAddAsset(record) : () => {}}
 												>
 													{isAvailable ? "Assign" : "Unassign"}
 												</Button>
@@ -136,6 +134,7 @@ export function expandedColumns(
 											danger
 											icon={<DeleteOutlined />}
 											block
+											onClick={() => onDeleteAsset(record)}
 											iconPosition="end"
 										>
 											Delete

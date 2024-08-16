@@ -1,15 +1,9 @@
 import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
-import { MoreOutlined, SearchOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import Button from "../../../../components/Shared/Button";
-import { TableProps, Dropdown } from "antd";
-import { ButtonType } from "../../../../enums/Button";
+import { SearchOutlined } from "@ant-design/icons";
+import { TableProps } from "antd";
 import { AssetDatatype } from "../../types/AssetsDataType";
 
-export function getColumns(
-	tableData: AssetDatatype[],
-	handleDataDelete: (id: string) => void,
-	handleDataEdit: (id: string) => void,
-): TableProps<AssetDatatype>["columns"] {
+export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype>["columns"] {
 	return [
 		createTableColumns({
 			title: "Employee",
@@ -37,56 +31,5 @@ export function getColumns(
 			displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
 		}),
 		createTableColumns({ title: "Code", dataIndex: "assetCode", key: "code", width: 150 }),
-		createTableColumns({
-			title: "Action",
-			dataIndex: "_id",
-			key: "action",
-			displayAs: (record) => (
-				<Dropdown
-					menu={{
-						items: [
-							{
-								key: "Edit",
-								label: (
-									<Button
-										type={ButtonType.TEXT}
-										onClick={() => {
-											handleDataEdit(record);
-											console.log(record);
-										}}
-										// size={ButtonSize.LARGE}
-										icon={<EditOutlined />}
-										block
-									>
-										Edit
-									</Button>
-								),
-							},
-							{
-								key: "Delete",
-								label: (
-									<Button
-										type={ButtonType.TEXT}
-										// size={ButtonSize.LARGE}
-										onClick={() => handleDataDelete(record)}
-										danger
-										icon={<DeleteOutlined />}
-										block
-									>
-										Delete
-									</Button>
-								),
-							},
-						],
-					}}
-					trigger={["click"]}
-				>
-					<Button type={ButtonType.TEXT} block icon={<MoreOutlined />} />
-				</Dropdown>
-			),
-			fixed: "right",
-			align: "center",
-			width: 20,
-		}),
 	];
 }

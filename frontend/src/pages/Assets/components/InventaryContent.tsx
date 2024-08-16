@@ -18,8 +18,13 @@ type InventaryContentProps = {
 };
 
 const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps) => {
-	const { assetData, getAssetData, addAssetTypeHandler, addQuantityHandler } =
-		useContext(AssetInventaryContext);
+	const {
+		assetData,
+		getAssetData,
+		addAssetTypeHandler,
+		addQuantityHandler,
+		deleteFromInventaryHandler,
+	} = useContext(AssetInventaryContext);
 	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
 	const [isLoading, , fetchData] = useHttp();
@@ -66,6 +71,8 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 		);
 	}
 
+	console.log(assetData, "assetData");
+
 	return (
 		<>
 			<Modal
@@ -94,6 +101,7 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 			{!isLoading ? (
 				<Table
 					// identifier="assetID"
+					pagination={false}
 					data={assetData}
 					columns={columns}
 					expandable={{
