@@ -1,3 +1,5 @@
+import { EmployeeDataType } from "../../Employment/types/Employee";
+
 export type AssetDatatype = {
 	_id: string;
 	assetName: string;
@@ -11,7 +13,8 @@ export type InventaryDataType = {
 	_id: string;
 	assetCodes: string;
 	assetID: string;
-	employeeID: string;
+	employeeDetails: EmployeeDataType[];
+	
 	assignedDate: Date;
 	status: AssetStatus;
 };

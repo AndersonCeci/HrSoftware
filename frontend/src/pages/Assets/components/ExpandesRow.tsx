@@ -87,7 +87,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			<Modal isOpen={isModalOpen} onCancel={handleModalClose} onOk={handleSubmit}>
 				<AssetForm onAdd={handleOnAssign} selectedElement={selectedAsset} ref={formRef} />
 			</Modal>
-			<Typography.Text>{`View info about Laptop ${record.assetName}`}</Typography.Text>
+			<Typography.Text>{`View info about ${record.assetName}`}</Typography.Text>
 			<Table
 				pagination={false}
 				data={filterData}

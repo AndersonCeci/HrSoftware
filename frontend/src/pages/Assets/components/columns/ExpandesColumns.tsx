@@ -27,10 +27,14 @@ export function expandedColumns(
 		}),
 		createTableColumns({
 			title: "Employee Name",
-			dataIndex: "employeeID",
+			dataIndex: "_id",
 			key: "userName",
-			displayAs: (text: string) => {
-				return <Typography.Text>{text ? text : "Not assigned"}</Typography.Text>;
+			displayAs: (_: string, record: InventaryDataType) => {
+				return (
+					<Typography.Text>
+						{record.employeeDetails[0] ? record.employeeDetails[0].username : " Not Assigned"}
+					</Typography.Text>
+				);
 			},
 		}),
 		createTableColumns({
