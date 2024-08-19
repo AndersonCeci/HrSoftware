@@ -35,9 +35,9 @@ export class AssetsService {
         {
           $lookup: {
             from: 'employees',
-            localField: 'inventories.employeeDetails', // Here, use employeeDetails for the local field
+            localField: 'inventories.employeeDetails', 
             foreignField: '_id',
-            as: 'inventories.employeeDetails', // Alias as employeeDetails for the frontend
+            as: 'inventories.employeeDetails', 
           },
         },
         {
