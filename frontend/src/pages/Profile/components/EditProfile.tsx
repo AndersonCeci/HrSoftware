@@ -1,9 +1,10 @@
 import { Form, Modal, Upload, message } from "antd";
 import type { GetProp, UploadProps } from "antd";
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
-// import useHttp from "../../../hooks/useHttp";
+import { EmployeeDataType } from "../../Employment/types/Employee";
+import { useTranslation } from "react-i18next";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -25,23 +26,18 @@ const beforeUpload = (file: FileType) => {
   return isJpgOrPng && isLt2M;
 };
 
-// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
+const EditProfile = ({ visible, handleOk, handleCancel, currentData }) => {
+  const [form] = Form.useForm<EmployeeDataType>();
+  const { t } = useTranslation();
 
-const EditProfile: React.FC = ({ visible, handleOk, handleCancel }) => {
+  useEffect(() => {
+    if (currentData) {
+      form.setFieldsValue({
+        phoneNumber: currentData.phoneNumber,
+      });
+    }
+  }, [currentData, form]);
 
-//     const [isLoading, error, sendRequest] = useHttp();
-
-//     useEffect(() => {
-//         sendRequest(
-//             {
-//                 url: `${API}/${id}`,
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                 },
-//             },
-//             setTableData,
-//         );
-//     }, []);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
 
@@ -66,15 +62,19 @@ const EditProfile: React.FC = ({ visible, handleOk, handleCancel }) => {
     </button>
   );
 
+  const onFinish = (values: any) => {
+    handleOk(values);
+  };
+
   return (
     <>
       <Modal
-        title="Edit Profile"
+        title={t("editProfile")}
         visible={visible}
-        onOk={handleOk}
+        onOk={() => form.submit()}
         onCancel={handleCancel}
       >
-        <Form layout="vertical">
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item style={{ display: "flex", justifyContent: "center" }}>
             <Upload
               name="avatar"

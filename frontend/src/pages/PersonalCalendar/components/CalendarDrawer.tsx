@@ -32,7 +32,7 @@ const CalendarDrawer: React.FC<Props> = ({
           placement="bottom"
           closable={false}
           onClose={onClose}
-          open={open} 
+          open={open}
           className="drawer-container"
         >
           <h2>Events on {selectedDate?.format("DD-MM-YYYY")}</h2>
@@ -40,7 +40,7 @@ const CalendarDrawer: React.FC<Props> = ({
             selectedDate &&
             events
               .filter((event) =>
-                dayjs(event.startDate).isSame(selectedDate, "day")
+                dayjs(event.startDate).isSame(selectedDate, "day"),
               )
               .map((event: any) => {
                 const formattedStartDate = formatDateAndTime(event.startDate);
@@ -69,7 +69,9 @@ const CalendarDrawer: React.FC<Props> = ({
                   >
                     <Card.Meta
                       avatar={
-                        <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${event.id}`} />
+                        <Avatar
+                          src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${event.id}`}
+                        />
                       }
                       title={event.title}
                       description={event.description}

@@ -8,20 +8,19 @@
   background-color: #1890ff;
 }
 
-.delete-icon-card svg{
-  color:red;
+.delete-icon-card svg {
+  color: red;
 }
 
-.edit-icon-card svg{
-  color:blue;
+.edit-icon-card svg {
+  color: blue;
 }
-
 
 .card-container {
   margin: 2rem 0rem;
 }
 
-.drawer-container{
+.drawer-container {
   width: 250px;
   margin-right: 20px;
   border-radius: 4px;
@@ -40,4 +39,3 @@
 .notes-month section {
   font-size: 28px;
 }
-

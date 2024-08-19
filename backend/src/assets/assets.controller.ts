@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body,Param, HttpException,Delete,Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import mongoose from 'mongoose';
@@ -19,24 +28,22 @@ export class AssetsController {
   }
 
   @Get(':name')
-  async findByName(@Param('name') name: string) {
-    const findUserAssets = await this.assetsService.findByName(name);
-    if (!findUserAssets) throw new HttpException('User not found', 404);
-    return findUserAssets;
-  }
-
-  @Delete(':id')
-  async deleteByName(@Param('id') id: string) {
-    const result = await this.assetsService.softDeleteAssetById(id);
-    return result;
+  async findById(@Param('name') name: string) {
+    return this.assetsService.findName(name);
   }
 
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateAssetDto: UpdateAssetDto,
+  ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
     return this.assetsService.updateAsset(id, updateAssetDto);
   }
-  
-  
+
+  @Delete(':id')
+  async deleteCode(@Param('id') id: string) {
+    return this.assetsService.softDeleteAssetById(id);
+  }
 }

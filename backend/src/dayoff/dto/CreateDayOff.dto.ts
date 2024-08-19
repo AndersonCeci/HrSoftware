@@ -1,42 +1,32 @@
-import {
-    IsNotEmpty,
-    IsEnum,
-    IsDateString,IsOptional
-  } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsDateString, IsOptional } from 'class-validator';
 
-  
-  export class CreateDayOffDto {
-    @IsNotEmpty()
-    employeeId: string;
-    
-    
-    EmployeeName: string;
-    
-    @IsNotEmpty()
-    @IsDateString()
-    StartTime: Date;
-    
-    @IsOptional()
-    @IsDateString()
-	EndTime?: Date;
+export class CreateDayOffDto {
+  @IsNotEmpty()
+  employeeId: string;
 
-    @IsEnum(
-        ['annual', 'sick', 'other'],
-        {
-          message:
-            'Leave type must be one of the following: annual,sick,other',
-        },
-      )
-    leaveType:string;
-    
-    description:string;
+  EmployeeName: string;
 
-    @IsOptional()
-    totalDays?: number;
+  @IsNotEmpty()
+  @IsDateString()
+  StartTime: Date;
 
-    isDeleted:boolean;
-    deleteDate?:Date
+  @IsOptional()
+  @IsDateString()
+  EndTime?: Date;
 
-    isApproved:boolean;
-    approvedDate?:Date
-  }
+  @IsEnum(['annual', 'sick', 'other'], {
+    message: 'Leave type must be one of the following: annual,sick,other',
+  })
+  leaveType: string;
+
+  description: string;
+
+  @IsOptional()
+  totalDays?: number;
+
+  isDeleted: boolean;
+  deleteDate?: Date;
+
+  isApproved: boolean;
+  approvedDate?: Date;
+}

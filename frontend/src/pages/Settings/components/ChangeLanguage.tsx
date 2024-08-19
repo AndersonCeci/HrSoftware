@@ -1,7 +1,5 @@
-import { MoonOutlined, SunOutlined } from "@ant-design/icons";
-import { Button, Card, ConfigProvider, Switch, theme } from "antd";
+import { Button, Card, Switch } from "antd";
 import { t } from "i18next";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   IoNotificationsOffOutline,
@@ -9,13 +7,7 @@ import {
 } from "react-icons/io5";
 
 export default function ChangeLanguage() {
-  const { defaultAlgorithm, darkAlgorithm } = theme;
   const { i18n } = useTranslation();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const handleClick = () => {
-    setIsDarkMode((previousValue) => !previousValue);
-  };
 
   const languagge = [
     { code: "sq", title: "Albanian" },
@@ -31,10 +23,10 @@ export default function ChangeLanguage() {
   };
 
   return (
-    <div style={{ display: "flex", margin: 20, alignItems: "center" }}>
+    <div style={{ margin: 20, alignItems: "center" }}>
       <Card
-        title={"General"}
-        style={{ width: "750px" }}
+        title={t(`general`)}
+        // style={{ width: "750px" }}
         styles={{ body: { display: "flex", flexDirection: "column" } }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -58,16 +50,7 @@ export default function ChangeLanguage() {
             justifyContent: "space-between",
             marginTop: "10px",
           }}
-        >
-          {/* <div style={{ fontSize: 15, fontWeight: "bold" }}>Theme:</div>
-          <ConfigProvider
-            theme={{
-              algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
-            }}
-          >
-            <Button onClick={handleClick}> Change Theme to {isDarkMode? "Light" : "Dark"}</Button>
-          </ConfigProvider> */}
-        </div>
+        ></div>
         <div
           style={{
             display: "flex",
@@ -76,7 +59,7 @@ export default function ChangeLanguage() {
           }}
         >
           <div style={{ fontSize: 15, fontWeight: "bold" }}>
-            Enable Notifications:
+            {t(`enableNotifications`)}
           </div>
           <Switch
             style={{ float: "right" }}
