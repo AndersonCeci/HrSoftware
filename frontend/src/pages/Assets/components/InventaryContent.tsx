@@ -23,7 +23,6 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 		getAssetData,
 		addAssetTypeHandler,
 		addQuantityHandler,
-		deleteFromInventaryHandler,
 	} = useContext(AssetInventaryContext);
 	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
@@ -65,6 +64,7 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 				assetCodes: values,
 			}),
 			(response) => {
+				console.log(response, "response");
 				addQuantityHandler(response, assetType);
 				setIsModalOpen(false);
 			},

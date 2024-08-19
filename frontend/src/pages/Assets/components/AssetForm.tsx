@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-  useEffect,
-  useState,
-} from "react";
+import { useRef, useImperativeHandle, forwardRef, useEffect, useState } from "react";
 import { Form } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import dayjs from "dayjs";
@@ -21,7 +15,7 @@ const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) =
 	const [employeeList, setEmployeeList] = useState<EmployeeDataType[]>([]);
 	const [, , sendRequest] = useHttp();
 
-    console.log(employeeList);
+	console.log(employeeList);
 
 	useEffect(() => {
 		console.log("Fetching employee list");
@@ -43,7 +37,7 @@ const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) =
 		)?._id;
 
 		const dataToSubmit = {
-			employeeID: selectedEmployee,
+			employeeDetails: selectedEmployee,
 			assignDate: dayjs(values.dateGiven).format("YYYY-MM-DD"),
 		};
 		onAdd(dataToSubmit);

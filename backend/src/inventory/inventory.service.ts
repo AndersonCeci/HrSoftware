@@ -42,6 +42,8 @@ export class InventoryService {
 
     const inventoryEntries = assetCodes.map((code) => ({
       assetID: foundAsset._id,
+      employeeDetails: null,
+      assignDate: null,
       assetCodes: code,
       status,
       isDeleted,
@@ -57,110 +59,52 @@ export class InventoryService {
       .exec();
   }
 
-  async assignToEmployee(
+   async assignToEmployee(
     inventoryID: string,
-    employeeID: string,
+    employeeDetails: string,
     assignDate: string,
     status: InventoryStatus,
   ): Promise<Inventory> {
-    const foundEmployee = await this.employeeModel.findById(employeeID);
+    const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
-    if (!foundEmployee) {
-      throw new NotFoundException(`Employee with ID ${employeeID} not found`);
-    }
+    // if (!foundEmployee) {
+    //   throw new NotFoundException(Employee with ID ${employeeDetails} not found);
+    // }
 
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
-      employeeID: foundEmployee._id,
+      employeeDetails: foundEmployee._id,
       assignDate: new Date(assignDate),
       status: InventoryStatus.Assigned,
     });
 
-    // Use populate to return the employee details instead of just the ID
     return await this.inventoryModel
       .findById(inventoryID)
-      .populate('employeeID');
+      .populate('employeeDetails');
   }
 
-  async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
-    const foundInventory = await this.inventoryModel.findById(inventoryID);
+  // async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
+  //   const foundInventory = await this.inventoryModel.findById(inventoryID);
 
-    if (!foundInventory) {
-      throw new NotFoundException(
-        `Inventory item with ID ${inventoryID} not found`,
-      );
-    }
+  //   if (!foundInventory) {
+  //     throw new NotFoundException(
+  //       `Inventory item with ID ${inventoryID} not found`,
+  //     );
+  //   }
 
-    foundInventory.employeeID = null; 
-    foundInventory.status = InventoryStatus.Available; 
-    foundInventory.assignDate = null; 
+  //   foundInventory.employeeID = null;
+  //   foundInventory.status = InventoryStatus.Available;
+  //   foundInventory.assignDate = null;
 
-    await foundInventory.save();
-    return foundInventory;
-  }
+  //   const updatedInventory = await foundInventory.save();
+  //   const response = {
+  //     ...updatedInventory.toObject(),
+  //     employeeID: [updatedInventory.employeeID],
+  //   };
+  //  return response as unknown as Inventory;
+  // }
 
   async findAll(): Promise<any> {
     return this.assetsService.findAll();
-  }
-
-  async getAssetQuantities(): Promise<any> {
-    return this.inventoryModel
-      .aggregate([
-        { $match: { isDeleted: false } },
-        { $group: { _id: '$assetID', quantity: { $sum: 1 } } },
-        {
-          $lookup: {
-            from: 'assets',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'assetDetails',
-          },
-        },
-        { $unwind: '$assetDetails' },
-        {
-          $project: {
-            _id: 0,
-            assetID: '$_id',
-            assetName: '$assetDetails.assetName',
-            quantity: 1,
-          },
-        },
-      ])
-      .exec();
-  }
-
-  async calculateReservedQuantity(): Promise<any> {
-    return this.inventoryModel
-      .aggregate([
-        { $match: { status: InventoryStatus.Assigned } },
-
-        {
-          $group: {
-            _id: '$assetID',
-            reservedQuantity: { $sum: 1 },
-          },
-        },
-
-        {
-          $lookup: {
-            from: 'assets',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'assetDetails',
-          },
-        },
-
-        { $unwind: '$assetDetails' },
-
-        {
-          $project: {
-            _id: 0,
-            assetID: '$_id',
-            assetName: '$assetDetails.assetName',
-            reservedQuantity: 1,
-          },
-        },
-      ])
-      .exec();
   }
 
   async delete(id: string): Promise<Inventory> {

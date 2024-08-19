@@ -34,7 +34,7 @@ const Modal = ({
       style={{ top: 20 }}
     >
       {children}
-      <Flex justify="flex-end">
+      <Flex justify="flex-end" gap={15}>
         {onCancel && (
           <Button type={ButtonType.TEXT} danger onClick={onCancel}>
             Cancel

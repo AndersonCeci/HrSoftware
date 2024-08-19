@@ -10,6 +10,9 @@ export class Asset extends Document {
   @Prop()
   quantity: number;
 
+  @Prop()
+  reserved:number;
+
   @Prop({ default: false })
   isDeleted: boolean;
 

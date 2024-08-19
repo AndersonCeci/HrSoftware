@@ -27,10 +27,17 @@ export function expandedColumns(
 		}),
 		createTableColumns({
 			title: "Employee Name",
-			dataIndex: "employeeID",
+			dataIndex: "_id",
 			key: "userName",
-			displayAs: (text: string) => {
-				return <Typography.Text>{text ? text : "Not assigned"}</Typography.Text>;
+			displayAs: (_: string, record: InventaryDataType) => {
+				console.log(record, "OBJEKTI NGA UNE MARR DATA");
+				const employee = record.employeeDetails;
+				console.log(employee, "EMPLOYEES");
+				return (
+					<Typography.Text>
+						{employee ? employee.username : " Not Assigned"}
+					</Typography.Text>
+				);
 			},
 		}),
 		createTableColumns({

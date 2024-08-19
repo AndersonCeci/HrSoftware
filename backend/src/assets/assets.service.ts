@@ -34,10 +34,16 @@ export class AssetsService {
         },
         {
           $lookup: {
-            from: 'employees', 
-            localField: 'inventories.employeeID',
+            from: 'employees',
+            localField: 'inventories.employeeDetails', // Here, use employeeDetails for the local field
             foreignField: '_id',
-            as: 'inventories.employeeDetails',
+            as: 'inventories.employeeDetails', // Alias as employeeDetails for the frontend
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories.employeeDetails',
+            preserveNullAndEmptyArrays: true,
           },
         },
         {
