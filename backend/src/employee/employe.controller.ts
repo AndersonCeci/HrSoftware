@@ -51,12 +51,6 @@ export class EmployeeController {
   }
 
 
-
-  // @Get('usernames')
-  // getUsernames() {
-  //   return this.employeeService.getUsernames();
-  // }
-
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Employee | null> {
     return this.employeeService.findOne(id);

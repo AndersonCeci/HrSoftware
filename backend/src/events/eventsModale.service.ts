@@ -14,9 +14,8 @@ export class EventsService {
     @InjectModel(Event.name) private eventModel: Model<Event>,
     private readonly notificationsGateway: NotificationsGateway,
     private readonly notificationService: NotificationsService,
-  ) { }
-  
-  
+  ) {}
+
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(createEventDto);
 
@@ -28,6 +27,8 @@ export class EventsService {
     const createNotificationDto: CreateNotificationDto = {
       message: createdEvent.eventName,
       isRead: false,
+      userId: null,
+      path: `/company/events`,
     };
     await this.notificationService.createNotification(createNotificationDto);
 

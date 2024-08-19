@@ -13,3 +13,8 @@
 .nav-menu-icon {
     cursor: pointer;
 }
+
+.notification-is-read{
+    background-color: rgb(255, 253, 254);
+    margin-top: 8px;
+}

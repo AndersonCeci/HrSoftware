@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateNotificationDto } from './dto/CreateNotificationDto';
 import { Notifications } from './notification.schema';
 
@@ -11,15 +11,27 @@ export class NotificationsService {
     private readonly notificationModel: Model<Notifications>,
   ) {}
 
-
-  async getNotifications(): Promise<Notifications[]>
-  {
+  async getNotifications(): Promise<Notifications[]> {
     const notifications = this.notificationModel.find().exec();
     return notifications;
   }
 
+  async getNotificationsByUser(userId?: string): Promise<Notifications[]> {
+    let filter = {};
+
+    if (userId) {
+      filter = {
+        $or: [
+          { userId:userId }, 
+          { userId: null }, 
+        ],
+      };
+    }
+    return this.notificationModel.find(filter).exec();
+  }
+
   async createNotification(createNotificationDto: CreateNotificationDto) {
-    const notification = new this.notificationModel(createNotificationDto);
+    const notification = new this.notificationModel( createNotificationDto );
     return notification.save();
   }
 
@@ -31,7 +43,5 @@ export class NotificationsService {
     );
   }
 
-  async getUserNotifications(userId: string) {
-    return this.notificationModel.find({ user: userId }).exec();
-  }
+
 }

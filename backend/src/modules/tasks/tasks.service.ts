@@ -19,14 +19,13 @@ export class TasksService {
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     try {
       const createdTask = new this.taskModel(createTaskDto);
-      console.log(createdTask, 'csdfsfsf');
       return await createdTask.save();
     } catch (error) {
       console.log(error);
     }
   }
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async handleCron() {
     await this.notifyTasksDueInOneDay();
   }
@@ -39,7 +38,6 @@ export class TasksService {
     const endOfTwoDaysBefore = new Date(oneDayBefore);
     endOfTwoDaysBefore.setHours(23, 59, 59, 999);
 
-
     const tasksDueInTwoDays = await this.taskModel
       .find({
         due_date: {
@@ -48,7 +46,6 @@ export class TasksService {
         },
       })
       .exec();
-
 
     tasksDueInTwoDays.forEach((task) => {
       this.notificationsGateway.notifyDueDayTask(
@@ -62,6 +59,8 @@ export class TasksService {
     const createNotificationDto: CreateNotificationDto = {
       message: 'Your task is due tommorow',
       isRead: false,
+      userId: null,
+      path: `/dashboard`,
     };
     await this.notificationService.createNotification(createNotificationDto);
   }
@@ -74,7 +73,7 @@ export class TasksService {
     return this.taskModel.findById(id).exec();
   }
 
-  softDeleteTaskById(id: string): Promise<Event> {
+  softDeleteTaskById(id: string): Promise<Task> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 

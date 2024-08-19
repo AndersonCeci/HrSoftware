@@ -1,9 +1,5 @@
 import { ObjectId, Types } from 'mongoose';
-import {
-  Injectable,
-  UnauthorizedException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/users.service';
 import { Role } from 'src/users/schemas/user.schema';
@@ -15,7 +11,7 @@ type SignInData = {
   role: Role;
   loginRole: Role;
   employID: Types.ObjectId;
-  email: string
+  email: string;
 };
 type AuthResult = {
   accessToken: string;
@@ -55,7 +51,7 @@ export class AuthService {
         role: user.role,
         loginRole: user.loginRole,
         employID: user.employID,
-        email: user.email
+        email: user.email,
       };
     }
     return null;
@@ -95,8 +91,7 @@ export class AuthService {
         role: user.role,
         loginRole: user.loginRole,
         employID: user.employID,
-        email: user.email
-
+        email: user.email,
       };
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

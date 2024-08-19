@@ -13,6 +13,13 @@ export class Notifications extends Document {
 
   @Prop({ default: Date.now })
   createdAt: Date;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  userId: User;
+
+  @Prop()
+  path: string;
 }
+
 
 export const NotificationSchema = SchemaFactory.createForClass(Notifications);
