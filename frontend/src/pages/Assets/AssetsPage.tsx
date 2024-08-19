@@ -6,7 +6,7 @@ import { ConfigProvider, Tabs } from "antd";
 import { useState } from "react";
 const AssetsPage: React.FC = () => {
 	const [activeTab, setActiveTab] = useState("Inventary");
-	const [isMoalOpen, setIsModalOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	function handleTabChange(key: string) {
 		setActiveTab(key);
@@ -27,23 +27,17 @@ const AssetsPage: React.FC = () => {
 				hideButton={activeTab !== "Inventary"}
 				onClick={handleModalOpen}
 			/>
-			<ConfigProvider>
-				<Tabs
-					onChange={(key) => handleTabChange(key)}
-					activeKey={activeTab}
-					size="large"
-					type="line"
-				>
-					<Tabs.TabPane tab="Inventary" key="Inventary">
-						<AssetInventaryContextProvider>
-							<InventaryContent isModalOpen={isMoalOpen} setIsModalOpen={setIsModalOpen} />
-						</AssetInventaryContextProvider>
-					</Tabs.TabPane>
-					<Tabs.TabPane tab="Assets" key="Assets">
-						<AssetContent />
-					</Tabs.TabPane>
-				</Tabs>
-			</ConfigProvider>
+
+			<Tabs onChange={(key) => handleTabChange(key)} activeKey={activeTab} size="large" type="line">
+				<Tabs.TabPane tab="Inventary" key="Inventary">
+					<AssetInventaryContextProvider>
+						<InventaryContent isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+					</AssetInventaryContextProvider>
+				</Tabs.TabPane>
+				<Tabs.TabPane tab="Assets" key="Assets">
+					<AssetContent />
+				</Tabs.TabPane>
+			</Tabs>
 		</section>
 	);
 };

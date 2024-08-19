@@ -85,6 +85,8 @@ const Table = ({
 			pagination={
 				pagination
 					? { ...pagination, position: ["bottomLeft"] }
+					: pagination === false
+					? false
 					: { position: ["bottomLeft"], pageSize: pageSize ? pageSize : 10 }
 			}
 			className="information-table-of-doom-and-despair-des-pa-sito "

@@ -42,7 +42,7 @@ export class InventoryService {
 
     const inventoryEntries = assetCodes.map((code) => ({
       assetID: foundAsset._id,
-      employeeID: null,
+      employeeDetails: null,
       assignDate: null,
       assetCodes: code,
       status,
@@ -59,7 +59,7 @@ export class InventoryService {
       .exec();
   }
 
-  async assignToEmployee(
+   async assignToEmployee(
     inventoryID: string,
     employeeDetails: string,
     assignDate: string,
@@ -67,11 +67,9 @@ export class InventoryService {
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
-    if (!foundEmployee) {
-      throw new NotFoundException(
-        `Employee with ID ${employeeDetails} not found`,
-      );
-    }
+    // if (!foundEmployee) {
+    //   throw new NotFoundException(Employee with ID ${employeeDetails} not found);
+    // }
 
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeDetails: foundEmployee._id,
@@ -79,16 +77,9 @@ export class InventoryService {
       status: InventoryStatus.Assigned,
     });
 
-    const updatedInventory = await this.inventoryModel
+    return await this.inventoryModel
       .findById(inventoryID)
       .populate('employeeDetails');
-
-    const response = {
-      ...updatedInventory.toObject(),
-      employeeDetails: [updatedInventory.employeeDetails],
-    };
-
-    return response as unknown as Inventory;
   }
 
   // async unassignFromEmployee(inventoryID: string): Promise<Inventory> {

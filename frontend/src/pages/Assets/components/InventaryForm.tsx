@@ -41,6 +41,22 @@ const QuantityForm = forwardRef(
 								}
 							},
 						},
+						{
+							validator: async (_, values) => {
+								const uniqueValues = new Set(values);
+
+								if (values.length !== uniqueValues.size) {
+									const duplicateValues = new Set(
+										values.filter(
+											(value: string) => values.indexOf(value) !== values.lastIndexOf(value),
+										),
+									);
+									return Promise.reject(
+										new Error(`Duplicate values found: ${duplicateValues.values().next().value}`),
+									);
+								}
+							},
+						},
 					]}
 				>
 					{(fields, { add, remove }, { errors }) => (
@@ -52,6 +68,7 @@ const QuantityForm = forwardRef(
 											? `${selectedAsset ? `Add ${selectedAsset.assetName}'s Code` : "Add Asset"}`
 											: ""
 									}
+									name={index}
 									required={false}
 									key={field.key}
 								>
