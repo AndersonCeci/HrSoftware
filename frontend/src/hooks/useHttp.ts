@@ -58,7 +58,7 @@ export default function useHttp() {
 				applyData ? applyData(responseData) : null;
 			} catch (err: any) {
 				console.log(err);
-				setError(err || "Something went wrong!");
+				setError(err.message || "Something went wrong!");
 			}
 			setIsLoading(false);
 		}

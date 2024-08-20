@@ -22,8 +22,8 @@ export class Employee extends Document {
   @Prop({ required: true })
   surname: string;
 
-  @Prop({ required: true })
-  username: string;
+  // @Prop({ required: true })
+  // username: string;
 
   // @Prop({ required: true })
   // password: string;
