@@ -62,7 +62,7 @@ export function getFormValues(form: any) {
 		phoneNumber: form.getFieldValue("phoneNumber"),
 		position: form.getFieldValue("position"),
 		salary: form.getFieldValue("salary"),
-		teamLeader: form.getFieldValue("teamLeader"),
+		teamLeaders: form.getFieldValue("teamLeaders") || [],
 		startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
 		contract: form.getFieldValue("contract"),
 		nID: form.getFieldValue("nID"),

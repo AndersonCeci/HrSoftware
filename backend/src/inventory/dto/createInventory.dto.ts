@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsEnum, IsBoolean, IsOptional, IsArray, ArrayNotEmpty } from 'class-validator';
-import { InventoryStatus } from '../schemas/inventory.schema';
+import { InventoryStatus } from '../schemas/Inventory.schema';
 
 export class CreateInventoryDto {
   

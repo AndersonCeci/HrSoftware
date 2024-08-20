@@ -52,9 +52,11 @@ export class Employee extends Document {
   @Prop()
   phoneNumber: string;
 
-  @Prop()
-  @IsOptional()
-  teamLeader: string;
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }],
+    default: [],
+  })
+  teamLeaders: MongooseSchema.Types.ObjectId[];
 
   @Prop({
     enum: ['Female', 'Male'],

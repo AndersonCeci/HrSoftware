@@ -16,6 +16,7 @@ export class PromotionService {
     newPosition: Position,
     newSalary: number,
     trainedBy: string,
+    isTeamLeader: boolean,
   ): Promise<{ employee: Employee; promotion: Promotion }> {
     const employee = await this.employeeModel.findById(employeeId);
 
@@ -32,16 +33,25 @@ export class PromotionService {
       newSalary: newSalary,
       dateOfPromotion: new Date(),
       trainedBy: trainedBy,
+      isTeamLeader: isTeamLeader,
     });
 
     await promotion.save();
+    console.log('Promotion created:', promotion);
 
     employee.position = newPosition;
     employee.salary = newSalary;
     employee.promotionHistory = employee.promotionHistory || [];
     employee.promotionHistory.push(promotion._id as any);
 
+    if (isTeamLeader) {
+      await this.employeeModel.findByIdAndUpdate(employeeId, {
+        $addToSet: { teamLeaders: employee._id },
+      });
+    }
+
     await employee.save();
+    console.log('Updated employee:', employee);
 
     return { employee, promotion };
   }
