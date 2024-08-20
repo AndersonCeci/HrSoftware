@@ -25,7 +25,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
                 />
               }
               title={userData.username}
-              description={userData.role.toUpperCase()}
+              description={userData.role}
               className="loged-user-panel"
             />
           </Card>

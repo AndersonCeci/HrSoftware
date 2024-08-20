@@ -57,7 +57,7 @@ export class EmployeeService {
     return this.employeeModel.find().exec();
   }
 
-  findOne(id: string): Promise<Employee | null> {
+  findOne(id: string) {
     return this.employeeModel.findById(id).exec();
   }
 
