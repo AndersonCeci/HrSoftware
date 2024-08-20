@@ -4,7 +4,7 @@ import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
 import { EmployeeDataType } from "../types/Employee";
-import { capitalizeFirstLetter } from "../../../utils/paths";
+import { capitalizeFirstLetter } from "../../../utils/utils";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -84,13 +84,14 @@ export function getColumns(
 			displayAs: (value) =>
 				value ? (
 					<Link to={value} target="_blank" rel="noopener noreferrer">
-						<Button size="large" type={ButtonType.LINK} icon={<IoDocumentAttach />}>
-							<span> View </span>
-						</Button>
+						<Button size="large" type="link" icon={<IoDocumentAttach />}>
+							<span> View Contract </span>
+						</Button> 
 					</Link>
 				) : (
-					<span>No File</span>
+					<span>No Contract Uploaded</span>
 				),
+			align: "center",
 		}),
 		createTableColumns({
 			title: t("startingOn"),
