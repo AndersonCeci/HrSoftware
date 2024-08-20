@@ -43,7 +43,7 @@ const fetchEmployee = async (name: string, surname: string) => {
 
 const getPayroll = async (
   grossSalary: number,
-  workDays: number,
+  workDays: number
 ): Promise<Payroll | null> => {
   try {
     const res = await axios.get(`${SALARY_API}/net-salary`, {
@@ -111,7 +111,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
     if (inGrossSalary && workDays) {
       const payroll = await getPayroll(
         parseInt(inGrossSalary),
-        parseInt(workDays),
+        parseInt(workDays)
       );
       if (payroll) {
         editFormRef.current.setFieldsValue({
@@ -125,7 +125,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
           total:
             bonuses?.reduce(
               (total: number, bonus: Bonus) => total + bonus.amount,
-              0,
+              0
             ) + payroll.netSalary,
         });
       }
@@ -160,7 +160,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
           bonusesTotal:
             selectedSalary?.bonuses?.reduce(
               (total, bonus) => total + bonus.amount,
-              0,
+              0
             ) || 0,
         }}
         style={{ padding: 35 }}

@@ -39,7 +39,7 @@ export class EmployeeService {
 
     const createUserDto: CreateUserDto = {
       employID: createdEmploy._id as Types.ObjectId,
-      username: createEmployeeDto.surname + 'codevider',
+      username: createEmployeeDto.surname + 'codevider', 
       password: 'codevider',
       email: createEmployeeDto.email,
       role: role,
@@ -57,7 +57,7 @@ export class EmployeeService {
     return this.employeeModel.find().exec();
   }
 
-  findOne(id: string): Promise<Employee | null> {
+  findOne(id: string) {
     return this.employeeModel.findById(id).exec();
   }
 

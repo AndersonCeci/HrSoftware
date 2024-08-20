@@ -10,65 +10,54 @@ import Title from "antd/es/typography/Title";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
-
 interface WelcomeGridProps {
 	initialData: Data[];
 }
 
 export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
-	
-
 	const options = {};
 
 	const { t } = useTranslation();
 
-  return (
-    <>
-      <div className="welcome-grid">
-        <div>
-          {initialData.map((data) => {
-            return (
-              <Row gutter={[16, 48]} key={data.status}>
-                <Col span={12} style={{ gap: "10px" }}>
-                  <NavLink to={data.path}>
-                    <Button
-                      className="active-dashboard"
-                      style={{ backgroundColor: data.color }}
-                    >
-                      <Title style={{ margin: 0, color: "white" }}>
-                        {data.noEmployee}
-                      </Title>
-                      <Text style={{ fontSize: 20, color: "white" }}>
-                        {data.status}
-                      </Text>
-                    </Button>
-                  </NavLink>
-                </Col>
-              </Row>
-            );
-          })}
-        </div>
-        <div className="pie-chart">
-          <Title
-            style={{
-              marginTop: 15,
-              color: "#666666",
-              textAlign: "center",
-              fontSize: 23,
-            }}
-          >
-            {t(`attendanceOverview`)}
-          </Title>
-          <Doughnut
-            style={{ marginTop: "15px" }}
-            data={data}
-            options={options}
-          ></Doughnut>
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<div className="welcome-grid">
+				<div>
+					{initialData.map((data) => {
+						return (
+							<Row gutter={[16, 48]} key={data.status}>
+								<Col span={12} style={{ gap: "10px" }}>
+									<NavLink to={data.path}>
+										<Button className="active-dashboard" style={{ backgroundColor: data.color }}>
+											<Typography.Title style={{ margin: 0, color: "white" }}>
+												{data.noEmployee}
+											</Typography.Title>
+											<Typography.Text style={{ fontSize: 20, color: "white" }}>
+												{data.status}
+											</Typography.Text>
+										</Button>
+									</NavLink>
+								</Col>
+							</Row>
+						);
+					})}
+				</div>
+				<div className="pie-chart">
+					<Title
+						style={{
+							marginTop: 15,
+							color: "#666666",
+							textAlign: "center",
+							fontSize: 23,
+						}}
+					>
+						{t(`attendanceOverview`)}
+					</Title>
+					<Doughnut style={{ marginTop: "15px" }} data={data} options={options}></Doughnut>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default WelcomeGrid;

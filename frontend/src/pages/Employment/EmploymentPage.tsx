@@ -20,7 +20,7 @@ const EmploymentPage: React.FC = () => {
 	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
 	const [open, setOpen] = useState(false);
 	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
-	const promoteRef = useRef();
+	const promoteRef = useRef<any>();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [form] = Form.useForm();
 	const [isDeleting, setIsDeleting] = useState(false);
