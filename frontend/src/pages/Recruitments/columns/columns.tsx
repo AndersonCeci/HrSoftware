@@ -1,11 +1,5 @@
-import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
-import {
-  MoreOutlined,
-  SearchOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
-import { TableProps, Dropdown } from "antd";
+import { SearchOutlined, EditOutlined } from "@ant-design/icons";
+import { TableProps } from "antd";
 import {
   createTableColumns,
   getAllUniqueValues,
@@ -17,18 +11,21 @@ import { Tag } from "antd";
 
 import { Link } from "react-router-dom";
 import { ButtonType } from "../../../enums/Button";
+import { ApplicantProps } from "../../../types/ApplicantProps";
+import { Dispatch, SetStateAction } from "react";
 
 type GenerateColumnsParams = {
-  tableData: RecrutmentDataType[];
-  handleEdit: (record: RecrutmentDataType) => void;
-  handleDelete: (id: string) => void;
+  tableData: ApplicantProps[];
+  setDrawerState: Dispatch<SetStateAction<boolean>>;
+  setEditingRecord: Dispatch<SetStateAction<ApplicantProps | null>>;
+  fetchApplicant: any;
 };
 
 export const columns = ({
   tableData,
-  handleEdit,
-  handleDelete,
-}: GenerateColumnsParams): TableProps<RecrutmentDataType>["columns"] => [
+  setDrawerState,
+  setEditingRecord,
+}: GenerateColumnsParams): TableProps<ApplicantProps>["columns"] => [
   createTableColumns({
     title: "Name",
     dataIndex: "name",
@@ -104,46 +101,26 @@ export const columns = ({
   }),
 
   createTableColumns({
-    title: "Action",
+    title: "More",
     dataIndex: "_id",
     key: "action",
-    displayAs: (text, record) => {
+    displayAs: (record) => {
+      const applicant = tableData.find((applicant) => applicant._id === record);
+      console.log("testtststst", record);
       return (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "Edit",
-                label: (
-                  <Button
-                    type={ButtonType.TEXT}
-                    block
-                    icon={<EditOutlined />}
-                    onClick={() => handleEdit(record)}
-                  >
-                    Edit
-                  </Button>
-                ),
-              },
-              {
-                key: "Delete",
-                label: (
-                  <Button
-                    type={ButtonType.TEXT}
-                    danger
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDelete(record._id)}
-                  >
-                    Delete
-                  </Button>
-                ),
-              },
-            ],
+        <Button
+          type={ButtonType.TEXT}
+          block
+          icon={<EditOutlined />}
+          onClick={() => {
+            if (applicant) {
+              setEditingRecord(applicant);
+              setDrawerState(true);
+            } else {
+              setEditingRecord(null);
+            }
           }}
-          trigger={["click"]}
-        >
-          <Button type={ButtonType.TEXT} icon={<MoreOutlined />} />
-        </Dropdown>
+        ></Button>
       );
     },
     fixed: "right",

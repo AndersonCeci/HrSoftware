@@ -70,10 +70,10 @@ export class InventoryController {
     );
   }
 
-  // @Patch('unassign/:id')
-  // async unassignFromEmployee(@Param('id') id: string) {
-  //   return this.inventoryService.unassignFromEmployee(id);
-  // }
+   @Patch('unassign/:id')
+   async unassignFromEmployee(@Param('id') id: string) {
+     return this.inventoryService.unassignFromEmployee(id);
+   }
 
   @Patch(':id')
   async updateUser(

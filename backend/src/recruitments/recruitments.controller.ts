@@ -10,36 +10,40 @@ import {
   Param,
   Patch,
   HttpException,
+  Query,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 
-@Controller('recruiments')
-export class RecruimentsController {
+@Controller('recruitments')
+export class RecruitmentsController {
   constructor(private recruitmentService: RecruitmentService) {}
 
   @Post()
   createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
+    console.log(createRecruitmentDto);
     return this.recruitmentService.createRecruitment(createRecruitmentDto);
   }
 
   @Get()
-  getRecruitment() {
-    return this.recruitmentService.getRecruitment();
-  }
-  @Get(':id')
-  async getRecruitmentById(@Param('id') id: string) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Recruitment not found', 404);
-    const findRec = await this.recruitmentService.getUserById(id);
-    if (!findRec) throw new HttpException('Recruitment not found', 404);
+  async getRecruitmentById(@Query('id') id?: string) {
+    const data =
+      await this.recruitmentService.getRecruitmentWithInterviewerDetails();
+    // console.log(data);
+    return data;
+    // if (id) {
+    //   const isValid = Types.ObjectId.isValid(id);
+    //   if (!isValid) throw new HttpException('Invalid ID format', 400);
 
-    return findRec;
+    //   const objectId = new Types.ObjectId(id);
+
+    // } else {
+    //   return await this.recruitmentService.getRecruitments();
+    // }
   }
 
   @Patch(':id')
-  @UsePipes(new ValidationPipe())
   async updateRecruitment(
     @Param('id') id: string,
     @Body() updateRecruitmentDto: UpdateRecruitmentDto,

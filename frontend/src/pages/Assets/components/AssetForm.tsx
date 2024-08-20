@@ -5,11 +5,11 @@ import dayjs from "dayjs";
 import useHttp from "../../../hooks/useHttp";
 import { AssetFormProps } from "../types/AddAssetsForm";
 import { EmployeeDataType } from "../../Employment/types/Employee";
+import { getFullName } from "../../../utils/utils";
 
-const API = import.meta.env.REACT_APP_ASSET_API;
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
-const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) => {
+const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 	const formRef = useRef<any>();
 	const [form] = Form.useForm();
 	const [employeeList, setEmployeeList] = useState<EmployeeDataType[]>([]);
@@ -18,8 +18,7 @@ const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) =
 	console.log(employeeList);
 
 	useEffect(() => {
-		console.log("Fetching employee list");
-		sendRequest({ url: `${EMPLOYEE}/search` }, (responseData: any) =>
+		sendRequest({ url: `${EMPLOYEE}/search` }, (responseData: EmployeeDataType[]) =>
 			setEmployeeList(responseData),
 		);
 	}, []);
@@ -33,7 +32,8 @@ const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) =
 	function onFinish(values: any) {
 		console.log(employeeList, "employeeList");
 		const selectedEmployee = employeeList.find(
-			(employee: EmployeeDataType) => employee.username === values.userName,
+			(employee: EmployeeDataType) =>
+				getFullName(employee.name, employee.surname) === values.userName,
 		)?._id;
 
 		const dataToSubmit = {
@@ -50,9 +50,9 @@ const AssetForm = forwardRef(({ selectedElement, onAdd }: AssetFormProps, ref) =
 				label="Employee"
 				name="userName"
 				required
-				options={employeeList.map((employee: any) => ({
-					value: employee.username,
-					label: employee.username,
+				options={employeeList.map((employee: EmployeeDataType) => ({
+					value: getFullName(employee.name, employee.surname),
+					label: getFullName(employee.name, employee.surname),
 				}))}
 				isMatchWithOption
 			/>

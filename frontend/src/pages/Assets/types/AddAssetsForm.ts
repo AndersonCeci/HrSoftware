@@ -1,7 +1,6 @@
-import { AssetDatatype, InventaryDataType } from "./AssetsDataType";
+import { AssetDatatype } from "./AssetsDataType";
 
 export type AssetFormProps = {
-	selectedElement?: InventaryDataType | null;
 	onAdd: (data: any) => void;
 };
 
