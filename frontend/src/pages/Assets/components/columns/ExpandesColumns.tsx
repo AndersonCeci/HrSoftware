@@ -3,6 +3,7 @@ import { AssetStatus } from "../../types/AssetsDataType";
 import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
 import { InventaryDataType } from "../../types/AssetsDataType";
+import { getFullName } from "../../../../utils/utils";
 import { DeleteOutlined, MoreOutlined, SearchOutlined, ToolOutlined } from "@ant-design/icons";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { BsFillPersonCheckFill } from "react-icons/bs";
@@ -12,6 +13,7 @@ export function expandedColumns(
 	inventaryData: InventaryDataType[],
 	onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
 	onAddAsset: (record: InventaryDataType) => void,
+	handleUnassign: (record: InventaryDataType) => void,
 	onDeleteAsset: (id: InventaryDataType) => void,
 ) {
 	return [
@@ -30,12 +32,12 @@ export function expandedColumns(
 			dataIndex: "_id",
 			key: "userName",
 			displayAs: (_: string, record: InventaryDataType) => {
-				console.log(record, "OBJEKTI NGA UNE MARR DATA");
 				const employee = record.employeeDetails;
-				console.log(employee, "EMPLOYEES");
 				return (
 					<Typography.Text>
-						{employee ? employee.username : " Not Assigned"}
+						{employee !== undefined
+							? getFullName(employee.name, employee.surname)
+							: " Not Assigned"}
 					</Typography.Text>
 				);
 			},
@@ -104,7 +106,9 @@ export function expandedColumns(
 													block
 													icon={isAvailable ? <BsFillPersonCheckFill /> : <BsFillPersonDashFill />}
 													iconPosition="end"
-													onClick={isAvailable ? () => onAddAsset(record) : () => {}}
+													onClick={
+														isAvailable ? () => onAddAsset(record) : () => handleUnassign(record)
+													}
 												>
 													{isAvailable ? "Assign" : "Unassign"}
 												</Button>

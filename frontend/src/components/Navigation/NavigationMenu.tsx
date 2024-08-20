@@ -18,26 +18,26 @@ const navElements = [
 ];
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
-  const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-    useLocation()
-      .pathname.split("/")
-      .filter((x) => x),
-  );
+	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+		useLocation()
+			.pathname.split("/")
+			.filter((x) => x),
+	);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+	const location = useLocation();
+	const navigate = useNavigate();
 
-  const { t } = useTranslation();
+	const { t } = useTranslation();
 
-	const items: any = navElements.map((element) => {
+	const items: any = navElements.map((element, index) => {
 		return {
-			key: `${element.path}`,
+			key: `${element.path} ${index}`,
 			label: t(element.path),
 			type: element.type ? element.type : null,
 			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
-			children: element.children.map((subElement) => {
+			children: element.children.map((subElement, subIndex) => {
 				return {
-					key: subElement.path,
+					key: `${element.path}/${subElement.path} ${subIndex}`,
 					label: <NavLink to={`${element.path}/${subElement.path}`}>{t(subElement.path)}</NavLink>,
 					icon: <subElement.icon className="nav-menu-icon" />,
 				};
@@ -45,15 +45,15 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		};
 	});
 
-  useEffect(() => {
-    setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-  }, [location.pathname]);
+	useEffect(() => {
+		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+	}, [location.pathname]);
 
-  const handleClick = () => {
-    localStorage.removeItem("userData");
-    console.log("Cleared?", localStorage.getItem("token"));
-    navigate("/");
-  };
+	const handleClick = () => {
+		localStorage.removeItem("userData");
+		console.log("Cleared?", localStorage.getItem("token"));
+		navigate("/");
+	};
 
 	return (
 		<Flex

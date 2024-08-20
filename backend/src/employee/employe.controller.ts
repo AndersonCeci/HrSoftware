@@ -30,14 +30,6 @@ export class EmployeeController {
   }
 
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    console.log(id, 'id')
-    const test =this.employeeService.findOne(id);
-    console.log(test, 'test')
-    return test
-
-  }
 
   @Get()
   findAll(): Promise<Employee[]> {
@@ -63,6 +55,17 @@ export class EmployeeController {
         error.message || 'An error occurred while searching for employees.',
       );
     }
+  }
+
+
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    console.log(id, 'id')
+    const test =this.employeeService.findOne(id);
+    console.log(test, 'test')
+    return test
+
   }
 
   // @Get('usernames')
