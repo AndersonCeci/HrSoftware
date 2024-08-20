@@ -7,6 +7,8 @@ import Loader from "../../../components/Shared/Loader";
 import { getColumns } from "../utils/LeftColumn";
 import { TablePaginationConfig } from "antd/lib/table";
 
+const API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
+
 const DismissedPage: React.FC = () => {
   const [tableData, setTableData] = useState<LeftDataType[]>([]);
   const [isLoading, error, sendRequest] = useHttp();

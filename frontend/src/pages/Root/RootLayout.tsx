@@ -6,7 +6,7 @@ import HeaderIcons from "../../components/Header/HeaderIcons";
 import LogedUserPanel from "../../components/Navigation/LogedUserPanel";
 import Trigger from "../../components/Navigation/Trigger";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { FloatButton } from "antd";
+import { Flex, FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "antd";
 import "./Style/RootStyle.css";
@@ -79,42 +79,45 @@ const RootLayout: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return (
-    <Layout className="root-page-container">
-      <Header
-        first={<NavigationMenuLogo logotext="HRSoftware" />}
-        third={<HeaderIcons />}
-      />
-      <Content className="root-content-container">
-        <Layout className="root-layout-container">
-          <Sider
-            collapsible
-            collapsed={colapsed}
-            onCollapse={onCollapse}
-            width={300}
-            collapsedWidth={90}
-            className="sider-container"
-            theme="light"
-            trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
-          >
-            {<LogedUserPanel colapsed={colapsed} />}
-            <NavigationMenu colapsed={colapsed} />
-          </Sider>
-          <Content className="outlet-container">
-            <FloatButton
-              className="float-button "
-              icon={<ExclamationCircleOutlined />}
-              type="primary"
-              style={{ right: 12, bottom: 12 }}
-              onClick={() => navigate("/company-background")}
-            />
+	return (
+		<Layout>
+			<Flex vertical flex={1} className="root-page-container">
+				<Header first={<NavigationMenuLogo logotext="HRSoftware" />} third={<HeaderIcons />} />
+				<Flex
+					style={{
+						height: "100%",
+						overflow: "hidden",
+					}}
+				>
+					<Sider
+						collapsible
+						collapsed={colapsed}
+						onCollapse={onCollapse}
+						collapsedWidth={90}
+						className="sidebar-menu"
+						width={300}
+						theme={"light"}
+						trigger={!isMobile ? <Trigger colapsed={colapsed} /> : null}
+					>
+						{/* {<LogedUserPanel colapsed={colapsed} />} */}
+						<NavigationMenu colapsed={colapsed} />
+					</Sider>
 
-            <Outlet />
-          </Content>
-        </Layout>
-      </Content>
-    </Layout>
-  );
+					<Content className="content-outlet-container">
+						<FloatButton
+							className="float-button "
+							icon={<ExclamationCircleOutlined />}
+							type="primary"
+							style={{ right: 25, bottom: 12, boxShadow: "3.9px 7.8px 7.8px hsl(0deg 0% 0% / 0.38)" }}
+							onClick={() => navigate("/company-background")}
+						/>
+
+						<Outlet />
+					</Content>
+				</Flex>
+			</Flex>
+		</Layout>
+	);
 };
 
 export default RootLayout;

@@ -24,6 +24,8 @@ import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
+import { InventoryService } from './inventory/inventory.service';
+import { InventoryModule } from './inventory/inventory.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { SchedulerModule } from './schedule/scheduler.module';
@@ -74,6 +76,7 @@ import { SchedulerModule } from './schedule/scheduler.module';
     FirebaseModule,
     TasksModule,
     DayoffModule,
+    InventoryModule,
     GmailApiModule,
     PromotionModule,
     SchedulerModule,

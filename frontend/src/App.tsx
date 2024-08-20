@@ -6,15 +6,17 @@ import { Paths } from "./utils/paths";
 import "./App.css";
 
 const iterationRoutes = [
-  Paths.Dashboard,
-  Paths.PersonalCalendar,
-  Paths.Notifications,
-  Paths.Company,
-  Paths.Employee,
-  Paths.Background,
-  Paths.DayOff,
-  // Paths.Settings,
-  Paths.Profile,
+	Paths.Dashboard,
+	Paths.Recruitment,
+	Paths.PersonalCalendar,
+	Paths.Notifications,
+	Paths.Company,
+	Paths.Management,
+	Paths.Employee,
+	Paths.Background,
+	Paths.DayOff,
+	// Paths.Settings,
+	Paths.Profile,
 ];
 
 const router = createBrowserRouter([

@@ -53,6 +53,6 @@ export class DayoffController {
   ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
-    return this.dayoffService.updateAsset(id, updateDayOffDto);
+    return this.dayoffService.updateDayOff(id, updateDayOffDto);
   }
 }
