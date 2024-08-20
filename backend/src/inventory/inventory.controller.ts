@@ -29,10 +29,10 @@ export class InventoryController {
     return this.inventoryService.createInventory(createInventoryDto);
   }
 
-  @Get()
-  async findAll() {
-    return this.inventoryService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.inventoryService.findAll();
+  // }
 
 
   @Delete(':id')

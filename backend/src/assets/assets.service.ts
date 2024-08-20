@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
+import { Query } from 'express-serve-static-core';
 
 
 @Injectable()
@@ -15,7 +16,9 @@ export class AssetsService {
     return createAsset.save();
   }
 
-  async findAll(): Promise<Asset[]> {
+  async findAll(query:Query): Promise<Asset[]> {
+    const page = Number(query.page) || 1;
+    const resPerPage = 10;
     const data = await this.assetModel
       .aggregate([
         {
@@ -98,3 +101,9 @@ export class AssetsService {
       .exec();
   }
 }
+// {
+        //   $skip: resPerPage * page,
+        // },
+        // {
+        //   $limit: resPerPage,
+        // },

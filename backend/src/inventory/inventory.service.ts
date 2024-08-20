@@ -103,9 +103,9 @@ export class InventoryService {
     return response as unknown as Inventory;
    }
 
-  async findAll(): Promise<any> {
-    return this.assetsService.findAll();
-  }
+  // async findAll(): Promise<any> {
+  //   return this.assetsService.findAll();
+  // }
 
   async delete(id: string): Promise<Inventory> {
     const deletedInventory = await this.inventoryModel.findByIdAndDelete(id);

@@ -7,11 +7,13 @@ import {
   HttpException,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import mongoose from 'mongoose';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
+import { Asset } from './schemas/Asset.schema';
 
 @Controller('assets')
 export class AssetsController {
@@ -23,8 +25,8 @@ export class AssetsController {
   }
 
   @Get()
-  async findAll() {
-    return this.assetsService.findAll();
+  async findAll(@Query() query: any): Promise<Asset[]> {
+    return this.assetsService.findAll(query);
   }
 
   @Get(':name')
