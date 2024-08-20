@@ -13,3 +13,10 @@ export const references = [
   { value: "Dua Pune", label: "Dua Pune" },
   { value: "Others", label: "Other" },
 ];
+
+export enum RecruitmentStage {
+  Applied = "Applied",
+  FirstInterview = "1st Interview",
+  SecondInterview = "2nd Interview",
+  OfferMade = "Offer Made",
+}

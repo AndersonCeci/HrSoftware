@@ -17,6 +17,7 @@ import { EmployeeService } from './employe.service';
 import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
+import { UserService } from 'src/users/users.service';
 
 @Controller('employees')
 export class EmployeeController {
@@ -32,6 +33,7 @@ export class EmployeeController {
   async getTeamLeaders(): Promise<Employee[]> {
     return this.employeeService.getTeamLeaders();
   }
+
 
   @Get('/search')
   async search(
@@ -51,6 +53,17 @@ export class EmployeeController {
         error.message || 'An error occurred while searching for employees.',
       );
     }
+  }
+
+
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    console.log(id, 'id')
+    const test =this.employeeService.findOne(id);
+    console.log(test, 'test')
+    return test
+
   }
 
   @Get()
@@ -78,8 +91,9 @@ export class EmployeeController {
     if (!isValid) throw new HttpException('Invalid ID', 404);
     const result = await this.employeeService.softDeleteEmployeeById(id);
     if (!result) {
-      throw new HttpException('No employee found for the given ID', 404);
+      throw new HttpException('No employe found for the given ID', 404);
     }
+
     return result;
   }
 }

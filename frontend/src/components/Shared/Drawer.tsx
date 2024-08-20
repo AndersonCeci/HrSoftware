@@ -9,6 +9,7 @@ type DrawerProps = {
   closeIcon?: boolean | null;
   size?: "default" | "large";
   title?: string;
+  width?: string | number;
 };
 
 const Drawer = ({
@@ -20,6 +21,7 @@ const Drawer = ({
   closeIcon,
   size = "default",
   title,
+  width,
 }: DrawerProps) => {
   return (
     <AntDrawer
@@ -31,6 +33,7 @@ const Drawer = ({
       placement={placement}
       size={size}
       title={title}
+      width={width}
     >
       {children}
     </AntDrawer>
