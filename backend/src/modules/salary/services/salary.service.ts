@@ -5,8 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import { Types } from 'mongoose';
+import mongoose, { Types, Model } from 'mongoose';
 import { Salary } from '../schema/salary.schema';
 import { SalaryDTO } from '../dto/salaryDTO/salary.dto';
 import { UpdateSalaryDTO } from '../dto/salaryDTO/updateSalary.dto';
@@ -18,7 +17,7 @@ import { Employee } from 'src/employee/schema/employe.schema';
 @Injectable()
 export class SalaryService {
   constructor(
-    @InjectModel(Salary.name) private salaryModel: mongoose.Model<Salary>,
+    @InjectModel(Salary.name) private salaryModel: Model<Salary>,
     private readonly employeeService: EmployeeService,
   ) {}
 
@@ -31,10 +30,15 @@ export class SalaryService {
       });
       return await createdSalary.save();
     } catch (error) {
-      console.log(error);
+      console.log('test for duplication', error.code);
 
       if (error.code === 11000) {
         const duplicateKey = Object.keys(error.keyPattern).join(', ');
+        throw new ConflictException(
+          `A salary record with the same ${duplicateKey} already exists.`,
+        );
+      } else if (error instanceof mongoose.Error.ValidationError) {
+        const duplicateKey = Object.keys(error).join(', ');
         throw new ConflictException(
           `A salary record with the same ${duplicateKey} already exists.`,
         );

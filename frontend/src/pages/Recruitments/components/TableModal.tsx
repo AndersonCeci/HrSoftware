@@ -3,10 +3,10 @@ import { Form, Input, Flex, Typography } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import { getDevRoles } from "../../Employment/utils/helperFunctions";
 import { useRef, forwardRef, useImperativeHandle, useState } from "react";
-import { RecrutmentDataType } from "../types/RecruitmentDataTypes";
 import { references, selectOption } from "../columns/constants";
 import dayjs from "dayjs";
 import useHttp from "../../../hooks/useHttp";
+import { ApplicantProps } from "../../../types/ApplicantProps";
 
 const options = selectOption.map((option) => ({
   value: option.label,
@@ -15,9 +15,9 @@ const options = selectOption.map((option) => ({
 
 type EditModalProps = {
   // onSubmit: (values: RecrutmentDataType) => void;
-  selectedRecord: RecrutmentDataType | null;
-  onAdd: (newData: RecrutmentDataType) => void;
-  onEdit: (newData: RecrutmentDataType) => void;
+  selectedRecord: ApplicantProps | null;
+  onAdd: (newData: ApplicantProps) => void;
+  onEdit: (newData: ApplicantProps) => void;
 };
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
@@ -30,7 +30,7 @@ const TableModal = forwardRef(
     const initialValues = selectedRecord
       ? {
           ...selectedRecord,
-          submittedDate: dayjs(selectedRecord.submittedDate),
+          submittedDate: dayjs(selectedRecord.dateSubmitted),
         }
       : undefined;
     const [isLoading, error, sendRequest] = useHttp();
@@ -52,7 +52,7 @@ const TableModal = forwardRef(
           {
             method: "POST",
             body: formData,
-          },
+          }
         );
 
         if (!uploadResponse.ok) {
@@ -74,6 +74,8 @@ const TableModal = forwardRef(
       console.log(file, "fileeee");
       if (file) {
         handleUpload(file);
+      } else {
+        console.log("no selected file");
       }
     };
 
@@ -90,12 +92,12 @@ const TableModal = forwardRef(
       sendRequest(
         useHttp[selectedRecord ? "patchRequestHelper" : "postRequestHelper"](
           path,
-          valuesToSend,
+          valuesToSend
         ),
         (responseData: any) => {
           console.log(responseData, "responseData");
           selectedRecord ? onEdit(responseData) : onAdd(responseData);
-        },
+        }
       );
     }
 
@@ -160,7 +162,7 @@ const TableModal = forwardRef(
         )}
       </Form>
     );
-  },
+  }
 );
 
 export default TableModal;

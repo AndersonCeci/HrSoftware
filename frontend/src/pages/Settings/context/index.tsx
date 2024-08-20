@@ -8,7 +8,7 @@ interface PasswordContextProps {
 }
 
 const PasswordContext = createContext<PasswordContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -37,13 +37,15 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       message.success("Password changed successfully!");
     } catch (error) {
       if (error instanceof AxiosError) {
         message.error(
-          `Failed to change password: ${error.response?.data.message || error.message}`,
+          `Failed to change password: ${
+            error.response?.data.message || error.message
+          }`
         );
       }
     }

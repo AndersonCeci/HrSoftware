@@ -6,6 +6,7 @@ type StepsProps = {
   responsive?: boolean;
   direction?: "horizontal" | "vertical";
   status?: "wait" | "process" | "finish" | "error";
+  onChange?: any;
 };
 
 const Steps = ({
@@ -14,6 +15,7 @@ const Steps = ({
   responsive,
   direction,
   status,
+  onChange,
 }: StepsProps) => {
   function deriveStatus(index: number) {
     if (status) {
@@ -45,6 +47,7 @@ const Steps = ({
       responsive={responsive}
       direction={direction}
       items={items}
+      onChange={onChange}
     />
   );
 };
