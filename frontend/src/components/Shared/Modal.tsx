@@ -11,7 +11,6 @@ type ModalProps = {
   isOpen: true | false;
   title?: string;
   width?: number;
-  
 };
 
 const Modal = ({
@@ -32,9 +31,10 @@ const Modal = ({
       onOk={onOk}
       footer={null}
       width={width}
-      style={{ top: 20 }}    >
+      style={{ top: 20 }}
+    >
       {children}
-      <Flex justify="flex-end">
+      <Flex justify="flex-end" gap={15}>
         {onCancel && (
           <Button type={ButtonType.TEXT} danger onClick={onCancel}>
             Cancel

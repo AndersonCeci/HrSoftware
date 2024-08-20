@@ -52,7 +52,7 @@ const TableModal = forwardRef(
           {
             method: "POST",
             body: formData,
-          }
+          },
         );
 
         if (!uploadResponse.ok) {
@@ -90,12 +90,12 @@ const TableModal = forwardRef(
       sendRequest(
         useHttp[selectedRecord ? "patchRequestHelper" : "postRequestHelper"](
           path,
-          valuesToSend
+          valuesToSend,
         ),
         (responseData: any) => {
           console.log(responseData, "responseData");
           selectedRecord ? onEdit(responseData) : onAdd(responseData);
-        }
+        },
       );
     }
 
@@ -160,7 +160,7 @@ const TableModal = forwardRef(
         )}
       </Form>
     );
-  }
+  },
 );
 
 export default TableModal;

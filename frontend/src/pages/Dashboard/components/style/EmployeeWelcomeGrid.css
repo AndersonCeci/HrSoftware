@@ -1,0 +1,79 @@
+.card-title {
+    font-weight: lighter;
+    margin: 0;
+    color: white;
+}
+
+h1.ant-typography.card-text.css-dev-only-do-not-override-1pg9a38 {
+    margin-bottom: 0;
+    margin-top: 0;
+    color: white;
+}
+
+.card-employee {
+    height: 125px;
+    width: 250px;
+}
+
+/* .ant-col.employee-col-card.ant-col-xs-8.ant-col-sm-8.ant-col-md-8.css-dev-only-do-not-override-1pg9a38 {
+    width: 250px;
+} */
+
+@media (max-width: 1024px) {
+    .employee-row-card {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-employee {
+        height: 125px;
+        width: 100%;
+    }
+
+    .flex-main {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1230px) {
+    .employee-row-card {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-employee {
+        height: 125px;
+        width: 100%;
+    }
+}
+
+.card-quote {
+    height: auto;
+    margin-bottom: 30px;
+    /* box-shadow: 3.9px 7.8px 7.8px hsl(0deg 0% 0% / 0.38); */
+}
+
+ .card-employee {
+    box-shadow: 3.9px 7.8px 7.8px hsl(0deg 0% 0% / 0.38);
+    border: 0;
+}
+
+.holiday-card {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    text-align: center;
+}
+
+.promotion-list {
+    list-style-type: "🔵";
+}
+
+
+p,
+.card-text {
+    margin-top: 10px
+}

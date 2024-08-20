@@ -16,7 +16,7 @@ type createColumnsProps = {
 export const createColumns = (
   data: RequestedDataType[],
   onAcept: (id: string) => void,
-  onDecline: (record: RequestedDataType) => void
+  onDecline: (record: RequestedDataType) => void,
 ) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation();

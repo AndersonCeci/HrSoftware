@@ -15,8 +15,16 @@ export class LeftService {
     private leftModel: mongoose.Model<Left>,
   ) {}
 
-  async findAll(): Promise<Employee[]> {
-    return this.leftModel.find();
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: Left[]; total: number }> {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      this.leftModel.find().skip(skip).limit(limit).exec(),
+      this.leftModel.countDocuments(),
+    ]);
+    return { data, total };
   }
 
   getByID(id: string): Promise<Employee | null> {

@@ -1,3 +1,4 @@
+import { Employee } from 'src/employee/schema/employe.schema';
 import {
   Controller,
   Get,
@@ -14,7 +15,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
-import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
 import { UserService } from 'src/users/users.service';
@@ -33,27 +33,31 @@ export class EmployeeController {
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
-  
-  @Get("/search")
+
+  @Get('/search')
   async search(
     @Query('name') name?: string,
     @Query('surname') surname?: string,
-  ){
+  ) {
     try {
       const result = await this.employeeService.searchEmployee(name, surname);
       if (!result) {
-        throw new NotFoundException('No employees found matching the given criteria.');
+        throw new NotFoundException(
+          'No employees found matching the given criteria.',
+        );
       }
       return result;
     } catch (error) {
-      throw new NotFoundException(error.message || 'An error occurred while searching for employees.');
+      throw new NotFoundException(
+        error.message || 'An error occurred while searching for employees.',
+      );
     }
   }
 
-
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Employee | null> {
-    return this.employeeService.findOne(id);
+  findOne(@Param('id') id: string) {
+    const employee = this.employeeService.findOne(id);
+    return employee;
   }
 
   @Patch(':id')

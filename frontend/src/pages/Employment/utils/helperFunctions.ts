@@ -25,16 +25,17 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
 				startingDate: "",
 				nID: "",
 				gender: "",
+				contract: "",
 		  };
 
 	return initialValues;
 }
 
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
-  return {
-    ...selectedEmployee,
-    startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
-  };
+	return {
+		...selectedEmployee,
+		startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
+	};
 }
 
 export function validate(salary: number | null | undefined) {
@@ -53,19 +54,20 @@ export function getDevRoles() {
 }
 
 export function getFormValues(form: any) {
+	console.log(form.getFieldsValue(), "form");
 	return {
 		name: form.getFieldValue("name"),
 		surname: form.getFieldValue("surname"),
-		email: form.getFieldValue("email") + "@codevider.com",
+		email: form.getFieldValue("email").split("@")[0] + "@codevider.com",
 		phoneNumber: form.getFieldValue("phoneNumber"),
 		position: form.getFieldValue("position"),
 		salary: form.getFieldValue("salary"),
 		teamLeader: form.getFieldValue("teamLeader"),
 		startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
-		contract: "Permanent",
+		contract: form.getFieldValue("contract"),
 		nID: form.getFieldValue("nID"),
-		username: form.getFieldValue("email").split("@")[0],
-		password: "codevider",
+		// username: "ESHTE STRING",
+		// password: "codevider",
 		gender: form.getFieldValue("gender"),
 	};
 }

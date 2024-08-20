@@ -1,29 +1,32 @@
-import {IsString,IsNotEmpty,IsDateString,IsOptional} from 'class-validator';
-  
-  export class CreateEventDto {
-    @IsString()
-    @IsNotEmpty()
-    eventName:string;
-    
-    @IsString()
-    @IsOptional()
-    eventDescription?:string;
-    
-    @IsDateString()
-    eventDate:Date;
+import {
+  IsString,
+  IsNotEmpty,
+  IsDateString,
+  IsOptional,
+} from 'class-validator';
 
-    eventStartTime:string;
+export class CreateEventDto {
+  @IsString()
+  @IsNotEmpty()
+  eventName: string;
 
-    eventEndTime:string;
-    
-    @IsOptional()
-    location?:string;
-    
-    @IsOptional()
-    image?:string;
-    
-    
-    isDeleted: boolean;
-    deleteDate?: Date;
+  @IsString()
+  @IsOptional()
+  eventDescription?: string;
+
+  @IsDateString()
+  eventDate: Date;
+
+  eventStartTime: string;
+
+  eventEndTime: string;
+
+  @IsOptional()
+  location?: string;
+
+  @IsOptional()
+  image?: string;
+
+  isDeleted: boolean;
+  deleteDate?: Date;
 }
-  

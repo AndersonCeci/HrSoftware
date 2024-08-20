@@ -1,13 +1,27 @@
-import { Controller, Get, Param, Delete, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Delete,
+  Post,
+  Body,
+  Query,
+} from '@nestjs/common';
 import { LeftService } from './left.service';
+import { PageSizes } from 'pdf-lib';
+import { Left } from './schema/left.schema';
 
 @Controller('left')
 export class LeftController {
   constructor(private readonly leftService: LeftService) {}
 
   @Get()
-  async findAll() {
-    return this.leftService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{ data: Left[]; total: number; page: number; limit: number }> {
+    const result = await this.leftService.findAll(page, limit);
+    return { ...result, page, limit };
   }
 
   @Get(':id')

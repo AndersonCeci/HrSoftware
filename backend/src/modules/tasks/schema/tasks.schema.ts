@@ -26,7 +26,7 @@ export class Task extends Document {
   @Prop({ default: false })
   isDeleted: boolean;
 
-  @Prop()
+  @Prop({ default: false })
   deleteDate: Date;
 }
 

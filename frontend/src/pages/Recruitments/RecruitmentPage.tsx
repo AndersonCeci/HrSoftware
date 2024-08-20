@@ -15,7 +15,7 @@ const RecruitmentPage: React.FC = () => {
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<RecrutmentDataType[]>([]);
   const [editingRecord, setEditingRecord] = useState<RecrutmentDataType | null>(
-    null
+    null,
   );
   const [isLoading, error, sendRequest] = useHttp();
   const formRef = useRef<any>();
@@ -30,7 +30,7 @@ const RecruitmentPage: React.FC = () => {
   function handleDelete(id: string) {
     sendRequest(useHttp.deleteRequestHelper(`${API}/${id}`));
     setTableData((prevData) =>
-      prevData.filter((item: RecrutmentDataType) => item._id !== id)
+      prevData.filter((item: RecrutmentDataType) => item._id !== id),
     );
   }
 
@@ -41,7 +41,7 @@ const RecruitmentPage: React.FC = () => {
 
   function handleEdit(newData: RecrutmentDataType) {
     setTableData((prevData) =>
-      prevData.map((item) => (item._id === newData._id ? newData : item))
+      prevData.map((item) => (item._id === newData._id ? newData : item)),
     );
     setIsEditModalVisible(false);
   }

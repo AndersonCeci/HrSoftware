@@ -7,7 +7,6 @@ import { UsersModule } from 'src/users/users.module';
 import { UserService } from 'src/users/users.service';
 import { PromotionModule } from 'src/promotion/promotion.module';
 
-
 @Module({
   imports: [
     MongooseModule.forFeature([

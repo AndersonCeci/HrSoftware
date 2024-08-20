@@ -4,7 +4,7 @@ export const SqTranslation = {
     "Jeni të sigurt që dëshironi ta refuzoni këtë kërkesë",
   activestatus: "Punonjesit Aktiv",
   action: "Veprimet",
-  available: "I Diponushëm",
+  available: "Të Diponushëm",
   assetType: "Lloji i asetit",
   assets: "Asetet",
   assetsTitle: "Asetet",
@@ -53,7 +53,7 @@ export const SqTranslation = {
   promoted: "Promovuar",
   promotedOn: "Promovuar në",
   promotions: "Promovimet",
-  reserved: "I rezervuar",
+  reserved: "Të rezervuar",
   recruitment: "Rekrutimet",
   recruitmentTitle: "Rekrutimet",
   remoteEmployee: "Punonjesit Remote",
@@ -80,4 +80,8 @@ export const SqTranslation = {
   enterEmployeeName: "Kërko emrin e punonjësit",
   viewPromotionRecordsForEmployees:
     "Shikoni të dhënat e promovimit për punonjësit",
+  projectManager: "Menaxher Projekti",
+  holidayEntitlement: "Lejet për largim",
+  currentSalary: "Paga Aktuale",
+  dailyQuote: "Citati i sotshëm",
 };

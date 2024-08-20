@@ -16,13 +16,9 @@ const AutoComplete = ({ name, label, options, required, isMatchWithOption }: Aut
 		},
 	];
 
-	// console.log(options);
-
-	// const formatedOptions = options.map((option) => ({ value: option }));
-
 	if (isMatchWithOption) {
 		rulesList.push({
-			validator: async (rule: any, value: any) => {
+			validator: async (_: any, value: any) => {
 				if (!options.some((option) => option.label === value)) {
 					throw new Error(`There is no record of ${value} `);
 				}

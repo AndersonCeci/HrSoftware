@@ -9,10 +9,12 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     MongooseModule.forFeature([
       {
-        name: Left.name, schema: LeftSchema
-      }
+        name: Left.name,
+        schema: LeftSchema,
+      },
     ]),
-    EmployeeModule],
+    EmployeeModule,
+  ],
   controllers: [LeftController],
   providers: [LeftService],
 })

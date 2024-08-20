@@ -19,7 +19,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   const [isLoading, error, sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}"
+    localStorage.getItem("userData") || "{}",
   ).employID;
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -31,7 +31,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
           "Content-Type": "application/json",
         },
       },
-      setTableData
+      setTableData,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -119,7 +119,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 }}
                 hoverable
               >
-                <Tag style={{width:"70px", marginTop:"10px"}} color="gold">Promoted</Tag>
+                {/* <Tag style={{width:"70px", marginTop:"10px"}} color="gold">Promoted</Tag> */}
                 <p>
                   <b>{t("newPosition")}:</b> {promote?.newPosition}
                 </p>

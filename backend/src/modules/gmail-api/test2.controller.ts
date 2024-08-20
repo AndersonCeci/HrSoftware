@@ -1,4 +1,11 @@
-import { ConflictException, Controller, Get, Query, Redirect, UseGuards } from '@nestjs/common';
+import {
+  ConflictException,
+  Controller,
+  Get,
+  Query,
+  Redirect,
+  UseGuards,
+} from '@nestjs/common';
 import { google } from 'googleapis';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
@@ -11,11 +18,11 @@ export class AuthController {
   private readonly oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    process.env.GOOGLE_REDIRECT_URI,
   );
 
   @Get('authorize')
-  @Redirect() 
+  @Redirect()
   authorize() {
     try {
       const scopes = [process.env.GOOGLE_CLIENT_SCOPE];
@@ -37,7 +44,9 @@ export class AuthController {
       console.log('Refresh Token:', tokens.refresh_token);
       return 'Tokens obtained successfully!';
     } catch (error) {
-      throw new ConflictException('Failed to exchange authorization code for tokens');
+      throw new ConflictException(
+        'Failed to exchange authorization code for tokens',
+      );
     }
   }
 }

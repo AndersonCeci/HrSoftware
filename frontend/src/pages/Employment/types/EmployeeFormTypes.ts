@@ -1,7 +1,17 @@
-import { EmployeeDataType } from "./Employee"; 
+import { EmployeeDataType } from "./Employee";
 
 export type AddEmployeeFormProps = {
 	selectedEmployee?: EmployeeDataType | undefined;
-	onAdd: (newEmployee: EmployeeDataType) => void;
 	onEdit: (editedEmployee: EmployeeDataType) => void;
+	onAdd: (newEmployee: EmployeeDataType) => void;
+};
+
+export type PromotionFormProps = {
+	selectedEmployee?: EmployeeDataType | undefined;
+	onEdit: (editedEmployee: {
+		newPosition: string;
+		newSalary: number;
+		trainedBy: string;
+		dateOfPromotion: string;
+	}) => void;
 };

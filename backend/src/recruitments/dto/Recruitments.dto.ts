@@ -40,15 +40,13 @@ export class CreateRecruitmentDto {
 
   @IsOptional()
   @IsString()
-   cv?: string;
+  cv?: string;
 
   submittedDate: Date;
 
   isDeleted: boolean;
   deleteDate?: Date;
 }
-
-
 
 export class RecruitmentWithFileDto extends CreateRecruitmentDto {
   file?: {

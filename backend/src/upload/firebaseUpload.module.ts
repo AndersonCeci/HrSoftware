@@ -8,8 +8,3 @@ import { ConfigModule } from '@nestjs/config';
   exports: [FirebaseService],
 })
 export class FirebaseModule {}
-
-
-
-
-

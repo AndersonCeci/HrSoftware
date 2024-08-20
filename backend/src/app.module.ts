@@ -7,7 +7,7 @@ import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { SalaryModule } from './modules/salary/salary.module';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './modules/events/events.module';
-import {  RecruitmentsModule } from './recruitments/recruitments.module';
+import { RecruitmentsModule } from './recruitments/recruitments.module';
 import { EmployeeModule } from './employee/employe.module';
 import { LeftModule } from './left/left.module';
 import { AssetsModule } from './assets/assets.module';
@@ -24,11 +24,14 @@ import { FirebaseModule } from './upload/firebaseUpload.module';
 import { UploadService } from './upload/upload.service';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { DayoffModule } from './dayoff/dayoff.module';
+import { InventoryService } from './inventory/inventory.service';
+import { InventoryModule } from './inventory/inventory.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { NotificationsGatewayModule } from './notificationsGateway/notificationgateAway.module';
 import { NotificationsModule } from './notificationsGateway/notification.module';
 
+import { SchedulerModule } from './schedule/scheduler.module';
 
 @Module({
   imports: [
@@ -76,10 +79,10 @@ import { NotificationsModule } from './notificationsGateway/notification.module'
     FirebaseModule,
     TasksModule,
     DayoffModule,
+    InventoryModule,
     GmailApiModule,
     PromotionModule,
-    NotificationsGatewayModule,
-    NotificationsModule,
+    SchedulerModule,
   ],
   controllers: [],
   providers: [AppService, UploadService],

@@ -117,7 +117,7 @@ export class DayoffService {
       .exec();
   }
 
-  async updateAsset(
+  async updateDayOff(
     id: string,
     updateDayOffDto: UpdateDayOffDto,
   ): Promise<DayOff> {

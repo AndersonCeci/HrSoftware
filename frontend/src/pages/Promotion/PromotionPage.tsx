@@ -1,4 +1,4 @@
-import { Typography, Input, Row, Col, Flex } from "antd";
+import { Typography, Input, Flex } from "antd";
 import useHttp from "../../hooks/useHttp";
 import PromoteCard from "./components/PromoteCard";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const PromotionPage: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-      setTableData
+      setTableData,
     );
   }, []);
 
@@ -31,7 +31,7 @@ const PromotionPage: React.FC = () => {
   };
 
   const filteredData = tableData.filter((promote) =>
-    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase())
+    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   if (isLoading) {
@@ -47,20 +47,20 @@ const PromotionPage: React.FC = () => {
       <p style={{ fontWeight: "lighter" }}>
         {t("viewPromotionRecordsForEmployees")}
       </p>
-      <div >
-      <Search
-        placeholder={t("enterEmployeeName")}
-        style={{ width: "100%", marginBottom: "20px", color: "red" }}
-        styles={{ affixWrapper: { backgroundColor: "#e6f4ff" } }}
-        onSearch={handleSearch}
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-        enterButton
-        allowClear
-        size="large"
-      />
+      <div>
+        <Search
+          placeholder={t("enterEmployeeName")}
+          style={{ width: "100%", marginBottom: "20px", color: "red" }}
+          styles={{ affixWrapper: { backgroundColor: "#e6f4ff" } }}
+          onSearch={handleSearch}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          enterButton
+          allowClear
+          size="large"
+        />
       </div>
-      <Flex>
+      <Flex wrap="wrap" justify="center">
         {filteredData.map((promote) => (
           <PromoteCard key={promote._id} promote={promote} />
         ))}
