@@ -29,10 +29,21 @@ export class EmployeeController {
     return this.employeeService.create(createEmployeeDto);
   }
 
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    console.log(id, 'id')
+    const test =this.employeeService.findOne(id);
+    console.log(test, 'test')
+    return test
+
+  }
+
   @Get()
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
+
 
   @Get('/search')
   async search(
@@ -59,10 +70,7 @@ export class EmployeeController {
   //   return this.employeeService.getUsernames();
   // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<Employee | null> {
-    return this.employeeService.findOne(id);
-  }
+ 
 
   @Patch(':id')
   async update(
