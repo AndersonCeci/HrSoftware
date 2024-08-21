@@ -59,7 +59,7 @@ export class InventoryService {
       .exec();
   }
 
-   async assignToEmployee(
+  async assignToEmployee(
     inventoryID: string,
     employeeDetails: string,
     assignDate: string,
@@ -82,30 +82,51 @@ export class InventoryService {
       .populate('employeeDetails');
   }
 
-   async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
-     const foundInventory = await this.inventoryModel.findById(inventoryID);
+  async unassignFromEmployee(inventoryID: string): Promise<Inventory> {
+    const foundInventory = await this.inventoryModel.findById(inventoryID);
 
-     if (!foundInventory) {
-       throw new NotFoundException(
-         `Inventory item with ID ${inventoryID} not found`,
-       );
-     }
+    if (!foundInventory) {
+      throw new NotFoundException(
+        `Inventory item with ID ${inventoryID} not found`,
+      );
+    }
 
-     foundInventory.employeeDetails = null;
-     foundInventory.status = InventoryStatus.Available;
-     foundInventory.assignDate = null;
+    foundInventory.employeeDetails = null;
+    foundInventory.status = InventoryStatus.Available;
+    foundInventory.assignDate = null;
 
-     const updatedInventory = await foundInventory.save();
-     const response = {
-       ...updatedInventory.toObject(),
-       employeeDetails: updatedInventory.employeeDetails,
-     };
+    const updatedInventory = await foundInventory.save();
+    const response = {
+      ...updatedInventory.toObject(),
+      employeeDetails: updatedInventory.employeeDetails,
+    };
     return response as unknown as Inventory;
-   }
-
-  async findAll(): Promise<any> {
-    return this.assetsService.findAll();
   }
+
+  async unnAssignAndRepair(inventoryID: string): Promise<Inventory> {
+    const foundInventory = await this.inventoryModel.findById(inventoryID);
+
+    if (!foundInventory) {
+      throw new NotFoundException(
+        `Inventory item with ID ${inventoryID} not found`,
+      );
+    }
+
+    foundInventory.employeeDetails = null;
+    foundInventory.status = InventoryStatus.OnRepair;
+    foundInventory.assignDate = null;
+
+    const updatedInventory = await foundInventory.save();
+    const response = {
+      ...updatedInventory.toObject(),
+      employeeDetails: updatedInventory.employeeDetails,
+    };
+    return response as unknown as Inventory;
+  }
+
+  // async findAll(): Promise<any> {
+  //   return this.assetsService.findAll();
+  // }
 
   async delete(id: string): Promise<Inventory> {
     const deletedInventory = await this.inventoryModel.findByIdAndDelete(id);
@@ -134,6 +155,9 @@ export class InventoryService {
     id: string,
     updateInventoryDto: UpdateInventoryDto,
   ): Promise<Inventory> {
+    if (updateInventoryDto.status === InventoryStatus.OnRepair) {
+      return await this.unnAssignAndRepair(id);
+    }
     return this.inventoryModel
       .findByIdAndUpdate(id, updateInventoryDto, { new: true })
       .exec();

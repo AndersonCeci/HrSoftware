@@ -1,7 +1,10 @@
-import { IsString, IsNotEmpty, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsOptional, ArrayNotEmpty, IsArray } from 'class-validator';
 
 export class CreateAssetDto {
-  assetName: string;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  assetName: string[];
 
   quantity?: number;
   reserved?: number;
