@@ -35,7 +35,7 @@ export function expandedColumns(
 				const employee = record.employeeDetails;
 				return (
 					<Typography.Text>
-						{employee !== undefined
+						{record.status === AssetStatus.Assigned
 							? getFullName(employee.name, employee.surname)
 							: " Not Assigned"}
 					</Typography.Text>

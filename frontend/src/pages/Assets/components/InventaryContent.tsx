@@ -18,12 +18,8 @@ type InventaryContentProps = {
 };
 
 const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps) => {
-	const {
-		assetData,
-		getAssetData,
-		addAssetTypeHandler,
-		addQuantityHandler,
-	} = useContext(AssetInventaryContext);
+	const { assetData, getAssetData, addAssetTypeHandler, addQuantityHandler } =
+		useContext(AssetInventaryContext);
 	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
 	const [isLoading, , fetchData] = useHttp();

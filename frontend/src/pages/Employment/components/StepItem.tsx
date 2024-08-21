@@ -8,6 +8,7 @@ import { BiSolidError } from "react-icons/bi";
 import FirstPanel from "./FirstPanel";
 import SecondStep from "./SecondStep";
 import FinalStep from "./FinalStep";
+import { t } from "i18next";
 
 type StepItem = {
 	subTitle: string;
@@ -30,17 +31,17 @@ const getStepItems: StepItemProps = (current, setCurrent, form, isLoading, error
 
 	return [
 		{
-			subTitle: "Create Account",
+			subTitle: t("createAccount"),
 			content: <FirstPanel />,
 			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
 		},
 		{
-			subTitle: "Add Information",
+			subTitle: t("addEmployeeInfo"),
 			content: <SecondStep form={form} />,
 			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
 		},
 		{
-			subTitle: "Finalize Account",
+			subTitle: t("finalizeAccount"),
 			content: <FinalStep isSubmitting={isLoading} errorMsg={error} onGoBackBtn={resetOnError} />,
 			icon: current === 2 ? error ? <BiSolidError /> : <FaCircleCheck /> : <CiCircleCheck />,
 		},

@@ -21,7 +21,7 @@ const EmploymentPage: React.FC = () => {
 	const [open, setOpen] = useState(false);
 	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
 	const promoteRef = useRef<any>();
-	const [isLoading, error, sendRequest] = useHttp();
+	const [isLoading, , sendRequest] = useHttp();
 	const [form] = Form.useForm();
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isPromoted, setIsPromoted] = useState(false);
@@ -76,7 +76,6 @@ const EmploymentPage: React.FC = () => {
 
 	function handleDeleteModalOk() {
 		const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
-		console.log(date);
 		sendRequest(
 			{
 				url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
@@ -91,7 +90,6 @@ const EmploymentPage: React.FC = () => {
 				setIsDeleting(false);
 			},
 		);
-		console.log("hsaihsiiha");
 		setIsDeleting(false);
 		setEditedData(undefined);
 	}

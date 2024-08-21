@@ -1,6 +1,6 @@
 import { Col, Form, Row, Flex, Input } from "antd";
 
-import { EuroCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { EuroCircleOutlined } from "@ant-design/icons";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 
 import { getDevRoles } from "../utils/helperFunctions";
@@ -8,16 +8,13 @@ import { useTranslation } from "react-i18next";
 
 const SecondStep = ({ form }: any) => {
 	const { t } = useTranslation();
-	// const form = Form.useFormInstance();
 	
-
 	const position = getDevRoles().map((role) => ({ label: role, value: role }));
 	position.push({ label: "Project Manager", value: "projectManager" });
 
 	const handleUpload = async (file: File) => {
 		const formData = new FormData();
 		formData.append("file", file);
-		console.log(formData, "formDataaa");
 		try {
 			const uploadResponse = await fetch("http://localhost:3000/files/upload", {
 				method: "POST",
@@ -39,8 +36,7 @@ const SecondStep = ({ form }: any) => {
 	};
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		console.log(file, "fileeee");
+		const file = e.target.files?.[0]
 		if (file) {
 			handleUpload(file);
 		}

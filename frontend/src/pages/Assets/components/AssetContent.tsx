@@ -62,7 +62,7 @@ const AssetContent = () => {
     setIsModalVisible(false);
   }
 
-  const columns = getColumns(tableData, handleDataDelete, handleStartEditing);
+  const columns = getColumns(tableData);
 
   const display = error ? (
     <div>{error}</div>
