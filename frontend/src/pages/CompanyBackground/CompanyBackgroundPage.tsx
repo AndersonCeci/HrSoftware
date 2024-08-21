@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Button, Card, Col, Row, Steps, Typography } from "antd";
+import { Avatar, Button, Card, Col, Flex, Row, Steps, Typography } from "antd";
 import "../CompanyBackground/style/CompanyBackground.css";
 import { PiBuildingApartmentLight } from "react-icons/pi";
 import { FaRegUser } from "react-icons/fa";
@@ -8,7 +8,6 @@ import Meta from "antd/es/card/Meta";
 import CEO from "../../assets/ceo.jpeg";
 
 const cardStyle: React.CSSProperties = {
-  width: "900px",
   margin: "auto",
   marginTop: "20px",
   display: "flex",
@@ -17,26 +16,46 @@ const cardStyle: React.CSSProperties = {
   height: "300px", // Adjust height as needed
 };
 
-const bigcardStyle: React.CSSProperties = {
-  width: "1000px",
-  margin: "auto",
-  border: "2px solid #e6eeff",
-  marginTop: "30px",
-  marginBottom: "30px",
-  backgroundColor: "white",
-};
+interface Data {
+  title?: string;
+  description?: string;
+  avatar?: any;
+}
 
 const { Title } = Typography;
 
 const CompanyBackgroundPage: React.FC = () => {
+  const initialData: Data[] = [
+    {
+      title: "Pasho Toska",
+      description: "CEO",
+      avatar: <Avatar className="aboutus-avatar" size={"large"} src={CEO} />,
+    },
+    {
+      title: "Ervin Ziko",
+      description: "Finance Manager",
+      avatar: <Avatar className="aboutus-avatar" size={"large"} src={""} />,
+    },
+    {
+      title: "Erion Domi",
+      description: "Multinational Manager",
+      avatar: <Avatar className="aboutus-avatar" size={"large"} src={""} />,
+    },
+    {
+      title: "Altin Luli",
+      description: "Outsorcing Manager",
+      avatar: <Avatar className="aboutus-avatar" size={"large"} src={""} />,
+    },
+  ];
+
   return (
-    <Card style={bigcardStyle}>
+    <Flex className="company-main-flex">
       <Card style={cardStyle} bordered={false} className="about-us">
         <div className="about-us-inner">
-          <Title style={{ color: "white", marginBottom: "0px" }} level={2}>
+          <Title className="about-us-title" level={2}>
             About Us
           </Title>
-          <p style={{ fontSize: "17px", fontWeight: "lighter" }}>
+          <p className="about-us-para">
             <b>CodeVider</b> is a leading provider of cutting-edge technology
             solutions, dedicated to empowering businesses of all sizes. With a
             focus on innovation and customer success, we strive to transform the
@@ -69,10 +88,10 @@ const CompanyBackgroundPage: React.FC = () => {
         ]}
       />
       <Typography>
-        <Title style={{ marginLeft: "40px" }} level={3}>
+        <Title className="mission-title" style={{ marginLeft: "40px" }} level={3}>
           Our Mission
         </Title>
-        <p style={{ fontSize: "15px", marginLeft: "40px" }}>
+        <p className="mission-para">
           We believe that everyone should have the opportunity to work with a
           great team. That's why we're building a platform that helps companies
           find and hire the best talent, and helps job seekers find the right
@@ -83,59 +102,34 @@ const CompanyBackgroundPage: React.FC = () => {
       <Title style={{ marginLeft: "40px" }} level={3}>
         Boarding Managment
       </Title>
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
-          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
-            <Meta
-              avatar={
-                <Avatar className="aboutus-avatar" size={"large"} src={CEO} />
-              }
-              title="Pasho Toska"
-              description="CEO"
-            />
-            {/* <Button>View Profile</Button> */}
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
-            <Meta
-              avatar={
-                <Avatar className="aboutus-avatar" size={"large"} src={""} />
-              }
-              title="Ervin Ziko"
-              description="Finance Manager"
-            />
-            {/* <Button>View Profile</Button> */}
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
-          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
-            <Meta
-              avatar={
-                <Avatar className="aboutus-avatar" size={"large"} src={""} />
-              }
-              title="Erion Domi"
-              description="Multinational Manager"
-            />
-            {/* <Button>View Profile</Button> */}
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card bordered={false} style={{ width: "400px", marginLeft: "40px" }}>
-            <Meta
-              avatar={
-                <Avatar className="aboutus-avatar" size={"large"} src={""} />
-              }
-              title="Altin Luli"
-              description="Outsorcing Manager"
-            />
-            {/* <Button>View Profile</Button> */}
-          </Card>
-        </Col>
-      </Row>
-    </Card>
+      <Flex className="ceo-cards">
+        <Row gutter={[16, 16]}>
+          {initialData.map((data) => {
+            return (
+              <Col
+                span={12}
+                xs={24}
+                sm={24}
+                md={12} 
+                lg={12} 
+                xl={12}
+              >
+                <Card
+                  bordered={false}
+                  style={{ width: "400px", marginLeft: "40px" }}
+                >
+                  <Meta
+                    avatar={data?.avatar}
+                    title={data?.title}
+                    description={data?.description}
+                  />
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </Flex>
+    </Flex>
   );
 };
 

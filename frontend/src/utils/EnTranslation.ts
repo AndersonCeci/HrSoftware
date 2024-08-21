@@ -1,5 +1,6 @@
 export const EnTranslation = {
   AddNew: "Add New",
+  addEvent: "Add Event",
   Areyousureyouwanttodeclinethisrequest:
     "Are you sure you want to decline this request",
   activestatus: "Active Employee",
@@ -85,4 +86,9 @@ export const EnTranslation = {
   holidayEntitlement: "Holiday Entitlement",
   currentSalary: "Current Salary",
   dailyQuote: "Daily qoute",
+  reminders: "Reminders",
+  searchAReminder: "Search a reminder",
+  addNewReminder: "Add new reminder",
+  thisMonth: "This Month",
+  upcoming: "Upcoming",
 };

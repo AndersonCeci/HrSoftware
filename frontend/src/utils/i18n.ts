@@ -12,15 +12,21 @@ const resources = {
   },
 };
 
+const savedLanguage = localStorage.getItem('i18nextLng') || 'en';
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en",
+  lng: savedLanguage, 
 
   keySeparator: false,
 
   interpolation: {
     escapeValue: false,
   },
+});
+
+i18n.on('languageChanged', (lng) => {
+  localStorage.setItem('i18nextLng', lng);
 });
 
 export default i18n;

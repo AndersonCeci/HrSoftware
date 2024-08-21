@@ -165,51 +165,43 @@ const TaskGrid: React.FC = () => {
     setIsEditable(false);
   };
 
-  return (
-    <div className="container">
-      <div className="header-container">
-        <h1 className="task-title">{t(`taskList`)}</h1>
-        <Search
-          onChange={onSearch}
-          placeholder="Search a task"
-          allowClear
-          style={{ width: 300 }}
-        />
-        <Tooltip placement="bottom" title="Add new">
-          <button onClick={onAddTask} className="add-btn">
-            <PlusOutlined />
-          </button>
-        </Tooltip>
-      </div>
-      <Table
-        pagination={{ pageSize: 10 }}
-        columns={columns}
-        dataSource={final}
-        locale={{
-          emptyText: "No tasks available",
-        }}
-      />
-      <Modal
-        footer={null}
-        className="Edit-modal"
-        title="Edit Task"
-        open={isEditable}
-        onCancel={() => {
-          setIsEditable(false);
-          setEditedTask({});
-        }}
-      >
-        <Form form={form} layout="vertical" onFinish={handleEditSubmit}>
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[
-              { required: true, message: "Please enter the title" },
-              { max: 100 },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+	return (
+		<div className="container">
+			<div className="header-container">
+				<h1 className="task-title">{t(`reminders`)}</h1>
+				<Search onChange={onSearch} placeholder={t("searchAReminder")} allowClear style={{ width: 300 }} />
+				<Tooltip placement="bottom" title="Add new">
+					<button onClick={onAddTask} className="add-btn">
+						<PlusOutlined />
+					</button>
+				</Tooltip>
+			</div>
+			<Table
+				pagination={{ pageSize: 10 }}
+				columns={columns}
+				dataSource={final}
+				locale={{
+					emptyText: "No tasks available",
+				}}
+			/>
+			<Modal
+				footer={null}
+				className="Edit-modal"
+				title="Edit Task"
+				open={isEditable}
+				onCancel={() => {
+					setIsEditable(false);
+					setEditedTask({});
+				}}
+			>
+				<Form form={form} layout="vertical" onFinish={handleEditSubmit}>
+					<Form.Item
+						label="Title"
+						name="title"
+						rules={[{ required: true, message: "Please enter the title" }, { max: 100 }]}
+					>
+						<Input />
+					</Form.Item>
 
           <Form.Item label="Description" name="description">
             <Input />
@@ -258,7 +250,7 @@ const TaskGrid: React.FC = () => {
         onCancel={() => {
           setIsVisible(false);
         }}
-        title="Add New Task"
+        title={t("addNewReminder")}
       >
         <Form form={form2} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

@@ -13,7 +13,7 @@ type NoDataResultProps = {
 const NoDataResult = ({ onOpenModal, isError = false }: NoDataResultProps) => {
   const msg = isError
     ? "Something went wrong!"
-    : "There are no events for this month untill now";
+    : "There are no events for this month.";
 
   return (
     <Result
@@ -26,15 +26,15 @@ const NoDataResult = ({ onOpenModal, isError = false }: NoDataResultProps) => {
           alt=""
         />
       }
-      extra={
-        <Button
-          type={ButtonType.PRIMARY}
-          size={ButtonSize.LARGE}
-          onClick={onOpenModal}
-        >
-          Add Event
-        </Button>
-      }
+      // extra={
+      //   <Button
+      //     type={ButtonType.PRIMARY}
+      //     size={ButtonSize.LARGE}
+      //     onClick={onOpenModal}
+      //   >
+      //     Add Event
+      //   </Button>
+      // }
     />
   );
 };

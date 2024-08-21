@@ -1,4 +1,4 @@
-import { Card, Col, ConfigProvider, Flex, Row, Tag } from "antd";
+import { Card, ConfigProvider } from "antd";
 import { PromoteType } from "../types/PromoteType";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import { useEffect, useState } from "react";

@@ -58,40 +58,40 @@ const EventPage: React.FC = () => {
 
   const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
-  return !isLoading ? (
-    <main>
-      <Modal
-        title="Add Event"
-        isOpen={isModalOpen}
-        onCancel={handleCloseModal}
-        onOk={() => {
-          formRef.current.submit();
-        }}
-      >
-        <AddEventForm ref={formRef} onAdd={handleAddEvent} />
-      </Modal>
-      <TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
-      {error ? (
-        <NoDataResult onOpenModal={handleOpenModal} isError />
-      ) : (
-        <>
-          <EventMenu
-            title={"This Month"}
-            EventList={sortByDate(thsMonth)}
-            displayNoResult
-            onOpenModal={handleOpenModal}
-          />
-          <EventMenu
-            title={"Near Future"}
-            EventList={sortByDate(nextMonth)}
-            onOpenModal={handleOpenModal}
-          />
-        </>
-      )}
-    </main>
-  ) : (
-    <Loader />
-  );
+	return !isLoading ? (
+		<main>
+			<Modal
+				title={t("addEvent")}
+				isOpen={isModalOpen}
+				onCancel={handleCloseModal}
+				onOk={() => {
+					formRef.current.submit();
+				}}
+			>
+				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
+			</Modal>
+			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
+			{error ? (
+				<NoDataResult onOpenModal={handleOpenModal} isError />
+			) : (
+				<>
+					<EventMenu
+						title={t("thisMonth")}
+						EventList={sortByDate(thsMonth)}
+						displayNoResult
+						onOpenModal={handleOpenModal}
+					/>
+					<EventMenu
+						title={t("upcoming")}
+						EventList={sortByDate(nextMonth)}
+						onOpenModal={handleOpenModal}
+					/>
+				</>
+			)}
+		</main>
+	) : (
+		<Loader />
+	);
 };
 
 export default EventPage;
