@@ -11,12 +11,24 @@ import { Query } from 'express-serve-static-core';
 export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
-  async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-    const createAsset = new this.assetModel(createAssetDto);
-    return createAsset.save();
+  // async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
+  //   const createAsset = new this.assetModel(createAssetDto);
+  //   return createAsset.save();
+  // }
+  async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
+    const { assetName, isDeleted = false, deleteDate } = createAssetDto;
+
+    const inventoryEntries = assetName.map((code) => ({
+      assetName: code,
+      isDeleted,
+      deleteDate,
+    }));
+
+      return await this.assetModel.create(inventoryEntries);
+
   }
 
-  async findAll(query:Query): Promise<Asset[]> {
+  async findAll(query: Query): Promise<Asset[]> {
     const page = Number(query.page) || 1;
     const resPerPage = 10;
     const data = await this.assetModel
@@ -38,9 +50,9 @@ export class AssetsService {
         {
           $lookup: {
             from: 'employees',
-            localField: 'inventories.employeeDetails', 
+            localField: 'inventories.employeeDetails',
             foreignField: '_id',
-            as: 'inventories.employeeDetails', 
+            as: 'inventories.employeeDetails',
           },
         },
         {
@@ -101,7 +113,7 @@ export class AssetsService {
       .exec();
   }
 }
-// {
+        // {
         //   $skip: resPerPage * page,
         // },
         // {
