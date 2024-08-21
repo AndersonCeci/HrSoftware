@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsDateString } from 'class-validator';
+import { streetviewpublish_v1 } from 'googleapis';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Employee, Position } from 'src/employee/schema/employe.schema';
 
@@ -27,13 +29,16 @@ export class Promotion extends Document {
   newSalary: number;
 
   @Prop({ required: true })
-  dateOfPromotion: Date;
+  dateOfPromotion: string;
 
   @Prop({ required: true })
   trainedBy: string;
 
   @Prop({ default: false })
   isTeamLeader: boolean;
+
+  @Prop()
+  dateOfHire: string;
 }
 
 export const PromotionSchema = SchemaFactory.createForClass(Promotion);

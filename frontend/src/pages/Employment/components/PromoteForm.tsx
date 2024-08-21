@@ -31,7 +31,7 @@ const PromoteForm = forwardRef(
         newSalary: values.salary,
         trainedBy: values.trainedBy,
         dateOfPromotion: dayjs(values.dateOfPromotion).format("DD/MM/YYYY"),
-        isTeamLeader, // Include isTeamLeader
+        isTeamLeader,
       };
       onEdit(valuesToSubmit);
     };
