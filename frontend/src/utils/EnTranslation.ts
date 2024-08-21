@@ -68,7 +68,7 @@ export const EnTranslation = {
   taskAction: "Action",
   taskDate: "Due Date",
   taskDescription: "Description",
-  taskList: "Task List",
+  taskList: "Reminder",
   taskStatus: "Status",
   taskTitle: "Title",
   teamLeader: "Team Leader",

@@ -13,9 +13,9 @@ interface NotificationItem {
   path: string;
 }
 
-const employID = JSON.parse( localStorage.getItem( "userData" ) || "{}" ).employID;
+const employID = JSON.parse(localStorage.getItem("userData") || "{}").employID;
 
-console.log(employID, 'employId')
+console.log(employID, "employId");
 
 const API = import.meta.env.REACT_APP_NOTIFICATIONS_API;
 
@@ -38,15 +38,12 @@ const NotificationContent: React.FC = () => {
       });
   };
 
-
   useEffect(() => {
     appendData();
   }, [employID]);
 
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
-   
-      appendData();
-    
+    appendData();
   };
 
   const changeNotificationStatus = (notificationId: string) => {

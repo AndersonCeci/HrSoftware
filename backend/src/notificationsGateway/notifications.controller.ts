@@ -9,31 +9,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
-import { Notifications } from './notification.schema';
+import { Notifications, NotificationStatus } from './notification.schema';
 
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @Get()
-  getNotifications ( @Query( 'userId' ) userId?: string ): Promise<Notifications[]>
-  {
-    const userNotifications =
-      this.notificationsService.getNotificationsByUser( userId );
-    console.log(userNotifications, 'userNotificatios')
-    return userNotifications;
+  getNotifications(
+    @Query('userId') userId?: string,
+    @Query('status') status?: NotificationStatus,
+  ): Promise<Notifications[]> {
+    return this.notificationsService.getNotificationsByUser(userId);
   }
-
-  // @Get('/:userId')
-  // getNotifications(@Query('userId') userId?: string): Promise<Notifications[]> {
-  //   console.log(userId, 'userIDDD');
-  //   if (userId) {
-  //     const userNotifications =
-  //       // this.notificationsService.getUserNotifications(userId) &&
-  //       this.notificationsService.getNotifications();
-  //     return userNotifications;
-  //   }
-  // }
 
   @Post()
   createNotification(@Body() createdNotifications: CreateNotificationDto) {

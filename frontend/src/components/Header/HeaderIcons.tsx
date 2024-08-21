@@ -6,6 +6,7 @@ import "../Notifications/NotificationStyle.css";
 import NotificationContent from "../Notifications/NotificationContent";
 import { BellOutlined } from "@ant-design/icons";
 
+
 const logout = () => {
   localStorage.removeItem("userData");
   console.log("Cleared?", localStorage.getItem("token"));
@@ -16,7 +17,7 @@ const HeaderIcons: React.FC = () => {
 
   const handleOpenChange = () => {
     setOpen(!open);
-  };
+  }
 
   const navigationLinkList = [
     {

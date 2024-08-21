@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateNotificationDto } from './dto/CreateNotificationDto';
-import { Notifications } from './notification.schema';
+import { Notifications, NotificationStatus } from './notification.schema';
 
 @Injectable()
 export class NotificationsService {
@@ -21,17 +21,15 @@ export class NotificationsService {
 
     if (userId) {
       filter = {
-        $or: [
-          { userId:userId }, 
-          { userId: null }, 
-        ],
+        $or: [{ userId: userId }, { userId: null }],
       };
     }
+
     return this.notificationModel.find(filter).exec();
   }
 
   async createNotification(createNotificationDto: CreateNotificationDto) {
-    const notification = new this.notificationModel( createNotificationDto );
+    const notification = new this.notificationModel(createNotificationDto);
     return notification.save();
   }
 
@@ -42,6 +40,4 @@ export class NotificationsService {
       { new: true },
     );
   }
-
-
 }

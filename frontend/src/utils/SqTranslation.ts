@@ -68,7 +68,7 @@ export const SqTranslation = {
   taskStatus: "Statusi",
   taskDate: "Data",
   taskDescription: "Pershkrimi",
-  taskList: "Lista e Detyrave",
+  taskList: "Kujtesa",
   taskTitle: "Titulli",
   teamLeader: "Lideri i ekipit",
   trainedBy: "Trajnuar nga",

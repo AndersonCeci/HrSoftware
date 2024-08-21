@@ -53,6 +53,12 @@ export class Employee extends Document {
   phoneNumber: string;
 
   @Prop()
+  fullName: string;
+
+  @Prop()
+  birthDay: Date;
+
+  @Prop()
   @IsOptional()
   teamLeader: string;
 

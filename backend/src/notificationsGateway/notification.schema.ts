@@ -3,6 +3,11 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from 'src/users/schemas/user.schema';
 
 
+export enum NotificationStatus {
+  NOTIFICATION = 'notification',
+  REMINDER = 'reminder',
+}
+
 @Schema()
 export class Notifications extends Document {
   @Prop({ required: true })
@@ -19,6 +24,9 @@ export class Notifications extends Document {
 
   @Prop()
   path: string;
+
+  @Prop({ enum: NotificationStatus, default: NotificationStatus.NOTIFICATION })
+  status: NotificationStatus;
 }
 
 

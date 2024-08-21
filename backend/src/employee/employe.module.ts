@@ -6,6 +6,7 @@ import { EmployeeService } from './employe.service';
 import { UsersModule } from 'src/users/users.module';
 import { UserService } from 'src/users/users.service';
 import { PromotionModule } from 'src/promotion/promotion.module';
+import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PromotionModule } from 'src/promotion/promotion.module';
       },
     ]),
     UsersModule,
+    NotificationsModule
   ],
   providers: [EmployeeService],
   controllers: [EmployeeController],
