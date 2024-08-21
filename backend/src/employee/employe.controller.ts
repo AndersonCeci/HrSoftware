@@ -34,7 +34,6 @@ export class EmployeeController {
     return this.employeeService.getTeamLeaders();
   }
 
-
   @Get('/search')
   async search(
     @Query('name') name?: string,
@@ -55,22 +54,16 @@ export class EmployeeController {
     }
   }
 
-
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log(id, 'id')
-    const test =this.employeeService.findOne(id);
-    console.log(test, 'test')
-    return test
-
+    const test = this.employeeService.findOne(id);
+    return test;
   }
 
   @Get()
   findAll(): Promise<Employee[]> {
     return this.employeeService.findAll();
   }
-
 
   @Patch(':id')
   async update(

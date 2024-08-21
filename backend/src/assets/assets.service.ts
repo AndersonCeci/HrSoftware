@@ -5,7 +5,6 @@ import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
 
-
 @Injectable()
 export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
@@ -35,9 +34,9 @@ export class AssetsService {
         {
           $lookup: {
             from: 'employees',
-            localField: 'inventories.employeeDetails', 
+            localField: 'inventories.employeeDetails',
             foreignField: '_id',
-            as: 'inventories.employeeDetails', 
+            as: 'inventories.employeeDetails',
           },
         },
         {

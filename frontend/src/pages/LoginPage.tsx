@@ -15,10 +15,6 @@ const LoginPage: React.FC = () => {
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
 
-  const onFinish = (values: unknown) => {
-    console.log("Received values of form:", values);
-  };
-
   // const handleSubmit = async (e: React.FormEvent) => {
   // 	e.preventDefault();
   // 	try {
@@ -52,7 +48,6 @@ const LoginPage: React.FC = () => {
 
   function handleSubmit() {
     if (!username || !password) {
-      console.log("Please fill in all fields");
       return;
     }
 
@@ -64,7 +59,6 @@ const LoginPage: React.FC = () => {
         body: { username, password },
       },
       (responseData: any) => {
-        console.log(responseData);
         const userData = {
           token: responseData.accessToken,
           username: responseData.username,
@@ -82,7 +76,6 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
-    console.log(userData);
     if (userData) {
       navigate("/dashboard");
     }

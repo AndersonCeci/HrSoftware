@@ -19,7 +19,7 @@ export const useRecruitmentContext = () => {
   const context = useContext(RecruitmentContext);
   if (context === null) {
     throw new Error(
-      "useRecruitmentContext must be used within a RecruitmentProvider"
+      "useRecruitmentContext must be used within a RecruitmentProvider",
     );
   }
   return context;

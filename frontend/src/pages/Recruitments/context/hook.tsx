@@ -11,7 +11,7 @@ export const useRecruitment = () => {
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
   const [editingRecord, setEditingRecord] = useState<ApplicantProps | null>(
-    null
+    null,
   );
   const [drawerState, setDrawerState] = useState<boolean>(false);
   const [isLoading, , sendRequest] = useHttp();
@@ -31,7 +31,7 @@ export const useRecruitment = () => {
     } catch (error) {
       if (error instanceof AxiosError)
         message.error(
-          error.response?.data.errorDetails.message || error.message
+          error.response?.data.errorDetails.message || error.message,
         );
       message.error("Failed to retrieve applicant");
     }
@@ -40,7 +40,7 @@ export const useRecruitment = () => {
   const handleDelete = (id: string) => {
     sendRequest(useHttp.deleteRequestHelper(`${API}/${id}`));
     setTableData((prevData) =>
-      prevData.filter((item: ApplicantProps) => item._id !== id)
+      prevData.filter((item: ApplicantProps) => item._id !== id),
     );
   };
 
@@ -51,7 +51,7 @@ export const useRecruitment = () => {
 
   const handleEdit = (newData: ApplicantProps) => {
     setTableData((prevData) =>
-      prevData.map((item) => (item._id === newData._id ? newData : item))
+      prevData.map((item) => (item._id === newData._id ? newData : item)),
     );
     setIsEditModalVisible(false);
   };
@@ -68,7 +68,6 @@ export const useRecruitment = () => {
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    console.log(formData, "formDataaa");
     try {
       const uploadResponse = await fetch("http://localhost:3000/files/upload", {
         method: "POST",
@@ -91,7 +90,6 @@ export const useRecruitment = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file, "fileeee");
     if (file) {
       handleUpload(file);
     }

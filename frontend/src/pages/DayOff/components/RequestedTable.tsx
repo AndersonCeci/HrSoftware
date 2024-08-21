@@ -38,7 +38,6 @@ const RequestedTable = () => {
         method: "PATCH",
       },
       () => {
-        console.log("id", id, "was approved");
         setData((prev) =>
           prev.map((item) => {
             if (item._id === id) {
@@ -64,7 +63,6 @@ const RequestedTable = () => {
         method: "DELETE",
       },
       () => {
-        console.log("id", id, "was deleted");
         setData((prev) => prev.filter((item) => item._id !== id));
       },
     );
@@ -72,18 +70,15 @@ const RequestedTable = () => {
 
   const onDecline = (record: RequestedDataType) => {
     setIsModalOpen(true);
-    console.log("record", record);
     setSelectedRecord(record);
     // setData((prevData) => prevData.filter((item) => item.id !== record.id))
   };
 
   function handleAddNew(data: RequestedDataType) {
-    console.log("data", data);
     setData((prev) => [...prev, data]);
   }
 
   function handleAddNewRequest(newRequest: RequestedDataType) {
-    console.log("RRERERER", newRequest);
     fetchData(
       {
         url: API,

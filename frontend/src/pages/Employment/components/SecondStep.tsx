@@ -8,37 +8,37 @@ import { useEffect, useState } from "react";
 
 const TEAM_LEADERS = import.meta.env.REACT_APP_TEAM_LEADERS_SEARCH_API;
 
-
 const SecondStep = ({ form }: any) => {
-	// const form = Form.useFormInstance();
+  // const form = Form.useFormInstance();
   const { t } = useTranslation();
   const [file, setFile] = useState<File | undefined>(undefined);
-  const [selectTeamLeader, setSelectTeamLeader] = useState<any[]>([])
+  const [selectTeamLeader, setSelectTeamLeader] = useState<any[]>([]);
   const position = getDevRoles().map((role) => ({ label: role, value: role }));
   position.push({ label: "Project Manager", value: "projectManager" });
 
- useEffect(() => {
-  const fetchTeamLeaders = async () => {
-    try {
-      const response = await fetch(TEAM_LEADERS);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch team leaders: ${response.statusText}`);
+  useEffect(() => {
+    const fetchTeamLeaders = async () => {
+      try {
+        const response = await fetch(TEAM_LEADERS);
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch team leaders: ${response.statusText}`,
+          );
+        }
+
+        const data = await response.json();
+        const teamLeaderOptions = data.map((leader: any) => ({
+          label: `${leader.name} ${leader.surname}`,
+          value: leader._id,
+        }));
+        setSelectTeamLeader(teamLeaderOptions);
+      } catch (error) {
+        console.error("Error fetching team leaders:", error);
       }
+    };
 
-      const data = await response.json();
-      const teamLeaderOptions = data.map((leader: any) => ({
-        label: `${leader.name} ${leader.surname}`,
-        value: leader._id, 
-      }));
-      setSelectTeamLeader(teamLeaderOptions);
-    } catch (error) {
-      console.error("Error fetching team leaders:", error);
-    }
-  };
-
-  fetchTeamLeaders();
-}, []);
-
+    fetchTeamLeaders();
+  }, []);
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
