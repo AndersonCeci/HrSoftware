@@ -4,9 +4,12 @@ import {
   IsString,
   IsEnum,
   Matches,
+  IsArray,
+  IsOptional,
 } from 'class-validator';
 import { Role } from 'src/users/schemas/user.schema';
 import { Position } from '../schema/employe.schema';
+import { Types } from 'mongoose';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -16,7 +19,6 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
 
   // @IsNotEmpty()
   // @IsString()
@@ -43,8 +45,9 @@ export class CreateEmployeeDto {
   })
   gender?: string;
 
-  @IsString()
-  teamLeader: string;
+  @IsArray()
+  @IsOptional()
+  teamLeaders?: Types.ObjectId[];
 
   @IsString()
   contract: string;

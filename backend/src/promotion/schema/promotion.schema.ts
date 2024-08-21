@@ -31,6 +31,9 @@ export class Promotion extends Document {
 
   @Prop({ required: true })
   trainedBy: string;
+
+  @Prop({ default: false })
+  isTeamLeader: boolean;
 }
 
 export const PromotionSchema = SchemaFactory.createForClass(Promotion);

@@ -15,6 +15,7 @@ export class PromotionController {
       newPosition: Position;
       newSalary: number;
       trainedBy: string;
+      isTeamLeader: boolean; // Add this field
     },
   ) {
     return this.promotionService.promoteEmployee(
@@ -22,6 +23,7 @@ export class PromotionController {
       promotionData.newPosition,
       promotionData.newSalary,
       promotionData.trainedBy,
+      promotionData.isTeamLeader,
     );
   }
 
