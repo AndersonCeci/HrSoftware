@@ -1,6 +1,5 @@
-import {IsEnum, IsOptional, IsString } from "class-validator";
-import { InventoryStatus } from "../schemas/Inventory.schema";
-
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { InventoryStatus } from '../schemas/Inventory.schema';
 
 export class AssignEmployeeDto {
   @IsString()

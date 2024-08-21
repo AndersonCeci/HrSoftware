@@ -9,66 +9,66 @@ import { PromoteType } from "./types/PromoteType";
 const { Search } = Input;
 
 const PromotionPage: React.FC = () => {
-	const { t } = useTranslation();
-	const [isLoading, error, sendRequest] = useHttp();
-	const [tableData, setTableData] = useState<PromoteType[]>([]);
-	const [searchValue, setSearchValue] = useState<string>("");
+  const { t } = useTranslation();
+  const [isLoading, error, sendRequest] = useHttp();
+  const [tableData, setTableData] = useState<PromoteType[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
 
-	useEffect(() => {
-		sendRequest(
-			{
-				url: `http://localhost:3000/promotions/promotion-history`,
-				headers: {
-					"Content-Type": "application/json",
-				},
-			},
-			(response) => {
-				setTableData(response);
-			},
-		);
-	}, []);
+  useEffect(() => {
+    sendRequest(
+      {
+        url: `http://localhost:3000/promotions/promotion-history`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      (response) => {
+        setTableData(response);
+      },
+    );
+  }, []);
 
-	console.log(tableData);
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
 
-	const handleSearch = (value: string) => {
-		setSearchValue(value);
-	};
+  const filteredData = tableData.filter((promote) =>
+    promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase()),
+  );
 
-	const filteredData = tableData.filter((promote) =>
-		promote?.employeeName?.toLowerCase().includes(searchValue.toLowerCase()),
-	);
+  if (isLoading) {
+    return <Loader />;
+  }
+  if (error) {
+    return <div>Something went wrong!!</div>;
+  }
 
-	if (isLoading) {
-		return <Loader />;
-	}
-	if (error) {
-		return <div>Something went wrong!!</div>;
-	}
-
-	return (
-		<div>
-			<Typography.Title level={3}>{t("promotions")}</Typography.Title>
-			<p style={{ fontWeight: "lighter" }}>{t("viewPromotionRecordsForEmployees")}</p>
-			<div>
-				<Search
-					placeholder={t("enterEmployeeName")}
-					style={{ width: "100%", marginBottom: "20px", color: "red" }}
-					styles={{ affixWrapper: { backgroundColor: "#e6f4ff" } }}
-					onSearch={handleSearch}
-					value={searchValue}
-					onChange={(e) => setSearchValue(e.target.value)}
-					enterButton
-					allowClear
-					size="large"
-				/>
-			</div>
-			<Flex wrap="wrap" justify="center">
-				{filteredData.map((promote) => (
-					<PromoteCard key={promote._id} promote={promote} />
-				))}
-			</Flex>
-		</div>
-	);
+  return (
+    <div>
+      <Typography.Title level={3}>{t("promotions")}</Typography.Title>
+      <p style={{ fontWeight: "lighter" }}>
+        {t("viewPromotionRecordsForEmployees")}
+      </p>
+      <div>
+        <Search
+          placeholder={t("enterEmployeeName")}
+          style={{ width: "100%", marginBottom: "20px", color: "red" }}
+          styles={{ affixWrapper: { backgroundColor: "#e6f4ff" } }}
+          onSearch={handleSearch}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          enterButton
+          allowClear
+          size="large"
+        />
+      </div>
+      <Flex wrap="wrap" justify="center">
+        {filteredData.map((promote) => (
+          <PromoteCard key={promote._id} promote={promote} />
+        ))}
+      </Flex>
+    </div>
+  );
 };
 
 export default PromotionPage;

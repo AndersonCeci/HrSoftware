@@ -36,11 +36,10 @@ export class PromotionService {
       dateOfPromotion: dateOfPromotion,
       trainedBy: trainedBy,
       isTeamLeader: isTeamLeader,
-      dateOfHire: employee.startingDate
+      dateOfHire: employee.startingDate,
     });
 
     await promotion.save();
-    console.log('Promotion created:', promotion);
 
     employee.position = newPosition;
     employee.salary = newSalary;
@@ -54,7 +53,6 @@ export class PromotionService {
     }
 
     await employee.save();
-    console.log('Updated employee:', employee);
 
     return { employee, promotion };
   }

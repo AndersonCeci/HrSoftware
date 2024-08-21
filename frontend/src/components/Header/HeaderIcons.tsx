@@ -2,14 +2,8 @@ import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
 import { Avatar, Badge } from "antd";
 
-// const logout = () => {
-//   localStorage.removeItem("userData");
-//   console.log("Cleared?", localStorage.getItem("token"));
-// };
-
 const logout = () => {
   localStorage.removeItem("userData");
-  console.log("Cleared?", localStorage.getItem("token"));
 };
 
 const navigationLinkList = [

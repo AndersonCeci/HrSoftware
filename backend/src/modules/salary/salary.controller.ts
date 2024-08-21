@@ -34,7 +34,6 @@ export class SalaryController {
     if (errors.length > 0) {
       throw new BadRequestException('Validation failed');
     }
-    console.log(dto);
     return await this.salaryService.create(dto);
   }
 
@@ -66,7 +65,6 @@ export class SalaryController {
     if (errors.length > 0) {
       throw new BadRequestException('Validation failed');
     }
-    console.log(dto);
     return await this.salaryService.updateSalary(salaryID, dto);
   }
 

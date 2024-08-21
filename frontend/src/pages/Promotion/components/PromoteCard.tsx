@@ -19,7 +19,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   const [isLoading, error, sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}"
+    localStorage.getItem("userData") || "{}",
   ).employID;
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -51,7 +51,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   const formatDate = (dateString?: string) => {
     if (!dateString) return "No date provided";
     const formattedDate = moment(dateString, "DD/MM/YYYY", true).format(
-      "DD/MM/YYYY"
+      "DD/MM/YYYY",
     );
     return formattedDate === "Invalid date"
       ? "Invalid date format"

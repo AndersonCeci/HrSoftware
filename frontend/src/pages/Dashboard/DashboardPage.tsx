@@ -9,10 +9,10 @@ import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
 import { Content } from "antd/es/layout/layout";
 
 export interface Data {
-	noEmployee: number;
-	status: string;
-	color: string;
-	path: string;
+  noEmployee: number;
+  status: string;
+  color: string;
+  path: string;
 }
 
 const DashboardPage: React.FC = () => {
@@ -37,8 +37,8 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-// const DELETED_API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
-// const EMPLOYEE_API = import.meta.env.REACT_APP_EMPLOYEE_API;
+  // const DELETED_API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
+  // const EMPLOYEE_API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
   return (
     <Content
@@ -53,8 +53,8 @@ const DashboardPage: React.FC = () => {
       {/* <Row gutter={[16, 16]} className="dashboard-main">
         <Col span={12}>
           <WelcomeGrid initialData={initialData} /> */}
-          <EmployeeWelcomeGrid/>
-        {/* </Col>
+      <EmployeeWelcomeGrid />
+      {/* </Col>
         <Col span={12}>
           <CalendarGrid />
         </Col>

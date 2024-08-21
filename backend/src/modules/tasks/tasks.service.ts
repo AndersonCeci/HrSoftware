@@ -15,7 +15,6 @@ export class TasksService {
       const createdTask = new this.taskModel(createTaskDto);
       return await createdTask.save();
     } catch (error) {
-      // throw new Error('Failed to create task');
       console.log(error);
     }
   }

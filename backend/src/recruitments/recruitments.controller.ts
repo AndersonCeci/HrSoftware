@@ -22,7 +22,6 @@ export class RecruitmentsController {
 
   @Post()
   createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
-    console.log(createRecruitmentDto);
     return this.recruitmentService.createRecruitment(createRecruitmentDto);
   }
 
@@ -30,7 +29,6 @@ export class RecruitmentsController {
   async getRecruitmentById(@Query('id') id?: string) {
     const data =
       await this.recruitmentService.getRecruitmentWithInterviewerDetails();
-    // console.log(data);
     return data;
     // if (id) {
     //   const isValid = Types.ObjectId.isValid(id);

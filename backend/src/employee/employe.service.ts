@@ -133,7 +133,6 @@ export class EmployeeService {
     }
   }
   async getTeamLeaders(): Promise<Employee[]> {
-
     const teamLeaders = await this.employeeModel
       .aggregate([
         {

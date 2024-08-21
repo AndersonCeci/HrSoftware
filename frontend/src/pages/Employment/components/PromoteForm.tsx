@@ -74,7 +74,7 @@ const PromoteForm = forwardRef(
         </Form>
       </div>
     );
-  }
+  },
 );
 
 export default PromoteForm;
