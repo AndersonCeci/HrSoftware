@@ -97,5 +97,5 @@ export const SqTranslation = {
 	finish: "Përfundo",
 	sucessSubmit: "Formulari juaj është dorëzuar",
 	noContrat: "Kontrata nuk është ngarkuar",
-	yesContract: "Shkarko Kontratën",
+	yesContract: "Shiko Kontratën",
 };
