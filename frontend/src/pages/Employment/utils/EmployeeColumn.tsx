@@ -67,7 +67,7 @@ export function getColumns(
 			dataIndex: "position",
 			key: "position",
 			filters: getAllUniqueValues(tableData, "position"),
-			onFilter: (value, record) => record.position.indexOf(value) === 0,
+			onFilter: (value, record) => record.position.includes(value),
 		}),
 		createTableColumns({
 			title: t("salary"),

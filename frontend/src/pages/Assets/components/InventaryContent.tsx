@@ -41,16 +41,13 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 	}
 
 	function handleAddAssetType(values: string[]) {
-		const valueToSend = values[0].charAt(0).toUpperCase() + values[0].slice(1).toLowerCase();
-		fetchData(
-			useHttp.postRequestHelper(ASSETS_API, {
-				assetName: valueToSend,
-			}),
-			(response) => {
-				addAssetTypeHandler(response);
-				setIsModalOpen(false);
-			},
+		const valueToSend = values.map(
+			(value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
 		);
+		fetchData(useHttp.postRequestHelper(ASSETS_API, { assetName: valueToSend }), (response) => {
+			addAssetTypeHandler(response);
+			setIsModalOpen(false);
+		});
 	}
 
 	function handleAddQuantity(values: string[], assetType: string) {

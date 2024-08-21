@@ -4,7 +4,7 @@ import { AssetDatatype, InventaryDataType } from "../types/AssetsDataType";
 export const AssetInventaryContext = createContext({
 	assetData: [] as AssetDatatype[],
 	getAssetData: (_assets: AssetDatatype[]) => {},
-	addAssetTypeHandler: (_newAssets: AssetDatatype) => {},
+	addAssetTypeHandler: (_newAssets: AssetDatatype[]) => {},
 	addQuantityHandler: (_values: InventaryDataType[], _assetType: string) => {},
 	updateInventaryItemHandler: (
 		_updatedRecord: InventaryDataType,
@@ -23,17 +23,18 @@ export default function AssetInventaryContextProvider({ children }: { children: 
 		setAssetsData(assets);
 	}
 
-	function addAssetTypeHandler(newAssets: AssetDatatype) {
-		setAssetsData((prev) => [
-			...prev,
-			{
-				...newAssets,
+	function addAssetTypeHandler(newAssets: AssetDatatype[]) {
+		const newAssetsData = newAssets.map((asset) => {
+			return {
+				...asset,
 				quantity: 0,
 				onRepair: 0,
 				reserved: 0,
 				inventories: [],
-			},
-		]);
+			};
+		});
+
+		setAssetsData((prev) => [...prev, ...newAssetsData]);
 	}
 
 	function addQuantityHandler(newAssets: InventaryDataType[], assetType: string) {

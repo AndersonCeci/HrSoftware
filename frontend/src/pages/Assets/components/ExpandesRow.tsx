@@ -30,7 +30,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			}),
 			(response) => {
 				updateInventaryItemHandler(response, {
-					onRepairModifier: response.status === AssetStatus.OnRepair ? 1 : -1,
+					onRepairModifier: -1,
 					reservedModifier: 0,
 				});
 			},
@@ -53,15 +53,12 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	}
 
 	function handleUnassign(record: InventaryDataType) {
-		fetchData(
-			useHttp.patchRequestHelper(`${INVENTARY_API}/unassign/${record._id}`),
-			(response) => {
-				updateInventaryItemHandler(response, {
-					onRepairModifier: 0,
-					reservedModifier: -1,
-				});
-			},
-		);
+		fetchData(useHttp.patchRequestHelper(`${INVENTARY_API}/unassign/${record._id}`), (response) => {
+			updateInventaryItemHandler(response, {
+				onRepairModifier: 0,
+				reservedModifier: -1,
+			});
+		});
 	}
 
 	function handleDeleteFromInventary(deletedInventary: InventaryDataType) {
