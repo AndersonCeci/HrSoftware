@@ -5,11 +5,10 @@ export class CreateTaskDto {
   @IsNotEmpty()
   title: string;
 
-  @IsNotEmpty()
-  description: string;
+    @IsNotEmpty()
+    due_date: Date;
 
-  @IsNotEmpty()
-  due_date: string;
+
 
   @IsNotEmpty()
   status: TaskStatus;

@@ -1,3 +1,4 @@
+import { Employee } from 'src/employee/schema/employe.schema';
 import {
   Controller,
   Get,
@@ -14,7 +15,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
-import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
 import { UserService } from 'src/users/users.service';
@@ -36,7 +36,6 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
-
   @Get('/search')
   async search(
     @Query('name') name?: string,
@@ -57,23 +56,11 @@ export class EmployeeController {
     }
   }
 
-
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log(id, 'id')
-    const test =this.employeeService.findOne(id);
-    console.log(test, 'test')
-    return test
-
+    const employee = this.employeeService.findOne(id);
+    return employee;
   }
-
-  // @Get('usernames')
-  // getUsernames() {
-  //   return this.employeeService.getUsernames();
-  // }
-
- 
 
   @Patch(':id')
   async update(

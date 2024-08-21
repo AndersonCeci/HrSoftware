@@ -28,6 +28,9 @@ import { InventoryService } from './inventory/inventory.service';
 import { InventoryModule } from './inventory/inventory.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
+import { NotificationsGatewayModule } from './notificationsGateway/notificationgateAway.module';
+import { NotificationsModule } from './notificationsGateway/notification.module';
+
 import { SchedulerModule } from './schedule/scheduler.module';
 
 @Module({

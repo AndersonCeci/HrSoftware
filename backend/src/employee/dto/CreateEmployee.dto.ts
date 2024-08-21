@@ -4,6 +4,9 @@ import {
   IsString,
   IsEnum,
   Matches,
+  isDate,
+  IsDateString,
+  IsOptional,
 } from 'class-validator';
 import { Role } from 'src/users/schemas/user.schema';
 import { Position } from '../schema/employe.schema';
@@ -16,7 +19,6 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
 
   // @IsNotEmpty()
   // @IsString()
@@ -37,6 +39,11 @@ export class CreateEmployeeDto {
   startingDate?: string;
 
   phoneNumber: string;
+
+  @IsOptional()
+  birdthDay: Date;
+
+  fullName: string;
 
   @IsEnum(['Female', 'Male'], {
     message: 'Must be one of the following gender',

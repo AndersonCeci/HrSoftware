@@ -1,9 +1,5 @@
 import { ObjectId, Types } from 'mongoose';
-import {
-  Injectable,
-  UnauthorizedException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/users.service';
 import { Role } from 'src/users/schemas/user.schema';
