@@ -1,6 +1,4 @@
 import { Button, Form, Input } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-
 import "../styles/LoginPage.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +6,8 @@ import useHttp from "../hooks/useHttp";
 
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
+import { IoLockClosedOutline } from "react-icons/io5";
+import { MdOutlineEmail } from "react-icons/md";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -76,7 +76,7 @@ const LoginPage: React.FC = () => {
 
         localStorage.setItem("userData", JSON.stringify(userData));
         navigate("/dashboard");
-      },
+      }
     );
   }
 
@@ -108,7 +108,7 @@ const LoginPage: React.FC = () => {
             rules={[{ required: true, message: "Please input your email" }]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
+              prefix={<MdOutlineEmail className="site-form-item-icon" />}
               placeholder="E-mail"
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -116,10 +116,11 @@ const LoginPage: React.FC = () => {
           </Form.Item>
           <Form.Item
             name="password"
-            className="password-input"
+            className="password-input-login"
             rules={[{ required: true, message: "Please input your password" }]}
           >
             <Input.Password
+              prefix={<IoLockClosedOutline />}
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               required

@@ -7,8 +7,6 @@ import { useRef, useImperativeHandle, forwardRef } from "react";
 import { AddEmployeeFormProps } from "../types/EmployeeFormTypes";
 import dayjs from "dayjs";
 
-// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
-
 const PromoteForm = forwardRef(
   ({ selectedEmployee, onEdit }: AddEmployeeFormProps, ref) => {
     const [form] = Form.useForm<EmployeeDataType>();

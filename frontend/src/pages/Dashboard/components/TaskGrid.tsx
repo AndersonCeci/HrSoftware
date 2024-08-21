@@ -157,8 +157,8 @@ const TaskGrid: React.FC = () => {
 	return (
 		<div className="container">
 			<div className="header-container">
-				<h1 className="task-title">{t(`taskList`)}</h1>
-				<Search onChange={onSearch} placeholder="Search a task" allowClear style={{ width: 300 }} />
+				<h1 className="task-title">{t(`reminders`)}</h1>
+				<Search onChange={onSearch} placeholder={t("searchAReminder")} allowClear style={{ width: 300 }} />
 				<Tooltip placement="bottom" title="Add new">
 					<button onClick={onAddTask} className="add-btn">
 						<PlusOutlined />
@@ -239,7 +239,7 @@ const TaskGrid: React.FC = () => {
         onCancel={() => {
           setIsVisible(false);
         }}
-        title="Add New Task"
+        title={t("addNewReminder")}
       >
         <Form form={form2} layout="vertical" onFinish={handleSubmit}>
           <Form.Item

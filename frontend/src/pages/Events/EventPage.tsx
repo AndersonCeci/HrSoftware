@@ -61,7 +61,7 @@ const EventPage: React.FC = () => {
 	return !isLoading ? (
 		<main>
 			<Modal
-				title="Add Event"
+				title={t("addEvent")}
 				isOpen={isModalOpen}
 				onCancel={handleCloseModal}
 				onOk={() => {
@@ -76,13 +76,13 @@ const EventPage: React.FC = () => {
 			) : (
 				<>
 					<EventMenu
-						title={"This Month"}
+						title={t("thisMonth")}
 						EventList={sortByDate(thsMonth)}
 						displayNoResult
 						onOpenModal={handleOpenModal}
 					/>
 					<EventMenu
-						title={"Near Future"}
+						title={t("upcoming")}
 						EventList={sortByDate(nextMonth)}
 						onOpenModal={handleOpenModal}
 					/>

@@ -1,5 +1,6 @@
 export const SqTranslation = {
   AddNew: "Krijo",
+  addEvent: "Shto Event",
   Areyousureyouwanttodeclinethisrequest:
     "Jeni të sigurt që dëshironi ta refuzoni këtë kërkesë",
   activestatus: "Punonjesit Aktiv",
@@ -8,9 +9,9 @@ export const SqTranslation = {
   assetType: "Lloji i asetit",
   assets: "Asetet",
   assetsTitle: "Asetet",
-  attendanceOverview: "Ditet e mbetura",
+  attendanceOverview: "Përmbledhje e frekuentimit",
   calendarLeave: "Kalendari Leje",
-  changePassoword: "Ndrysho Fjalekalimin",
+  changePassoword: "Ndrysho Fjalëkalimin",
   changeWebsiteLanguage: "Ndrysho gjuhën në faqe",
   clickToUpload: "Kliko për të ngarkuar",
   code: "Kodi",
@@ -84,4 +85,9 @@ export const SqTranslation = {
   holidayEntitlement: "Lejet për largim",
   currentSalary: "Paga Aktuale",
   dailyQuote: "Citati i sotshëm",
+  reminders: "Përkujtues",
+  searchAReminder: "Kërko një përkujtues",
+  addNewReminder: "Shto një përkujtues",
+  thisMonth: "Ky Muaj",
+  upcoming: "Të Ardhshme"
 };

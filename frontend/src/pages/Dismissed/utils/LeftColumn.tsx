@@ -9,7 +9,7 @@ import { capitalizeFirstLetter } from "../../../utils/paths";
 import { useTranslation } from "react-i18next";
 
 export function getColumns(
-  tableData: LeftDataType[],
+  tableData: LeftDataType[]
 ): TableProps<LeftDataType>["columns"] {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation();
@@ -19,12 +19,9 @@ export function getColumns(
       dataIndex: "username",
       key: "name",
       filterDropdown: true,
-      onFilter: (inputValue, filter) =>
-        filter.username.toLowerCase().includes(inputValue.toLowerCase()),
       filterIcon: <SearchOutlined className="nav-menu-icon" />,
-      displayAs: (value) => {
-        return <span>{capitalizeFirstLetter(value)}</span>;
-      },
+      onFilter: (inputValue, filter) =>
+        filter.name.toLowerCase().includes(inputValue.toLowerCase()),
     }),
     createTableColumns({
       title: "Email",

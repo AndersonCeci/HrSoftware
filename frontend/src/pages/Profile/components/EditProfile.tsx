@@ -26,7 +26,13 @@ const beforeUpload = (file: FileType) => {
   return isJpgOrPng && isLt2M;
 };
 
-const EditProfile = ({ visible, handleOk, handleCancel, currentData }) => {
+interface EditProfileProps {
+  visible: boolean;
+  handleOk: () => void;
+  handleCancel: () => void;
+}
+
+const EditProfile: React.FC<EditProfileProps> = ({ visible, handleOk, handleCancel, currentData }) => {
   const [form] = Form.useForm<EmployeeDataType>();
   const { t } = useTranslation();
 
