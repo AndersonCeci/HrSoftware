@@ -11,7 +11,7 @@ export class Asset extends Document {
   quantity: number;
 
   @Prop()
-  reserved:number;
+  reserved: number;
 
   @Prop({ default: false })
   isDeleted: boolean;
@@ -21,5 +21,4 @@ export class Asset extends Document {
 }
 
 const AssetSchema = SchemaFactory.createForClass(Asset).plugin(muv);
-export {AssetSchema}
-
+export { AssetSchema };

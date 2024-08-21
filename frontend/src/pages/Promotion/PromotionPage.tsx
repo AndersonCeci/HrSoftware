@@ -22,7 +22,9 @@ const PromotionPage: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-      setTableData,
+      (response) => {
+        setTableData(response);
+      },
     );
   }, []);
 

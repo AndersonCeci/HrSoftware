@@ -33,7 +33,13 @@ export class EmployeeService {
         throw new Error('Invalid position');
     }
 
-    const employeeData = { ...createEmployeeDto, role };
+    const employeeData = {
+      ...createEmployeeDto,
+      role,
+      teamLeaders:
+        createEmployeeDto.teamLeaders?.map((id) => new Types.ObjectId(id)) ||
+        [],
+    };
 
     const createdEmploy = await new this.employeeModel(employeeData).save();
 
@@ -57,7 +63,7 @@ export class EmployeeService {
     return this.employeeModel.find().exec();
   }
 
-  findOne(id: string): Promise<Employee | null> {
+  findOne(id: string) {
     return this.employeeModel.findById(id).exec();
   }
 
@@ -125,5 +131,26 @@ export class EmployeeService {
     } catch (error) {
       throw new Error('An error occurred while searching for employees.');
     }
+  }
+  async getTeamLeaders(): Promise<Employee[]> {
+    const teamLeaders = await this.employeeModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'promotions',
+            localField: 'promotionHistory',
+            foreignField: '_id',
+            as: 'promotions',
+          },
+        },
+        {
+          $match: {
+            'promotions.isTeamLeader': true,
+          },
+        },
+      ])
+      .exec();
+
+    return teamLeaders;
   }
 }

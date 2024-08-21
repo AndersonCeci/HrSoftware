@@ -25,6 +25,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
         startingDate: "",
         nID: "",
         gender: "",
+        contract: "",
       };
 
   return initialValues;
@@ -33,6 +34,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
   return {
     ...selectedEmployee,
+    // birthDate: dayjs(selectedEmployee["birthDate"], "DD/MM/YYYY"),
     startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
   };
 }
@@ -56,16 +58,17 @@ export function getFormValues(form: any) {
   return {
     name: form.getFieldValue("name"),
     surname: form.getFieldValue("surname"),
-    email: form.getFieldValue("email") + "@codevider.com",
+    email: form.getFieldValue("email").split("@")[0] + "@codevider.com",
     phoneNumber: form.getFieldValue("phoneNumber"),
     position: form.getFieldValue("position"),
     salary: form.getFieldValue("salary"),
-    teamLeader: form.getFieldValue("teamLeader"),
+    teamLeaders: form.getFieldValue("teamLeaders") || [],
     startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
-    contract: "Permanent",
+    contract: form.getFieldValue("contract"),
     nID: form.getFieldValue("nID"),
-    username: form.getFieldValue("email").split("@")[0],
-    password: "codevider",
+    birthDate: form.getFieldValue("birthDate").format("DD/MM/YYYY"),
+    // username: "ESHTE STRING",
+    // password: "codevider",
     gender: form.getFieldValue("gender"),
   };
 }

@@ -23,18 +23,18 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
   ).employID;
   const [isFlipped, setIsFlipped] = useState(false);
 
-  useEffect(() => {
-    sendRequest(
-      {
-        url: `${API}/${EmployeData}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      setTableData,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   sendRequest(
+  //     {
+  //       url: `${API}/${EmployeData}`,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     },
+  //     setTableData,
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (isLoading) {
     return <Loader />;
@@ -46,6 +46,16 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
 
   const handleClick = () => {
     setIsFlipped(!isFlipped);
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "No date provided";
+    const formattedDate = moment(dateString, "DD/MM/YYYY", true).format(
+      "DD/MM/YYYY",
+    );
+    return formattedDate === "Invalid date"
+      ? "Invalid date format"
+      : formattedDate;
   };
 
   return (
@@ -87,7 +97,8 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                   <b>{t("oldPosition")}:</b> {promote?.oldPosition}
                 </p>
                 <p>
-                  <b>{t("dateOfHire")}:</b> {tableData?.startingDate}
+                  <b>{t("dateOfHire")}:</b> {tableData?.startingDate} //! TO BE
+                  ADDED
                 </p>
                 <p>
                   <b>{t("salary")}:</b> {promote?.oldSalary}
@@ -125,7 +136,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 </p>
                 <p>
                   <b>{t("dateOfPromotion")}:</b>{" "}
-                  {moment(promote?.dateOfPromotion).format("DD/MM/YYYY")}
+                  {formatDate(promote?.dateOfPromotion)}
                 </p>
                 <p>
                   <b>{t("salary")}:</b> {promote?.newSalary}

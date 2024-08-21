@@ -12,9 +12,11 @@ import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
 import { EmployeeDataType } from "../types/Employee";
-import { capitalizeFirstLetter } from "../../../utils/paths";
+import { capitalizeFirstLetter } from "../../../utils/utils";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { IoDocumentAttach } from "react-icons/io5";
 
 export function getColumns(
   tableData: EmployeeDataType[],
@@ -27,16 +29,19 @@ export function getColumns(
   return [
     createTableColumns({
       title: t("name"),
-      dataIndex: "username",
+      dataIndex: "name",
       key: "name",
       filterDropdown: true,
       onFilter: (inputValue, filter) =>
         filter.username.toLowerCase().includes(inputValue.toLowerCase()),
       filterIcon: <SearchOutlined className="nav-menu-icon" />,
-      displayAs: (value) => {
+      displayAs: (_, record) => {
+        const value = record.name + " " + record.surname;
+
         return <span>{capitalizeFirstLetter(value)}</span>;
       },
     }),
+
     createTableColumns({
       title: "Email",
       dataIndex: "email",
@@ -81,6 +86,22 @@ export function getColumns(
       },
     }),
     createTableColumns({
+      title: "Conract",
+      dataIndex: "contract",
+      key: "contract",
+      displayAs: (value) =>
+        value ? (
+          <Link to={value} target="_blank" rel="noopener noreferrer">
+            <Button size="large" type="link" icon={<IoDocumentAttach />}>
+              <span> View Contract </span>
+            </Button>
+          </Link>
+        ) : (
+          <span>No Contract Uploaded</span>
+        ),
+      align: "center",
+    }),
+    createTableColumns({
       title: t("startingOn"),
       dataIndex: "startingDate",
       key: "startDate",
@@ -89,7 +110,7 @@ export function getColumns(
       title: t("action"),
       dataIndex: "id",
       key: "action",
-      displayAs: (text, record) => (
+      displayAs: (_, record) => (
         <Dropdown
           menu={{
             items: [

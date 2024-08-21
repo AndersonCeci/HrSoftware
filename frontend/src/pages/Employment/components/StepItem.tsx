@@ -42,7 +42,7 @@ const getStepItems: StepItemProps = (
     },
     {
       subTitle: "Add Information",
-      content: <SecondStep />,
+      content: <SecondStep form={form} />,
       icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
     },
     {

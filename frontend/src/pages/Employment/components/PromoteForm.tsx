@@ -1,22 +1,23 @@
-import { Form } from "antd";
+import { Form, Checkbox } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import { EmployeeDataType } from "../types/Employee";
 import exporter, { getDevRoles } from "../utils/helperFunctions";
 import { useTranslation } from "react-i18next";
-import { useRef, useImperativeHandle, forwardRef } from "react";
-import { AddEmployeeFormProps } from "../types/EmployeeFormTypes";
+import { useRef, useImperativeHandle, forwardRef, useState } from "react";
+import { PromotionFormProps } from "../types/EmployeeFormTypes";
 import dayjs from "dayjs";
 
 const PromoteForm = forwardRef(
-  ({ selectedEmployee, onEdit }: AddEmployeeFormProps, ref) => {
+  ({ selectedEmployee, onEdit }: PromotionFormProps, ref) => {
     const [form] = Form.useForm<EmployeeDataType>();
-    const formRef = useRef();
+    const formRef = useRef<any>();
     const initialValues = exporter.getInitialFormValues(selectedEmployee);
     const position = getDevRoles().map((role) => ({
       label: role,
       value: role,
     }));
     const { t } = useTranslation();
+    const [isTeamLeader, setIsTeamLeader] = useState(false);
 
     useImperativeHandle(ref, () => ({
       submit: () => {
@@ -25,12 +26,12 @@ const PromoteForm = forwardRef(
     }));
 
     const onFinish = (values: any) => {
-      console.log(values);
       const valuesToSubmit = {
         newPosition: values.position,
         newSalary: values.salary,
         trainedBy: values.trainedBy,
         dateOfPromotion: dayjs(values.dateOfPromotion).format("DD/MM/YYYY"),
+        isTeamLeader,
       };
       onEdit(valuesToSubmit);
     };
@@ -62,6 +63,14 @@ const PromoteForm = forwardRef(
             isDisabledDate
           />
           <FormInputs.Input label={t("Trained By")} name="trainedBy" required />
+          <Form.Item>
+            <Checkbox
+              checked={isTeamLeader}
+              onChange={(e) => setIsTeamLeader(e.target.checked)}
+            >
+              {t("Promote to Team Leader")}
+            </Checkbox>
+          </Form.Item>
         </Form>
       </div>
     );

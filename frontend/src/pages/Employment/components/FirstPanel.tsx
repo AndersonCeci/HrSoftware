@@ -1,4 +1,4 @@
-import { Flex, Row, Col } from "antd";
+import { Flex, Row, Col, Space } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import flagOpt from "../utils/flags";
 import { useTranslation } from "react-i18next";
@@ -34,13 +34,20 @@ const FirstPanel = () => {
           />
         </Col>
       </Row>
-      <Row>
-        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
+      <Row gutter={10}>
+        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 5 }}>
           <FormInputs.Input
             label={t("personalNumber")}
             name="nID"
             required
             defaultValidateRule="personalNumber"
+          />
+        </Col>
+        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 0, span: 5 }}>
+          <FormInputs.DatePicker
+            label={t("birthDate")}
+            name="birthDate"
+            required
           />
         </Col>
         <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>

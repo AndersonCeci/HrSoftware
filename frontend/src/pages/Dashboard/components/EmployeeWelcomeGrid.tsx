@@ -12,7 +12,6 @@ import EmployeeLineGraph from "./EmployeeLineGraph";
 import { useTranslation } from "react-i18next";
 import QouteCard from "./QouteCard";
 
-const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 interface Item {
   title: string;
@@ -33,7 +32,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}"
+    localStorage.getItem("userData") || "{}",
   ).employID;
 
   const initialItem: Item[] = [
@@ -75,15 +74,13 @@ const EmployeeWelcomeGrid: React.FC = () => {
   useEffect(() => {
     sendRequest(
       {
-        url: `${API}/${EmployeData}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        url: `http://localhost:3000/employees/${EmployeData}`,
       },
-      setTableData
+      (data: EmployeeDataType) => {
+        setTableData(data);
+      },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  })
 
   if (isLoading) {
     return <Loader />;
@@ -92,6 +89,8 @@ const EmployeeWelcomeGrid: React.FC = () => {
   if (error) {
     return <div>Something went wrong!!</div>;
   }
+
+
   return (
     <>
       <Flex className="flex-main" justify="space-between">

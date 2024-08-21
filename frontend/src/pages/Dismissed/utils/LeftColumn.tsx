@@ -5,7 +5,7 @@ import {
   getAllUniqueValues,
 } from "../../../components/Table/Table";
 import { SearchOutlined } from "@ant-design/icons";
-import { capitalizeFirstLetter } from "../../../utils/paths";
+import { capitalizeFirstLetter } from "../../../utils/utils";
 import { useTranslation } from "react-i18next";
 
 export function getColumns(

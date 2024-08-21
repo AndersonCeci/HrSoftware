@@ -18,10 +18,6 @@ export default function ChangeLanguage() {
     i18n.changeLanguage(code);
   };
 
-  const onChange = (checked: boolean) => {
-    console.log(`switch to ${checked}`);
-  };
-
   return (
     <div style={{ margin: 20, alignItems: "center" }}>
       <Card

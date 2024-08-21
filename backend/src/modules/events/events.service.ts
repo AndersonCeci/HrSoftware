@@ -22,7 +22,6 @@ export class EventsService {
         throw new Error('User not found');
       }
 
-      // Ensure invitees is an empty array if not provided or is empty
       const sanitizedInvitees = invitees && invitees.length > 0 ? invitees : [];
 
       const createdEvent = new this.eventsModel({
@@ -30,8 +29,6 @@ export class EventsService {
         creator: user._id,
         invitees: sanitizedInvitees,
       });
-
-      console.log(createdEvent); // For testing purposes only, remove before production
 
       return createdEvent.save();
     } catch (error) {

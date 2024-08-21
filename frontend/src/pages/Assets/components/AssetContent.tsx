@@ -70,22 +70,22 @@ const AssetContent = () => {
     <Table columns={columns} data={tableData} />
   );
 
-	return (
-		<>
-			<Modal
-				title={selectedElement ? "Edit Asset" : "Assign New Asset"}
-				isOpen={isModalVisible}
-				onCancel={() => {
-					setIsModalVisible(false);
-					setSelectedElement(undefined);
-				}}
-				onOk={() => {
-					editFormRef.current?.submit();
-				}}
-			>
-				<AssetForm ref={editFormRef} onAdd={handleAssetAdd} />
-			</Modal>
-			{/* <TableHeader
+  return (
+    <>
+      <Modal
+        title={selectedElement ? "Edit Asset" : "Assign New Asset"}
+        isOpen={isModalVisible}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setSelectedElement(undefined);
+        }}
+        onOk={() => {
+          editFormRef.current?.submit();
+        }}
+      >
+        <AssetForm ref={editFormRef} onAdd={handleAssetAdd} />
+      </Modal>
+      {/* <TableHeader
 				title={t("assetsTitle")}
 				onClick={() => {
 					setIsModalVisible(true);

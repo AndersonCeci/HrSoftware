@@ -179,7 +179,6 @@ export default CompanyBackgroundPage;
 //         }
 //       );
 //       const data = response.data;
-//       // console.log(response.data);
 //       setRecruitments(data);
 //     } catch (error) {
 //       console.error("Error fetching recruitments:", error);
@@ -196,14 +195,10 @@ export default CompanyBackgroundPage;
 //         return "";
 //       }
 
-//       console.log("Original base64url string:", base64url.substring(0, 50) + "...");
-
 //       const base64 = base64url
 //         .replace(/-/g, "+")
 //         .replace(/_/g, "/")
 //         .padEnd(base64url.length + ((4 - (base64url.length % 4)) % 4), "=");
-
-//       console.log("Converted base64 string:", base64.substring(0, 50) + "...");
 
 //       const binaryString = atob(base64);
 //       const byteArray = new Uint8Array(binaryString.length);
