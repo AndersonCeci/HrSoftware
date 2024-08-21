@@ -97,8 +97,8 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                   <b>{t("oldPosition")}:</b> {promote?.oldPosition}
                 </p>
                 <p>
-                  <b>{t("dateOfHire")}:</b> {tableData?.startingDate} //! TO BE
-                  ADDED
+                  <b>{t("dateOfHire")}:</b> {promote?.dateOfHire}
+                  
                 </p>
                 <p>
                   <b>{t("salary")}:</b> {promote?.oldSalary}

@@ -7,4 +7,5 @@ export type PromoteType = {
   oldSalary: number;
   trainedBy: string;
   dateOfPromotion: string;
+  dateOfHire: string;
 };
