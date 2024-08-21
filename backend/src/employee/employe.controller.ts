@@ -71,11 +71,6 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    const test = this.employeeService.findOne(id);
-    return test;
-  }
 
   @Patch(':id')
   async update(
