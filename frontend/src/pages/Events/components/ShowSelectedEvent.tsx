@@ -23,46 +23,53 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 
 	console.log(displayedTime);
 	return (
-		<section className="show-event-container">
-			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
-			<Carousel autoplay draggable className="large-image">
-				<img className="temp-img-class" src={TempImage} alt="no" />
-				<img className="temp-img-class" src={TempImage} alt="no" />
-				<img className="temp-img-class" src={TempImage} alt="no" />
-				<img className="temp-img-class" src={TempImage} alt="no" />
-			</Carousel>
-			<Flex justify="space-between" align="flex-start" gap={50}>
-				{selectedEvent.eventDescription && (
-					<div className="selected-event-description-container">
-						<Typography.Paragraph
-							ellipsis={{
-								rows: 5,
-								expandable: "collapsible",
-								expanded: expanded,
-								symbol: expanded ? "Show less" : "Show more",
-								onExpand: (_, info) => setExpanded(info.expanded),
-							}}
-						>
-							{selectedEvent.eventDescription}
-						</Typography.Paragraph>
-					</div>
-				)}
-				<div className="selected-event-list-container">
-					<ul className="selected-event-list">
-						<li>
-							<Typography.Title level={4}>Date </Typography.Title>
-							<Typography.Text className="selected-event-info">{displayedDate}</Typography.Text>
-						</li>
+    <section className="show-event-container">
+      <Typography.Title className="event-name-text">
+        {selectedEvent.eventName}
+      </Typography.Title>
+      <Carousel className="large-image" pauseOnHover adaptiveHeight draggable>
+        {selectedEvent.images?.map((image, index) => (
+          <div key={index} className="temp-img-class">
+            <img src={image} alt={`Event ${index}`} />
+          </div>
+        ))}
+      </Carousel>
+      <Flex justify="space-between" align="flex-start" gap={50}>
+        {selectedEvent.eventDescription && (
+          <div className="selected-event-description-container">
+            <Typography.Paragraph
+              ellipsis={{
+                rows: 5,
+                expandable: "collapsible",
+                expanded: expanded,
+                symbol: expanded ? "Show less" : "Show more",
+                onExpand: (_, info) => setExpanded(info.expanded),
+              }}
+            >
+              {selectedEvent.eventDescription}
+            </Typography.Paragraph>
+          </div>
+        )}
+        <div className="selected-event-list-container">
+          <ul className="selected-event-list">
+            <li>
+              <Typography.Title level={4}>Date </Typography.Title>
+              <Typography.Text className="selected-event-info">
+                {displayedDate}
+              </Typography.Text>
+            </li>
 
-						<li>
-							<Typography.Title level={4}>Time </Typography.Title>
-							<Typography.Text className="selected-event-info">{displayedTime}</Typography.Text>
-						</li>
-					</ul>
-				</div>
-			</Flex>
-		</section>
-	);
+            <li>
+              <Typography.Title level={4}>Time </Typography.Title>
+              <Typography.Text className="selected-event-info">
+                {displayedTime}
+              </Typography.Text>
+            </li>
+          </ul>
+        </div>
+      </Flex>
+    </section>
+  );
 };
 
 export default ShowSelectedEvent;

@@ -52,6 +52,8 @@ const EventPage: React.FC = () => {
 		);
 	}, []);
 
+
+	console.log(loadedEvents, 'loadedEventssss')
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (

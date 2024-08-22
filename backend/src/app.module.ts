@@ -32,6 +32,7 @@ import { NotificationsGatewayModule } from './notificationsGateway/notificationg
 import { NotificationsModule } from './notificationsGateway/notification.module';
 
 import { SchedulerModule } from './schedule/scheduler.module';
+import { FileModule } from './upload/file.module';
 
 @Module({
   imports: [

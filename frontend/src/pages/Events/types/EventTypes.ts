@@ -7,5 +7,5 @@ export type EvenType = {
   eventStartTime: string;
   eventEndTime: string;
   location?: string;
-  image?: string;
+  images?: string[];
 };
