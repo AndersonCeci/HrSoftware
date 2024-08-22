@@ -50,13 +50,13 @@ export class InventoryService {
       deleteDate,
     }));
 
-    const createdInventories =
-      await this.inventoryModel.create(inventoryEntries);
-
-    return this.inventoryModel
-      .find({ _id: { $in: createdInventories.map((item) => item._id) } })
-      .populate('assetID')
-      .exec();
+    // const createdInventories =
+    //   await this.inventoryModel.create(inventoryEntries);
+     return  await this.inventoryModel.create(inventoryEntries);
+    // return this.inventoryModel
+    //   .find({ _id: { $in: createdInventories.map((item) => item._id) } })
+    //   .populate('assetID')
+    //   .exec();
   }
 
   async assignToEmployee(

@@ -11,10 +11,6 @@ import { Query } from 'express-serve-static-core';
 export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
-  // async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-  //   const createAsset = new this.assetModel(createAssetDto);
-  //   return createAsset.save();
-  // }
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
     const { assetName, isDeleted = false, deleteDate } = createAssetDto;
 
@@ -24,8 +20,7 @@ export class AssetsService {
       deleteDate,
     }));
 
-      return await this.assetModel.create(inventoryEntries);
-
+    return await this.assetModel.create(inventoryEntries);
   }
 
   async findAll(query: Query): Promise<Asset[]> {
@@ -81,6 +76,77 @@ export class AssetsService {
         },
         {
           $sort: { assetName: 1 },
+        },
+      ])
+      .exec();
+    return data;
+  }
+
+  async findAllEmployee(): Promise<Asset[]> {
+    const data = await this.assetModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: '_id',
+            foreignField: 'assetID',
+            as: 'inventories',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'inventories.employeeDetails',
+            foreignField: '_id',
+            as: 'inventories.employeeDetails',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories.employeeDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            assetName: { $first: '$assetName' },
+            quantity: { $sum: 1 },
+            inventories: { $push: '$inventories' },
+            reserved: {
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
+              },
+            },
+            onRepair: {
+              $sum: {
+                $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
+              },
+            },
+          },
+        },
+        {
+          $match: {
+            inventories: { $exists: true, $ne: {} },
+          },
+        },
+        {
+          $project: {
+            inventories: {
+              $filter: {
+                input: '$inventories',
+                as: 'inventory',
+                cond: { $eq: ['$$inventory.status', 'Assigned'] },
+              },
+            },
+            assetName: 1,
+          },
         },
       ])
       .exec();
