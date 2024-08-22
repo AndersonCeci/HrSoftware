@@ -1,7 +1,4 @@
-import {
-  createTableColumns,
-  getAllUniqueValues,
-} from "../../../../components/Table/Table";
+import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import { SearchOutlined } from "@ant-design/icons";
 import { TableProps } from "antd";
 import { t } from "i18next";
@@ -18,10 +15,15 @@ export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype
 			width: 150,
 			onFilter: (inputValue, filter) =>
 				filter.userName.toLowerCase().includes(inputValue.toLowerCase()),
+			displayAs: (_, record) => {
+				// console.log(record);
+				
+				return <></>;
+			},
 		}),
 		createTableColumns({
 			title: t("assetType"),
-			dataIndex: "assetType",
+			dataIndex: "assetName",
 			key: "type",
 			width: 150,
 			filters: getAllUniqueValues(tableData, "assetType"),

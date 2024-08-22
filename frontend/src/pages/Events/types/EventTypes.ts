@@ -3,6 +3,7 @@ export type EvenType = {
   eventName: string;
   eventDescription?: string;
   eventDate: Date;
+  eventEndDate?: Date;
   eventStartTime: string;
   eventEndTime: string;
   location?: string;

@@ -19,6 +19,7 @@ const EventMenu = ({
   onOpenModal,
   displayNoResult = false,
 }: EventMenuProps) => {
+  
   const isOnlyOneEvent = EventList.length === 1;
   const [selectedEvent, setSelectedEvent] = useState<EvenType | undefined>(
     undefined,

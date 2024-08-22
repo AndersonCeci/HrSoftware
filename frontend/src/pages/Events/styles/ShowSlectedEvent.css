@@ -14,6 +14,10 @@
   align-self: flex-start;
 }
 
+.event-name-text {
+  margin-top: 1rem;
+}
+
 .selected-event-list {
   list-style: none;
   display: flex;
@@ -34,5 +38,5 @@
 }
 
 .selected-event-info {
-  align-self: center;
+  align-self: flex-start;
 }

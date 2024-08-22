@@ -24,14 +24,13 @@ export class AssetsController {
     return this.assetsService.createAsset(createAssetDto);
   }
 
-  // @Post('post2')
-  // async create2(@Body() createAssetDto: CreateAssetDto) {
-  //   return this.assetsService.createInventory(createAssetDto);
-  // }
-
   @Get()
   async findAll(@Query() query: any): Promise<Asset[]> {
     return this.assetsService.findAll(query);
+  }
+  @Get('employee')
+  async findAllEmployee(): Promise<Asset[]> {
+    return this.assetsService.findAllEmployee();
   }
 
   @Get(':name')
