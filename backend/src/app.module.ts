@@ -29,6 +29,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { SchedulerModule } from './schedule/scheduler.module';
+import { FileModule } from './upload/file.module';
 
 @Module({
   imports: [

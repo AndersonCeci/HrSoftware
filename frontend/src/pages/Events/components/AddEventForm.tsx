@@ -74,8 +74,8 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
       <Form.Item label="Event Attachment" name="image">
         <Flex className="event-attachment-container">
           <Upload
-            beforeUpload={() => {
-              return false;
+            beforeUpload={(e: any) => {
+              console.log(e, "testtt");
             }}
             listType="picture-card"
             multiple
