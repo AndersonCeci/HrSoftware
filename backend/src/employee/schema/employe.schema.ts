@@ -53,8 +53,19 @@ export class Employee extends Document {
   phoneNumber: string;
 
   @Prop()
+  fullName: string;
+
+  @Prop()
+  birthDay: Date;
+
+  @Prop()
   @IsOptional()
   teamLeader: string;
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }],
+    default: [],
+  })
+  teamLeaders: MongooseSchema.Types.ObjectId[];
 
   @Prop({
     enum: ['Female', 'Male'],

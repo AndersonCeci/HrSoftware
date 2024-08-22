@@ -1,10 +1,17 @@
-import {ArrayNotEmpty, IsArray, IsBoolean, IsEnum, IsOptional, IsString} from 'class-validator';
-import { InventoryStatus } from '../schemas/inventory.schema';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { InventoryStatus } from '../schemas/Inventory.schema';
 
 export class UpdateInventoryDto {
   @IsOptional()
   @IsString()
-  assetName?:string
+  assetName?: string;
 
   @IsOptional()
   @IsString()
@@ -13,5 +20,4 @@ export class UpdateInventoryDto {
   @IsEnum(InventoryStatus)
   @IsOptional()
   status?: InventoryStatus;
-
 }

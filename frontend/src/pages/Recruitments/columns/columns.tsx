@@ -106,7 +106,6 @@ export const columns = ({
     key: "action",
     displayAs: (record) => {
       const applicant = tableData.find((applicant) => applicant._id === record);
-      console.log("testtststst", record);
       return (
         <Button
           type={ButtonType.TEXT}

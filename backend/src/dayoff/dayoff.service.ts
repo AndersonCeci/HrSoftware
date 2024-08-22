@@ -5,12 +5,18 @@ import { CreateDayOffDto } from './dto/CreateDayOff.dto';
 import { DayOff } from './schema/dayoff.schema';
 import { EmployeeService } from 'src/employee/employe.service';
 import { UpdateDayOffDto } from './dto/UpdateDayOff.dto';
+import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
+import { UserService } from 'src/users/users.service';
+import { NotificationsService } from 'src/notificationsGateway/notifications.service';
+import { Role, User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class DayoffService {
   constructor(
-    @InjectModel(DayOff.name) private dayoffModel: Model<DayOff>,
+     @InjectModel( DayOff.name ) private dayoffModel: Model<DayOff>,
+     @InjectModel(User.name) private userModel: Model<User>,
     private readonly employeeService: EmployeeService,
+    private readonly notificationService: NotificationsService,
   ) {}
 
   async createDayOff(createDayOff: CreateDayOffDto) {
@@ -43,7 +49,21 @@ export class DayoffService {
     const createdDayoff = new this.dayoffModel({
       ...createDayOff,
       EmployeeName: employeeName,
+
       totalDays,
+    });
+
+    const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
+    console.log( hrUsers,  'hrUsers')
+
+    hrUsers.forEach(async (hrUser) => {
+      const createNotification: CreateNotificationDto = {
+        message: `A new day off request has been created by ${employeeName}.`,
+        isRead: false,
+        userId: hrUser._id,
+        path: '/dayoff/requestedLeave',
+      };
+      await this.notificationService.createNotification(createNotification);
     });
 
     return createdDayoff.save();

@@ -67,9 +67,8 @@ export class RecruitmentService {
       },
     };
   }
-  async getRecruitmentWithInterviewerDetails(
-    // applicantID: Types.ObjectId,
-  ): Promise<Recruitment[]> {
+  async getRecruitmentWithInterviewerDetails() // applicantID: Types.ObjectId,
+  : Promise<Recruitment[]> {
     const pipeline = [
       // { $match: { _id: applicantID } },
       this.createLookupPipeline('firstInterview'),

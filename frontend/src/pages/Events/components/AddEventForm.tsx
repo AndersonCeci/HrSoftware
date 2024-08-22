@@ -21,8 +21,6 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
   }));
 
   function onFinish(values: any) {
-    console.log("Finish");
-    // console.log(values);
     const date = new Date(values.eventDate);
     const valuesToSubmit = {
       ...values,

@@ -1,100 +1,21 @@
 import Table from "../../../components/Table/Table";
-import Modal from "../../../components/Shared/Modal";
 import Loader from "../../../components/Shared/Loader";
-import AssetForm from "./AssetForm";
-import { AssetDatatype } from "../types/AssetsDataType";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import useHttp from "../../../hooks/useHttp";
 import { getColumns } from "./columns/AssetsColumn";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 
 const AssetContent = () => {
-  const [tableData, setTableData] = useState<AssetDatatype[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const editFormRef = useRef<HTMLFormElement>();
-  const [isLoading, error, sendRequest] = useHttp();
-  const [selectedElement, setSelectedElement] = useState<
-    AssetDatatype | undefined
-  >(undefined);
+	const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    sendRequest({ url: API }, setTableData);
-  }, []);
+	const [isLoading, error, sendRequest] = useHttp();
 
-  function handleDataDelete(id: string) {
-    sendRequest(
-      {
-        url: `${API}/${id}`,
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      () => {
-        setTableData((prev) => prev.filter((item) => item._id !== id));
-      },
-    );
-  }
+	const columns = getColumns(tableData);
 
-  function handleStartEditing(id: string) {
-    const newElement = tableData.find((item) => item._id === id);
-    setSelectedElement(newElement);
-    setIsModalVisible(true);
-  }
+	const display = error ? <div>{error}</div> : <Table columns={columns} data={tableData} />;
 
-  function handleAssetEdit(newAsset: AssetDatatype) {
-    setTableData((prev) => {
-      const newTableData = prev.map((item) => {
-        if (item._id === newAsset._id) {
-          return newAsset;
-        }
-        return item;
-      });
-      return newTableData;
-    });
-    setIsModalVisible(false);
-    setSelectedElement(undefined);
-  }
-
-  function handleAssetAdd(newAsset: AssetDatatype) {
-    setTableData((prev) => [...prev, newAsset]);
-    setIsModalVisible(false);
-  }
-
-  const columns = getColumns(tableData, handleDataDelete, handleStartEditing);
-
-  const display = error ? (
-    <div>{error}</div>
-  ) : (
-    <Table columns={columns} data={tableData} />
-  );
-
-	return (
-		<>
-			<Modal
-				title={selectedElement ? "Edit Asset" : "Assign New Asset"}
-				isOpen={isModalVisible}
-				onCancel={() => {
-					setIsModalVisible(false);
-					setSelectedElement(undefined);
-				}}
-				onOk={() => {
-					editFormRef.current?.submit();
-				}}
-			>
-				<AssetForm ref={editFormRef} onAdd={handleAssetAdd} />
-			</Modal>
-			{/* <TableHeader
-				title={t("assetsTitle")}
-				onClick={() => {
-					setIsModalVisible(true);
-				}}
-			/> */}
-
-      {!isLoading ? display : <Loader />}
-    </>
-  );
+	return <>{!isLoading ? display : <Loader />}</>;
 };
 
 export default AssetContent;

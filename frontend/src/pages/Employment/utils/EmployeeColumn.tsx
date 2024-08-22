@@ -67,7 +67,7 @@ export function getColumns(
 			dataIndex: "position",
 			key: "position",
 			filters: getAllUniqueValues(tableData, "position"),
-			onFilter: (value, record) => record.position.indexOf(value) === 0,
+			onFilter: (value, record) => record.position.includes(value),
 		}),
 		createTableColumns({
 			title: t("salary"),
@@ -78,18 +78,18 @@ export function getColumns(
 			},
 		}),
 		createTableColumns({
-			title: "Conract",
+			title: t("contract"),
 			dataIndex: "contract",
 			key: "contract",
 			displayAs: (value) =>
 				value ? (
 					<Link to={value} target="_blank" rel="noopener noreferrer">
 						<Button size="large" type="link" icon={<IoDocumentAttach />}>
-							<span> View Contract </span>
-						</Button> 
+							<span> {t("yesContract")} </span>
+						</Button>
 					</Link>
 				) : (
-					<span>No Contract Uploaded</span>
+					<span>{t("noContrat")}</span>
 				),
 			align: "center",
 		}),
@@ -156,7 +156,7 @@ export function getColumns(
 			),
 			fixed: "right",
 			align: "center",
-			width: 30,
+			width: 40,
 		}),
 	];
 }

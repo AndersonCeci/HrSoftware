@@ -8,7 +8,8 @@ import { InventoryService } from 'src/inventory/inventory.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Asset.name, schema: AssetSchema }])],
+    MongooseModule.forFeature([{ name: Asset.name, schema: AssetSchema }]),
+  ],
   providers: [AssetsService],
   controllers: [AssetsController],
   exports: [AssetsService],

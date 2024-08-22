@@ -1,6 +1,4 @@
 import { Button, Form, Input } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-
 import "../styles/LoginPage.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,16 +6,14 @@ import useHttp from "../hooks/useHttp";
 
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
+import { IoLockClosedOutline } from "react-icons/io5";
+import { MdOutlineEmail } from "react-icons/md";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
-
-  const onFinish = (values: unknown) => {
-    console.log("Received values of form:", values);
-  };
 
   // const handleSubmit = async (e: React.FormEvent) => {
   // 	e.preventDefault();
@@ -52,7 +48,6 @@ const LoginPage: React.FC = () => {
 
   function handleSubmit() {
     if (!username || !password) {
-      console.log("Please fill in all fields");
       return;
     }
 
@@ -64,7 +59,6 @@ const LoginPage: React.FC = () => {
         body: { username, password },
       },
       (responseData: any) => {
-        console.log(responseData);
         const userData = {
           token: responseData.accessToken,
           username: responseData.username,
@@ -76,13 +70,12 @@ const LoginPage: React.FC = () => {
 
         localStorage.setItem("userData", JSON.stringify(userData));
         navigate("/dashboard");
-      },
+      }
     );
   }
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
-    console.log(userData);
     if (userData) {
       navigate("/dashboard");
     }
@@ -108,7 +101,7 @@ const LoginPage: React.FC = () => {
             rules={[{ required: true, message: "Please input your email" }]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
+              prefix={<MdOutlineEmail className="site-form-item-icon" />}
               placeholder="E-mail"
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -116,10 +109,11 @@ const LoginPage: React.FC = () => {
           </Form.Item>
           <Form.Item
             name="password"
-            className="password-input"
+            className="password-input-login"
             rules={[{ required: true, message: "Please input your password" }]}
           >
             <Input.Password
+              prefix={<IoLockClosedOutline />}
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               required

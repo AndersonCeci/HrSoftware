@@ -7,6 +7,7 @@ import { AssetDatatype, AssetStatus, InventaryDataType } from "../types/AssetsDa
 import Modal from "../../../components/Shared/Modal";
 import QuantityForm from "./InventaryForm";
 import ExpandedRow from "./ExpandesRow";
+import { t } from "i18next";
 import { AssetInventaryContext } from "../context/AssetInventaryContext";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
@@ -18,12 +19,8 @@ type InventaryContentProps = {
 };
 
 const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps) => {
-	const {
-		assetData,
-		getAssetData,
-		addAssetTypeHandler,
-		addQuantityHandler,
-	} = useContext(AssetInventaryContext);
+	const { assetData, getAssetData, addAssetTypeHandler, addQuantityHandler } =
+		useContext(AssetInventaryContext);
 	const [selectedInventaryData, setSelectedAsset] = useState<AssetDatatype | null>(null);
 	const formRef = useRef<any>();
 	const [isLoading, , fetchData] = useHttp();
@@ -45,16 +42,13 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 	}
 
 	function handleAddAssetType(values: string[]) {
-		const valueToSend = values[0].charAt(0).toUpperCase() + values[0].slice(1).toLowerCase();
-		fetchData(
-			useHttp.postRequestHelper(ASSETS_API, {
-				assetName: valueToSend,
-			}),
-			(response) => {
-				addAssetTypeHandler(response);
-				setIsModalOpen(false);
-			},
+		const valueToSend = values.map(
+			(value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
 		);
+		fetchData(useHttp.postRequestHelper(ASSETS_API, { assetName: valueToSend }), (response) => {
+			addAssetTypeHandler(response);
+			setIsModalOpen(false);
+		});
 	}
 
 	function handleAddQuantity(values: string[], assetType: string) {
@@ -64,22 +58,19 @@ const InventaryContent = ({ isModalOpen, setIsModalOpen }: InventaryContentProps
 				assetCodes: values,
 			}),
 			(response) => {
-				console.log(response, "response");
 				addQuantityHandler(response, assetType);
 				setIsModalOpen(false);
 			},
 		);
 	}
 
-	console.log(assetData, "assetData");
-
 	return (
 		<>
 			<Modal
 				title={
 					selectedInventaryData
-						? `Add ${selectedInventaryData.assetName} to inventary`
-						: "Add Asset Type"
+						? `${t("add")} ${selectedInventaryData.assetName} ${t("toINventary")}`
+						: t("addAssetType")
 				}
 				isOpen={isModalOpen}
 				onCancel={() => {

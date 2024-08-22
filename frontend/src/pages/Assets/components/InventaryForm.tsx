@@ -4,24 +4,24 @@ import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useImperativeHandle, useRef, forwardRef } from "react";
+import { t } from "i18next";
 
 const QuantityForm = forwardRef(
 	({ selectedAsset, onAddAssetType, onAddQuantity }: QuantityFormProps, ref) => {
 		const [form] = Form.useForm();
 		const formRef = useRef<any>();
-		// console.log(selectedAsset, "selectedAsset");
 
-		function onFinish(values: any, identifier: string) {
-			selectedAsset
-				? onAddQuantity(values[identifier], selectedAsset.assetName)
-				: onAddAssetType(values[identifier]);
-		}
+    function onFinish(values: any, identifier: string) {
+      selectedAsset
+        ? onAddQuantity(values[identifier], selectedAsset.assetName)
+        : onAddAssetType(values[identifier]);
+    }
 
-		useImperativeHandle(ref, () => ({
-			submit: () => {
-				formRef.current.submit();
-			},
-		}));
+    useImperativeHandle(ref, () => ({
+      submit: () => {
+        formRef.current.submit();
+      },
+    }));
 
 		return (
 			<Form
@@ -37,7 +37,7 @@ const QuantityForm = forwardRef(
 						{
 							validator: async (_, values) => {
 								if (!values || values.length < 1) {
-									return Promise.reject(new Error("At least 1 Asset is required"));
+									return Promise.reject(new Error(t("minimumOneRequired")));
 								}
 							},
 						},
@@ -52,7 +52,7 @@ const QuantityForm = forwardRef(
 										),
 									);
 									return Promise.reject(
-										new Error(`Duplicate values found: ${duplicateValues.values().next().value}`),
+										new Error(`${t("duplicatedValue")} ${duplicateValues.values().next().value}`),
 									);
 								}
 							},
@@ -81,7 +81,7 @@ const QuantityForm = forwardRef(
 												whitespace: true,
 												message: selectedAsset
 													? `Please input ${selectedAsset?.assetName}'s code or delete this field.`
-													: "Please input asset type or delete this field.",
+													: t("pleaseInputAssetTypeOrDeleteThisField"),
 											},
 										]}
 										noStyle
@@ -109,7 +109,11 @@ const QuantityForm = forwardRef(
 									style={{ width: "100%" }}
 									icon={<PlusOutlined />}
 								>
-									{`Add ${selectedAsset ? `${selectedAsset.assetName}'s Code` : "Asset Type"}`}
+									{`${t("add")} ${
+										selectedAsset
+											? `${selectedAsset.assetName}${t('codeEngOnly')}`
+											: t("assetTypeAdd")
+									}`}
 								</Button>
 								<Form.ErrorList errors={errors} />
 							</Form.Item>
