@@ -1,4 +1,7 @@
-import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
+import {
+  createTableColumns,
+  getAllUniqueValues,
+} from "../../../../components/Table/Table";
 import { SearchOutlined } from "@ant-design/icons";
 import { TableProps } from "antd";
 import { t } from "i18next";

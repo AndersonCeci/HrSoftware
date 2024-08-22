@@ -34,7 +34,6 @@ export class InventoryController {
   //   return this.inventoryService.findAll();
   // }
 
-
   @Delete(':id')
   async deleteInventory(@Param('id') id: string) {
     return this.inventoryService.delete(id);
@@ -51,17 +50,14 @@ export class InventoryController {
     @Param('id') id: string,
     @Body() assignEmployeeDto: AssignEmployeeDto,
   ) {
-   
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid Asset ID');
     }
 
-    
     if (!mongoose.Types.ObjectId.isValid(assignEmployeeDto.employeeDetails)) {
       throw new BadRequestException('Invalid Employee ID');
     }
 
-    
     return this.inventoryService.assignToEmployee(
       id,
       assignEmployeeDto.employeeDetails,
@@ -70,10 +66,10 @@ export class InventoryController {
     );
   }
 
-   @Patch('unassign/:id')
-   async unassignFromEmployee(@Param('id') id: string) {
-     return this.inventoryService.unassignFromEmployee(id);
-   }
+  @Patch('unassign/:id')
+  async unassignFromEmployee(@Param('id') id: string) {
+    return this.inventoryService.unassignFromEmployee(id);
+  }
 
   @Patch(':id')
   async updateUser(

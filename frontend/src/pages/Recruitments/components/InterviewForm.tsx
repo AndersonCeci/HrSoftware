@@ -86,7 +86,7 @@ const InterviewForm: React.FC<{ step: string }> = ({ step }) => {
             size="small"
             labelPlacement="vertical"
             current={evaluationSteps.findIndex(
-              (item) => item.value === editingRecord?.[step]?.evaluation
+              (item) => item.value === editingRecord?.[step]?.evaluation,
             )}
           >
             {evaluationSteps.map((item, index) => (

@@ -4,9 +4,9 @@ import Button from "../../../components/Shared/Button";
 import { t } from "i18next";
 
 type FinalStepProps = {
-	isSubmitting: boolean;
-	errorMsg: string | null;
-	onGoBackBtn: () => void;
+  isSubmitting: boolean;
+  errorMsg: string | null;
+  onGoBackBtn: () => void;
 };
 
 const FinalStep = ({ isSubmitting, errorMsg, onGoBackBtn }: FinalStepProps) => {

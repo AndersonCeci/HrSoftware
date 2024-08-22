@@ -126,4 +126,10 @@ export const EnTranslation = {
 	cancel: "Cancel",
 	assetTypeAdd: "Asset Types",
 	codeEngOnly: "'s Codes",
+	addEvent: "Add Event",
+	reminders: "Reminders",
+	searchAReminder: "Search a reminder",
+	addNewReminder: "Add new reminder",
+	thisMonth: "This Month",
+	upcoming: "Upcoming",
 };

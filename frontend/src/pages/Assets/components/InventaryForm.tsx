@@ -11,17 +11,17 @@ const QuantityForm = forwardRef(
 		const [form] = Form.useForm();
 		const formRef = useRef<any>();
 
-		function onFinish(values: any, identifier: string) {
-			selectedAsset
-				? onAddQuantity(values[identifier], selectedAsset.assetName)
-				: onAddAssetType(values[identifier]);
-		}
+    function onFinish(values: any, identifier: string) {
+      selectedAsset
+        ? onAddQuantity(values[identifier], selectedAsset.assetName)
+        : onAddAssetType(values[identifier]);
+    }
 
-		useImperativeHandle(ref, () => ({
-			submit: () => {
-				formRef.current.submit();
-			},
-		}));
+    useImperativeHandle(ref, () => ({
+      submit: () => {
+        formRef.current.submit();
+      },
+    }));
 
 		return (
 			<Form

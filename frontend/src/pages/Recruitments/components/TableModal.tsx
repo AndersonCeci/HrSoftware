@@ -45,14 +45,13 @@ const TableModal = forwardRef(
     const handleUpload = async (file: File) => {
       const formData = new FormData();
       formData.append("file", file);
-      console.log(formData, "formDataaa");
       try {
         const uploadResponse = await fetch(
           "http://localhost:3000/files/upload",
           {
             method: "POST",
             body: formData,
-          }
+          },
         );
 
         if (!uploadResponse.ok) {
@@ -71,7 +70,6 @@ const TableModal = forwardRef(
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      console.log(file, "fileeee");
       if (file) {
         handleUpload(file);
       } else {
@@ -92,12 +90,11 @@ const TableModal = forwardRef(
       sendRequest(
         useHttp[selectedRecord ? "patchRequestHelper" : "postRequestHelper"](
           path,
-          valuesToSend
+          valuesToSend,
         ),
         (responseData: any) => {
-          console.log(responseData, "responseData");
           selectedRecord ? onEdit(responseData) : onAdd(responseData);
-        }
+        },
       );
     }
 
@@ -162,7 +159,7 @@ const TableModal = forwardRef(
         )}
       </Form>
     );
-  }
+  },
 );
 
 export default TableModal;

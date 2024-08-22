@@ -19,10 +19,6 @@ export default function ChangeLanguage() {
 		i18n.changeLanguage(code);
 	};
 
-	const onChange = (checked: boolean) => {
-		console.log(`switch to ${checked}`);
-	};
-
 	return (
 		<div style={{ margin: 20, alignItems: "center" }}>
 			<Card
@@ -64,7 +60,7 @@ export default function ChangeLanguage() {
 					<Switch
 						style={{ float: "right" }}
 						defaultChecked
-						onChange={onChange}
+						// onChange={onChange}
 						checkedChildren={<IoNotificationsOutline />}
 						unCheckedChildren={<IoNotificationsOffOutline />}
 					/>

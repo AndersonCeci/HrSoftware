@@ -11,23 +11,29 @@ import FinalStep from "./FinalStep";
 import { t } from "i18next";
 
 type StepItem = {
-	subTitle: string;
-	content: JSX.Element;
-	icon: JSX.Element;
+  subTitle: string;
+  content: JSX.Element;
+  icon: JSX.Element;
 };
 
 type StepItemProps = (
-	current: number,
-	setCurrent: (value: number) => void,
-	form: any,
-	isLoading: boolean,
-	error: string | null,
+  current: number,
+  setCurrent: (value: number) => void,
+  form: any,
+  isLoading: boolean,
+  error: string | null,
 ) => StepItem[];
 
-const getStepItems: StepItemProps = (current, setCurrent, form, isLoading, error) => {
-	function resetOnError() {
-		setCurrent(0);
-	}
+const getStepItems: StepItemProps = (
+  current,
+  setCurrent,
+  form,
+  isLoading,
+  error,
+) => {
+  function resetOnError() {
+    setCurrent(0);
+  }
 
 	return [
 		{

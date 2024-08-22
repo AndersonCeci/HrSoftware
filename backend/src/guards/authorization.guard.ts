@@ -21,7 +21,6 @@ export class AuthorizationGuard implements CanActivate {
     if (!requiredRoles) {
       return true;
     }
-    console.error('Just for testing');
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     if (!user || !user.id) {

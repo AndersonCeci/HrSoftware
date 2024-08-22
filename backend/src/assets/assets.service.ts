@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Asset } from 'src/assets/schemas/asset.schema';
+import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
 import { Query } from 'express-serve-static-core';
-
 
 @Injectable()
 export class AssetsService {

@@ -62,29 +62,8 @@ export const Paths = {
 			},
 		],
 	},
-	// Settings: {
-	//   path: "settings",
-	//   icon: NavigationIcons.IoSettingsOutline,
-	//   children: [
-	//     {
-	//       path: "",
-	//       pageElement: PageRoutesComponents.SettingsPage,
-	//     },
-	//   ],
-	// },
-	// Notifications: {
-	// 	path: "notifications",
-	// 	icon: NavigationIcons.BellOutlined,
-	// 	children: [
-	// 		{
-	// 			path: "",
-	// 			pageElement: PageRoutesComponents.NotificationPage,
-	// 		},
-	// 	],
-	// },
 	Background: {
 		path: "company-background",
-		// icon: NavigationIcons.BgColorsOutlined,
 		children: [
 			{
 				path: "",

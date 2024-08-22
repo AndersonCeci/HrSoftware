@@ -51,18 +51,18 @@ export default function useHttp() {
           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
         });
 
-				if (!response.ok) {
-					throw new Error("Request failed!");
-				}
-				const responseData = await response.json();
-				applyData ? applyData(responseData) : null;
-			} catch (err: any) {
-				setError(err.message || "Something went wrong!");
-			}
-			setIsLoading(false);
-		}
-		fetchData();
-	};
+        if (!response.ok) {
+          throw new Error("Request failed!");
+        }
+        const responseData = await response.json();
+        applyData ? applyData(responseData) : null;
+      } catch (err: any) {
+        setError(err.message || "Something went wrong!");
+      }
+      setIsLoading(false);
+    }
+    fetchData();
+  };
 
   return [isLoading, error, sendRequest] as const;
 }

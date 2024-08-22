@@ -8,8 +8,8 @@ import { t } from "i18next";
 import create from "@ant-design/icons/lib/components/IconFont";
 
 type InventaryColumnType = (
-	data: AssetDatatype[],
-	onEdit: (record: AssetDatatype) => void,
+  data: AssetDatatype[],
+  onEdit: (record: AssetDatatype) => void,
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {

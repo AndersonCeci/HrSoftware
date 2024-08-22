@@ -25,7 +25,6 @@ const AddEmployeeForm = ({
 
   function handleStepChanges(changer: number) {
     if (changer > 0) {
-      console.log("Validated", form.getFieldsValue());
       form.validateFields().then(() => {
         setCurrent((prev) => prev + changer);
       });

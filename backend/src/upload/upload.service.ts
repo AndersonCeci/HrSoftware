@@ -14,7 +14,6 @@ export class UploadService {
 
     const fileName = `${Date.now()}_${file.originalname}`;
     const fileUpload = bucket.file(fileName);
-    console.log(fileName, 'fileNameeee');
     const stream = fileUpload.createWriteStream({
       metadata: {
         contentType: file.mimetype,

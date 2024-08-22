@@ -59,6 +59,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 					reservedModifier: 1,
 				});
 				setIsModalOpen(false);
+				setSelectedAsset(null);
 			},
 		);
 	}
@@ -90,7 +91,6 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 
 	const handleSubmit = () => {
 		formRef.current.submit();
-		setSelectedAsset(null);
 	};
 
 	const columns = expandedColumns(
