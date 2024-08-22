@@ -85,10 +85,11 @@ export const EnTranslation = {
   projectManager: "Project Manager",
   holidayEntitlement: "Holiday Entitlement",
   currentSalary: "Current Salary",
-  dailyQuote: "Daily qoute",
+  dailyQuote: "Daily Qoute",
   reminders: "Reminders",
   searchAReminder: "Search a reminder",
   addNewReminder: "Add new reminder",
   thisMonth: "This Month",
   upcoming: "Upcoming",
+  dailyJoke: "Daily Joke",
 };

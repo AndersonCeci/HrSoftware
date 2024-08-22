@@ -131,6 +131,7 @@ const EmploymentPage: React.FC = () => {
     );
   }
 
+
   const columns = getColumns(
     tableData,
     handleEditButtonClick,

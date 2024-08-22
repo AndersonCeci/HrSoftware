@@ -22,7 +22,6 @@ export default function ChangeLanguage() {
     <div style={{ margin: 20, alignItems: "center" }}>
       <Card
         title={t(`general`)}
-        // style={{ width: "750px" }}
         styles={{ body: { display: "flex", flexDirection: "column" } }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -60,7 +59,7 @@ export default function ChangeLanguage() {
           <Switch
             style={{ float: "right" }}
             defaultChecked
-            onChange={onChange}
+            onChange={()=>changeLanguage}
             checkedChildren={<IoNotificationsOutline />}
             unCheckedChildren={<IoNotificationsOffOutline />}
           />
