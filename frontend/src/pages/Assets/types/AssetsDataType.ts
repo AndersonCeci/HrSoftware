@@ -14,7 +14,6 @@ export type InventaryDataType = {
 	assetCodes: string;
 	assetID: string;
 	employeeDetails: EmployeeDataType;
-	
 	assignedDate: Date;
 	status: AssetStatus;
 };

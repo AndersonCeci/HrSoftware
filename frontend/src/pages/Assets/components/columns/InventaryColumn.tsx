@@ -4,6 +4,7 @@ import Button from "../../../../components/Shared/Button";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { TableProps, Typography } from "antd";
 import Progress from "../../../../components/Shared/Progress";
+import { t } from "i18next";
 import create from "@ant-design/icons/lib/components/IconFont";
 
 type InventaryColumnType = (
@@ -12,18 +13,18 @@ type InventaryColumnType = (
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
-  return parseFloat(((reserved / quantity) * 100).toFixed(1));
+	return parseFloat(((reserved / quantity) * 100).toFixed(1));
 }
 
 const createColumns: InventaryColumnType = (data, onEdit) => {
 	return [
 		createTableColumns({
-			title: "Asset Name",
+			title: t("assetType"),
 			dataIndex: "assetName",
 			key: "assetType",
 		}),
 		createTableColumns({
-			title: "Available",
+			title: t("available"),
 			dataIndex: "_id",
 			key: "reserved",
 			displayAs: (_, record) => {
@@ -35,7 +36,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 					<Progress
 						percentPosition={{ align: "end", type: "inner" }}
 						format={(percent) =>
-							`${available} / ${quantity} ${percent && percent > 20 ? "Available" : ""}`
+							`${available} / ${quantity} ${percent && percent > 20 ? t("available") : ""}`
 						}
 						percentage={percentage}
 						status={
@@ -51,7 +52,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			width: "40%",
 		}),
 		createTableColumns({
-			title: "Total quantity",
+			title: t("totalQuantity"),
 			dataIndex: "quantity",
 			key: "quantity",
 			displayAs: (value) => {
@@ -59,24 +60,24 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			},
 		}),
 		createTableColumns({
-			title: "Reserved",
+			title: t("reserved"),
 			dataIndex: "reserved",
 			key: "reserved",
 		}),
 		createTableColumns({
-			title: "On Repair",
+			title: t("onRepair"),
 			dataIndex: "onRepair",
 			key: "onRepair",
 		}),
 
 		createTableColumns({
-			title: "Edit",
+			title: t("edit"),
 			dataIndex: "_id",
 			key: "quantity",
 			displayAs: (_, record) => {
 				return (
 					<Button type="text" icon={<PlusCircleOutlined />} onClick={() => onEdit(record)}>
-						Add
+						{t("add")}
 					</Button>
 				);
 			},

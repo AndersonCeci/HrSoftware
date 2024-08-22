@@ -56,9 +56,9 @@ const ProfilePage: React.FC = () => {
     return <Loader />;
   }
 
-  if (error) {
-    return <div>Something went wrong!!</div>;
-  }
+  // if (error) {
+  //   return <div>Something went wrong!!</div>;
+  // }
 
   const bigcardStyle: React.CSSProperties = {
     width: "1000px",

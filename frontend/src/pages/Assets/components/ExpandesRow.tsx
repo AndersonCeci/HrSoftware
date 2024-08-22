@@ -22,6 +22,16 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const filterData = record.inventories;
 
 	const handleOnRepairClick = (newStatus: string, updatedRecord: InventaryDataType) => {
+		let onRepaieModifier = 0;
+		let reservedModifier = 0;
+
+		if (updatedRecord.status === AssetStatus.OnRepair) {
+			onRepaieModifier = -1;
+		} else {
+			reservedModifier = updatedRecord.status === AssetStatus.Assigned ? -1 : 0;
+			onRepaieModifier = 1;
+		}
+
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/${updatedRecord._id}`, {
 				assetName: record.assetName,
@@ -30,8 +40,8 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			}),
 			(response) => {
 				updateInventaryItemHandler(response, {
-					onRepairModifier: -1,
-					reservedModifier: 0,
+					onRepairModifier: onRepaieModifier,
+					reservedModifier: reservedModifier,
 				});
 			},
 		);
@@ -48,6 +58,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 					onRepairModifier: 0,
 					reservedModifier: 1,
 				});
+				setIsModalOpen(false);
 			},
 		);
 	}
@@ -80,7 +91,6 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const handleSubmit = () => {
 		formRef.current.submit();
 		setSelectedAsset(null);
-		setIsModalOpen(false);
 	};
 
 	const columns = expandedColumns(

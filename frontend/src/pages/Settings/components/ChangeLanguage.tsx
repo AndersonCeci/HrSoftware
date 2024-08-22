@@ -3,9 +3,11 @@ import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { IoNotificationsOffOutline, IoNotificationsOutline } from "react-icons/io5";
 import { setToLocalStorage } from "../../../utils/utils";
+import { getFromLocalStorage } from "../../../utils/utils";
 
 export default function ChangeLanguage() {
 	const { i18n } = useTranslation();
+	const selectedLanguage = getFromLocalStorage("language") || "en";
 
 	const languagge = [
 		{ code: "sq", title: "Albanian" },
@@ -35,6 +37,7 @@ export default function ChangeLanguage() {
 					<div style={{ alignItems: "center" }}>
 						{languagge.map((lang) => (
 							<Button
+								type={selectedLanguage === lang.code ? "primary" : "default"}
 								style={{ float: "right", marginLeft: "10px" }}
 								onClick={() => changeLanguage(lang.code)}
 							>

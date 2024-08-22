@@ -20,7 +20,20 @@ export default function AssetInventaryContextProvider({ children }: { children: 
 	const [assetsData, setAssetsData] = useState<AssetDatatype[]>([]);
 
 	function getAssetData(assets: AssetDatatype[]) {
-		setAssetsData(assets);
+		const assetsData = assets.map((asset) => {
+			if (Object.keys(asset.inventories[0]).length > 0) {
+				return asset;
+			} else {
+				return {
+					...asset,
+					quantity: 0,
+					onRepair: 0,
+					reserved: 0,
+					inventories: [],
+				};
+			}
+		});
+		setAssetsData(assetsData);
 	}
 
 	function addAssetTypeHandler(newAssets: AssetDatatype[]) {
