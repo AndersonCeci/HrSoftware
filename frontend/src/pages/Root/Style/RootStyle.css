@@ -26,3 +26,12 @@
 		background: #2a9be6;
 	}
 }
+
+
+::-webkit-scrollbar {
+	display: none;
+}
+
+::-webkit-scrollbar:hover{
+	display: block
+}

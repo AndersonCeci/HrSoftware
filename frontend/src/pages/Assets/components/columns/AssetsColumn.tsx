@@ -1,7 +1,4 @@
-import {
-  createTableColumns,
-  getAllUniqueValues,
-} from "../../../../components/Table/Table";
+import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import { SearchOutlined } from "@ant-design/icons";
 import { TableProps } from "antd";
 import { t } from "i18next";
@@ -11,17 +8,22 @@ export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype
 	return [
 		createTableColumns({
 			title: t("employee"),
-			dataIndex: "userName",
+			dataIndex: "_id",
 			key: "employee",
 			filterDropdown: true,
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
 			width: 150,
 			onFilter: (inputValue, filter) =>
 				filter.userName.toLowerCase().includes(inputValue.toLowerCase()),
+			displayAs: (_, record) => {
+				const { inventory } = record;
+				const employee = inventory.employeeDetails.fullName;
+				return <span> {employee} </span>;
+			},
 		}),
 		createTableColumns({
 			title: t("assetType"),
-			dataIndex: "assetType",
+			dataIndex: "assetName",
 			key: "type",
 			width: 150,
 			filters: getAllUniqueValues(tableData, "assetType"),
@@ -29,11 +31,25 @@ export function getColumns(tableData: AssetDatatype[]): TableProps<AssetDatatype
 		}),
 		createTableColumns({
 			title: t("dateGiven"),
-			dataIndex: "dateGiven",
+			dataIndex: "assignDate",
 			key: "date",
 			width: 150,
-			displayAs: (value) => <span>{new Date(value).toLocaleDateString()}</span>,
+			displayAs: (value, record) => {
+				const { inventory } = record;
+				console.log(inventory);
+				const text = inventory.assignDate;
+				return <span>{new Date(text).toLocaleDateString()}</span>;
+			},
 		}),
-		createTableColumns({ title: t("code"), dataIndex: "assetCode", key: "code", width: 150 }),
+		createTableColumns({
+			title: t("code"),
+			dataIndex: "assetCode",
+			key: "code",
+			displayAs: (value, record) => {
+				const { inventory } = record;
+				return <span>{inventory.assetCodes}</span>;
+			},
+			width: 150,
+		}),
 	];
 }
