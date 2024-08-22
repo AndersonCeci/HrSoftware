@@ -86,7 +86,7 @@ export const EnTranslation = {
 	projectManager: "Project Manager",
 	holidayEntitlement: "Holiday Entitlement",
 	currentSalary: "Current Salary",
-	dailyQuote: "Daily qoute",
+	dailyQuote: "Daily Qoute",
 	other: "Other",
 	errorMessages: "Please fill in",
 	errorMsgValidim: "Please enter the correct information! Example: ",
