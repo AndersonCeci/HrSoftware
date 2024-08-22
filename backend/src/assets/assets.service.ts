@@ -4,17 +4,32 @@ import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
+import { Query } from 'express-serve-static-core';
 
 @Injectable()
 export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
-  async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-    const createAsset = new this.assetModel(createAssetDto);
-    return createAsset.save();
+  // async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
+  //   const createAsset = new this.assetModel(createAssetDto);
+  //   return createAsset.save();
+  // }
+  async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
+    const { assetName, isDeleted = false, deleteDate } = createAssetDto;
+
+    const inventoryEntries = assetName.map((code) => ({
+      assetName: code,
+      isDeleted,
+      deleteDate,
+    }));
+
+      return await this.assetModel.create(inventoryEntries);
+
   }
 
-  async findAll(): Promise<Asset[]> {
+  async findAll(query: Query): Promise<Asset[]> {
+    const page = Number(query.page) || 1;
+    const resPerPage = 10;
     const data = await this.assetModel
       .aggregate([
         {
@@ -97,3 +112,9 @@ export class AssetsService {
       .exec();
   }
 }
+        // {
+        //   $skip: resPerPage * page,
+        // },
+        // {
+        //   $limit: resPerPage,
+        // },

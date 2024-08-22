@@ -1,3 +1,4 @@
+import { Employee } from 'src/employee/schema/employe.schema';
 import {
   Controller,
   Get,
@@ -14,7 +15,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
-import { Employee } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
 import { UserService } from 'src/users/users.service';
@@ -56,8 +56,8 @@ export class EmployeeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const test = this.employeeService.findOne(id);
-    return test;
+    const employee = this.employeeService.findOne(id);
+    return employee;
   }
 
   @Get()

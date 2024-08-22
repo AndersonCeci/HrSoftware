@@ -8,6 +8,7 @@ import { BiSolidError } from "react-icons/bi";
 import FirstPanel from "./FirstPanel";
 import SecondStep from "./SecondStep";
 import FinalStep from "./FinalStep";
+import { t } from "i18next";
 
 type StepItem = {
   subTitle: string;
@@ -34,38 +35,23 @@ const getStepItems: StepItemProps = (
     setCurrent(0);
   }
 
-  return [
-    {
-      subTitle: "Create Account",
-      content: <FirstPanel />,
-      icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
-    },
-    {
-      subTitle: "Add Information",
-      content: <SecondStep form={form} />,
-      icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
-    },
-    {
-      subTitle: "Finalize Account",
-      content: (
-        <FinalStep
-          isSubmitting={isLoading}
-          errorMsg={error}
-          onGoBackBtn={resetOnError}
-        />
-      ),
-      icon:
-        current === 2 ? (
-          error ? (
-            <BiSolidError />
-          ) : (
-            <FaCircleCheck />
-          )
-        ) : (
-          <CiCircleCheck />
-        ),
-    },
-  ];
+	return [
+		{
+			subTitle: t("createAccount"),
+			content: <FirstPanel />,
+			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
+		},
+		{
+			subTitle: t("addEmployeeInfo"),
+			content: <SecondStep form={form} />,
+			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
+		},
+		{
+			subTitle: t("finalizeAccount"),
+			content: <FinalStep isSubmitting={isLoading} errorMsg={error} onGoBackBtn={resetOnError} />,
+			icon: current === 2 ? error ? <BiSolidError /> : <FaCircleCheck /> : <CiCircleCheck />,
+		},
+	];
 };
 
 export default getStepItems;

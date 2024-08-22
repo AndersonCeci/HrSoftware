@@ -10,13 +10,12 @@ export type AssetDatatype = {
 };
 
 export type InventaryDataType = {
-  _id: string;
-  assetCodes: string;
-  assetID: string;
-  employeeDetails: EmployeeDataType;
-
-  assignedDate: Date;
-  status: AssetStatus;
+	_id: string;
+	assetCodes: string;
+	assetID: string;
+	employeeDetails: EmployeeDataType;
+	assignedDate: Date;
+	status: AssetStatus;
 };
 
 export enum AssetStatus {

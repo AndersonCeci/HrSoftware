@@ -17,19 +17,15 @@ const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
 
 const EmploymentPage: React.FC = () => {
-  const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
-  const [open, setOpen] = useState(false);
-  const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(
-    undefined,
-  );
-  const promoteRef = useRef<any>();
-  const [isLoading, error, sendRequest] = useHttp();
-  const [form] = Form.useForm();
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPromoted, setIsPromoted] = useState(false);
-  const [promotedData, setPromotedData] = useState<
-    EmployeeDataType | undefined
-  >(undefined);
+	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
+	const [open, setOpen] = useState(false);
+	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
+	const promoteRef = useRef<any>();
+	const [isLoading, , sendRequest] = useHttp();
+	const [form] = Form.useForm();
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [isPromoted, setIsPromoted] = useState(false);
+	const [promotedData, setPromotedData] = useState<EmployeeDataType | undefined>(undefined);
 
   const { t } = useTranslation();
 
@@ -75,27 +71,25 @@ const EmploymentPage: React.FC = () => {
     setEditedData(record);
   }
 
-  function handleDeleteModalOk() {
-    const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
-    sendRequest(
-      {
-        url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: { deletedAt: date },
-      },
-      () => {
-        setTableData((prev) =>
-          prev.filter((item) => item._id !== editedData?._id),
-        );
-        setIsDeleting(false);
-      },
-    );
-    setIsDeleting(false);
-    setEditedData(undefined);
-  }
+	function handleDeleteModalOk() {
+		const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
+		sendRequest(
+			{
+				url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: { deletedAt: date },
+			},
+			() => {
+				setTableData((prev) => prev.filter((item) => item._id !== editedData?._id));
+				setIsDeleting(false);
+			},
+		);
+		setIsDeleting(false);
+		setEditedData(undefined);
+	}
 
   function handlClose(fn: (arg: boolean) => void) {
     fn(false);

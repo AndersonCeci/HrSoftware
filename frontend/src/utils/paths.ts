@@ -62,16 +62,6 @@ export const Paths = {
 			},
 		],
 	},
-	Notifications: {
-		path: "notifications",
-		icon: NavigationIcons.BellOutlined,
-		children: [
-			{
-				path: "",
-				pageElement: PageRoutesComponents.NotificationPage,
-			},
-		],
-	},
 	Background: {
 		path: "company-background",
 		children: [

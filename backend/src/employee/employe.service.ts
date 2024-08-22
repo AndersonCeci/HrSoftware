@@ -1,3 +1,4 @@
+import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -6,13 +7,59 @@ import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import { UserService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Role } from 'src/users/schemas/user.schema';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
     private readonly userService: UserService,
+    private readonly notificationService: NotificationsService,
   ) {}
+
+  // async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
+  //   let role: Role;
+
+  //   switch (createEmployeeDto.position) {
+  //     case Position.JuniorFrontEnd:
+  //     case Position.JuniorBackEnd:
+  //     case Position.SeniorFrontEnd:
+  //     case Position.SeniorBackEnd:
+  //     case Position.FullStack:
+  //     case Position.DevOps:
+  //       role = Role.Employee;
+  //       break;
+  //     case Position.ProjectManager:
+  //       role = Role.ProjectManager;
+  //       break;
+  //     default:
+  //       throw new Error('Invalid position');
+  //   }
+
+  //   const fullName = await this.employeeModel.aggregate([
+  //     {
+  //       $project: {
+  //         fullName: { $concat: ['$name', '', '$surname'] },
+  //       },
+  //     },
+  //   ]);
+
+  //   const employeeData = { ...createEmployeeDto, role, fullName };
+
+  //   const createdEmploy = await new this.employeeModel(employeeData).save();
+
+  //   const createUserDto: CreateUserDto = {
+  //     employID: createdEmploy._id as Types.ObjectId,
+  //     username: createEmployeeDto.surname + 'codevider',
+  //     password: 'codevider',
+  //     email: createEmployeeDto.email,
+  //     role: role,
+  //     isDeleted: false,
+  //   };
+  //   await this.userService.createUser(createUserDto);
+  //   return createdEmploy;
+  // }
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     let role: Role;
@@ -33,26 +80,62 @@ export class EmployeeService {
         throw new Error('Invalid position');
     }
 
-    const employeeData = {
+    const createdEmploye = await new this.employeeModel ({
       ...createEmployeeDto,
       role,
       teamLeaders:
         createEmployeeDto.teamLeaders?.map((id) => new Types.ObjectId(id)) ||
         [],
-    };
+    }).save();
 
-    const createdEmploy = await new this.employeeModel(employeeData).save();
+    const fullNameAggregation = await this.employeeModel.aggregate([
+      {
+        $match: { _id: createdEmploye._id },
+      },
+      {
+        $project: {
+          fullName: {
+            $concat: [
+              { $toUpper: { $substrCP: [`$name`, 0, 1] } },
+              {
+                $substrCP: [
+                  `$name`,
+                  1,
+                  { $subtract: [{ $strLenCP: `$name` }, 1] },
+                ],
+              },
+              ' ',
+              { $toUpper: { $substrCP: [`$surname`, 0, 1] } },
+              {
+                $substrCP: [
+                  `$surname`,
+                  1,
+                  { $subtract: [{ $strLenCP: `$surname` }, 1] },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    const updatedEmployee = await this.employeeModel.findByIdAndUpdate(
+      createdEmploye._id,
+      { fullName: fullNameAggregation[0].fullName },
+      { new: true },
+    );
 
     const createUserDto: CreateUserDto = {
-      employID: createdEmploy._id as Types.ObjectId,
-      username: createEmployeeDto.surname + 'codevider',
+      employID: updatedEmployee._id as Types.ObjectId,
+      username: `${createEmployeeDto.surname}codevider`,
       password: 'codevider',
       email: createEmployeeDto.email,
       role: role,
       isDeleted: false,
     };
+
     await this.userService.createUser(createUserDto);
-    return createdEmploy;
+    return updatedEmployee;
   }
 
   findAll(): Promise<Employee[]> {
@@ -101,14 +184,6 @@ export class EmployeeService {
     return updatedEmployee;
   }
 
-  // async getUsernames(): Promise<{ id: string; username: string }[]> {
-  //   const employees = await this.employeeModel
-  //     .find({ deleteDate: false })
-  //     .select('_id username')
-  //     .exec();
-
-  //   return {employees._id, employees.username};
-  // }
   async findName(name: string): Promise<Employee | null> {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
