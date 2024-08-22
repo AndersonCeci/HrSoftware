@@ -132,4 +132,5 @@ export const EnTranslation = {
 	addNewReminder: "Add new reminder",
 	thisMonth: "This Month",
 	upcoming: "Upcoming",
+	dailyJoke: "Daily Joke",
 };

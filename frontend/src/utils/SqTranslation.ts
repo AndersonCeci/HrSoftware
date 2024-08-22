@@ -214,5 +214,6 @@ export const SqTranslation = {
   searchAReminder: "Kërko një përkujtues",
   addNewReminder: "Shto një përkujtues",
   thisMonth: "Ky Muaj",
-  upcoming: "Të Ardhshme"
+  upcoming: "Të Ardhshme",
+  dailyJoke: "Humori Ditës",
 };
