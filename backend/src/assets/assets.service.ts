@@ -95,7 +95,7 @@ export class AssetsService {
         {
           $unwind: {
             path: '$inventories',
-            preserveNullAndEmptyArrays: true,
+            preserveNullAndEmptyArrays: false,
           },
         },
         {
@@ -113,39 +113,19 @@ export class AssetsService {
           },
         },
         {
-          $group: {
-            _id: '$_id',
-            assetName: { $first: '$assetName' },
-            quantity: { $sum: 1 },
-            inventories: { $push: '$inventories' },
-            reserved: {
-              $sum: {
-                $cond: [{ $eq: ['$inventories.status', 'Assigned'] }, 1, 0],
-              },
-            },
-            onRepair: {
-              $sum: {
-                $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
-              },
-            },
-          },
-        },
-        {
           $match: {
-            inventories: { $exists: true, $ne: {} },
+            'inventories.status': 'Assigned', 
           },
         },
         {
           $project: {
-            inventories: {
-              $filter: {
-                input: '$inventories',
-                as: 'inventory',
-                cond: { $eq: ['$$inventory.status', 'Assigned'] },
-              },
-            },
+            _id: 0,
             assetName: 1,
+            inventory: '$inventories', 
           },
+        },
+        {
+          $sort: { assetName: 1 },
         },
       ])
       .exec();

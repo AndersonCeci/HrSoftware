@@ -15,7 +15,7 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 	const dateStr = date.toLocaleDateString("en-GB");
 	const dateEndStr = dateEnd.toLocaleDateString("en-GB");
 
-	const isOnlyOneDay = dateStr === "23/08/2024";
+	const isOnlyOneDay = dateStr === dateEndStr;
 
 	const displayedDate = dateStr + (isOnlyOneDay ? "" : ` - ${dateEndStr}`);
 	const displayedTime =
