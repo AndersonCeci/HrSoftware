@@ -1,10 +1,10 @@
 import { Form, Flex, Upload } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
-import TextField from "../../../components/Shared/TextField";
 import Button from "../../../components/Shared/Button";
 import { ButtonSize, ButtonType } from "../../../enums/Button";
 import { UploadOutlined } from "@ant-design/icons";
 import { useRef, forwardRef, useImperativeHandle } from "react";
+import { RcFile } from "antd/lib/upload/interface";
 
 type AddEventFormProps = {
   onAdd: (event: any) => void;
@@ -21,10 +21,12 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
   }));
 
   function onFinish(values: any) {
-    const date = new Date(values.eventDate);
     const valuesToSubmit = {
       ...values,
       eventDate: values.eventDate.format("YYYY-MM-DD"),
+      eventEndDate: values.eventEndDate
+        ? values.eventEndDate.format("YYYY-MM-DD")
+        : values.eventDate.format("YYYY-MM-DD"),
       eventStartTime: values.eventStartTime.format("HH:mm"),
       eventEndTime: values.eventEndTime.format("HH:mm"),
       eventDiscription: values.eventDescription ? values.eventDescription : " ",
@@ -33,6 +35,35 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 
     onAdd(valuesToSubmit);
   }
+
+  const handleUpload = async (files: RcFile[]) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file as File);
+    });
+
+    try {
+      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const uploadData = await uploadResponse.json();
+      const fileUrls = uploadData.fileUrls;
+
+      form.setFieldsValue({ images: fileUrls });
+    } catch (error) {
+      console.error("File upload error:", error);
+    }
+  };
+
+//   const handleFileChange = (info: any) => {
+//     const files = info.fileList.map(
+//       (file: any) => file.originFileObj as RcFile
+//     );
+//     if (files.length > 0) {
+//       handleUpload(files);
+//     }
+//   };
 
   return (
     <Form
@@ -46,12 +77,22 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
     >
       <FormInputs.Input label="Event Name" name="eventName" required />
 
-      <FormInputs.DatePicker
-        label="Event Start"
-        name="eventDate"
-        required
-        isDisabledDate
-      />
+      <Flex gap={10}>
+        <FormInputs.DatePicker
+          label="Event Start"
+          name="eventDate"
+          required
+          isDisabledDate
+        />
+        <FormInputs.DatePicker
+          label="Event End"
+          name="eventEndDate"
+          isDisabledDate
+          // disableFuture
+          dependsOn="eventDate"
+        />
+      </Flex>
+
       <Flex gap={10}>
         <FormInputs.TimePicker
           label="Start Time"
@@ -71,20 +112,26 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
         type="textarea"
       />
 
-      <Form.Item label="Event Attachment" name="image">
+      <Form.Item label="Event Attachment" name="images">
         <Flex className="event-attachment-container">
           <Upload
-            beforeUpload={(e: any) => {
-              console.log(e, "testtt");
+            beforeUpload={() => {
+              return false;
             }}
             listType="picture-card"
             multiple
+            onChange={(info) => {
+				
+				const files = info.fileList.map( ( file ) => file.originFileObj );
+				console.log(files, 'filesss')
+              if (files) {
+                handleUpload(files);
+              }
+            }}
           >
-            <Button
-              icon={<UploadOutlined />}
-              type={ButtonType.TEXT}
-              size={ButtonSize.LARGE}
-            ></Button>
+            <Button icon={<UploadOutlined />} type="text" size="large">
+              Upload
+            </Button>
           </Upload>
         </Flex>
       </Form.Item>

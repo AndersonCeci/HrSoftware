@@ -29,7 +29,7 @@ export class CreateEventDto {
   location?: string;
 
   @IsOptional()
-  image?: string[];
+  images?: string[];
 
   isDeleted: boolean;
   deleteDate?: Date;

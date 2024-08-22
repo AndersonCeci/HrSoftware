@@ -5,20 +5,38 @@ import AssetInventaryContextProvider from "./context/AssetInventaryContext";
 import { Tabs } from "antd";
 import { useState } from "react";
 import { t } from "i18next";
+import useHttp from "../../hooks/useHttp";
 
 const INVENTARY_TAB = "inventary";
 const ASSETS_TAB = "assets";
+const API = import.meta.env.REACT_APP_ASSET_API;
 
 const AssetsPage: React.FC = () => {
 	const [activeTab, setActiveTab] = useState(INVENTARY_TAB);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isLoading, error, sendRequest] = useHttp();
+	const [tableData, setTableData] = useState([]);
 
 	function handleTabChange(key: string) {
 		setActiveTab(key);
+		if (key === ASSETS_TAB) {
+			getNewData();
+		}
 	}
 
 	function handleModalOpen() {
 		setIsModalOpen(true);
+	}
+
+	function getNewData() {
+		sendRequest(
+			{
+				url: `${API}/employee`,
+			},
+			(data) => {
+				setTableData(data);
+			},
+		);
 	}
 
 	return (
@@ -36,7 +54,7 @@ const AssetsPage: React.FC = () => {
 					</AssetInventaryContextProvider>
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={t("assets")} key={ASSETS_TAB}>
-					<AssetContent />
+					<AssetContent tableData={tableData} />
 				</Tabs.TabPane>
 			</Tabs>
 		</section>
