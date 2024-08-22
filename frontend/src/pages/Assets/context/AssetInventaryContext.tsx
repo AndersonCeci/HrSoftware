@@ -2,18 +2,18 @@ import { createContext, useState } from "react";
 import { AssetDatatype, InventaryDataType } from "../types/AssetsDataType";
 
 export const AssetInventaryContext = createContext({
-  assetData: [] as AssetDatatype[],
-  getAssetData: (_assets: AssetDatatype[]) => {},
-  addAssetTypeHandler: (_newAssets: AssetDatatype) => {},
-  addQuantityHandler: (_values: InventaryDataType[], _assetType: string) => {},
-  updateInventaryItemHandler: (
-    _updatedRecord: InventaryDataType,
-    _modifiers: {
-      onRepairModifier: number;
-      reservedModifier: number;
-    },
-  ) => {},
-  deleteFromInventaryHandler: (_deletedINventart: InventaryDataType) => {},
+	assetData: [] as AssetDatatype[],
+	getAssetData: (_assets: AssetDatatype[]) => {},
+	addAssetTypeHandler: (_newAssets: AssetDatatype[]) => {},
+	addQuantityHandler: (_values: InventaryDataType[], _assetType: string) => {},
+	updateInventaryItemHandler: (
+		_updatedRecord: InventaryDataType,
+		_modifiers: {
+			onRepairModifier: number;
+			reservedModifier: number;
+		},
+	) => {},
+	deleteFromInventaryHandler: (_deletedINventart: InventaryDataType) => {},
 });
 
 export default function AssetInventaryContextProvider({
@@ -23,22 +23,36 @@ export default function AssetInventaryContextProvider({
 }) {
   const [assetsData, setAssetsData] = useState<AssetDatatype[]>([]);
 
-  function getAssetData(assets: AssetDatatype[]) {
-    setAssetsData(assets);
-  }
+	function getAssetData(assets: AssetDatatype[]) {
+		const assetsData = assets.map((asset) => {
+			if (Object.keys(asset.inventories[0]).length > 0) {
+				return asset;
+			} else {
+				return {
+					...asset,
+					quantity: 0,
+					onRepair: 0,
+					reserved: 0,
+					inventories: [],
+				};
+			}
+		});
+		setAssetsData(assetsData);
+	}
 
-  function addAssetTypeHandler(newAssets: AssetDatatype) {
-    setAssetsData((prev) => [
-      ...prev,
-      {
-        ...newAssets,
-        quantity: 0,
-        onRepair: 0,
-        reserved: 0,
-        inventories: [],
-      },
-    ]);
-  }
+	function addAssetTypeHandler(newAssets: AssetDatatype[]) {
+		const newAssetsData = newAssets.map((asset) => {
+			return {
+				...asset,
+				quantity: 0,
+				onRepair: 0,
+				reserved: 0,
+				inventories: [],
+			};
+		});
+
+		setAssetsData((prev) => [...prev, ...newAssetsData]);
+	}
 
   function addQuantityHandler(
     newAssets: InventaryDataType[],

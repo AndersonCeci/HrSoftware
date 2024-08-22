@@ -5,6 +5,7 @@ import { Promotion, PromotionSchema } from './schema/promotion.schema';
 import { PromotionController } from './promotion.controller';
 import { EmployeeModule } from 'src/employee/employe.module';
 import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
+import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
       { name: Employee.name, schema: EmployeeSchema },
     ]),
     EmployeeModule,
+    NotificationsModule
   ],
   providers: [PromotionService],
   controllers: [PromotionController],

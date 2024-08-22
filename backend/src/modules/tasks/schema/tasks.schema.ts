@@ -18,7 +18,7 @@ export class Task extends Document {
 
   @IsDateString()
   @Prop()
-  due_date: string;
+  due_date: Date;
 
   @Prop({ required: true, enum: TaskStatus })
   status: TaskStatus;

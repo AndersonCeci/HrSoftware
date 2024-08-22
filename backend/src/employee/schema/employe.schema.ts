@@ -52,6 +52,15 @@ export class Employee extends Document {
   @Prop()
   phoneNumber: string;
 
+  @Prop()
+  fullName: string;
+
+  @Prop()
+  birthDay: Date;
+
+  @Prop()
+  @IsOptional()
+  teamLeader: string;
   @Prop({
     type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }],
     default: [],
