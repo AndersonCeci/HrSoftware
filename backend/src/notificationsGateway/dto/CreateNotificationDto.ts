@@ -13,6 +13,10 @@ export class CreateNotificationDto {
   @IsNotEmpty()
   message: string;
 
+  @IsString()
+  @IsOptional()
+  reminderTitle?: string;
+
   @IsBoolean()
   @IsOptional()
   isRead?: boolean;

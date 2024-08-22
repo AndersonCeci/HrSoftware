@@ -53,7 +53,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
 					>
 						{t(`attendanceOverview`)}
 					</Title>
-					<Doughnut style={{ marginTop: "15px" }} data={data} options={options}></Doughnut>
+					<Doughnut style={{ marginTop: "15px" }} data={data} options={options}/>
 				</div>
 			</div>
 		</>

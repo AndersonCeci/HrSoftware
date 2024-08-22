@@ -5,6 +5,7 @@ import { Promotion } from './schema/promotion.schema';
 import { Employee, Position } from 'src/employee/schema/employe.schema';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 
 @Injectable()
 export class PromotionService {
@@ -40,7 +41,8 @@ export class PromotionService {
     const createNotificationDto: CreateNotificationDto = {
       message: 'Congrats you got a promotion',
       isRead: false,
-      userId: new Types.ObjectId(employeeId),
+      userId: new Types.ObjectId( employeeId ),
+      status: NotificationStatus.NOTIFICATION,
       path: `/managment/promotions`,
     };
     await this.notificationService.createNotification(createNotificationDto);

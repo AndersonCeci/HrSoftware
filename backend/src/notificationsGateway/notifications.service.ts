@@ -16,13 +16,20 @@ export class NotificationsService {
     return notifications;
   }
 
-  async getNotificationsByUser(userId?: string): Promise<Notifications[]> {
-    let filter = {};
+  async getNotificationsByUser(
+    userId?: string,
+    status?: NotificationStatus,
+  ): Promise<Notifications[]> {
+    let filter: any = {};
 
     if (userId) {
       filter = {
         $or: [{ userId: userId }, { userId: null }],
       };
+    }
+
+    if (status) {
+      filter.status = status;
     }
 
     return this.notificationModel.find(filter).exec();
