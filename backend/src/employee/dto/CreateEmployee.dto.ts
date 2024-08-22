@@ -4,6 +4,8 @@ import {
   IsString,
   IsEnum,
   Matches,
+  isDate,
+  IsDateString,
   IsArray,
   IsOptional,
 } from 'class-validator';
@@ -39,6 +41,11 @@ export class CreateEmployeeDto {
   startingDate?: string;
 
   phoneNumber: string;
+
+  @IsOptional()
+  birdthDay: Date;
+
+  fullName: string;
 
   @IsEnum(['Female', 'Male'], {
     message: 'Must be one of the following gender',

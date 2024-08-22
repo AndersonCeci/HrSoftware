@@ -29,10 +29,10 @@ export class InventoryController {
     return this.inventoryService.createInventory(createInventoryDto);
   }
 
-  @Get()
-  async findAll() {
-    return this.inventoryService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.inventoryService.findAll();
+  // }
 
   @Delete(':id')
   async deleteInventory(@Param('id') id: string) {
@@ -78,7 +78,8 @@ export class InventoryController {
   ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
-    return this.inventoryService.updateInventory(id, updateInventoryDto);
+     
+      return this.inventoryService.updateInventory(id, updateInventoryDto);
   }
 
   @Delete(':id')

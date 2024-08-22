@@ -1,12 +1,14 @@
 import { Col, Form, Row, Flex, Upload, Input, Select } from "antd";
 
-import { EuroCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { EuroCircleOutlined } from "@ant-design/icons";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import { getDevRoles } from "../utils/helperFunctions";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 const TEAM_LEADERS = import.meta.env.REACT_APP_TEAM_LEADERS_SEARCH_API;
+
+//!THIS MIGHT NEED ATTENTION
 
 const SecondStep = ({ form }: any) => {
   // const form = Form.useFormInstance();
@@ -49,11 +51,6 @@ const SecondStep = ({ form }: any) => {
         method: "POST",
         body: formData,
       });
-
-      if (!uploadResponse.ok) {
-        throw new Error("File upload failed");
-      }
-
       const uploadData = await uploadResponse.json();
       const fileUrl = uploadData.fileUrl;
 
@@ -73,6 +70,8 @@ const SecondStep = ({ form }: any) => {
   const handleTeamLeaderChange = (selectedTeamLeaders: any[]) => {
     form.setFieldsValue({ teamLeaders: selectedTeamLeaders });
   };
+
+
 
   return (
     <Flex vertical>

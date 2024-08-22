@@ -1,6 +1,6 @@
 import Button from "./Button";
 import { ButtonType } from "../../enums/Button";
-
+import { t } from "i18next";
 import { Modal as AntModal, Flex } from "antd";
 
 type ModalProps = {
@@ -37,12 +37,12 @@ const Modal = ({
       <Flex justify="flex-end" gap={15}>
         {onCancel && (
           <Button type={ButtonType.TEXT} danger onClick={onCancel}>
-            Cancel
+            {t("cancel")}
           </Button>
         )}
         {onOk && (
           <Button type={ButtonType.PRIMARY} onClick={onOk}>
-            {isLoading ? "Submiting..." : "Submit"}
+            {isLoading ? t("submitting") : t("submit")}
           </Button>
         )}
       </Flex>

@@ -12,6 +12,10 @@ const NavigationLink = ({
 }: NavigationLinkProps) => {
   const { t } = useTranslation();
 
+  if (!linkTo) {
+    return <div>{icon}</div>;
+  }
+
   return (
     <div>
       <NavLink to={`${linkTo}`} onClick={handleClick}>
