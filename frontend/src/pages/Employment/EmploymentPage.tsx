@@ -74,19 +74,21 @@ const EmploymentPage: React.FC = () => {
 	function handleDeleteModalOk() {
 		const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
 		sendRequest(
-			{
-				url: `${API_DELETE_EMPLOYEE}/${editedData?._id}`,
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: { deletedAt: date },
-			},
-			() => {
-				setTableData((prev) => prev.filter((item) => item._id !== editedData?._id));
-				setIsDeleting(false);
-			},
-		);
+      {
+        url: `${API_DELETE_EMPLOYEE}/copy/${editedData?._id}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: { deletedAt: date },
+      },
+      () => {
+        setTableData((prev) =>
+          prev.filter((item) => item._id !== editedData?._id)
+        );
+        setIsDeleting(false);
+      }
+    );
 		setIsDeleting(false);
 		setEditedData(undefined);
 	}
