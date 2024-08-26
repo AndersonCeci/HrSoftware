@@ -57,14 +57,14 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 		}
 	};
 
-	//   const handleFileChange = (info: any) => {
-	//     const files = info.fileList.map(
-	//       (file: any) => file.originFileObj as RcFile
-	//     );
-	//     if (files.length > 0) {
-	//       handleUpload(files);
-	//     }
-	//   };
+	  const handleFileChange = (info: any) => {
+	    const files = info.fileList.map(
+	      (file: any) => file.originFileObj as RcFile
+	    );
+	    if (files.length > 0) {
+	      handleUpload(files);
+	    }
+	  };
 
 	return (
 		<Form
@@ -101,7 +101,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			<MapInput />
 			<FormInputs.Input label="Event Description" name="eventDescription" type="textarea" />
 
-			{/* <Form.Item label="Event Attachment" name="images">
+			<Form.Item label="Event Attachment" name="images">
 				<Flex className="event-attachment-container">
 					<Upload
 						beforeUpload={() => {
@@ -121,7 +121,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 						</Button>
 					</Upload>
 				</Flex>
-			</Form.Item> */}
+			</Form.Item>
 		</Form>
 	);
 });
