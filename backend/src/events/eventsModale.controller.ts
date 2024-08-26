@@ -11,6 +11,7 @@ import {
 import { CreateEventDto } from './dto/createEvent.dto';
 import { EventsService } from './eventsModale.service';
 import mongoose from 'mongoose';
+import { CoordinatesDto } from './dto/coordinates.dto';
 
 @Controller('event')
 export class EventsController {
@@ -19,6 +20,16 @@ export class EventsController {
   @Post()
   createEvent(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.createEvent(createEventDto);
+  }
+
+  @Post('location')
+  createLocation(@Body() coordinatesDto: CoordinatesDto) {
+    return this.eventsService.createLocation(coordinatesDto);
+  }
+
+  @Get('location')
+  async getLocation() {
+    return this.eventsService.getCoordinates();
   }
 
   @Get()

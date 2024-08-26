@@ -19,9 +19,6 @@ export class Event extends Document {
   eventEndTime: string;
 
   @Prop()
-  location: string;
-
-  @Prop()
   image: string;
 
   @Prop({ default: false })

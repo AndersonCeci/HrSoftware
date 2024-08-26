@@ -71,7 +71,7 @@ export class DayoffService {
 
   async findAll(): Promise<DayOff[]> {
     return this.dayoffModel
-      .find({ isDeleted: false, isApproved: false })
+      .find({ isDeleted: false})
       .populate('EmployeeName', 'name')
       .exec();
   }

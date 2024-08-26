@@ -22,7 +22,13 @@ export class CreateEventDto {
   eventEndTime: string;
 
   @IsOptional()
-  location?: string;
+  locationName?: string;
+
+  @IsOptional()
+  longtitude?: string;
+
+  @IsOptional()
+  latitude?: string;
 
   @IsOptional()
   image?: string;
