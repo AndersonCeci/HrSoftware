@@ -17,6 +17,10 @@ export class CreateEventDto {
   @IsDateString()
   eventDate: Date;
 
+  @IsDateString()
+  @IsOptional()
+  eventEndDate: Date;
+
   eventStartTime: string;
 
   eventEndTime: string;
@@ -31,7 +35,7 @@ export class CreateEventDto {
   latitude?: string;
 
   @IsOptional()
-  image?: string;
+  images?: string[];
 
   isDeleted: boolean;
   deleteDate?: Date;

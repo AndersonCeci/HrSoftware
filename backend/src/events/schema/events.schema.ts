@@ -12,14 +12,19 @@ export class Event extends Document {
   @Prop({ required: true })
   eventDate: Date;
 
+  @Prop()
+  eventEndDate: Date;
+
   @Prop({ required: true })
   eventStartTime: string;
 
   @Prop({ required: true })
   eventEndTime: string;
 
-  @Prop()
-  image: string;
+  
+
+  @Prop([String])
+  images: string[];
 
   @Prop({ default: false })
   isDeleted: boolean;

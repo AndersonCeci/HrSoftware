@@ -45,7 +45,6 @@ const SecondStep = ({ form }: any) => {
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-
     try {
       const uploadResponse = await fetch("http://localhost:3000/files/upload", {
         method: "POST",

@@ -10,10 +10,6 @@ import { Query } from 'express-serve-static-core';
 export class AssetsService {
   constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
 
-  // async createAsset(createAssetDto: CreateAssetDto): Promise<Asset> {
-  //   const createAsset = new this.assetModel(createAssetDto);
-  //   return createAsset.save();
-  // }
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
     const { assetName, isDeleted = false, deleteDate } = createAssetDto;
 
@@ -23,8 +19,7 @@ export class AssetsService {
       deleteDate,
     }));
 
-      return await this.assetModel.create(inventoryEntries);
-
+    return await this.assetModel.create(inventoryEntries);
   }
 
   async findAll(query: Query): Promise<Asset[]> {
@@ -76,6 +71,57 @@ export class AssetsService {
                 $cond: [{ $eq: ['$inventories.status', 'OnRepair'] }, 1, 0],
               },
             },
+          },
+        },
+        {
+          $sort: { assetName: 1 },
+        },
+      ])
+      .exec();
+    return data;
+  }
+
+  async findAllEmployee(): Promise<Asset[]> {
+    const data = await this.assetModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: '_id',
+            foreignField: 'assetID',
+            as: 'inventories',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories',
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'inventories.employeeDetails',
+            foreignField: '_id',
+            as: 'inventories.employeeDetails',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories.employeeDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $match: {
+            'inventories.status': 'Assigned', 
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            assetName: 1,
+            inventory: '$inventories', 
           },
         },
         {
