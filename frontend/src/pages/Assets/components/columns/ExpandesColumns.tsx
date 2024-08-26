@@ -1,9 +1,6 @@
 import { Tag, Typography, Dropdown } from "antd";
 import { AssetStatus } from "../../types/AssetsDataType";
-import {
-  createTableColumns,
-  getAllUniqueValues,
-} from "../../../../components/Table/Table";
+import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
 import { InventaryDataType } from "../../types/AssetsDataType";
 import { DeleteOutlined, MoreOutlined, SearchOutlined, ToolOutlined } from "@ant-design/icons";
@@ -13,11 +10,11 @@ import { BsFillPersonDashFill } from "react-icons/bs";
 import { t } from "i18next";
 
 export function expandedColumns(
-  inventaryData: InventaryDataType[],
-  onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
-  onAddAsset: (record: InventaryDataType) => void,
-  handleUnassign: (record: InventaryDataType) => void,
-  onDeleteAsset: (id: InventaryDataType) => void,
+	inventaryData: InventaryDataType[],
+	onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
+	onAddAsset: (record: InventaryDataType) => void,
+	handleUnassign: (record: InventaryDataType) => void,
+	onDeleteAsset: (id: InventaryDataType) => void,
 ) {
 	return [
 		createTableColumns({
@@ -35,10 +32,10 @@ export function expandedColumns(
 			dataIndex: "_id",
 			key: "userName",
 			displayAs: (_: string, record: InventaryDataType) => {
-				const employee = record.employeeDetails;
+				const employee = record.employeeDetails ? record.employeeDetails.fullName : "Not assigned";
 				return (
 					<Typography.Text>
-						{record.status === AssetStatus.Assigned ? employee.fullName : t("notAssigned")}
+						{record.status === AssetStatus.Assigned ? employee : t("notAssigned")}
 					</Typography.Text>
 				);
 			},
