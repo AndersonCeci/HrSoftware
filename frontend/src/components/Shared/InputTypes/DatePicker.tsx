@@ -8,20 +8,25 @@ type DatePickerProps = {
 	label: string;
 	name: string;
 	required?: boolean;
-	isDisabledDate?: boolean;
+	isDisabledDate?: boolean | number;
+	disableFuture?: boolean;
 	dependsOn?: string;
 };
 type RangePickerProps = GetProps<typeof DudePerfect.RangePicker>;
 
 dayjs.extend(customParseFormat);
-const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-	return current && current < dayjs().startOf("day");
-};
 
-const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePickerProps) => {
+const DatePicker = ({
+	label,
+	name,
+	required,
+	isDisabledDate,
+	disableFuture,
+	dependsOn,
+}: DatePickerProps) => {
 	function dateValidator(getFieldValue: any, dependsOn?: string) {
 		return {
-			validator(rule: any, value: any) {
+			validator(_: any, value: any) {
 				const startTime = getFieldValue(dependsOn);
 				if (value && startTime) {
 					if (value.isAfter(startTime) || value.isSame(startTime)) {
@@ -34,6 +39,12 @@ const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePi
 			},
 		};
 	}
+
+	const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+		return disableFuture
+			? current && current > dayjs().startOf("day")
+			: current && current < dayjs().startOf("day");
+	};
 
 	const rulesList: any = [
 		{
@@ -53,6 +64,7 @@ const DatePicker = ({ label, name, required, isDisabledDate, dependsOn }: DatePi
 			rules={rulesList}
 			validateDebounce={1000}
 			dependencies={[dependsOn]}
+			style={{ width: "100%" }}
 		>
 			<DudePerfect
 				size="large"

@@ -6,14 +6,24 @@ import { getColumns } from "./columns/AssetsColumn";
 
 const API = import.meta.env.REACT_APP_ASSET_API;
 
-const AssetContent = () => {
-	const [tableData, setTableData] = useState([]);
-
+const AssetContent = ({ tableData }: any) => {
+	// const [tableData, setTableData] = useState([]);
 	const [isLoading, error, sendRequest] = useHttp();
+
+	// useEffect(() => {
+	// 	sendRequest(
+	// 		{
+	// 			url: `${API}/employee`,
+	// 		},
+	// 		(data) => {
+	// 			setTableData(data);
+	// 		},
+	// 	);
+	// }, []);
 
 	const columns = getColumns(tableData);
 
-	const display = error ? <div>{error}</div> : <Table columns={columns} data={tableData} />;
+	const display = <Table columns={columns} data={tableData} />;
 
 	return <>{!isLoading ? display : <Loader />}</>;
 };

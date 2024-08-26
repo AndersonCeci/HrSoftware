@@ -10,8 +10,8 @@ import CalendarGrid from "./CalendarGrid";
 import TaskGrid from "./TaskGrid";
 import EmployeeLineGraph from "./EmployeeLineGraph";
 import { useTranslation } from "react-i18next";
-import QouteCard from "./QouteCard";
-
+import JokeCard from "./JokeCard";
+import { PromoteType } from "../../Promotion/types/PromoteType";
 
 interface Item {
   title: string;
@@ -32,8 +32,9 @@ const EmployeeWelcomeGrid: React.FC = () => {
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}",
+    localStorage.getItem("userData") || "{}"
   ).employID;
+
 
   const initialItem: Item[] = [
     {
@@ -78,9 +79,9 @@ const EmployeeWelcomeGrid: React.FC = () => {
       },
       (data: EmployeeDataType) => {
         setTableData(data);
-      },
+      }
     );
-  })
+  }, []);
 
   if (isLoading) {
     return <Loader />;
@@ -89,7 +90,6 @@ const EmployeeWelcomeGrid: React.FC = () => {
   if (error) {
     return <div>Something went wrong!!</div>;
   }
-
 
   return (
     <>
@@ -129,7 +129,6 @@ const EmployeeWelcomeGrid: React.FC = () => {
               <Card className="card-promotions">
                 <h2 className="promo-title">{t("promotions")}</h2>
                 <img className="promo-img" src={Promotions} />
-                {/* <li className="promotion-list"></li> */}
               </Card>
             </Col>
             <Col className="bonus-graph">
@@ -141,7 +140,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
         <Flex align="flex-start">
           <Row className="qoute-row">
             <Col>
-              <QouteCard />
+              <JokeCard />
             </Col>
             <Col className="calendar-col">
               <CalendarGrid />

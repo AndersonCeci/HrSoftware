@@ -1,4 +1,3 @@
-import { AssetDatatype } from "../types/AssetsDataType";
 import { QuantityFormProps } from "../types/AddAssetsForm";
 import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
@@ -11,17 +10,17 @@ const QuantityForm = forwardRef(
 		const [form] = Form.useForm();
 		const formRef = useRef<any>();
 
-    function onFinish(values: any, identifier: string) {
-      selectedAsset
-        ? onAddQuantity(values[identifier], selectedAsset.assetName)
-        : onAddAssetType(values[identifier]);
-    }
+		function onFinish(values: any, identifier: string) {
+			selectedAsset
+				? onAddQuantity(values[identifier], selectedAsset.assetName)
+				: onAddAssetType(values[identifier]);
+		}
 
-    useImperativeHandle(ref, () => ({
-      submit: () => {
-        formRef.current.submit();
-      },
-    }));
+		useImperativeHandle(ref, () => ({
+			submit: () => {
+				formRef.current.submit();
+			},
+		}));
 
 		return (
 			<Form
@@ -111,7 +110,7 @@ const QuantityForm = forwardRef(
 								>
 									{`${t("add")} ${
 										selectedAsset
-											? `${selectedAsset.assetName}${t('codeEngOnly')}`
+											? `${selectedAsset.assetName}${t("codeEngOnly")}`
 											: t("assetTypeAdd")
 									}`}
 								</Button>

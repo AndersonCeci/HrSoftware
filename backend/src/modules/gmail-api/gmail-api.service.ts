@@ -155,14 +155,17 @@ export class GmailApiService {
                   mime.lookup(fileExtension) || 'application/octet-stream',
                 );
 
-                if (file) {
-                  const fileUrl = await this.uploadService.uploadFile(file);
-                  recruitmentWithFile.cv = fileUrl;
-                  await this.recruitmentService.updateRecruitment(
-                    applicant._id as string,
-                    recruitmentWithFile,
-                  );
-                }
+                // if ( file )
+                // {
+                //   const fileList = []
+                //   const fileUrl =
+                //     await this.uploadService.uploadFiles(fileList);
+                //   recruitmentWithFile.cv = fileUrl;
+                //   await this.recruitmentService.updateRecruitment(
+                //     applicant._id as string,
+                //     recruitmentWithFile,
+                //   );
+                // }
 
                 break;
               }
