@@ -7,8 +7,3 @@
 .inner-table-container table tr {
 	background-color: #ffffffc9;
 }
-
-::-webkit-scrollbar {
-	width: 3px;
-    display: none;
-}

@@ -11,6 +11,8 @@ import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
 
+const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
+
 const EventPage: React.FC = () => {
 	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
@@ -28,14 +30,8 @@ const EventPage: React.FC = () => {
 
 	function handleAddEvent(newEvent: EvenType) {
 		sendRequest(
-			{
-				url: import.meta.env.REACT_APP_EVENTS_API,
-				headers: {
-					"Content-Type": "application/json",
-				},
-				method: "POST",
-				body: newEvent,
-			},
+			useHttp.postRequestHelper(EVENT_API, newEvent),
+
 			(responseData: EvenType) => {
 				setLoadedEvents((prevEvents) => {
 					return [...prevEvents, responseData];
@@ -48,7 +44,7 @@ const EventPage: React.FC = () => {
 	useEffect(() => {
 		sendRequest(
 			{
-				url: import.meta.env.REACT_APP_EVENTS_API,
+				url: EVENT_API,
 			},
 			(responseData: EvenType[]) => {
 				setLoadedEvents(responseData);
@@ -56,12 +52,14 @@ const EventPage: React.FC = () => {
 		);
 	}, []);
 
+
+	console.log(loadedEvents, 'loadedEventssss')
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
 		<main>
 			<Modal
-				title="Add Event"
+				title={t("addEvent")}
 				isOpen={isModalOpen}
 				onCancel={handleCloseModal}
 				onOk={() => {
@@ -76,13 +74,13 @@ const EventPage: React.FC = () => {
 			) : (
 				<>
 					<EventMenu
-						title={"This Month"}
+						title={t("thisMonth")}
 						EventList={sortByDate(thsMonth)}
 						displayNoResult
 						onOpenModal={handleOpenModal}
 					/>
 					<EventMenu
-						title={"Near Future"}
+						title={t("upcoming")}
 						EventList={sortByDate(nextMonth)}
 						onOpenModal={handleOpenModal}
 					/>

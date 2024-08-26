@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Interview } from './interview.schema';
 export enum RecruitmentStage {
   Applied = 'Applied',
   Rejected = 'Rejected',
@@ -7,6 +8,7 @@ export enum RecruitmentStage {
   SecondInterview = '2nd Interview',
   OfferMade = 'Offer Made',
 }
+
 @Schema()
 export class Recruitment extends Document {
   @Prop({ required: true })
@@ -30,6 +32,12 @@ export class Recruitment extends Document {
     default: RecruitmentStage.Applied,
   })
   stage: string;
+
+  @Prop({ type: Interview })
+  firstInterview?: Interview;
+
+  @Prop({ type: Interview })
+  secondInterview?: Interview;
 
   @Prop()
   reference: string;

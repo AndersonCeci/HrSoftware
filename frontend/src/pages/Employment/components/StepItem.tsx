@@ -8,39 +8,46 @@ import { BiSolidError } from "react-icons/bi";
 import FirstPanel from "./FirstPanel";
 import SecondStep from "./SecondStep";
 import FinalStep from "./FinalStep";
+import { t } from "i18next";
 
 type StepItem = {
-	subTitle: string;
-	content: JSX.Element;
-	icon: JSX.Element;
+  subTitle: string;
+  content: JSX.Element;
+  icon: JSX.Element;
 };
 
 type StepItemProps = (
-	current: number,
-	setCurrent: (value: number) => void,
-	form: any,
-	isLoading: boolean,
-	error: string | null,
+  current: number,
+  setCurrent: (value: number) => void,
+  form: any,
+  isLoading: boolean,
+  error: string | null,
 ) => StepItem[];
 
-const getStepItems: StepItemProps = (current, setCurrent, form, isLoading, error) => {
-	function resetOnError() {
-		setCurrent(0);
-	}
+const getStepItems: StepItemProps = (
+  current,
+  setCurrent,
+  form,
+  isLoading,
+  error,
+) => {
+  function resetOnError() {
+    setCurrent(0);
+  }
 
 	return [
 		{
-			subTitle: "Create Account",
+			subTitle: t("createAccount"),
 			content: <FirstPanel />,
 			icon: current === 0 ? <UserOutlined /> : <FaUserCheck />,
 		},
 		{
-			subTitle: "Add Information",
+			subTitle: t("addEmployeeInfo"),
 			content: <SecondStep form={form} />,
 			icon: current === 1 ? <BsPencilSquare /> : <IoDocumentOutline />,
 		},
 		{
-			subTitle: "Finalize Account",
+			subTitle: t("finalizeAccount"),
 			content: <FinalStep isSubmitting={isLoading} errorMsg={error} onGoBackBtn={resetOnError} />,
 			icon: current === 2 ? error ? <BiSolidError /> : <FaCircleCheck /> : <CiCircleCheck />,
 		},

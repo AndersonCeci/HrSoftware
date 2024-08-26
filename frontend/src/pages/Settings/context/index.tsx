@@ -43,7 +43,9 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       if (error instanceof AxiosError) {
         message.error(
-          `Failed to change password: ${error.response?.data.message || error.message}`,
+          `Failed to change password: ${
+            error.response?.data.message || error.message
+          }`,
         );
       }
     }

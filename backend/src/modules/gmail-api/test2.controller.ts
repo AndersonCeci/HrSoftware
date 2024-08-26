@@ -11,7 +11,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { AuthorizationGuard } from 'src/guards/authorization.guard';
 
-@Roles(['hr', 'ceo'])
+// @Roles(['hr', 'ceo'])
 // @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('auth')
 export class AuthController {
@@ -40,8 +40,6 @@ export class AuthController {
   async callback(@Query('code') code: string) {
     try {
       const { tokens } = await this.oauth2Client.getToken(code);
-      console.log('Access Token:', tokens.access_token);
-      console.log('Refresh Token:', tokens.refresh_token);
       return 'Tokens obtained successfully!';
     } catch (error) {
       throw new ConflictException(

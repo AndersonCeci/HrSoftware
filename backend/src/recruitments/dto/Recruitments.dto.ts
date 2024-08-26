@@ -4,9 +4,10 @@ import {
   IsOptional,
   IsString,
   IsEnum,
-  IsNumber,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
+import { InterviewDTO } from '../interviewDTO/interview.dto';
+import { Type } from 'class-transformer';
 
 export class CreateRecruitmentDto {
   @IsNotEmpty()
@@ -35,17 +36,29 @@ export class CreateRecruitmentDto {
   readonly stage: RecruitmentStage;
 
   @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly firstIntervie?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly secondInterview?: InterviewDTO;
+
+  @IsOptional()
   @IsString()
   readonly reference?: string;
 
   @IsOptional()
   @IsString()
-  cv?: string;
+  readonly cv?: string;
 
-  submittedDate: Date;
+  @IsOptional()
+  readonly submittedDate: Date;
 
-  isDeleted: boolean;
-  deleteDate?: Date;
+  @IsOptional()
+  readonly isDeleted: boolean;
+
+  @IsOptional()
+  readonly deleteDate?: Date;
 }
 
 export class RecruitmentWithFileDto extends CreateRecruitmentDto {

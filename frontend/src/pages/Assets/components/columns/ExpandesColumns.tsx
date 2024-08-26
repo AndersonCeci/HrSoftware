@@ -1,22 +1,27 @@
 import { Tag, Typography, Dropdown } from "antd";
 import { AssetStatus } from "../../types/AssetsDataType";
-import { createTableColumns, getAllUniqueValues } from "../../../../components/Table/Table";
+import {
+  createTableColumns,
+  getAllUniqueValues,
+} from "../../../../components/Table/Table";
 import Button from "../../../../components/Shared/Button";
 import { InventaryDataType } from "../../types/AssetsDataType";
 import { DeleteOutlined, MoreOutlined, SearchOutlined, ToolOutlined } from "@ant-design/icons";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import { BsFillPersonDashFill } from "react-icons/bs";
+import { t } from "i18next";
 
 export function expandedColumns(
-	inventaryData: InventaryDataType[],
-	onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
-	onAddAsset: (record: InventaryDataType) => void,
-	onDeleteAsset: (id: InventaryDataType) => void,
+  inventaryData: InventaryDataType[],
+  onChangeStatus: (newStatus: AssetStatus, record: InventaryDataType) => void,
+  onAddAsset: (record: InventaryDataType) => void,
+  handleUnassign: (record: InventaryDataType) => void,
+  onDeleteAsset: (id: InventaryDataType) => void,
 ) {
 	return [
 		createTableColumns({
-			title: "Code",
+			title: t("code"),
 			dataIndex: "assetCodes",
 			key: "code",
 			filterDropdown: true,
@@ -26,34 +31,32 @@ export function expandedColumns(
 			},
 		}),
 		createTableColumns({
-			title: "Employee Name",
+			title: t("employee"),
 			dataIndex: "_id",
 			key: "userName",
 			displayAs: (_: string, record: InventaryDataType) => {
-				console.log(record, "OBJEKTI NGA UNE MARR DATA");
 				const employee = record.employeeDetails;
-				console.log(employee, "EMPLOYEES");
 				return (
 					<Typography.Text>
-						{employee ? employee.username : " Not Assigned"}
+						{record.status === AssetStatus.Assigned ? employee.fullName : t("notAssigned")}
 					</Typography.Text>
 				);
 			},
 		}),
 		createTableColumns({
-			title: "Date",
+			title: t("dateGiven"),
 			dataIndex: "assignDate",
 			key: "dateGiven",
 			displayAs: (text: string) => {
 				return (
 					<Typography.Text>
-						{text ? new Date(text).toLocaleDateString() : "Not assigned"}
+						{text ? new Date(text).toLocaleDateString() : t("notAssigned")}
 					</Typography.Text>
 				);
 			},
 		}),
 		createTableColumns({
-			title: "Status",
+			title: t("status"),
 			dataIndex: "status",
 			key: "status",
 			displayAs: (_, record) => {
@@ -61,7 +64,7 @@ export function expandedColumns(
 				const isOnRepair = record.status === AssetStatus.OnRepair;
 				return (
 					<Tag color={isAvailable ? "success" : isOnRepair ? "warning" : "red"}>
-						{record.status}
+						{t(record.status)}
 					</Tag>
 				);
 			},
@@ -73,7 +76,7 @@ export function expandedColumns(
 			},
 		}),
 		createTableColumns({
-			title: "Date of Purchase",
+			title: t("dateBought"),
 			dataIndex: "createdAt",
 			key: "assetName",
 			displayAs: (text) => {
@@ -82,7 +85,7 @@ export function expandedColumns(
 			},
 		}),
 		createTableColumns({
-			title: "Actions",
+			title: t("action"),
 			dataIndex: "_id",
 			key: "actions",
 			displayAs: (_, record) => {
@@ -104,9 +107,11 @@ export function expandedColumns(
 													block
 													icon={isAvailable ? <BsFillPersonCheckFill /> : <BsFillPersonDashFill />}
 													iconPosition="end"
-													onClick={isAvailable ? () => onAddAsset(record) : () => {}}
+													onClick={
+														isAvailable ? () => onAddAsset(record) : () => handleUnassign(record)
+													}
 												>
-													{isAvailable ? "Assign" : "Unassign"}
+													{isAvailable ? t("assign") : t("unassign")}
 												</Button>
 											),
 									  }
@@ -128,7 +133,7 @@ export function expandedColumns(
 											}
 											iconPosition="end"
 										>
-											{!isOnRepair ? "Repair" : "Repaired"}
+											{!isOnRepair ? t("repair") : t("repaired")}
 										</Button>
 									),
 								},
@@ -144,7 +149,7 @@ export function expandedColumns(
 											onClick={() => onDeleteAsset(record)}
 											iconPosition="end"
 										>
-											Delete
+											{t("remove")}
 										</Button>
 									),
 								},

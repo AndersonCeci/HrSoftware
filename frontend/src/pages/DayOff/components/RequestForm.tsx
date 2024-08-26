@@ -1,7 +1,7 @@
 import { Form } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import Button from "../../../components/Shared/Button";
-
+import { getFullName } from "../../../utils/utils";
 import { ButtonType } from "../../../enums/Button";
 import { RequestedDataType } from "../types/RequestedLeave";
 import { useEffect, useState } from "react";
@@ -21,7 +21,9 @@ const RequestForm = ({ onAdd }: any) => {
   }, []);
 
   const handleSubmit = (value: any) => {
-    const selected = employee.find((e) => e.username === value.username);
+    const selected = employee.find(
+      (e) => getFullName(e.name, e.surname) === value.username,
+    );
 
     const values = {
       employeeId: selected._id,
@@ -52,8 +54,8 @@ const RequestForm = ({ onAdd }: any) => {
         label="Username"
         required
         options={employee.map((e) => ({
-          label: e.username,
-          value: e.username,
+          label: getFullName(e.name, e.surname),
+          value: getFullName(e.name, e.surname),
         }))}
         isMatchWithOption
       />

@@ -53,7 +53,6 @@ export const useSalaryHook = () => {
         params: { page, limit, ...filters },
       });
       const { data, meta } = response.data;
-      console.log("Fetched salaries", data);
       setTableData(data);
       setItemCount(meta.itemCount);
     } catch (error) {

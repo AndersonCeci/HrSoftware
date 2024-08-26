@@ -4,7 +4,7 @@ import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown } from "antd";
 import { EmployeeDataType } from "../types/Employee";
-import { capitalizeFirstLetter } from "../../../utils/paths";
+import { capitalizeFirstLetter } from "../../../utils/utils";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -67,7 +67,7 @@ export function getColumns(
 			dataIndex: "position",
 			key: "position",
 			filters: getAllUniqueValues(tableData, "position"),
-			onFilter: (value, record) => record.position.indexOf(value) === 0,
+			onFilter: (value, record) => record.position.includes(value),
 		}),
 		createTableColumns({
 			title: t("salary"),
@@ -78,19 +78,20 @@ export function getColumns(
 			},
 		}),
 		createTableColumns({
-			title: "Conract",
+			title: t("contract"),
 			dataIndex: "contract",
 			key: "contract",
 			displayAs: (value) =>
 				value ? (
 					<Link to={value} target="_blank" rel="noopener noreferrer">
-						<Button size="large" type={ButtonType.LINK} icon={<IoDocumentAttach />}>
-							<span> View </span>
+						<Button size="large" type="link" icon={<IoDocumentAttach />}>
+							<span> {t("yesContract")} </span>
 						</Button>
 					</Link>
 				) : (
-					<span>No File</span>
+					<span>{t("noContrat")}</span>
 				),
+			align: "center",
 		}),
 		createTableColumns({
 			title: t("startingOn"),
@@ -155,7 +156,7 @@ export function getColumns(
 			),
 			fixed: "right",
 			align: "center",
-			width: 30,
+			width: 40,
 		}),
 	];
 }

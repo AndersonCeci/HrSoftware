@@ -5,8 +5,9 @@ import dayjs from "dayjs";
 import useHttp from "../../../hooks/useHttp";
 import { AssetFormProps } from "../types/AddAssetsForm";
 import { EmployeeDataType } from "../../Employment/types/Employee";
+import { getFullName } from "../../../utils/utils";
+import { t } from "i18next";
 
-const API = import.meta.env.REACT_APP_ASSET_API;
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
@@ -14,8 +15,6 @@ const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 	const [form] = Form.useForm();
 	const [employeeList, setEmployeeList] = useState<EmployeeDataType[]>([]);
 	const [, , sendRequest] = useHttp();
-
-	console.log(employeeList);
 
 	useEffect(() => {
 		sendRequest({ url: `${EMPLOYEE}/search` }, (responseData: EmployeeDataType[]) =>
@@ -30,9 +29,9 @@ const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 	}));
 
 	function onFinish(values: any) {
-		console.log(employeeList, "employeeList");
 		const selectedEmployee = employeeList.find(
-			(employee: EmployeeDataType) => employee.name + " " + employee.surname === values.userName,
+			(employee: EmployeeDataType) =>
+				getFullName(employee.name, employee.surname) === values.userName,
 		)?._id;
 
 		const dataToSubmit = {
@@ -44,14 +43,14 @@ const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 
 	return (
 		<Form form={form} ref={formRef} layout="vertical" autoComplete="off" onFinish={onFinish}>
-			<FormInputs.DatePicker label="Date Given" name="assignDate" required isDisabledDate />
+			<FormInputs.DatePicker label={t("dateGiven")} name="assignDate" required isDisabledDate />
 			<FormInputs.AutoComplete
-				label="Employee"
+				label={t("employee")}
 				name="userName"
 				required
 				options={employeeList.map((employee: EmployeeDataType) => ({
-					value: employee.name + " " + employee.surname,
-					label: employee.name + " " + employee.surname,
+					value: getFullName(employee.name, employee.surname),
+					label: getFullName(employee.name, employee.surname),
 				}))}
 				isMatchWithOption
 			/>

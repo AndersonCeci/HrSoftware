@@ -34,7 +34,6 @@ export class TasksController {
 
   @Delete(':id')
   async deleteTask(@Param('id') id: string) {
-    console.log('Received ID:', id);
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid ID format');
     }

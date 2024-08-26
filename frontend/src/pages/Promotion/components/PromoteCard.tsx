@@ -1,51 +1,56 @@
-import { Card, Col, ConfigProvider, Flex, Row, Tag } from "antd";
+import { Card, ConfigProvider } from "antd";
 import { PromoteType } from "../types/PromoteType";
-import { EmployeeDataType } from "../../Employment/types/Employee";
 import { useEffect, useState } from "react";
-import useHttp from "../../../hooks/useHttp";
-import Loader from "../../../components/Shared/Loader";
+// import useHttp from "../../../hooks/useHttp";
+// import Loader from "../../../components/Shared/Loader";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Button from "../../../components/Shared/Button";
 import ReactCardFlip from "react-card-flip";
 
-const API = import.meta.env.REACT_APP_EMPLOYEE_API;
+// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 type PromoteCardProps = {
   promote?: PromoteType;
 };
 const PromoteCard = ({ promote }: PromoteCardProps) => {
   const { t } = useTranslation();
-  const [isLoading, error, sendRequest] = useHttp();
-  const [tableData, setTableData] = useState<EmployeeDataType>();
-  const EmployeData = JSON.parse(
-    localStorage.getItem("userData") || "{}",
-  ).employID;
+  // const [isLoading, error, sendRequest] = useHttp();
   const [isFlipped, setIsFlipped] = useState(false);
 
-  useEffect(() => {
-    sendRequest(
-      {
-        url: `${API}/${EmployeData}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      setTableData,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   sendRequest(
+  //     {
+  //       url: `${API}/${EmployeData}`,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     },
+  //     setTableData,
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
-  if (error) {
-    return <div>Something went wrong!!</div>;
-  }
+  // if (error) {
+  //   return <div>Something went wrong!!</div>;
+  // }
 
   const handleClick = () => {
     setIsFlipped(!isFlipped);
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "No date provided";
+    const formattedDate = moment(dateString, "DD/MM/YYYY", true).format(
+      "DD/MM/YYYY",
+    );
+    return formattedDate === "Invalid date"
+      ? "Invalid date format"
+      : formattedDate;
   };
 
   return (
@@ -87,7 +92,8 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                   <b>{t("oldPosition")}:</b> {promote?.oldPosition}
                 </p>
                 <p>
-                  <b>{t("dateOfHire")}:</b> {tableData?.startingDate}
+                  <b>{t("dateOfHire")}:</b> //! TO BE
+                  ADDED
                 </p>
                 <p>
                   <b>{t("salary")}:</b> {promote?.oldSalary}
@@ -125,7 +131,7 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 </p>
                 <p>
                   <b>{t("dateOfPromotion")}:</b>{" "}
-                  {moment(promote?.dateOfPromotion).format("DD/MM/YYYY")}
+                  {formatDate(promote?.dateOfPromotion)}
                 </p>
                 <p>
                   <b>{t("salary")}:</b> {promote?.newSalary}

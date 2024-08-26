@@ -6,6 +6,7 @@ import { Employee, Position } from 'src/employee/schema/employe.schema';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import moment from 'moment';
 
 @Injectable()
 export class PromotionService {
@@ -20,6 +21,8 @@ export class PromotionService {
     newPosition: Position,
     newSalary: number,
     trainedBy: string,
+    isTeamLeader: boolean,
+    dateOfPromotion: string,
   ): Promise<{ employee: Employee; promotion: Promotion }> {
     const employee = await this.employeeModel.findById(employeeId);
 
@@ -34,8 +37,10 @@ export class PromotionService {
       newPosition: newPosition,
       oldSalary: employee.salary,
       newSalary: newSalary,
-      dateOfPromotion: new Date(),
+      dateOfPromotion: dateOfPromotion,
       trainedBy: trainedBy,
+      isTeamLeader: isTeamLeader,
+      dateOfHire: employee.startingDate,
     });
 
     const createNotificationDto: CreateNotificationDto = {
@@ -53,6 +58,12 @@ export class PromotionService {
     employee.salary = newSalary;
     employee.promotionHistory = employee.promotionHistory || [];
     employee.promotionHistory.push(promotion._id as any);
+
+    if (isTeamLeader) {
+      await this.employeeModel.findByIdAndUpdate(employeeId, {
+        $addToSet: { teamLeaders: employee._id },
+      });
+    }
 
     await employee.save();
 

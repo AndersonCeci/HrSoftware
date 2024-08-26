@@ -9,7 +9,6 @@ import { AssetInventaryContext } from "../context/AssetInventaryContext";
 import useHttp from "../../../hooks/useHttp";
 
 import { AssetDatatype, InventaryDataType, AssetStatus } from "../types/AssetsDataType";
-import Button from "../../../components/Shared/Button";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
 
@@ -20,8 +19,19 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 	const [selectedAsset, setSelectedAsset] = useState<InventaryDataType | null>(null);
 	const formRef = useRef<any>();
 	const [, , fetchData] = useHttp();
+	const filterData = record.inventories;
 
 	const handleOnRepairClick = (newStatus: string, updatedRecord: InventaryDataType) => {
+		let onRepaieModifier = 0;
+		let reservedModifier = 0;
+
+		if (updatedRecord.status === AssetStatus.OnRepair) {
+			onRepaieModifier = -1;
+		} else {
+			reservedModifier = updatedRecord.status === AssetStatus.Assigned ? -1 : 0;
+			onRepaieModifier = 1;
+		}
+
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/${updatedRecord._id}`, {
 				assetName: record.assetName,
@@ -30,29 +40,38 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 			}),
 			(response) => {
 				updateInventaryItemHandler(response, {
-					onRepairModifier: response.status === AssetStatus.OnRepair ? 1 : -1,
-					reservedModifier: 0,
+					onRepairModifier: onRepaieModifier,
+					reservedModifier: reservedModifier,
 				});
 			},
 		);
 	};
 
-	const filterData = record.inventories;
-
-	const handleOnAssign = (dataToSubmit: {
+	function handleOnAssign(dataToSubmit: {
 		employeeDetails: string | undefined;
 		dateGiven: string | undefined;
-	}) => {
+	}) {
 		fetchData(
 			useHttp.patchRequestHelper(`${INVENTARY_API}/assign/${selectedAsset?._id}`, dataToSubmit),
 			(response) => {
 				updateInventaryItemHandler(response, {
 					onRepairModifier: 0,
-					reservedModifier: response.status === AssetStatus.Assigned ? 1 : -1,
+					reservedModifier: 1,
 				});
+				setIsModalOpen(false);
+				setSelectedAsset(null);
 			},
 		);
-	};
+	}
+
+	function handleUnassign(record: InventaryDataType) {
+		fetchData(useHttp.patchRequestHelper(`${INVENTARY_API}/unassign/${record._id}`), (response) => {
+			updateInventaryItemHandler(response, {
+				onRepairModifier: 0,
+				reservedModifier: -1,
+			});
+		});
+	}
 
 	function handleDeleteFromInventary(deletedInventary: InventaryDataType) {
 		fetchData(useHttp.deleteRequestHelper(`${INVENTARY_API}/${deletedInventary._id}`), () => {
@@ -67,25 +86,25 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 
 	const handleModalClose = () => {
 		setIsModalOpen(false);
+		setSelectedAsset(null);
 	};
 
 	const handleSubmit = () => {
 		formRef.current.submit();
-		setSelectedAsset(null);
-		setIsModalOpen(false);
 	};
 
 	const columns = expandedColumns(
 		record.inventories,
 		handleOnRepairClick,
 		handleAddAsset,
+		handleUnassign,
 		handleDeleteFromInventary,
 	);
 
 	return (
 		<Flex vertical align="center" className="inner-table-container test">
 			<Modal isOpen={isModalOpen} onCancel={handleModalClose} onOk={handleSubmit}>
-				<AssetForm onAdd={handleOnAssign} selectedElement={selectedAsset} ref={formRef} />
+				<AssetForm onAdd={handleOnAssign} ref={formRef} />
 			</Modal>
 			<Typography.Text>{`View info about ${record.assetName}`}</Typography.Text>
 			<Table

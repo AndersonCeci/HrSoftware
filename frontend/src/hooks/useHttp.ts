@@ -23,7 +23,7 @@ function DELETEHelper(url: string, headers?: any) {
   };
 }
 
-function PATCHHelper(url: string, body: any, headers?: any) {
+function PATCHHelper(url: string, body?: any, headers?: any) {
   return {
     url: url,
     headers: {
@@ -51,19 +51,18 @@ export default function useHttp() {
           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
         });
 
-				if (!response.ok) {
-					throw new Error("Request failed!");
-				}
-				const responseData = await response.json();
-				applyData ? applyData(responseData) : null;
-			} catch (err: any) {
-				console.log(err);
-				setError(err.message || "Something went wrong!");
-			}
-			setIsLoading(false);
-		}
-		fetchData();
-	};
+        if (!response.ok) {
+          throw new Error("Request failed!");
+        }
+        const responseData = await response.json();
+        applyData ? applyData(responseData) : null;
+      } catch (err: any) {
+        setError(err.message || "Something went wrong!");
+      }
+      setIsLoading(false);
+    }
+    fetchData();
+  };
 
   return [isLoading, error, sendRequest] as const;
 }

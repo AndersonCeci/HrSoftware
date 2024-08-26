@@ -62,29 +62,8 @@ export const Paths = {
 			},
 		],
 	},
-	// Settings: {
-	//   path: "settings",
-	//   icon: NavigationIcons.IoSettingsOutline,
-	//   children: [
-	//     {
-	//       path: "",
-	//       pageElement: PageRoutesComponents.SettingsPage,
-	//     },
-	//   ],
-	// },
-	// Notifications: {
-	// 	path: "notifications",
-	// 	icon: NavigationIcons.BellOutlined,
-	// 	children: [
-	// 		{
-	// 			path: "",
-	// 			pageElement: PageRoutesComponents.NotificationPage,
-	// 		},
-	// 	],
-	// },
 	Background: {
 		path: "company-background",
-		// icon: NavigationIcons.BgColorsOutlined,
 		children: [
 			{
 				path: "",
@@ -164,11 +143,3 @@ export const Paths = {
 		],
 	},
 };
-
-export function capitalizeFirstLetter(string: string) {
-  const words = string.split("-");
-  const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1),
-  );
-  return capitalizedWords.join(" ");
-}
