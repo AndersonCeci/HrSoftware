@@ -42,7 +42,7 @@ export class Employee extends Document {
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Promotion' }] })
   promotionHistory: Promotion[];
 
-  @Prop()
+  @Prop({ type: String, enum: Role })
   @IsEnum(Role)
   role: Role;
 
