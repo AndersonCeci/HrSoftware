@@ -10,7 +10,7 @@ export class Left extends Document {
   @Prop({ required: true })
   surname: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   username: string;
 
   @Prop({ required: true })

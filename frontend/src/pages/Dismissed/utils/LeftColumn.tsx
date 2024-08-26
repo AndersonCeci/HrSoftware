@@ -16,12 +16,17 @@ export function getColumns(
   return [
     createTableColumns({
       title: t("name"),
-      dataIndex: "username",
+      dataIndex: "name",
       key: "name",
       filterDropdown: true,
-      filterIcon: <SearchOutlined className="nav-menu-icon" />,
       onFilter: (inputValue, filter) =>
-        filter.name.toLowerCase().includes(inputValue.toLowerCase()),
+        filter.username.toLowerCase().includes(inputValue.toLowerCase()),
+      filterIcon: <SearchOutlined className="nav-menu-icon" />,
+      displayAs: (_, record) => {
+        const value = record.name + " " + record.surname;
+
+        return <span>{capitalizeFirstLetter(value)}</span>;
+      },
     }),
     createTableColumns({
       title: "Email",

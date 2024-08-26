@@ -69,7 +69,6 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			dataIndex: "onRepair",
 			key: "onRepair",
 		}),
-
 		createTableColumns({
 			title: t("edit"),
 			dataIndex: "_id",
