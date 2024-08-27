@@ -19,5 +19,6 @@ import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
   ],
   controllers: [InventoryController],
   providers: [InventoryService],
+  exports: [InventoryService],
 })
 export class InventoryModule {}

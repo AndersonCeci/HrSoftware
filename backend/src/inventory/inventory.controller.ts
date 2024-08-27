@@ -66,6 +66,11 @@ export class InventoryController {
     );
   }
 
+  @Patch('cleanEmployees')
+  async clanEmployees(@Param('employeeId') employeeId:string){
+     return this.inventoryService.cleanUpAssetsAfterEmployeeDeletion(employeeId)
+  }
+
   @Patch('unassign/:id')
   async unassignFromEmployee(@Param('id') id: string) {
     return this.inventoryService.unassignFromEmployee(id);

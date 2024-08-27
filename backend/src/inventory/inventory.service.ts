@@ -1,6 +1,4 @@
 import {
-  ConflictException,
-  ConsoleLogger,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,8 +8,9 @@ import mongoose, { Model, Types } from 'mongoose';
 import { CreateInventoryDto } from './dto/createInventory.dto';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import { AssetsService } from 'src/assets/assets.service';
-import { EmployeeService } from 'src/employee/employe.service';
+
 import { Employee } from 'src/employee/schema/employe.schema';
+
 
 @Injectable()
 export class InventoryService {
@@ -19,7 +18,7 @@ export class InventoryService {
     @InjectModel(Inventory.name) private inventoryModel: Model<Inventory>,
     @InjectModel(Employee.name) private employeeModel: Model<Employee>,
     private readonly assetsService: AssetsService,
-    private readonly employeeService: EmployeeService,
+   
   ) {}
 
   async createInventory(
@@ -52,11 +51,26 @@ export class InventoryService {
 
     // const createdInventories =
     //   await this.inventoryModel.create(inventoryEntries);
-     return  await this.inventoryModel.create(inventoryEntries);
+    return await this.inventoryModel.create(inventoryEntries);
     // return this.inventoryModel
     //   .find({ _id: { $in: createdInventories.map((item) => item._id) } })
     //   .populate('assetID')
     //   .exec();
+  }
+
+  async cleanUpAssetsAfterEmployeeDeletion(
+    employeeId: string,
+  ): Promise<Inventory| null> {
+    const assetsToUnassign: Inventory[] = await this.inventoryModel.find({
+      employeeDetails: employeeId,
+    });
+    console.log(assetsToUnassign);
+
+    for (const asset of assetsToUnassign) {
+      if (asset._id) {
+        return await this.unassignFromEmployee(asset._id.toString());
+      }
+    }
   }
 
   async assignToEmployee(
@@ -67,9 +81,11 @@ export class InventoryService {
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
-    // if (!foundEmployee) {
-    //   throw new NotFoundException(Employee with ID ${employeeDetails} not found);
-    // }
+    if (!foundEmployee) {
+      throw new NotFoundException(
+        `Employee with ID ${employeeDetails} not found`,
+      );
+    }
 
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeDetails: foundEmployee._id,

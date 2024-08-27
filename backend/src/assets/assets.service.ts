@@ -145,6 +145,8 @@ export class AssetsService {
       .exec();
   }
 
+  
+
   async softDeleteAssetById(id: string): Promise<Asset> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
