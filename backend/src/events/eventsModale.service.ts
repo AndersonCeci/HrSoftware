@@ -4,19 +4,40 @@ import { Model } from 'mongoose';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { Event } from './schema/events.schema';
 import { Query } from 'express-serve-static-core';
+import { NotificationsGateway } from 'src/notificationsGateway/notifications.gateway';
+import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
+import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 
 @Injectable()
 export class EventsService {
-  constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
+  constructor(
+    @InjectModel(Event.name) private eventModel: Model<Event>,
+    private readonly notificationsGateway: NotificationsGateway,
+    private readonly notificationService: NotificationsService,
+  ) {}
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(createEventDto);
+
+    this.notificationsGateway.sendNotification(
+      `A new event "${createdEvent.eventName}" has been created !`,
+      createdEvent,
+    );
+
+    const createNotificationDto: CreateNotificationDto = {
+      message: createdEvent.eventName,
+      isRead: false,
+      userId: null,
+      path: `/company/events`,
+    };
+    await this.notificationService.createNotification(createNotificationDto);
+
     return createdEvent.save();
   }
 
   async getEvent(query: Query): Promise<Event[]> {
-    const resPerPage = 10; 
-    const currentPage = Number(query.page) || 1; 
+    const resPerPage = 10;
+    const currentPage = Number(query.page) || 1;
     const skip = resPerPage * (currentPage - 1);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);

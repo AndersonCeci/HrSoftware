@@ -32,7 +32,6 @@ export class UserService {
     });
 
     const savedUser = await newUser.save();
-    console.log('Saved User:', savedUser);
     return savedUser;
   }
 

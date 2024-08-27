@@ -10,28 +10,21 @@ type EventCardProps = {
 };
 
 const EventCard = ({ event, isAlone }: EventCardProps) => {
-  const { eventName, eventDate, eventStartTime, eventEndTime } = event;
+  const { eventName, eventDate, eventStartTime, eventEndTime, images } = event;
 
   const date = new Date(eventDate);
   const month = date.toLocaleString("default", { month: "short" });
   const day = date.getDate();
-
+console.log(images, "iamgeeeee");
   return (
     <div className={`event-item ${isAlone ? "alone-event" : undefined}`}>
       <article>
         <Carousel pauseOnHover adaptiveHeight draggable>
-          <div className="event-image-container">
-            <img src={TempImage} alt="Event" />
-          </div>
-          <div className="event-image-container">
-            <img src={ICONTEMP} alt="Event" />
-          </div>
-          <div className="event-image-container">
-            <img src={TempImage} alt="Event" />
-          </div>
-          <div className="event-image-container">
-            <img src={ICONTEMP} alt="Event" />
-          </div>
+          {images?.map((image, index) => (
+            <div key={index} className="event-image-container">
+              <img src={image} alt={`Event ${index}`} />
+            </div>
+          ))}
         </Carousel>
 
         <Flex className="event-info-container" gap={35} justify="center">

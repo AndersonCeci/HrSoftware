@@ -30,8 +30,6 @@ export class SalaryService {
       });
       return await createdSalary.save();
     } catch (error) {
-      console.log('test for duplication', error.code);
-
       if (error.code === 11000) {
         const duplicateKey = Object.keys(error.keyPattern).join(', ');
         throw new ConflictException(

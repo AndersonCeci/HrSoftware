@@ -17,6 +17,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@mui/x-charts": "^7.12.1",
+    "@react-google-maps/api": "^2.19.3",
     "@syncfusion/ej2-react-schedule": "^26.2.7",
     "antd": "^5.19.1",
     "axios": "^1.7.2",

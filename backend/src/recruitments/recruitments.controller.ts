@@ -20,7 +20,6 @@ export class RecruitmentsController {
 
   @Post()
   createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
-    console.log(createRecruitmentDto);
     return this.recruitmentService.createRecruitment(createRecruitmentDto);
   }
 
@@ -37,8 +36,6 @@ export class RecruitmentsController {
           pageNo,
           limitNo,
         );
-
-      return data;
     } catch (error) {
       throw new Error(error);
     }

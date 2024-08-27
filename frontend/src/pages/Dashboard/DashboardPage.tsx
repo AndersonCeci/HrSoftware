@@ -1,33 +1,31 @@
-import { Row, Col, Typography } from "antd";
-import { Doughnut } from "react-chartjs-2";
-import WelcomeGrid from "./components/WelcomeGrid";
-import CalendarGrid from "./components/CalendarGrid";
-import TaskGrid from "./components/TaskGrid";
 import "./styles/Dashboard.css";
 import { t } from "i18next";
 import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
 import { Content } from "antd/es/layout/layout";
+import HRWelcomeGrid from "./components/HRWelcomeGrid";
 
 export interface Data {
-	noEmployee: number;
-	status: string;
-	color: string;
-	path: string;
+  noEmployee: number;
+  status: string;
+  color: string;
+  path: string;
 }
 
 const DashboardPage: React.FC = () => {
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+
   const initialData: Data[] = [
     {
       noEmployee: 300,
       status: t("activestatus"),
       color: "#136F63",
-      path: "/managment/employment",
+      path: "/employment",
     },
     {
       noEmployee: 100,
       status: t("remoteEmployee"),
       color: "#474CCC",
-      path: "/managment/employment",
+      path: "employment",
     },
     {
       noEmployee: 50,
@@ -36,9 +34,6 @@ const DashboardPage: React.FC = () => {
       path: "/managment/dismissed",
     },
   ];
-
-// const DELETED_API = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
-// const EMPLOYEE_API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
   return (
     <Content
@@ -50,16 +45,11 @@ const DashboardPage: React.FC = () => {
         color: "grey",
       }}
     >
-      {/* <Row gutter={[16, 16]} className="dashboard-main">
-        <Col span={12}>
-          <WelcomeGrid initialData={initialData} /> */}
-          <EmployeeWelcomeGrid/>
-        {/* </Col>
-        <Col span={12}>
-          <CalendarGrid />
-        </Col>
-      </Row>
-      <TaskGrid /> */}
+      {userData.role === "employee" ? (
+        <EmployeeWelcomeGrid />
+      ) : (
+        <HRWelcomeGrid initialData={initialData} />
+      )}
     </Content>
   );
 };

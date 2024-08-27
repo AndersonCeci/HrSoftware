@@ -51,9 +51,9 @@ const FirstPanel = () => {
 						label={t("gender")}
 						name="gender"
 						options={[
-							{ label: "Male", value: "Male" },
-							{ label: "Female", value: "Female" },
-							{ label: "Other", value: "Other" },
+							{ label: t("male"), value: "Male" },
+							{ label: t("female"), value: "Female" },
+							{ label: t("other"), value: "Other" },
 						]}
 						required
 					/>

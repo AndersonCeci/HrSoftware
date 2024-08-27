@@ -60,8 +60,8 @@ export const createColumns = (
       title: t("action"),
       dataIndex: "_id",
       key: "action",
-      align: "right",
-      width: 150,
+      align:"center",
+      width: 120,
       displayAs: (text, record) => (
         <Space size="middle">
           <Button
