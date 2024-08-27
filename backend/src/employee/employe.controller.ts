@@ -34,6 +34,11 @@ export class EmployeeController {
     return this.employeeService.getTeamLeaders();
   }
 
+  @Get('/status-length')
+  async findStatusLength(): Promise<Employee[]> {
+    return this.employeeService.findStatusLength();
+  }
+
   @Get('/search')
   async search(
     @Query('name') name?: string,

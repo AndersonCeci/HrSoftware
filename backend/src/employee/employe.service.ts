@@ -38,7 +38,7 @@ export class EmployeeService {
         throw new Error('Invalid position');
     }
 
-    const createdEmploye = await new this.employeeModel ({
+    const createdEmploye = await new this.employeeModel({
       ...createEmployeeDto,
       role,
       teamLeaders:
@@ -98,6 +98,28 @@ export class EmployeeService {
 
   findAll(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
+  }
+
+  async findStatusLength(): Promise<any[]> {
+    const employmentData = await this.employeeModel
+      .aggregate([
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            status: '$_id',
+            count: 1,
+          },
+        },
+      ])
+      .exec();
+
+    return employmentData;
   }
 
   findLeft(): Promise<Employee[]> {

@@ -10,7 +10,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Role } from 'src/users/schemas/user.schema';
-import { Position } from '../schema/employe.schema';
+import { EmploymentStatus, Position } from '../schema/employe.schema';
 import { Types } from 'mongoose';
 
 export class CreateEmployeeDto {
@@ -21,10 +21,6 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // readonly password: string;
 
   @IsNotEmpty()
   @IsString()
@@ -38,12 +34,18 @@ export class CreateEmployeeDto {
   @IsEnum(Position)
   position: Position;
 
+  @IsEnum(EmploymentStatus)
+  status: EmploymentStatus;
+
   startingDate?: string;
 
   phoneNumber: string;
 
+  @IsString()
+  profilePhoto: string;
+
   @IsOptional()
-  birdthDay: Date;
+  birthDay: Date;
 
   fullName: string;
 

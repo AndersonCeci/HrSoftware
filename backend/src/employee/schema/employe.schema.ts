@@ -14,6 +14,12 @@ export enum Position {
   ProjectManager = 'projectManager',
 }
 
+export enum EmploymentStatus
+{
+  REMOTE = 'Remote',
+  ONSITE = 'On Site'
+}
+
 @Schema()
 export class Employee extends Document {
   @Prop({ required: true })
@@ -40,11 +46,18 @@ export class Employee extends Document {
   @IsEnum(Role)
   role: Role;
 
+  @Prop({ type: String, enum: EmploymentStatus })
+  @IsEnum(EmploymentStatus)
+  status: EmploymentStatus;
+
   @Prop()
   startingDate: string;
 
   @Prop()
   phoneNumber: string;
+
+  @Prop()
+  profilePhoto: string;
 
   @Prop()
   fullName: string;
