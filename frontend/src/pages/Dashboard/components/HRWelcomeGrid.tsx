@@ -10,6 +10,9 @@ import TaskGrid from "./TaskGrid";
 import QouteCard from "./QouteCard";
 import CalendarGrid from "./CalendarGrid";
 import HrLineGraph from "./HrLineGraph";
+import { LeftDataType } from "../../Dismissed/types/Left";
+import { useEffect, useState } from "react";
+import useHttp from "../../../hooks/useHttp";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,6 +23,22 @@ interface WelcomeGridProps {
 export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   const options = {};
   const { t } = useTranslation();
+  const [tableData, setTableData] = useState<LeftDataType[]>([]);
+  const [isLoading, error, sendRequest] = useHttp();
+
+  useEffect(() => {
+    sendRequest(
+      {
+        url: `http://localhost:3000/left`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      (response) => {
+        setTableData(response.data);
+      }
+    );
+  }, []);
 
   const data = {
     labels: ["Off", "on"],
@@ -45,7 +64,10 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
                       className="active-dashboard"
                       style={{ backgroundColor: data.color, padding: "20px" }}
                     >
-                      <Title className="hr-card-title">{data.noEmployee}</Title>
+                       <Title className="hr-card-title">
+                          {data.noEmployee}
+                        </Title>
+
                       <h1 className="hr-card-status">{data.status}</h1>
                     </Button>
                   </NavLink>
@@ -53,7 +75,10 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
               );
             })}
           </Flex>
-          <Row className="graph-row" style={{ justifyContent: "space-between" }}>
+          <Row
+            className="graph-row"
+            style={{ justifyContent: "space-between" }}
+          >
             <Col>
               <Card className="pie-chart">
                 <Title className="title-piechart">

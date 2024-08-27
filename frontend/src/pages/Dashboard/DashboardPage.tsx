@@ -3,6 +3,9 @@ import { t } from "i18next";
 import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
 import { Content } from "antd/es/layout/layout";
 import HRWelcomeGrid from "./components/HRWelcomeGrid";
+import { useEffect, useState } from "react";
+import { LeftDataType } from "../Dismissed/types/Left";
+import useHttp from "../../hooks/useHttp";
 
 export interface Data {
   noEmployee: number;
@@ -12,6 +15,23 @@ export interface Data {
 }
 
 const DashboardPage: React.FC = () => {
+  const [tableData, setTableData] = useState<LeftDataType[]>([]);
+  const [isLoading, error, sendRequest] = useHttp();
+
+  useEffect(() => {
+    sendRequest(
+      {
+        url: `http://localhost:3000/left`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      (response) => {
+        setTableData(response.data);
+      }
+    );
+  }, []);
+
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
   const initialData: Data[] = [
@@ -28,7 +48,7 @@ const DashboardPage: React.FC = () => {
       path: "employment",
     },
     {
-      noEmployee: 50,
+      noEmployee: tableData?.length,
       status: t("dismissed"),
       color: "#CA054D",
       path: "/managment/dismissed",
