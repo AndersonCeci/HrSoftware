@@ -4,6 +4,7 @@ import { Recruitment } from './schemas/recruitment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
+import { PaginatedDTO } from 'src/paginationDTO/paginated.dto';
 
 @Injectable()
 export class RecruitmentService {
@@ -23,7 +24,7 @@ export class RecruitmentService {
     }
   }
 
-  async getRecruitments(): Promise<Recruitment[]> {
+  async getRecruitments() {
     return await this.recruitmentModel.find({ isDeleted: false });
   }
 
@@ -67,11 +68,9 @@ export class RecruitmentService {
       },
     };
   }
-  async getRecruitmentWithInterviewerDetails(
-    // applicantID: Types.ObjectId,
-  ): Promise<Recruitment[]> {
+  async getRecruitmentWithInterviewerDetails(page: number, limit: number) {
+    const skip = (page - 1) * limit;
     const pipeline = [
-      // { $match: { _id: applicantID } },
       this.createLookupPipeline('firstInterview'),
       this.createLookupPipeline('secondInterview'),
       this.createAddFields('firstInterview'),
@@ -94,9 +93,14 @@ export class RecruitmentService {
         },
       },
     ];
-
-    return this.recruitmentModel.aggregate(pipeline);
+    const itemCount = await this.recruitmentModel.countDocuments();
+    const data = await this.recruitmentModel
+      .aggregate(pipeline)
+      .skip(skip)
+      .limit(limit);
+    return new PaginatedDTO<any>(data, page, limit, itemCount);
   }
+
   createAddFields(interviewRound: 'firstInterview' | 'secondInterview') {
     return {
       $addFields: {

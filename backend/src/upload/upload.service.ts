@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseService } from './firebaseUpload.service';
-import { resolve } from 'path';
-import { rejects } from 'assert';
-import { Stream } from 'stream';
 
 @Injectable()
 export class UploadService {
   constructor(private readonly firebaseService: FirebaseService) {}
 
-  async uploadFile(file): Promise<string> {
+  async uploadFile(file: Express.Multer.File): Promise<string> {
     const storage = this.firebaseService.getStorageInstance();
     const bucket = storage.bucket();
 
@@ -36,5 +33,34 @@ export class UploadService {
       });
       stream.end(file.buffer);
     });
+  }
+
+  async deleteFile(fileName: string): Promise<void> {
+    const storage = this.firebaseService.getStorageInstance();
+    const bucket = storage.bucket();
+    const file = bucket.file(fileName);
+
+    return new Promise((resolve, reject) => {
+      file.delete((error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  async getAllFiles(): Promise<string[]> {
+    const storage = this.firebaseService.getStorageInstance();
+    const bucket = storage.bucket();
+
+    const [files] = await bucket.getFiles();
+
+    const fileUrls = files.map((file) => {
+      return `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    });
+
+    return fileUrls;
   }
 }

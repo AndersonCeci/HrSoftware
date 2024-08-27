@@ -1,45 +1,44 @@
-import UserOutlined from "@ant-design/icons/lib/icons/UserOutlined";
+import { useState, useEffect } from "react";
+import { Button, Checkbox, Col, Row, Form } from "antd";
+import { useForm } from "antd/es/form/Form";
 import Steps from "../../../components/Shared/Steps";
-import { RecruitmentStage } from "../columns/constants";
-import SolutionOutlined from "@ant-design/icons/lib/icons/SolutionOutlined";
-import SmileOutlined from "@ant-design/icons/lib/icons/SmileOutlined";
-import ProfileOutlined from "@ant-design/icons/lib/icons/ProfileOutlined";
-import { useState } from "react";
-import ApplicantForm from "./ApplicantForm";
-import InterviewForm from "./InterviewForm";
-
-const items = [
-  {
-    title: RecruitmentStage.Applied,
-    status: "finish",
-    icon: <UserOutlined />,
-    content: RecruitmentStage.Applied,
-  },
-  {
-    title: RecruitmentStage.FirstInterview,
-    status: "finish",
-    icon: <SolutionOutlined />,
-    content: RecruitmentStage.FirstInterview,
-  },
-  {
-    title: RecruitmentStage.SecondInterview,
-    icon: <ProfileOutlined />,
-    content: RecruitmentStage.SecondInterview,
-  },
-  {
-    title: RecruitmentStage.OfferMade,
-    status: "wait",
-    icon: <SmileOutlined />,
-    content: RecruitmentStage.OfferMade,
-  },
-];
+import { Text } from "../../../components/Shared/Typography";
+import { items } from "../columns/constants";
+import { useRecruitmentContext } from "../context";
+import moment from "moment";
 
 const Stepper = () => {
+  const [form] = useForm();
   const [current, setCurrent] = useState(0);
+  const { editingRecord, updateApplicant } = useRecruitmentContext();
+  const stage =
+    current === 1
+      ? editingRecord.firstInterview
+      : current === 2
+      ? editingRecord.secondInterview
+      : null;
+
   const onChange = (value: number) => {
-    console.log("onChange:", value);
     setCurrent(value);
   };
+  useEffect(() => {
+    if (editingRecord) {
+      form.setFieldsValue({
+        name: editingRecord.name,
+        surname: editingRecord.surname,
+        email: editingRecord.email,
+        position: editingRecord.position,
+        reference: editingRecord.reference,
+      });
+
+      if (stage) {
+        form.setFieldsValue({
+          ...stage,
+          date: stage.date ? moment(stage.date) : null,
+        });
+      }
+    }
+  }, [current, editingRecord, form]);
 
   return (
     <div style={{ paddingTop: 16 }}>
@@ -48,18 +47,51 @@ const Stepper = () => {
         current={current}
         direction="horizontal"
         responsive
-        items={items}
+        items={items.map(({ title, icon }) => ({
+          title,
+          icon,
+        }))}
       />
-      <div>
-        {current === 0 && <ApplicantForm />}
-        {current === 1 && (
-          <InterviewForm step={RecruitmentStage.FirstInterview} />
-        )}
-        {current === 2 && (
-          <InterviewForm step={RecruitmentStage.SecondInterview} />
-        )}
-        {current === 3 && <div>{RecruitmentStage.OfferMade}</div>}
-      </div>
+
+      <Form form={form} layout="vertical" id={editingRecord._id}>
+        <div style={{ justifyItems: "inherit" }}>{items[current].content}</div>
+
+        <Form.Item>
+          <Row
+            justify="end"
+            style={{
+              alignItems: "end",
+              maxWidth: "100%",
+              gap: "10",
+            }}
+          >
+            <Text style={{ paddingRight: 10 }}>Notify applicant</Text>
+            <Checkbox onChange={() => {}}></Checkbox>
+          </Row>
+        </Form.Item>
+
+        <Row gutter={6} style={{ marginTop: 16 }}>
+          <Col>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={() => {
+                  console.log("form values", form.getFieldsValue());
+                  updateApplicant(editingRecord._id, form.getFieldsValue());
+                }}
+              >
+                Save
+              </Button>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item>
+              <Button type="default">Reject</Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };

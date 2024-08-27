@@ -47,14 +47,6 @@ export class SalaryService {
     }
   }
 
-  async getAllSalaries(): Promise<Salary[]> {
-    try {
-      return await this.salaryModel.find();
-    } catch (error) {
-      throw new ConflictException('Failed to fetch salaries');
-    }
-  }
-
   async find(id: string): Promise<Salary> {
     try {
       const salary = await this.salaryModel.findById(id, { isDeleted: false });

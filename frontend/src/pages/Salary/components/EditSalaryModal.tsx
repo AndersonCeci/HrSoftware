@@ -18,8 +18,8 @@ import axios, { AxiosError } from "axios";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import { Bonus } from "../../../types/BonusProps";
 import { Payroll } from "../../../types/Payroll";
+import { fetchEmployee } from "../../../helpers/employee.helper";
 
-const API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API;
 const SALARY_API = import.meta.env.REACT_APP_SALARY;
 const { Option } = Select;
 
@@ -28,18 +28,6 @@ interface EditSalaryProps {
   handleEditSubmit: (values: any) => void;
   handleCreateSubmit: (values: any) => void;
 }
-
-const fetchEmployee = async (name: string, surname: string) => {
-  try {
-    const res = await axios.get(API, {
-      params: { name, surname },
-    });
-    return res.data;
-  } catch (error) {
-    message.error("Failed to fetch employee");
-    return null;
-  }
-};
 
 const getPayroll = async (
   grossSalary: number,
@@ -115,13 +103,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
       );
       if (payroll) {
         editFormRef.current.setFieldsValue({
-          netSalary: payroll.netSalary,
-          socialSecurityContributions: payroll.socialInsuranceEmployee,
-          healthInsurance: payroll.healthInsuranceEmployee,
-          incomeTax: payroll.incomeTax,
-          socialInsuranceCompany: payroll.socialInsuranceCompany,
-          healthInsuranceCompany: payroll.healthInsuranceCompany,
-          grossSalary: payroll.grossSalary,
+          ...payroll,
           total:
             bonuses?.reduce(
               (total: number, bonus: Bonus) => total + bonus.amount,

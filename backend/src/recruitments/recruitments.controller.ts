@@ -4,8 +4,6 @@ import {
   Controller,
   Post,
   Get,
-  UsePipes,
-  ValidationPipe,
   Delete,
   Param,
   Patch,
@@ -27,20 +25,23 @@ export class RecruitmentsController {
   }
 
   @Get()
-  async getRecruitmentById(@Query('id') id?: string) {
-    const data =
-      await this.recruitmentService.getRecruitmentWithInterviewerDetails();
-    // console.log(data);
-    return data;
-    // if (id) {
-    //   const isValid = Types.ObjectId.isValid(id);
-    //   if (!isValid) throw new HttpException('Invalid ID format', 400);
+  async getRecruitments(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    try {
+      const pageNo = parseInt(page.toString());
+      const limitNo = parseInt(limit.toString());
+      const data =
+        await this.recruitmentService.getRecruitmentWithInterviewerDetails(
+          pageNo,
+          limitNo,
+        );
 
-    //   const objectId = new Types.ObjectId(id);
-
-    // } else {
-    //   return await this.recruitmentService.getRecruitments();
-    // }
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Patch(':id')

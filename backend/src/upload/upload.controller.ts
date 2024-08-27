@@ -1,5 +1,8 @@
 import {
   Controller,
+  Delete,
+  Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -16,5 +19,17 @@ export class FileController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const fileUrl = await this.fileService.uploadFile(file);
     return { fileUrl };
+  }
+
+  @Delete('delete/:fileName')
+  async deleteFile(@Param('fileName') fileName: string) {
+    await this.fileService.deleteFile(fileName);
+    return { message: 'File deleted successfully' };
+  }
+
+  @Get('list')
+  async listFiles() {
+    const fileUrls = await this.fileService.getAllFiles();
+    return { files: fileUrls };
   }
 }

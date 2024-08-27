@@ -11,8 +11,6 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { AuthorizationGuard } from 'src/guards/authorization.guard';
 
-// @Roles(['hr', 'ceo'])
-// @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('auth')
 export class AuthController {
   private readonly oauth2Client = new google.auth.OAuth2(

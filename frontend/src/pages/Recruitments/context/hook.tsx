@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useRef } from "react";
 import { ApplicantProps } from "../../../types/ApplicantProps";
 import useHttp from "../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
-import { message } from "antd";
+import { Form, message } from "antd";
+import { sendMail } from "../../../helpers/mail.helper";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
 
 export const useRecruitment = () => {
-  const { t } = useTranslation();
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
   const [editingRecord, setEditingRecord] = useState<ApplicantProps | null>(
     null
@@ -17,17 +16,17 @@ export const useRecruitment = () => {
   const [isLoading, , sendRequest] = useHttp();
   const formRef = useRef<any>();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [file, setFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    sendRequest({ url: API }, (data) => {
-      setTableData(data);
-    });
-  }, []);
-  const fetchApplicant = async (id: string) => {
+  const fetchApplicants = async (page: number, limit: number) => {
     try {
-      return await axios.get(API, {
-        params: { id },
+      const response = await axios.get(API, {
+        params: { page, limit },
       });
+      const { data, meta } = response.data;
+      setTableData(data);
+      return meta.itemCount;
     } catch (error) {
       if (error instanceof AxiosError)
         message.error(
@@ -53,7 +52,6 @@ export const useRecruitment = () => {
     setTableData((prevData) =>
       prevData.map((item) => (item._id === newData._id ? newData : item))
     );
-    setIsEditModalVisible(false);
   };
 
   const handleEditButtonClick = (record: ApplicantProps) => {
@@ -68,7 +66,6 @@ export const useRecruitment = () => {
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    console.log(formData, "formDataaa");
     try {
       const uploadResponse = await fetch("http://localhost:3000/files/upload", {
         method: "POST",
@@ -79,25 +76,53 @@ export const useRecruitment = () => {
         throw new Error("File upload failed");
       }
 
-      // const uploadData = await uploadResponse.json();
-      // const fileUrl = uploadData.fileUrl;
+      const uploadData = await uploadResponse.json();
+      const fileUrl = uploadData.fileUrl;
 
-      // form.setFieldsValue({ cv: fileUrl });
-      // setFile(file);
+      form.setFieldsValue({ cv: fileUrl });
+      setFile(null);
     } catch (error) {
       console.error("File upload error:", error);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    console.log(file, "fileeee");
+  const updateApplicant = async (_id: string, values: any) => {
+    console.log(values);
+    try {
+      const res = await axios.patch(`${API}/${_id}`, values);
+      handleEdit(res.data);
+      message.success("Applicant updated successfully!");
+      return res;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      }
+    } finally {
+      sendMail("", {
+        sender: "",
+        recepients: [editingRecord?.email || ""],
+        subject: "",
+        text: "",
+        name: editingRecord?.name || "",
+        email: "",
+        password: "",
+        hr: "",
+      });
+    }
+  };
+
+  const handleFileChange = async () => {
     if (file) {
-      handleUpload(file);
+      console.log(file, "fileeee");
+      // handleUpload(file);
+    } else {
+      message.error("No file chose");
     }
   };
   return {
-    t,
+    form,
     tableData,
     editingRecord,
     drawerState,
@@ -111,7 +136,10 @@ export const useRecruitment = () => {
     handleEditButtonClick,
     handleOnClose,
     setEditingRecord,
-    fetchApplicant,
+    fetchApplicants,
     handleFileChange,
+    setFile,
+    handleUpload,
+    updateApplicant,
   };
 };

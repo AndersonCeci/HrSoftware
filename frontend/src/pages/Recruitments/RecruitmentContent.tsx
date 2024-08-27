@@ -4,23 +4,43 @@ import TableHeader from "../../components/Table/TableHeader";
 import Drawer from "../../components/Shared/Drawer";
 import Stepper from "./components/Stepper";
 import { columns as generateColumns } from "./columns/columns";
+import usePagination from "../../hooks/usePagination";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-const RecruitmentContent: React.FC = () => {
+export const RecruitmentContent: React.FC = () => {
+  const { t } = useTranslation();
   const {
-    t,
     tableData,
     drawerState,
     setDrawerState,
     setIsEditModalVisible,
     setEditingRecord,
-    fetchApplicant,
+    fetchApplicants,
   } = useRecruitmentContext();
+  const {
+    page,
+    limit,
+    handlePageChange,
+    handleLimitChange,
+    setItemCount,
+    itemCount,
+  } = usePagination();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchApplicants(page, limit);
+      if (response) {
+        setItemCount(response);
+      }
+    };
+    fetchData();
+  }, [page, limit]);
 
   const columns = generateColumns({
     tableData,
     setDrawerState,
     setEditingRecord,
-    fetchApplicant,
   });
 
   return (
@@ -43,16 +63,14 @@ const RecruitmentContent: React.FC = () => {
         data={tableData}
         pagination={{
           position: ["bottomRight"],
-          // current: page,
-          // pageSize: limit,
-          // total: itemCount,
-          // onChange: handlePageChange,
-          // onShowSizeChange: handleLimitChange,
+          current: page,
+          pageSize: limit,
+          total: itemCount,
+          onChange: handlePageChange,
+          onShowSizeChange: handleLimitChange,
         }}
         fixed
       />
     </section>
   );
 };
-
-export default RecruitmentContent;
