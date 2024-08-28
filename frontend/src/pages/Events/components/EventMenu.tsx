@@ -7,51 +7,49 @@ import { Typography } from "antd";
 import { useState } from "react";
 
 type EventMenuProps = {
-  EventList?: EvenType[];
-  title: string;
-  onOpenModal: () => void;
-  displayNoResult?: boolean;
+	EventList?: EvenType[];
+	title: string;
+	onOpenModal: () => void;
+	displayNoResult?: boolean;
 };
 
 const EventMenu = ({
-  EventList = [],
-  title,
-  onOpenModal,
-  displayNoResult = false,
+	EventList = [],
+	title,
+	onOpenModal,
+	displayNoResult = false,
 }: EventMenuProps) => {
-  const isOnlyOneEvent = EventList.length === 1;
-  const [selectedEvent, setSelectedEvent] = useState<EvenType | undefined>(
-    undefined,
-  );
+	const isOnlyOneEvent = EventList.length === 1;
+	const [selectedEvent, setSelectedEvent] = useState<EvenType | undefined>(undefined);
 
-  function handleModalShow(event: EvenType | undefined) {
-    setSelectedEvent(event);
-  }
+	function handleModalShow(event: EvenType | undefined) {
+		setSelectedEvent(event);
+	}
 
-  return EventList.length === 0 ? (
-    displayNoResult && <NoDataResult onOpenModal={onOpenModal} />
-  ) : (
-    <section className="event-menu-container">
-      <Modal
-        title={"Event Details"}
-        isOpen={!!selectedEvent}
-        onCancel={() => handleModalShow(undefined)}
-      >
-        {selectedEvent && <ShowSelectedEvent selectedEvent={selectedEvent} />}
-      </Modal>
+	return EventList.length === 0 ? (
+		displayNoResult && <NoDataResult onOpenModal={onOpenModal} />
+	) : (
+		<section className="event-menu-container">
+			<Modal
+				title={"Event Details"}
+				isOpen={!!selectedEvent}
+				onCancel={() => handleModalShow(undefined)}
+			>
+				{selectedEvent && <ShowSelectedEvent selectedEvent={selectedEvent} />}
+			</Modal>
 
-      <Typography.Title type="secondary" level={4}>
-        {title}
-      </Typography.Title>
-      <ul id="events">
-        {EventList.map((event) => (
-          <li key={event._id} onClick={() => handleModalShow(event)}>
-            <EventCard event={event} isAlone={isOnlyOneEvent} />
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+			<Typography.Title type="secondary" level={4}>
+				{title}
+			</Typography.Title>
+			<ul id="events">
+				{EventList.map((event) => (
+					<li key={event._id} onClick={() => handleModalShow(event)}>
+						<EventCard event={event} isAlone={isOnlyOneEvent} />
+					</li>
+				))}
+			</ul>
+		</section>
+	);
 };
 
 export default EventMenu;

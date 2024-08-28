@@ -1,75 +1,90 @@
+import "../styles/ShowSlectedEvent.css";
 import { EvenType } from "../types/EventTypes";
 import { Carousel, Flex, Typography } from "antd";
-import TempImage from "../../../assets/image 99.png";
-import "../styles/ShowSlectedEvent.css";
 import { useState } from "react";
+import { useJsApiLoader, Libraries } from "@react-google-maps/api";
+
+import EventListItem from "./EventListItem";
+import SelectedEventInformation from "./SelectedEventInformation";
+import Button from "../../../components/Shared/Button";
+import Map from "./Map/Map";
+
+import { FaMapMarkedAlt } from "react-icons/fa";
+import { FaRegImage } from "react-icons/fa";
 
 type ShowSelectedEventProps = {
 	selectedEvent: EvenType;
 };
 
+const libraries: Libraries = ["places", "geocoding"];
+const API = import.meta.env.REACT_APP_GOOGLE_MAPS_API;
+
+const mapOptions: google.maps.MapOptions = {
+	zoomControl: false,
+	streetViewControl: false,
+	fullscreenControl: false,
+	mapTypeControl: false,
+	clickableIcons: false,
+};
+
 const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
-	const [expanded, setExpanded] = useState(false);
-	const date = new Date(selectedEvent.eventDate);
-	const dateEnd = new Date(selectedEvent.eventEndDate || selectedEvent.eventDate);
-	const dateStr = date.toLocaleDateString("en-GB");
-	const dateEndStr = dateEnd.toLocaleDateString("en-GB");
+	const [showMap, setShowMap] = useState(false);
 
-	const isOnlyOneDay = dateStr === dateEndStr;
+	function handleShowImage() {
+		setShowMap((prev) => !prev);
+	}
 
-	const displayedDate = dateStr + (isOnlyOneDay ? "" : ` - ${dateEndStr}`);
-	const displayedTime =
-		selectedEvent.eventStartTime + (!isOnlyOneDay ? "" : ` - ${selectedEvent.eventEndTime}`);
+	const { isLoaded } = useJsApiLoader({
+		googleMapsApiKey: API,
+		libraries: libraries,
+	});
 
-	console.log(displayedTime);
 	return (
-    <section className="show-event-container">
-      <Typography.Title className="event-name-text">
-        {selectedEvent.eventName}
-      </Typography.Title>
-      <Carousel className="large-image" pauseOnHover adaptiveHeight draggable>
-        {selectedEvent.images?.map((image, index) => (
-          <div key={index} className="temp-img-class">
-            <img src={image} alt={`Event ${index}`} />
-          </div>
-        ))}
-      </Carousel>
-      <Flex justify="space-between" align="flex-start" gap={50}>
-        {selectedEvent.eventDescription && (
-          <div className="selected-event-description-container">
-            <Typography.Paragraph
-              ellipsis={{
-                rows: 5,
-                expandable: "collapsible",
-                expanded: expanded,
-                symbol: expanded ? "Show less" : "Show more",
-                onExpand: (_, info) => setExpanded(info.expanded),
-              }}
-            >
-              {selectedEvent.eventDescription}
-            </Typography.Paragraph>
-          </div>
-        )}
-        <div className="selected-event-list-container">
-          <ul className="selected-event-list">
-            <li>
-              <Typography.Title level={4}>Date </Typography.Title>
-              <Typography.Text className="selected-event-info">
-                {displayedDate}
-              </Typography.Text>
-            </li>
+		<section className="show-event-container">
+			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
+			<div className="carousel-map-container">
+				<Button
+					onClick={handleShowImage}
+					type="default"
+					icon={
+						!showMap ? (
+							<FaMapMarkedAlt className="map-carousel-container-icon" />
+						) : (
+							<FaRegImage className="map-carousel-container-icon" />
+						)
+					}
+					className="map-carousel-btn"
+					size="large"
+					shape="circle"
+				/>
 
-            <li>
-              <Typography.Title level={4}>Time </Typography.Title>
-              <Typography.Text className="selected-event-info">
-                {displayedTime}
-              </Typography.Text>
-            </li>
-          </ul>
-        </div>
-      </Flex>
-    </section>
-  );
+				{!showMap ? (
+					<Carousel pauseOnHover adaptiveHeight draggable>
+						{selectedEvent.images?.map((image, index) => (
+							<div key={index} className="selected-event-image-container">
+								<img src={image} alt={`Event ${index}`} className="selected-event-image" />
+							</div>
+						))}
+					</Carousel>
+				) : (
+					<Map onLoad={() => {}} mapOptions={mapOptions} isLoaded={isLoaded}></Map>
+				)}
+			</div>
+			<Flex vertical gap={10}>
+				<EventListItem>
+					{selectedEvent.location.name && (
+						<Typography.Paragraph>
+							<strong>Name:</strong> {selectedEvent.location.name}
+						</Typography.Paragraph>
+					)}
+					<Typography.Paragraph>
+						<strong>Address:</strong> {selectedEvent.location.address}
+					</Typography.Paragraph>
+				</EventListItem>
+				<SelectedEventInformation selectedEvent={selectedEvent} />
+			</Flex>
+		</section>
+	);
 };
 
 export default ShowSelectedEvent;

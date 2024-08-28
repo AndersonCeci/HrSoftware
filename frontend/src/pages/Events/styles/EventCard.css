@@ -1,41 +1,16 @@
 .event-item {
 	background-color: #fff;
 	border-radius: 1rem;
-	overflow: hidden;
 	text-align: center;
 	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+	transition: transform 0.2s;
 	/* max-width: 300px; */
+	/* min-width: 100%; */
 }
 
 .alone-event {
 	max-width: 300px;
 }
-
-.event-image-container {
-	/* padding: 0 30px; */
-	position: relative;
-}
-
-/* .left-event-arrow {
-	position: absolute;
-	top: 40%;
-	left: 0;
-	height: 50px;
-	width: 50px;
-	border-radius: 50%;
-	background-color: rgba(0, 0, 0, 0.7);
-	z-index: 1000;
-}
-
-.right-event-arrow {
-	position: absolute;
-	top: 40%;
-	right: 0;
-	height: 50px;
-	width: 50px;
-	width: 10%;
-	background-color: rgba(0, 0, 0, 0.7);
-} */
 
 .event-item article {
 	height: 100%;

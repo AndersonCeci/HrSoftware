@@ -16,10 +16,10 @@ export class Promotion extends Document {
   @Prop()
   employeeName: string;
 
-  @Prop({ required: true })
+  @Prop({type: String, required: true })
   oldPosition: Position;
 
-  @Prop({ required: true })
+  @Prop({type: String, required: true })
   newPosition: Position;
 
   @Prop({ required: true })
