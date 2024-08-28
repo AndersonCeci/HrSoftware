@@ -25,8 +25,8 @@ export class Event extends Document {
   @Prop({
     type: {
       location: {
-        latitude: { type: Number },
-        longitude: { type: Number },
+        lat: { type: Number },
+        lng: { type: Number },
       },
       address: { type: String },
       name: { type: String },
@@ -34,8 +34,8 @@ export class Event extends Document {
   })
   location?: {
     location?: {
-      latitude: number;
-      longitude: number;
+      lat: number;
+      lng: number;
     };
     address?: string;
     name?: string;

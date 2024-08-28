@@ -36,8 +36,8 @@ export class CreateEventDto {
   
   location?: {
     location?: {
-      latitude?: number;
-      longitude?: number;
+      lat?: number;
+      lng?: number;
     };
 
     address?: string;
