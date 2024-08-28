@@ -166,7 +166,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 						</Button>
 					</Upload>
 				</Flex>
-			</Form.Item>
+			</Form.Item> 
 		</Form>
 	);
 });

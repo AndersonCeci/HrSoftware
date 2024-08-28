@@ -8,6 +8,7 @@ import { NotificationsGateway } from 'src/notificationsGateway/notifications.gat
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 
+
 @Injectable()
 export class EventsService {
   constructor(
@@ -17,22 +18,9 @@ export class EventsService {
   ) {}
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-    const createdEvent = new this.eventModel(createEventDto);
-
-    this.notificationsGateway.sendNotification(
-      `A new event "${createdEvent.eventName}" has been created !`,
-      createdEvent,
-    );
-
-    const createNotificationDto: CreateNotificationDto = {
-      message: createdEvent.eventName,
-      isRead: false,
-      userId: null,
-      path: `/company/events`,
-    };
-    await this.notificationService.createNotification(createNotificationDto);
-
-    return createdEvent.save();
+   const event = this.eventModel.create(createEventDto)
+   return event
+  
   }
 
   async getEvent(query: Query): Promise<Event[]> {

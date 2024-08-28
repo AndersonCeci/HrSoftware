@@ -12,6 +12,8 @@ import { CreateEventDto } from './dto/createEvent.dto';
 import { EventsService } from './eventsModale.service';
 import mongoose from 'mongoose';
 
+
+
 @Controller('event')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
