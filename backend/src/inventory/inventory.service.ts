@@ -10,6 +10,7 @@ import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import { AssetsService } from 'src/assets/assets.service';
 
 import { Employee } from 'src/employee/schema/employe.schema';
+import { Asset } from 'src/assets/schemas/Asset.schema';
 
 
 @Injectable()
@@ -17,8 +18,8 @@ export class InventoryService {
   constructor(
     @InjectModel(Inventory.name) private inventoryModel: Model<Inventory>,
     @InjectModel(Employee.name) private employeeModel: Model<Employee>,
+
     private readonly assetsService: AssetsService,
-   
   ) {}
 
   async createInventory(
@@ -57,18 +58,24 @@ export class InventoryService {
     //   .populate('assetID')
     //   .exec();
   }
+  async findAssetByEmployeeName(employeeDetails: string): Promise<Inventory[]> {
+    return this.inventoryModel.find({ employeeDetails: employeeDetails });
+  }
 
-  async cleanUpAssetsAfterEmployeeDeletion(
-    employeeId: string,
-  ): Promise<Inventory| null> {
-    const assetsToUnassign: Inventory[] = await this.inventoryModel.find({
-      employeeDetails: employeeId,
-    });
-    console.log(assetsToUnassign);
+  // async careOfNull():Promise<void>{
+  //     return this.inventoryModel.find()
+  // }
 
-    for (const asset of assetsToUnassign) {
-      if (asset._id) {
-        return await this.unassignFromEmployee(asset._id.toString());
+  async cleanUpInventoriesAfterEmployeeDeletion(): Promise<void> {
+    const inventories = await this.inventoryModel
+      .find({
+        status: InventoryStatus.Assigned,
+      })
+      .populate('employeeDetails');
+
+    for (const inventory of inventories) {
+      if (!inventory.employeeDetails) {
+        await this.unassignFromEmployee(inventory._id.toString());
       }
     }
   }
@@ -140,9 +147,10 @@ export class InventoryService {
     return response as unknown as Inventory;
   }
 
-  // async findAll(): Promise<any> {
-  //   return this.assetsService.findAll();
-  // }
+  async findAll(): Promise<Inventory[]> {
+    console.log('find all inventories');
+    return this.inventoryModel.find().exec();
+  }
 
   async delete(id: string): Promise<Inventory> {
     const deletedInventory = await this.inventoryModel.findByIdAndDelete(id);

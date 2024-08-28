@@ -25,8 +25,8 @@ export class AssetsController {
   }
 
   @Get()
-  async findAll(@Query() query: any): Promise<Asset[]> {
-    return this.assetsService.findAll(query);
+  async findAll(): Promise<Asset[]> {
+    return this.assetsService.findAll();
   }
   @Get('employee')
   async findAllEmployee(): Promise<Asset[]> {

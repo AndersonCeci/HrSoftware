@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/Asset.schema';
@@ -18,13 +18,13 @@ export class AssetsService {
       isDeleted,
       deleteDate,
     }));
+    Logger.log('create');
 
     return await this.assetModel.create(inventoryEntries);
   }
 
-  async findAll(query: Query): Promise<Asset[]> {
-    const page = Number(query.page) || 1;
-    const resPerPage = 10;
+  async findAll(): Promise<Asset[]> {
+   
     const data = await this.assetModel
       .aggregate([
         {

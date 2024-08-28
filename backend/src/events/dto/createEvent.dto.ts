@@ -3,6 +3,9 @@ import {
   IsNotEmpty,
   IsDateString,
   IsOptional,
+  IsBoolean,
+  IsArray,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateEventDto {
@@ -19,24 +22,38 @@ export class CreateEventDto {
 
   @IsDateString()
   @IsOptional()
-  eventEndDate: Date;
+  eventEndDate?: Date;
 
+  @IsString()
+  @IsNotEmpty()
   eventStartTime: string;
 
-  eventEndTime: string;
+  @IsString()
+  @IsOptional()
+  eventEndTime?: string;
 
   @IsOptional()
-  locationName?: string;
+  
+  location?: {
+    location?: {
+      latitude?: number;
+      longitude?: number;
+    };
 
-  @IsOptional()
-  longtitude?: string;
+    address?: string;
+    name?: string;
+  };
 
-  @IsOptional()
-  latitude?: string;
-
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
   images?: string[];
 
-  isDeleted: boolean;
+  @IsBoolean()
+  @IsOptional()
+  isDeleted?: boolean;
+
+  @IsDateString()
+  @IsOptional()
   deleteDate?: Date;
 }
