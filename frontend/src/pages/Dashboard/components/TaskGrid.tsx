@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Tooltip,
   Table,
@@ -14,11 +14,16 @@ import { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import "../styles/TaskGrid.css";
 import { useTranslation } from "react-i18next";
+import useHttp from "../../../hooks/useHttp";
+import { RemindersDataType } from "../types/ReminderDataTypes";
+import ReminderForm from "./ReminderForm";
+import { statusOptions } from "../utils";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 const { Search } = Input;
 
-interface Task {
+interface Reminder {
   id: number;
   title: string;
   description: string;
@@ -36,24 +41,35 @@ const TaskGrid: React.FC = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedTask, setEditedTask] = useState<Partial<Task>>({});
   const [isVisible, setIsVisible] = useState(false);
+  const [reminders, setReminders] = useState<RemindersDataType[]>();
 
-  const columns: ColumnsType<Task> = [
+  const [, , sendRequest] = useHttp();
+
+  useEffect(() => {
+    sendRequest(
+      { url: `http://localhost:3000/notifications?status=reminder` },
+      (responseData: RemindersDataType[]) => setReminders(responseData)
+    );
+  }, []);
+
+
+  const columns: ColumnsType<RemindersDataType | Task> = [
     {
       key: "1",
       title: t(`taskTitle`),
-      dataIndex: "title",
+      dataIndex: "reminderTitle",
     },
     {
       key: "2",
       title: t("taskDescription"),
-      dataIndex: "description",
+      dataIndex: "message",
       width: "200px",
     },
     {
       key: "3",
       title: t("taskDate"),
-      dataIndex: "due",
-      sorter: (a, b) => a.due.localeCompare(b.due),
+      dataIndex: "due_date",
+      // sorter: (a, b) => a.due.localeCompare(b.due),
     },
     {
       key: "4",
@@ -64,7 +80,7 @@ const TaskGrid: React.FC = () => {
         { text: "DOING", value: "DOING" },
         { text: "DONE", value: "DONE" },
       ],
-      onFilter: (value, record) => record.status.indexOf(value as string) === 0,
+      // onFilter: (value, record) => record.status.indexOf(value as string) === 0,
     },
     {
       key: "7",
@@ -116,12 +132,6 @@ const TaskGrid: React.FC = () => {
     setIsEditable(true);
   };
 
-  const statusOptions = [
-    { label: "TO DO", value: "TO DO" },
-    { label: "DOING", value: "DOING" },
-    { label: "DONE", value: "DONE" },
-  ];
-
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
     setLen(searchTerm.length);
@@ -137,12 +147,15 @@ const TaskGrid: React.FC = () => {
   const final = len > 0 ? searchData : dataSource;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: RemindersDataType) => {
+    console.log(values, "valuess");
     setIsVisible(false);
     const newTask = {
       ...values,
       id: dataSource.length + 1,
-      due: values.due ? values.due.format("MM/DD/YYYY") : undefined,
+      due_date: values.due_date
+        ? dayjs(values.due_date["due_date"], "DD/MM/YYYY")
+        : undefined,
     };
 
     setDataSource((prev) => [...prev, newTask]);
@@ -159,49 +172,57 @@ const TaskGrid: React.FC = () => {
 
     setDataSource((prev) =>
       prev.map((task) =>
-        task.id === editedTask.id ? (updatedTask as Task) : task,
-      ),
+        task.id === editedTask.id ? (updatedTask as Reminder) : task
+      )
     );
     setIsEditable(false);
   };
 
-	return (
-		<div className="container">
-			<div className="header-container">
-				<h1 className="task-title">{t(`reminders`)}</h1>
-				<Search onChange={onSearch} placeholder={t("searchAReminder")} allowClear style={{ width: 300 }} />
-				<Tooltip placement="bottom" title="Add new">
-					<button onClick={onAddTask} className="add-btn">
-						<PlusOutlined />
-					</button>
-				</Tooltip>
-			</div>
-			<Table
-				pagination={{ pageSize: 10 }}
-				columns={columns}
-				dataSource={final}
-				locale={{
-					emptyText: "No tasks available",
-				}}
-			/>
-			<Modal
-				footer={null}
-				className="Edit-modal"
-				title="Edit Task"
-				open={isEditable}
-				onCancel={() => {
-					setIsEditable(false);
-					setEditedTask({});
-				}}
-			>
-				<Form form={form} layout="vertical" onFinish={handleEditSubmit}>
-					<Form.Item
-						label="Title"
-						name="title"
-						rules={[{ required: true, message: "Please enter the title" }, { max: 100 }]}
-					>
-						<Input />
-					</Form.Item>
+  return (
+    <div className="container">
+      <div className="header-container">
+        <h1 className="task-title">{t(`reminders`)}</h1>
+        <Search
+          onChange={onSearch}
+          placeholder={t("searchAReminder")}
+          allowClear
+          style={{ width: 300 }}
+        />
+        <Tooltip placement="bottom" title="Add new">
+          <button onClick={onAddTask} className="add-btn">
+            <PlusOutlined />
+          </button>
+        </Tooltip>
+      </div>
+      <Table
+        pagination={{ pageSize: 10 }}
+        columns={columns}
+        dataSource={reminders}
+        locale={{
+          emptyText: "No tasks available",
+        }}
+      />
+      <Modal
+        footer={null}
+        className="Edit-modal"
+        title="Edit Task"
+        open={isEditable}
+        onCancel={() => {
+          setIsEditable(false);
+          setEditedTask({});
+        }}
+      >
+        <Form form={form} layout="vertical" onFinish={handleEditSubmit}>
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[
+              { required: true, message: "Please enter the title" },
+              { max: 100 },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
           <Form.Item label="Description" name="description">
             <Input />
@@ -214,7 +235,7 @@ const TaskGrid: React.FC = () => {
                 validator: (_, value) => {
                   if (value && value < moment().startOf("day")) {
                     return Promise.reject(
-                      new Error("Due date cannot be earlier than today"),
+                      new Error("Due date cannot be earlier than today")
                     );
                   }
                   return Promise.resolve();
@@ -244,74 +265,12 @@ const TaskGrid: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <Modal
-        open={isVisible}
-        footer={null}
-        onCancel={() => {
-          setIsVisible(false);
-        }}
-        title={t("addNewReminder")}
-      >
-        <Form form={form2} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[
-              { required: true, message: "Please enter the title" },
-              { max: 100 },
-            ]}
-          >
-            <Input placeholder="Enter the title" />
-          </Form.Item>
-          <Form.Item
-            label="Description"
-            name="description"
-            rules={[
-              { required: true, message: "Please enter the description" },
-              { max: 1000 },
-            ]}
-          >
-            <Input.TextArea placeholder="Enter the description" />
-          </Form.Item>
-          <Form.Item
-            label="Due Date"
-            name="due"
-            rules={[
-              {
-                validator: (_, value) => {
-                  if (value && value < moment().startOf("day")) {
-                    return Promise.reject(
-                      new Error("Due date cannot be earlier than today"),
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}
-          >
-            <DatePicker format={"MM/DD/YYYY"} />
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="Status"
-            initialValue="TO DO"
-            rules={[{ required: true, message: "Please choose the status" }]}
-          >
-            <Select placeholder="Select status">
-              {statusOptions.map((status) => (
-                <Option key={status.value} value={status.value}>
-                  {status.label}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item>
-            <Button className="Submit-btn" type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <ReminderForm
+        setIsVisible={setIsVisible}
+        isVisible={isVisible}
+        handleSubmit={handleSubmit}
+        form2={form2}
+      />
     </div>
   );
 };

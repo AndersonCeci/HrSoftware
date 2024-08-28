@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateTaskDto } from './tasksDTO/tasks.dto';
+import { CreateReminderDto } from './tasksDTO/tasks.dto';
 import { Task } from './schema/tasks.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -16,7 +16,7 @@ export class TasksService {
     private readonly notificationService: NotificationsService,
   ) {}
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+  async createTask(createTaskDto: CreateReminderDto): Promise<Task> {
     try {
       const createdTask = new this.taskModel(createTaskDto);
       return await createdTask.save();
@@ -49,10 +49,10 @@ export class TasksService {
 
     tasksDueInTwoDays.forEach((task) => {
       this.notificationsGateway.notifyDueDayTask(
-        `Task ${task.title} Due in 1 Day`,
+        `Task ${task.reminderTitle} Due in 1 Day`,
         {
-          title: task.title,
-          description: task.description,
+          title: task.reminderTitle,
+          description: task.message,
         },
       );
     });
@@ -84,7 +84,7 @@ export class TasksService {
     );
   }
 
-  editTask(id: string, updateTaskDto: CreateTaskDto): Promise<Task | null> {
+  editTask(id: string, updateTaskDto: CreateReminderDto): Promise<Task | null> {
     return this.taskModel
       .findByIdAndUpdate(id, updateTaskDto, { new: true })
       .exec();

@@ -1,17 +1,15 @@
 import { IsNotEmpty } from 'class-validator';
-import { TaskStatus } from '../schema/tasks.schema';
+import { ReminderStatus } from '../schema/tasks.schema';
 
-export class CreateTaskDto {
+export class CreateReminderDto {
   @IsNotEmpty()
-  title: string;
-
-    @IsNotEmpty()
-    due_date: Date;
-
-
+  reminderTitle: string;
 
   @IsNotEmpty()
-  status: TaskStatus;
+  due_date: Date;
+
+  @IsNotEmpty()
+  status: ReminderStatus;
 
   isDeleted: boolean;
   deleteDate: Date;

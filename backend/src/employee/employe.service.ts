@@ -15,6 +15,8 @@ import { NotificationStatus } from 'src/notificationsGateway/notification.schema
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
   ) {}
@@ -168,7 +170,7 @@ export class EmployeeService {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
 
-  @Cron(CronExpression.EVERY_10_HOURS)
+  @Cron(CronExpression.EVERY_12_HOURS)
   async handleCron() {
     await this.notifyBirthdayOneDayBefore();
     // await this.notifyOneYearAnniversary();
@@ -195,7 +197,7 @@ export class EmployeeService {
       const message = `Reminder: ${employee.name} ${employee.surname}'s birthday is tomorrow!`;
 
       const createNotificationDto: CreateNotificationDto = {
-        reminderTitle: 'Birthday Reminder',
+        reminderTitle: 'Birthday Reminder 🎂',
         message,
         isRead: false,
         userId: null,
@@ -207,40 +209,40 @@ export class EmployeeService {
     }
   }
 
-  // async notifyOneYearAnniversary(): Promise<void> {
-  //   const oneYearAgo = new Date();
-  //   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-  //   oneYearAgo.setHours(0, 0, 0, 0);
+  async notifyOneYearAnniversary(): Promise<void> {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    oneYearAgo.setHours(0, 0, 0, 0);
 
-  //   const endOfDay = new Date(oneYearAgo);
-  //   endOfDay.setHours(23, 59, 59, 999);
+    const endOfDay = new Date(oneYearAgo);
+    endOfDay.setHours(23, 59, 59, 999);
 
-  //   const employeesWithAnniversary = await this.employeeModel
-  //     .find({
-  //       startingDate: {
-  //         $gte: oneYearAgo,
-  //         $lte: endOfDay,
-  //       },
-  //     })
-  //     .exec();
+    const employeesWithAnniversary = await this.employeeModel
+      .find({
+        startingDate: {
+          $gte: oneYearAgo,
+          $lte: endOfDay,
+        },
+      })
+      .exec();
 
-  //   const hrUser = await this.userModel.findOne({ role: Role.HR }).exec();
+    const hrUser = await this.userModel.findOne({ role: Role.HR }).exec();
 
-  //   if (!hrUser) {
-  //     throw new Error('No HR user found');
-  //   }
+    if (!hrUser) {
+      throw new Error('No HR user found');
+    }
 
-  //   for (const employee of employeesWithAnniversary) {
-  //     const createNotificationDto: CreateNotificationDto = {
-  //       message: `Congratulations to ${employee.fullName} for one year at the company!`,
-  //       isRead: false,
-  //       userId: new Types.ObjectId(hrUser._id),
-  //       path: `/dashboard`,
-  //       status: NotificationStatus.REMINDER,
-  //     };
-  //     await this.notificationService.createNotification(createNotificationDto);
-  //   }
-  // }
+    for (const employee of employeesWithAnniversary) {
+      const createNotificationDto: CreateNotificationDto = {
+        message: `Congratulations to ${employee.fullName} for one year at the company!`,
+        isRead: false,
+        userId: new Types.ObjectId(hrUser._id),
+        path: `/dashboard`,
+        status: NotificationStatus.REMINDER,
+      };
+      await this.notificationService.createNotification(createNotificationDto);
+    }
+  }
 
   async searchEmployee(
     name?: string,
@@ -261,6 +263,7 @@ export class EmployeeService {
       throw new Error('An error occurred while searching for employees.');
     }
   }
+
   async getTeamLeaders(): Promise<Employee[]> {
     const teamLeaders = await this.employeeModel
       .aggregate([

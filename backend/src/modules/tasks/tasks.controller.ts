@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './tasksDTO/tasks.dto';
+import { CreateReminderDto } from './tasksDTO/tasks.dto';
 import { Types } from 'mongoose';
 
 @Controller('tasks')
@@ -18,8 +18,8 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.createTask(createTaskDto);
+  createTask(@Body() createReminderDto: CreateReminderDto) {
+    return this.tasksService.createTask(createReminderDto);
   }
 
   @Get()
@@ -47,7 +47,7 @@ export class TasksController {
   }
 
   @Put(':id')
-  editTask(@Param('id') id: string, @Body() updateTaskDto: CreateTaskDto) {
+  editTask(@Param('id') id: string, @Body() updateTaskDto: CreateReminderDto) {
     return this.tasksService.editTask(id, updateTaskDto);
   }
 }

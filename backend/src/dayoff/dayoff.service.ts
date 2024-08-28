@@ -54,13 +54,12 @@ export class DayoffService {
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
-    console.log( hrUsers,  'hrUsers')
 
     hrUsers.forEach(async (hrUser) => {
       const createNotification: CreateNotificationDto = {
         message: `A new day off request has been created by ${employeeName}.`,
         isRead: false,
-        userId: hrUser._id,
+        userId: hrUser.employID,
         path: '/dayoff/requestedLeave',
       };
       await this.notificationService.createNotification(createNotification);

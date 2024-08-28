@@ -15,7 +15,6 @@ const EventCard = ({ event, isAlone }: EventCardProps) => {
   const date = new Date(eventDate);
   const month = date.toLocaleString("default", { month: "short" });
   const day = date.getDate();
-console.log(images, "iamgeeeee");
   return (
     <div className={`event-item ${isAlone ? "alone-event" : undefined}`}>
       <article>

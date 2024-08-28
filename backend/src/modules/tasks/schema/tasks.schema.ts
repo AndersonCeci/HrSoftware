@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsDateString } from 'class-validator';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 
-export enum TaskStatus {
+export enum ReminderStatus {
   TO_DO = 'TO_DO',
   DOING = 'DOING',
   DONE = 'DONE',
@@ -11,17 +11,17 @@ export enum TaskStatus {
 @Schema()
 export class Task extends Document {
   @Prop({ required: true })
-  title: string;
+  reminderTitle: string;
 
   @Prop({ required: true })
-  description: string;
+  message: string;
 
   @IsDateString()
   @Prop()
   due_date: Date;
 
-  @Prop({ required: true, enum: TaskStatus })
-  status: TaskStatus;
+  @Prop({ required: true, enum: ReminderStatus })
+  status: ReminderStatus;
 
   @Prop({ default: false })
   isDeleted: boolean;
