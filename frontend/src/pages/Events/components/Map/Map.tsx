@@ -11,7 +11,7 @@ type MapProps = {
 	onClick?: (event: google.maps.MapMouseEvent) => void;
 	isLoaded: boolean;
 };
-
+console.log("Map.tsx");
 export default function Map({
 	children,
 	mapOptions,
