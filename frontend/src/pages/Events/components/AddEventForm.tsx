@@ -45,7 +45,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 		onAdd(valuesToSubmit);
 	}
 
-	const handleUpload = async (files: RcFile[]) => {
+	const handleUpload = async (files: (RcFile | undefined)[]) => {
 		const formData = new FormData();
 		files.forEach((file) => {
 			formData.append("files", file as File);
@@ -155,7 +155,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 						multiple
 						maxCount={8}
 						onChange={(info) => {
-							const files = info.fileList.map((file) => file.originFileObj);
+							const files: (RcFile | undefined)[] = info.fileList.map((file) => file.originFileObj);
 							if (files) {
 								handleUpload(files);
 							}
@@ -166,7 +166,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 						</Button>
 					</Upload>
 				</Flex>
-			</Form.Item> 
+			</Form.Item>
 		</Form>
 	);
 });

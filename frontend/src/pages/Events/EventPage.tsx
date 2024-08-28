@@ -41,6 +41,8 @@ const EventPage: React.FC = () => {
 		);
 	}
 
+	console.log("newEvent", loadedEvents);
+
 	useEffect(() => {
 		sendRequest(
 			{

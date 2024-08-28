@@ -4,6 +4,8 @@ import { Carousel, Flex, Typography } from "antd";
 import { useState } from "react";
 import { useJsApiLoader, Libraries } from "@react-google-maps/api";
 
+import { Marker } from "@react-google-maps/api";
+
 import EventListItem from "./EventListItem";
 import SelectedEventInformation from "./SelectedEventInformation";
 import Button from "../../../components/Shared/Button";
@@ -39,6 +41,8 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 		libraries: libraries,
 	});
 
+	console.log("Location data", selectedEvent.location.location);
+
 	return (
 		<section className="show-event-container">
 			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
@@ -67,7 +71,25 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 						))}
 					</Carousel>
 				) : (
-					<Map onLoad={() => {}} mapOptions={mapOptions} isLoaded={isLoaded}></Map>
+					<Map
+						onLoad={(map) => {
+							map.setCenter({
+								lat: selectedEvent.location.location!.lat,
+								lng: selectedEvent.location.location!.lng,
+							});
+						}}
+						mapOptions={mapOptions}
+						isLoaded={isLoaded}
+					>
+						{/* {selectedEvent.location.location?.lat && selectedEvent.location.location.lng && (
+							<Marker
+								position={{
+									lat: selectedEvent.location.location.lat,
+									lng: selectedEvent.location.location.lng,
+								}}
+							/>
+						)} */}
+					</Map>
 				)}
 			</div>
 			<Flex vertical gap={10}>
