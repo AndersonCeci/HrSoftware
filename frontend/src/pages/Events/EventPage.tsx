@@ -34,14 +34,13 @@ const EventPage: React.FC = () => {
 
 			(responseData: EvenType) => {
 				setLoadedEvents((prevEvents) => {
+					console.log("prevEvents", responseData);
 					return [...prevEvents, responseData];
 				});
 				handleCloseModal();
 			},
 		);
 	}
-
-	console.log("newEvent", loadedEvents);
 
 	useEffect(() => {
 		sendRequest(
@@ -54,6 +53,7 @@ const EventPage: React.FC = () => {
 		);
 	}, []);
 
+	console.log("newEvent", loadedEvents);
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (

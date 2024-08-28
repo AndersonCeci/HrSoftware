@@ -17,7 +17,7 @@ export default function useMap(): UseMapReturnType {
 	const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
 	const [locationData, setLocationData] = useState<SelectedLocationData>({
-		location: null,
+		position: null,
 		address: "",
 		name: "",
 	});
@@ -36,7 +36,7 @@ export default function useMap(): UseMapReturnType {
 		setLocationData((prev) => {
 			return {
 				...prev,
-				location: newLocation,
+				position: newLocation,
 			};
 		});
 	}
@@ -105,10 +105,9 @@ export default function useMap(): UseMapReturnType {
 				},
 				(place, status) => {
 					if (status === google.maps.places.PlacesServiceStatus.OK) {
-						console.log("Place details:", place);
 						if (place) {
 							const newLocationData: SelectedLocationData = {
-								location: {
+								position: {
 									lat: place.geometry!.location!.lat(),
 									lng: place.geometry!.location!.lng(),
 								},

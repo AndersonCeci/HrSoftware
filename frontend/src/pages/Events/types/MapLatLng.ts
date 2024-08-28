@@ -4,7 +4,8 @@ export type MapLatLng = {
 };
 
 export type SelectedLocationData = {
-	location: MapLatLng | null;
+	position: MapLatLng | null;
 	address: string;
 	name: string | undefined;
+	// _id: string | undefined;
 };

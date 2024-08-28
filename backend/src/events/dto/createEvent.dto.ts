@@ -33,11 +33,10 @@ export class CreateEventDto {
   eventEndTime?: string;
 
   @IsOptional()
-  
   location?: {
-    location?: {
-      latitude?: number;
-      longitude?: number;
+    position?: {
+      lat?: number;
+      lng?: number;
     };
 
     address?: string;

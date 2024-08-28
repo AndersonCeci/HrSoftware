@@ -70,15 +70,15 @@ export default function MapInput({ map }: { map: UseMapReturnType }) {
 			<Map
 				onLoad={map.setMap}
 				mapOptions={mapOptions}
+				isLoaded={isLoaded}
 				onDblClick={map.handleDargAndDblClickEvents}
 				onClick={map.handleIconClick}
-				isLoaded={isLoaded}
 			>
-				{map.locationData.location && (
+				{map.locationData.position && (
 					<Marker
 						position={{
-							lat: map.locationData.location.lat,
-							lng: map.locationData.location.lng,
+							lat: map.locationData.position.lat,
+							lng: map.locationData.position.lng,
 						}}
 						onDragEnd={map.handleDargAndDblClickEvents}
 						draggable

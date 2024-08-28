@@ -67,7 +67,9 @@ export default function Map({
 					map.setCenter(new google.maps.LatLng(initialCenter));
 				}}
 				onDblClick={onDblClick}
-				onClick={onClick}
+				onClick={(event) => {
+					onClick && onClick(event);
+				}}
 			>
 				{children}
 			</GoogleMap>

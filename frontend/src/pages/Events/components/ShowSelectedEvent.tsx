@@ -41,7 +41,7 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 		libraries: libraries,
 	});
 
-	console.log("Location data", selectedEvent.location.location);
+	console.log("Location data", selectedEvent.location.position);
 
 	return (
 		<section className="show-event-container">
@@ -74,18 +74,26 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 					<Map
 						onLoad={(map) => {
 							map.setCenter({
-								lat: selectedEvent.location.location!.lat,
-								lng: selectedEvent.location.location!.lng,
+								lat: selectedEvent.location.position!.lat,
+								lng: selectedEvent.location.position!.lng,
+							});
+							//Add marker
+							new google.maps.Marker({
+								position: {
+									lat: selectedEvent.location.position!.lat,
+									lng: selectedEvent.location.position!.lng,
+								},
+								map: map,
 							});
 						}}
 						mapOptions={mapOptions}
 						isLoaded={isLoaded}
 					>
-						{/* {selectedEvent.location.location?.lat && selectedEvent.location.location.lng && (
+						{/* {selectedEvent.location.position?.lat && selectedEvent.location.position.lng && (
 							<Marker
 								position={{
-									lat: selectedEvent.location.location.lat,
-									lng: selectedEvent.location.location.lng,
+									lat: selectedEvent.location.position.lat,
+									lng: selectedEvent.location.position.lng,
 								}}
 							/>
 						)} */}
