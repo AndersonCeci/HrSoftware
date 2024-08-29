@@ -62,23 +62,17 @@ export class InventoryService {
     return this.inventoryModel.find({ employeeDetails: employeeDetails });
   }
 
-  // async careOfNull():Promise<void>{
-  //     return this.inventoryModel.find()
-  // }
-
-  async cleanUpInventoriesAfterEmployeeDeletion(): Promise<void> {
-    const inventories = await this.inventoryModel
+  async cleanUpInventories(employeeDetails): Promise<void> {
+    const deletedEmployees = await this.inventoryModel
       .find({
-        status: InventoryStatus.Assigned,
+        employeeDetails: employeeDetails,
       })
-      .populate('employeeDetails');
 
-    for (const inventory of inventories) {
-      if (!inventory.employeeDetails) {
-        await this.unassignFromEmployee(inventory._id.toString());
-      }
+    for (const delEmployee of deletedEmployees) {
+      await this.unassignFromEmployee(delEmployee._id.toString());
     }
   }
+
 
   async assignToEmployee(
     inventoryID: string,
