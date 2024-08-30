@@ -31,7 +31,16 @@ export class EventsService {
     return joinEmploy;
   }
 
-  
+  async unassignAllEmployeesFromAllEvents() {
+    const result = await this.eventModel
+      .updateMany(
+        {}, 
+        {
+          $set: { eventParticipants: [] }, 
+        },
+      )
+      .exec();
+  }
 
   async getEvent(query: Query): Promise<Event[]> {
     const resPerPage = 10;

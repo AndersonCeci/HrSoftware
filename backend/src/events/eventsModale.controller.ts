@@ -37,12 +37,10 @@ export class EventsController {
     @Param('id') id: string,
     @Body() assignEmployeeDto: AssignEmployeeDto,
   ) {
-    
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid event ID');
     }
 
-    
     if (!Types.ObjectId.isValid(assignEmployeeDto.joinEmployee)) {
       throw new BadRequestException('Invalid joinEmployee ID');
     }
@@ -50,8 +48,13 @@ export class EventsController {
     return this.eventsService.assignEmployee(
       id,
       assignEmployeeDto.joinEmployee,
-     
     );
+  }
+
+  @Delete('deleteAll')
+  async unassignAllEmployeesFromAllEvents()
+   {
+   return this.eventsService.unassignAllEmployeesFromAllEvents()
   }
 
   @Delete(':id')
