@@ -8,7 +8,7 @@ import { PromotionFormProps } from "../types/EmployeeFormTypes";
 import dayjs from "dayjs";
 
 const PromoteForm = forwardRef(
-  ({ selectedEmployee, onEdit }: PromotionFormProps, ref) => {
+  ({ selectedEmployee, onEdit }: PromotionFormProps, ref) =>{ 
     const [form] = Form.useForm<EmployeeDataType>();
     const formRef = useRef<any>();
     const initialValues = exporter.getInitialFormValues(selectedEmployee);
