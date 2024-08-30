@@ -113,7 +113,6 @@ const SecondStep = ({ form }: any) => {
             label={t("startingOn")}
             name="startingDate"
             required
-            isDisabledDate
           />
         </Col>
         <Col

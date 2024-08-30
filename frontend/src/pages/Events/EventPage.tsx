@@ -10,10 +10,13 @@ import useHttp from "../../hooks/useHttp";
 import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
+import { getFromLocalStorage } from "../../utils/utils";
 
 const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
 
 const EventPage: React.FC = () => {
+	const user = getFromLocalStorage("userData");
+	console.log(user);
 	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
@@ -53,7 +56,6 @@ const EventPage: React.FC = () => {
 		);
 	}, []);
 
-	console.log("newEvent", loadedEvents);
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
@@ -65,12 +67,17 @@ const EventPage: React.FC = () => {
 				onOk={() => {
 					formRef.current.submit();
 				}}
+				// width={500}
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
+			<TableHeader
+				title={t("eventTitle")}
+				onClick={handleOpenModal}
+				hideButton={user.role !== "hr"}
+			/>
 			{error ? (
-				<NoDataResult onOpenModal={handleOpenModal} isError />
+				<NoDataResult isError />
 			) : (
 				<>
 					<EventMenu

@@ -16,6 +16,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 	const [form] = Form.useForm();
 	const formRef = useRef<any>();
 	const [isMultipleDays, setIsMultipleDays] = useState(false);
+	const [isUploadingFiles, setIsUploadingFiles] = useState(false);
 
 	const map = useMap();
 
@@ -26,9 +27,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 	}));
 
 	function onFinish(values: any) {
-		console.log("MAP DATA", map.locationData);
-
-		const valuesToSubmit = {
+		const valuesToSubmit = { 
 			...values,
 			eventDate: values.eventDate.format("YYYY-MM-DD"),
 			eventEndDate: values.eventEndDate
@@ -36,11 +35,10 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 				: values.eventDate.format("YYYY-MM-DD"),
 			eventStartTime: values.eventStartTime.format("HH:mm"),
 			eventEndTime: values.eventEndTime ? values.eventEndTime.format("HH:mm") : undefined,
-			// eventDiscription: values.eventDescription ? values.eventDescription : undefined,
 			location: map.locationData,
 		};
 
-		console.log("Form values", valuesToSubmit);
+		
 
 		onAdd(valuesToSubmit);
 	}
@@ -52,6 +50,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 		});
 
 		try {
+			setIsUploadingFiles(true);
 			const uploadResponse = await fetch("http://localhost:3000/files/upload", {
 				method: "POST",
 				body: formData,
@@ -60,6 +59,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			const fileUrls = uploadData.fileUrls;
 
 			form.setFieldsValue({ images: fileUrls });
+			setIsUploadingFiles(false);
 		} catch (error) {
 			console.error("File upload error:", error);
 		}
@@ -90,7 +90,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 				style={{
 					marginTop: 10,
 					marginBottom: 20,
-					paddingBottom: 15,
+					paddingBottom: 25,
 					borderBottom: "1px solid #e0e0e0",
 				}}
 			>

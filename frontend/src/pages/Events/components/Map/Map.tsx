@@ -10,6 +10,8 @@ type MapProps = {
 	onDblClick?: (event: google.maps.MapMouseEvent) => void;
 	onClick?: (event: google.maps.MapMouseEvent) => void;
 	isLoaded: boolean;
+	defaultCenter?: MapLatLng;
+	isUserLocation?: boolean;
 };
 
 export default function Map({
@@ -19,20 +21,19 @@ export default function Map({
 	onDblClick,
 	onClick,
 	isLoaded,
+	defaultCenter = { lat: -41.331672, lng: -19.8203257 },
+	isUserLocation = false,
 }: MapProps) {
-	const [initialCenter, setInitialCenter] = useState<MapLatLng>({
-		lat: 41.331672,
-		lng: 19.8203257,
-	});
+	function getUserCurrentLocation(map: google.maps.Map) {
+		navigator.geolocation.getCurrentPosition((position) => {
+			const currentLocation = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude,
+			};
 
-	//? useEffect(() => {
-	//? 	navigator.geolocation.getCurrentPosition((position) => {
-	//? 		setInitialCenter({
-	//? 			lat: position.coords.latitude,
-	//? 			lng: position.coords.longitude,
-	//? 		});
-	//? 	});
-	//? }, []);
+			map.setCenter(currentLocation);
+		});
+	}
 
 	if (!isLoaded) {
 		return (
@@ -64,7 +65,11 @@ export default function Map({
 				options={mapOptions}
 				onLoad={(map) => {
 					onLoad(map);
-					map.setCenter(new google.maps.LatLng(initialCenter));
+					if (isUserLocation) {
+						getUserCurrentLocation(map);
+					} else {
+						map.setCenter(new google.maps.LatLng(defaultCenter.lat, defaultCenter.lng));
+					}
 				}}
 				onDblClick={onDblClick}
 				onClick={(event) => {

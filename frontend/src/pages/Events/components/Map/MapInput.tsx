@@ -1,9 +1,8 @@
-import { Marker, Autocomplete, useJsApiLoader, Libraries } from "@react-google-maps/api";
-import { Flex, Form, Input } from "antd";
-import Map from "./Map";
+import { Marker, useJsApiLoader, Libraries } from "@react-google-maps/api";
+import { Flex } from "antd";
 import { UseMapReturnType } from "../../hook/useMap";
-import { t } from "i18next";
-import { useEffect } from "react";
+import Map from "./Map";
+import MapAutocomplete from "./MapAutoComplete";
 
 const libraries: Libraries = ["places", "geocoding"];
 const API = import.meta.env.REACT_APP_GOOGLE_MAPS_API;
@@ -17,21 +16,10 @@ const mapOptions: google.maps.MapOptions = {
 };
 
 export default function MapInput({ map }: { map: UseMapReturnType }) {
-	const form = Form.useFormInstance();
-
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: API,
 		libraries: libraries,
 	});
-
-	const combineNameAndAddress =
-		(map.locationData.name ? map.locationData.name : "") +
-		(map.locationData.address ? " " : "") +
-		map.locationData.address;
-
-	useEffect(() => {
-		form.setFieldsValue({ location: combineNameAndAddress });
-	}, [combineNameAndAddress]);
 
 	return (
 		<Flex
@@ -43,28 +31,12 @@ export default function MapInput({ map }: { map: UseMapReturnType }) {
 			}}
 		>
 			{isLoaded && (
-				<Autocomplete
-					onLoad={(autocomplete) => map.setAutocomplete(autocomplete)}
-					onPlaceChanged={map.handleAutocompleteSelect}
-				>
-					<Form.Item
-						rules={[
-							{
-								required: true,
-								message: t("errorMessagesLocation"),
-							},
-						]}
-						name={"location"}
-						label={t("location")}
-					>
-						<Input
-							placeholder={t("enterLocation")}
-							value={combineNameAndAddress}
-							onChange={(e) => map.handleMapInputChages(e.target.value)}
-							size="large"
-						/>
-					</Form.Item>
-				</Autocomplete>
+				<MapAutocomplete
+					locationData={map.locationData}
+					setAutocomplete={map.setAutocomplete}
+					handleMapInputChages={map.handleMapInputChages}
+					handleAutocompleteSelect={map.handleAutocompleteSelect}
+				/>
 			)}
 
 			<Map
@@ -73,6 +45,7 @@ export default function MapInput({ map }: { map: UseMapReturnType }) {
 				isLoaded={isLoaded}
 				onDblClick={map.handleDargAndDblClickEvents}
 				onClick={map.handleIconClick}
+				isUserLocation
 			>
 				{map.locationData.position && (
 					<Marker

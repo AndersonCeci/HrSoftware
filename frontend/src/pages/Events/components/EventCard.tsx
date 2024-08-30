@@ -1,6 +1,4 @@
 import "../styles/EventCard.css";
-import TempImage from "../../../assets/image 99.png";
-import ICONTEMP from "../../../assets/Group 14.svg";
 import { Carousel, Flex } from "antd";
 import { EvenType } from "../types/EventTypes";
 

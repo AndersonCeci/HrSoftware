@@ -1,6 +1,6 @@
 import { Flex, Typography } from "antd";
 import EventListItem from "./EventListItem";
-import { EvenType } from "../types/EventTypes";
+import { EvenType } from "../../types/EventTypes";
 import { useState } from "react";
 
 type SelectedEventInformationProps = {
