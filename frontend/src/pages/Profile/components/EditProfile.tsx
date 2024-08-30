@@ -16,15 +16,15 @@ const EditProfile = ({
   currentData,
   onImageUpload,
   setTableData,
-  setIsModal
+  setIsModal,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
   handleCancel: () => void;
   currentData: EmployeeDataType | undefined;
   onImageUpload: (url: string) => void;
-  setTableData: any,
-  setIsModal: any
+  setTableData: any;
+  setIsModal: any;
 }) => {
   const [form] = Form.useForm<EmployeeDataType>();
   const { t } = useTranslation();
@@ -49,23 +49,23 @@ const EditProfile = ({
 
   const handleFinish = (value: EmployeeDataType) => {
     console.log(value, "sasasasas");
-  
+
     fetchData(
       useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
         profilePhoto: value.profilePhoto[0],
         phoneNumber: value.phoneNumber,
       }),
-      () => {
-      }
-    );
-    setIsModal(false);
+      () => {}
+	  );
+	setIsModal()
   };
 
   const handleUpload = async (files: RcFile[]) => {
     const formData = new FormData();
-    
-      formData.append("file", files[0] as File);
-    
+    files.forEach((file) => {
+      formData.append("files", file as File);
+    });
+
     try {
       const uploadResponse = await fetch("http://localhost:3000/files/upload", {
         method: "POST",
@@ -73,7 +73,7 @@ const EditProfile = ({
       });
       const uploadData = await uploadResponse.json();
       const fileUrls = uploadData.fileUrls;
-console.log(fileUrls, 'fileeeeee')
+
       form.setFieldsValue({ profilePhoto: fileUrls });
     } catch (error) {
       console.error("File upload error:", error);
@@ -81,14 +81,14 @@ console.log(fileUrls, 'fileeeeee')
   };
 
   const handleFileChange = (info: any) => {
-    console.log(info, 'infooo')
+    console.log(info, "infooo");
     const files = info.fileList.map(
       (file: any) => file.originFileObj as RcFile
     );
-    console.log(files, 'files')
+    console.log(files, "files");
     if (files.length > 0) {
       handleUpload(files);
-      console.log('hyriiiii')
+      console.log("hyriiiii");
     }
   };
 
@@ -97,7 +97,7 @@ console.log(fileUrls, 'fileeeeee')
       <Modal
         title={t("editProfile")}
         open={visible}
-        onOk={()=>formRef.current.submit()}
+        onOk={() => formRef.current.submit()}
         onCancel={handleCancel}
       >
         <Form
@@ -122,9 +122,12 @@ console.log(fileUrls, 'fileeeeee')
               }}
               onChange={handleFileChange}
             >
-              <Button icon={<UploadOutlined />} type="text" size="large" shape="circle">
-              
-              </Button>
+              <Button
+                icon={<UploadOutlined />}
+                type="text"
+                size="large"
+                shape="circle"
+              ></Button>
             </Upload>
           </Form.Item>
           <FormInputs.Input

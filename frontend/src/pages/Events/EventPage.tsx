@@ -10,11 +10,14 @@ import useHttp from "../../hooks/useHttp";
 import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
+import { isHR, getFromLocalStorage } from "../../utils/utils";
 
 const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
 
 const EventPage: React.FC = () => {
 	const { t } = useTranslation();
+	const user = getFromLocalStorage("userData");
+	const isHr = isHR();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,9 +37,31 @@ const EventPage: React.FC = () => {
 
 			(responseData: EvenType) => {
 				setLoadedEvents((prevEvents) => {
+					console.log("prevEvents", responseData);
 					return [...prevEvents, responseData];
 				});
 				handleCloseModal();
+			},
+		);
+	}
+
+	function handleUserJoinEvent(eventId: string) {
+		sendRequest(
+			useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
+				joinEmployee: user.employID,
+			}),
+			() => {
+				setLoadedEvents((prevEvents) => {
+					return prevEvents.map((event) => {
+						if (event._id === eventId) {
+							return {
+								...event,
+								eventParticipants: [...event.eventParticipants, user.employID],
+							};
+						}
+						return event;
+					});
+				});
 			},
 		);
 	}
@@ -52,8 +77,6 @@ const EventPage: React.FC = () => {
 		);
 	}, []);
 
-
-	console.log(loadedEvents, 'loadedEventssss')
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
 	return !isLoading ? (
@@ -65,12 +88,13 @@ const EventPage: React.FC = () => {
 				onOk={() => {
 					formRef.current.submit();
 				}}
+				// width={500}
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} />
+			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} hideButton={!isHr} />
 			{error ? (
-				<NoDataResult onOpenModal={handleOpenModal} isError />
+				<NoDataResult isError />
 			) : (
 				<>
 					<EventMenu
@@ -78,11 +102,13 @@ const EventPage: React.FC = () => {
 						EventList={sortByDate(thsMonth)}
 						displayNoResult
 						onOpenModal={handleOpenModal}
+						onUserJoinEvent={handleUserJoinEvent}
 					/>
 					<EventMenu
 						title={t("upcoming")}
 						EventList={sortByDate(nextMonth)}
 						onOpenModal={handleOpenModal}
+						onUserJoinEvent={handleUserJoinEvent}
 					/>
 				</>
 			)}

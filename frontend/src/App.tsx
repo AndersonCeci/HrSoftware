@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import ErrorPage from "./pages/ErrorPage";
 import RootLayout from "./pages/Root/RootLayout";
 import { Paths } from "./utils/paths";
 
@@ -26,17 +26,24 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <RootLayout />,
-		children: iterationRoutes.map((route) => {
-			return {
-				path: route.path,
-				children: route.children.map((child) => {
-					return {
-						path: child.path,
-						element: <child.pageElement />,
-					};
-				}),
-			};
-		}),
+		errorElement: <ErrorPage />,
+		children: [
+			...iterationRoutes.map((route) => {
+				return {
+					path: route.path,
+					children: route.children.map((child) => {
+						return {
+							path: child.path,
+							element: <child.pageElement />,
+						};
+					}),
+				};
+			}),
+			{
+				path: "*",
+				element: <ErrorPage />,
+			},
+		],
 	},
 ]);
 

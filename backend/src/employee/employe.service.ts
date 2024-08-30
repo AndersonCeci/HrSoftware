@@ -1,5 +1,5 @@
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Employee, Position } from './schema/employe.schema';
@@ -10,11 +10,14 @@ import { Role, User } from 'src/users/schemas/user.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
+    @Inject(forwardRef(() => InventoryService))
+    private readonly inventoryService: InventoryService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
   ) {}
@@ -93,6 +96,7 @@ export class EmployeeService {
     };
 
     await this.userService.createUser(createUserDto);
+    Logger.log('create');
     return updatedEmployee;
   }
 
@@ -137,6 +141,7 @@ export class EmployeeService {
   }
 
   delete(id: string): Promise<Employee | null> {
+    this.inventoryService.cleanUpInventories(id);
     return this.employeeModel.findByIdAndDelete(id);
   }
 

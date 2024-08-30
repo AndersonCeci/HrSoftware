@@ -68,7 +68,7 @@ const ProfilePage: React.FC = () => {
     return <Loader />;
   }
 
-console.log(avatarUrl, 'urll')
+  console.log(avatarUrl, "urlsetdryf7tr5ftl");
 
   const initialData: Data[] = [
     {
@@ -112,13 +112,7 @@ console.log(avatarUrl, 'urll')
           <Card className="avatar-profile-card">
             <div className="inside-profile-card">
               <div>
-                <img
-                  className="profile-pic"
-                  src={
-                    avatarUrl ||
-                    "https://api.dicebear.com/7.x/miniavs/svg?seed=1"
-                  }
-                />
+                <img className="profile-pic" src={tableData?.profilePhoto} />
               </div>
               <div>
                 <h3>{userData.username}</h3>
@@ -133,7 +127,7 @@ console.log(avatarUrl, 'urll')
                 <EditProfile
                   visible={isModalVisible}
                   handleOk={handleOk}
-                  setIsModal={setIsModalVisible}
+                  setIsModal={handleOk}
                   handleCancel={handleCancel}
                   currentData={tableData}
                   onImageUpload={handleImageUpload}

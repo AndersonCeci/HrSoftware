@@ -32,3 +32,5 @@ export function devideEventsByMonth(eventList: EvenType[]) {
 
   return devideEventsByMonth;
 }
+
+
