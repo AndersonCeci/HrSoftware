@@ -40,6 +40,11 @@ export class Event extends Document {
     address?: string;
     name?: string;
   };
+  @Prop({ type: Types.ObjectId, ref: 'Employee' })
+  joinEmployee: Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Employee' }] })
+  eventParticipants?: Types.ObjectId[];
 
   @Prop([String])
   images: string[];

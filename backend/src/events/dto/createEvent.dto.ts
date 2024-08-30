@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -7,6 +8,7 @@ import {
   IsArray,
   IsNumber,
 } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class CreateEventDto {
   @IsString()
@@ -33,7 +35,6 @@ export class CreateEventDto {
   eventEndTime?: string;
 
   @IsOptional()
-  
   location?: {
     location?: {
       lat?: number;

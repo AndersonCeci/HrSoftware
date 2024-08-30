@@ -6,13 +6,16 @@ import { Event, EventSchema } from './schema/events.schema';
 import { NotificationsGateway } from 'src/notificationsGateway/notifications.gateway';
 import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 import { NotificationsGatewayModule } from 'src/notificationsGateway/notificationgateAway.module';
+import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
 
 
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
-    
+    MongooseModule.forFeature([
+      { name: Event.name, schema: EventSchema },
+      { name: Employee.name, schema: EmployeeSchema },
+    ]),
 
     NotificationsGatewayModule,
     NotificationsModule,
