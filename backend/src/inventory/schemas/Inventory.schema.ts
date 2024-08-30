@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import * as muv from 'mongoose-unique-validator';
-import { Asset } from 'src/assets/schemas/Asset.schema';
 
 export enum InventoryStatus {
   Available = 'Available',
@@ -33,9 +31,6 @@ export class Inventory extends Document {
 
   @Prop()
   assetName: string;
-
-  // @Prop()
-  // quantity:number
 
   @Prop({ default: false })
   isDeleted: boolean;
