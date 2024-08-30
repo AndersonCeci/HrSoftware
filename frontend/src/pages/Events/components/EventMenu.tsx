@@ -13,25 +13,36 @@ type EventMenuProps = {
 	title: string;
 	onOpenModal: () => void;
 	displayNoResult?: boolean;
+	onUserJoinEvent: (eventId: string) => void;
 };
 
-const EventMenu = ({ EventList = [], title, displayNoResult = false }: EventMenuProps) => {
+const API = import.meta.env.REACT_APP_EVENTS_API;
+const user = getFromLocalStorage("userData");
+
+const EventMenu = ({
+	EventList = [],
+	title,
+	displayNoResult = false,
+	onUserJoinEvent,
+}: EventMenuProps) => {
 	const isOnlyOneEvent = EventList.length === 1;
 	const [selectedEvent, setSelectedEvent] = useState<EvenType | undefined>(undefined);
-	const [isLoading, error, sendRequest] = useHttp();
-	const user = getFromLocalStorage("userData");
-	const [isParticipant, setIsParticipant] = useState(false);
+	const [isLoading, , sendRequest] = useHttp();
+	const [isJoined, setIsJoined] = useState(false);
 
 	function handleModalShow(event: EvenType | undefined) {
 		setSelectedEvent(event);
 	}
 
-	function handleJoinEvent() {}
-
 	useEffect(() => {
 		if (selectedEvent) {
+			const isJoined = selectedEvent.eventParticipants.includes(user.employID);
+			setIsJoined(isJoined);
+			setSelectedEvent(selectedEvent);
 		}
 	}, [selectedEvent]);
+
+	// function handleJoinEvent() {
 
 	return EventList.length === 0 ? (
 		displayNoResult && <NoDataResult />
@@ -41,7 +52,9 @@ const EventMenu = ({ EventList = [], title, displayNoResult = false }: EventMenu
 				title={"Event Details"}
 				isOpen={!!selectedEvent}
 				onCancel={() => handleModalShow(undefined)}
-				onOk={isParticipant ? () => handleJoinEvent() : undefined}
+				onOk={!isJoined ? () => onUserJoinEvent(selectedEvent!._id) : undefined}
+				okBtnText="Joni"
+				isLoading={isLoading}
 			>
 				{selectedEvent && <ShowSelectedEvent selectedEvent={selectedEvent} />}
 			</Modal>

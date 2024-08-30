@@ -10,13 +10,13 @@ import useHttp from "../../hooks/useHttp";
 import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
-import { getFromLocalStorage } from "../../utils/utils";
+import { isHR, getFromLocalStorage } from "../../utils/utils";
 
 const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
 
 const EventPage: React.FC = () => {
 	const user = getFromLocalStorage("userData");
-	console.log(user);
+	const isHr = isHR();
 	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
@@ -45,6 +45,27 @@ const EventPage: React.FC = () => {
 		);
 	}
 
+	function handleUserJoinEvent(eventId: string) {
+		sendRequest(
+			useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
+				joinEmployee: user.employID,
+			}),
+			(responseData: EvenType) => {
+				setLoadedEvents((prevEvents) => {
+					return prevEvents.map((event) => {
+						if (event._id === eventId) {
+							return {
+								...event,
+								eventParticipants: [...event.eventParticipants, user.employID],
+							};
+						}
+						return event;
+					});
+				});
+			},
+		);
+	}
+
 	useEffect(() => {
 		sendRequest(
 			{
@@ -57,6 +78,8 @@ const EventPage: React.FC = () => {
 	}, []);
 
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
+
+	// console.log("thsMonth", loadedEvents);
 
 	return !isLoading ? (
 		<main>
@@ -71,11 +94,7 @@ const EventPage: React.FC = () => {
 			>
 				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
 			</Modal>
-			<TableHeader
-				title={t("eventTitle")}
-				onClick={handleOpenModal}
-				hideButton={user.role !== "hr"}
-			/>
+			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} hideButton={!isHr} />
 			{error ? (
 				<NoDataResult isError />
 			) : (
@@ -85,11 +104,13 @@ const EventPage: React.FC = () => {
 						EventList={sortByDate(thsMonth)}
 						displayNoResult
 						onOpenModal={handleOpenModal}
+						onUserJoinEvent={handleUserJoinEvent}
 					/>
 					<EventMenu
 						title={t("upcoming")}
 						EventList={sortByDate(nextMonth)}
 						onOpenModal={handleOpenModal}
+						onUserJoinEvent={handleUserJoinEvent}
 					/>
 				</>
 			)}

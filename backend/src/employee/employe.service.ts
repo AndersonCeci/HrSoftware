@@ -161,9 +161,7 @@ export class EmployeeService {
   }
 
   delete(id: string): Promise<Employee | null> {
-    console.log('Before');
-    this.inventoryService.cleanUpInventoriesAfterEmployeeDeletion();
-    console.log('After');
+    this.inventoryService.cleanUpInventories(id);
     return this.employeeModel.findByIdAndDelete(id);
   }
 

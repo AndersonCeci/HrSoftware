@@ -9,5 +9,6 @@ export type EvenType = {
 	eventStartTime: string;
 	eventEndTime?: string;
 	location: SelectedLocationData;
+	eventParticipants: string[];
 	images: string[];
 };

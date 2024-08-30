@@ -6,18 +6,16 @@ import EventListItem from "./EventListItem";
 import SelectedEventInformation from "./SelectedEventInformation";
 
 import { PhotosAndMapCard } from "./PhotosAndMapCard";
-import { getFromLocalStorage } from "../../../../utils/utils";
+import { isHR } from "../../../../utils/utils";
 import EmployeeList from "./EmployeeList";
 
 type ShowSelectedEventProps = {
 	selectedEvent: EvenType;
 };
 
-const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
-	const user = getFromLocalStorage("userData");
-	console.log(user);
-	const isHR = user?.role === "hr";
+const isHr = isHR();
 
+const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 	return (
 		<section className="show-event-container">
 			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
@@ -38,7 +36,7 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 				<SelectedEventInformation selectedEvent={selectedEvent} />
 			</Flex>
 
-			{isHR && <EmployeeList />}
+			{isHr && <EmployeeList />}
 		</section>
 	);
 };
