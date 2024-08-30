@@ -1,10 +1,5 @@
 import { Typography } from "antd";
-
-type EventListItemProps = {
-	title?: string;
-	children: React.ReactNode;
-	level?: 1 | 2 | 3 | 4 | 5;
-};
+import { EventListItemProps } from "../../types/EventTypes";
 
 export default function EventListItem({ title, children, level = 1 }: EventListItemProps) {
 	return (

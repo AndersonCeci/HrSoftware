@@ -145,4 +145,10 @@ export const EnTranslation = {
 	location: "Location",
 	errorMessagesLocation: "Please write the location",
 	enterLocation: "Enter location",
+	eventDetails: "Event Details",
+	joinEvent: "Join Event",
+	joinedEmployees: "Joined Employees",
+	time: "Time",
+	locationAddress: "Address",
+	locationName: "Location Name",
 };

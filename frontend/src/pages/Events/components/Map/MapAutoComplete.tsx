@@ -1,15 +1,8 @@
 import { Autocomplete } from "@react-google-maps/api";
 import { Form, Input } from "antd";
 import { useEffect } from "react";
-import { UseMapReturnType } from "../../hook/useMap";
+import { MapAutocompleteProps } from "../../types/MapComponents";
 import { t } from "i18next";
-
-type MapAutocompleteProps = {
-	locationData: UseMapReturnType["locationData"];
-	setAutocomplete: UseMapReturnType["setAutocomplete"];
-	handleMapInputChages: UseMapReturnType["handleMapInputChages"];
-	handleAutocompleteSelect: UseMapReturnType["handleAutocompleteSelect"];
-};
 
 export default function MapAutocomplete({
 	locationData,

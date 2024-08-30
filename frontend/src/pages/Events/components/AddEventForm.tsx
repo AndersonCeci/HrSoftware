@@ -27,7 +27,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 	}));
 
 	function onFinish(values: any) {
-		const valuesToSubmit = { 
+		const valuesToSubmit = {
 			...values,
 			eventDate: values.eventDate.format("YYYY-MM-DD"),
 			eventEndDate: values.eventEndDate
@@ -37,8 +37,6 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			eventEndTime: values.eventEndTime ? values.eventEndTime.format("HH:mm") : undefined,
 			location: map.locationData,
 		};
-
-		
 
 		onAdd(valuesToSubmit);
 	}
@@ -161,9 +159,7 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 							}
 						}}
 					>
-						<Button icon={<UploadOutlined />} type="text" size="large">
-							{t("uploadImages")}
-						</Button>
+						<Button icon={<UploadOutlined />} type="dashed" size="large" shape="circle"></Button>
 					</Upload>
 				</Flex>
 			</Form.Item>

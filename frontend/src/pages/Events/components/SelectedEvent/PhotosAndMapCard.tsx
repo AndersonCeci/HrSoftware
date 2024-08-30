@@ -81,33 +81,4 @@ export function PhotosAndMapCard({ selectedEvent }: { selectedEvent: EvenType })
 			</div>
 		</div>
 	);
-	{
-		/* {!showMap ? (
-		<Carousel pauseOnHover adaptiveHeight draggable>
-			{selectedEvent.images?.map((image: string, index: number) => (
-				<div key={index} className="selected-event-image-container">
-					<img src={image} alt={`Event ${index}`} className="selected-event-image" />
-				</div>
-			))}
-		</Carousel>
-	) : (
-		<Map
-			onLoad={(map) => {
-				new google.maps.Marker({
-					position: {
-						lat: selectedEvent.location.position!.lat,
-						lng: selectedEvent.location.position!.lng,
-					},
-					map: map,
-				});
-			}}
-			mapOptions={mapOptions}
-			defaultCenter={{
-				lat: selectedEvent.location.position!.lat,
-				lng: selectedEvent.location.position!.lng,
-			}}
-			isLoaded={isLoaded}
-		></Map>
-	)} */
-	}
 }

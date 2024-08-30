@@ -9,3 +9,4 @@ export type SelectedLocationData = {
 	name: string | undefined;
 	// _id: string | undefined;
 };
+

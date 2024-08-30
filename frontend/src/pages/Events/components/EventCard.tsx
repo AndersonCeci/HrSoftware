@@ -1,11 +1,6 @@
 import "../styles/EventCard.css";
 import { Carousel, Flex } from "antd";
-import { EvenType } from "../types/EventTypes";
-
-type EventCardProps = {
-	event: EvenType;
-	isAlone?: boolean;
-};
+import { EventCardProps } from "../types/EventTypes";
 
 const EventCard = ({ event, isAlone }: EventCardProps) => {
 	const { eventName, eventDate, eventStartTime, eventEndTime, images } = event;

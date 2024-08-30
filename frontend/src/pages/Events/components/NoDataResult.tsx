@@ -1,7 +1,6 @@
 import { Result } from "antd";
 import NoDataImg from "../../../assets/Empty-pana.svg";
 import ErrorImg from "../../../assets/Computer troubleshooting-bro.svg";
-import "../styles/NoData.css";
 
 type NoDataResultProps = {
 	isError?: boolean;

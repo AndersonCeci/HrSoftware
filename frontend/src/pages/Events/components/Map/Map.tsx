@@ -1,18 +1,7 @@
 import { GoogleMap } from "@react-google-maps/api";
 import { Flex, Skeleton } from "antd";
-import { MapLatLng } from "../../types/MapLatLng";
-import { useState } from "react";
-
-type MapProps = {
-	children?: React.ReactNode;
-	mapOptions?: google.maps.MapOptions;
-	onLoad: (map: google.maps.Map) => void;
-	onDblClick?: (event: google.maps.MapMouseEvent) => void;
-	onClick?: (event: google.maps.MapMouseEvent) => void;
-	isLoaded: boolean;
-	defaultCenter?: MapLatLng;
-	isUserLocation?: boolean;
-};
+import { MapProps } from "../../types/MapComponents";
+import "../../styles/Map.css";
 
 export default function Map({
 	children,
@@ -37,14 +26,8 @@ export default function Map({
 
 	if (!isLoaded) {
 		return (
-			<Flex
-				vertical
-				style={{
-					width: "100%",
-					height: 300,
-				}}
-			>
-				<Skeleton.Input style={{ width: "100%", height: "100%" }} active />
+			<Flex vertical className="map-skeleton-container">
+				<Skeleton.Input className="map-skeleton" active />
 			</Flex>
 		);
 	}

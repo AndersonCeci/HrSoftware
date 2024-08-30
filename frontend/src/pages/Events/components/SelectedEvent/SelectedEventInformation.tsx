@@ -1,18 +1,17 @@
 import { Flex, Typography } from "antd";
 import EventListItem from "./EventListItem";
+
 import { EvenType } from "../../types/EventTypes";
 import { useState } from "react";
 
-type SelectedEventInformationProps = {
-	selectedEvent: EvenType;
-};
+import { t } from "i18next";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
 	month: "short",
 	day: "numeric",
 };
 
-export default function SelectedEventInformation({ selectedEvent }: SelectedEventInformationProps) {
+export default function SelectedEventInformation({ selectedEvent }: { selectedEvent: EvenType }) {
 	const [expanded, setExpanded] = useState(false);
 
 	const dateStr = new Date(selectedEvent.eventDate).toLocaleDateString("en-GB", dateOptions);
@@ -31,10 +30,10 @@ export default function SelectedEventInformation({ selectedEvent }: SelectedEven
 		<Flex justify="flex-start" align="flex-start" gap={30}>
 			<div className="selected-event-list-container">
 				<ul className="selected-event-list">
-					<EventListItem title="Date" level={4}>
+					<EventListItem title={t("date")} level={4}>
 						{displayedDate}
 					</EventListItem>
-					<EventListItem title="Time" level={4}>
+					<EventListItem title={t("time")} level={4}>
 						{displayedTime}
 					</EventListItem>
 				</ul>

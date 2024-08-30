@@ -1,21 +1,20 @@
 import "../../styles/ShowSlectedEvent.css";
+
 import { EvenType } from "../../types/EventTypes";
+
 import { Flex, Typography } from "antd";
 
 import EventListItem from "./EventListItem";
 import SelectedEventInformation from "./SelectedEventInformation";
-
 import { PhotosAndMapCard } from "./PhotosAndMapCard";
-import { isHR } from "../../../../utils/utils";
 import EmployeeList from "./EmployeeList";
 
-type ShowSelectedEventProps = {
-	selectedEvent: EvenType;
-};
+import { isHR } from "../../../../utils/utils";
+import { t } from "i18next";
 
 const isHr = isHR();
 
-const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
+const ShowSelectedEvent = ({ selectedEvent }: { selectedEvent: EvenType }) => {
 	return (
 		<section className="show-event-container">
 			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
@@ -26,11 +25,11 @@ const ShowSelectedEvent = ({ selectedEvent }: ShowSelectedEventProps) => {
 				<EventListItem>
 					{selectedEvent.location.name && (
 						<Typography.Paragraph>
-							<strong>Name:</strong> {selectedEvent.location.name}
+							<strong>{t("locationName")}</strong> {selectedEvent.location.name}
 						</Typography.Paragraph>
 					)}
 					<Typography.Paragraph>
-						<strong>Address:</strong> {selectedEvent.location.address}
+						<strong>{t("locationAddress")}</strong> {selectedEvent.location.address}
 					</Typography.Paragraph>
 				</EventListItem>
 				<SelectedEventInformation selectedEvent={selectedEvent} />

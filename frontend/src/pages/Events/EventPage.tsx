@@ -15,9 +15,9 @@ import { isHR, getFromLocalStorage } from "../../utils/utils";
 const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
 
 const EventPage: React.FC = () => {
+	const { t } = useTranslation();
 	const user = getFromLocalStorage("userData");
 	const isHr = isHR();
-	const { t } = useTranslation();
 	const [isLoading, error, sendRequest] = useHttp();
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +50,7 @@ const EventPage: React.FC = () => {
 			useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
 				joinEmployee: user.employID,
 			}),
-			(responseData: EvenType) => {
+			() => {
 				setLoadedEvents((prevEvents) => {
 					return prevEvents.map((event) => {
 						if (event._id === eventId) {
@@ -78,8 +78,6 @@ const EventPage: React.FC = () => {
 	}, []);
 
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
-
-	// console.log("thsMonth", loadedEvents);
 
 	return !isLoading ? (
 		<main>

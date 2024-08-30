@@ -143,4 +143,10 @@ export const SqTranslation = {
 	location: "Vendndodhja",
 	errorMessagesLocation: "Ju lutem shkruani vendndodhjen",
 	enterLocation: "Shkruani vendndodhjen",
+	eventDetails: "Detajet e Eventit",
+	joinEvent: "Bashkohu në Event",
+	joinedEmployees: "Punonjesit qe do vine",
+	time: "Koha",
+	locationAddress: "Adresa ",
+	locationName: "Emri i vendndodhjes",
 };
