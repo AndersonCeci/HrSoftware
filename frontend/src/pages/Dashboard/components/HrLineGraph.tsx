@@ -43,7 +43,7 @@ class ApexChart extends React.Component<{}, ApexChartState> {
     this.state = {
       series: [
         {
-          name: "Bonus",
+          name: "Applicants",
           data: [10, 2, 3, 1, 20, 5, 4, 0, 2],
         },
       ],

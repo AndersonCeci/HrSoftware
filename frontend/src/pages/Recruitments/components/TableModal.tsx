@@ -154,7 +154,7 @@ const TableModal = forwardRef(
         </Flex>
         {error && (
           <Typography.Text type="danger">
-            {"SUPER MEGA XHEST PLAK"}
+            {"Upsies. Somethings is wrong"}
           </Typography.Text>
         )}
       </Form>

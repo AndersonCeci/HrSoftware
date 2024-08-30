@@ -2,7 +2,7 @@ import { createTableColumns, getAllUniqueValues } from "../../../components/Tabl
 import { DeleteOutlined, EditOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
-import { TableProps, Dropdown } from "antd";
+import { TableProps, Dropdown, Tag } from "antd";
 import { EmployeeDataType } from "../types/Employee";
 import { capitalizeFirstLetter } from "../../../utils/utils";
 import { PiChartLineUpBold } from "react-icons/pi";
@@ -39,24 +39,6 @@ export function getColumns(
 			dataIndex: "email",
 			key: "email",
 		}),
-		// createTableColumns({
-		// 	title: "Status",
-		// 	dataIndex: "status",
-		// 	key: "status",
-		// 	displayAs: (value) => {
-		// 		return (
-		// 			<Tag
-		// 				color={value === "Working" ? "green" : value === "Remote" ? "blue" : "yellow"}
-		// 				key={value}
-		// 			>
-		// 				{value}
-		// 			</Tag>
-		// 		);
-		// 	},
-		// 	filters: getAllUniqueValues(tableData, "status"),
-		// 	align: "center",
-		// 	onFilter: (value, record) => record.status.indexOf(value) === 0,
-		// }),
 		createTableColumns({
 			title: t("phoneNumber"),
 			dataIndex: "phoneNumber",
@@ -68,6 +50,24 @@ export function getColumns(
 			key: "position",
 			filters: getAllUniqueValues(tableData, "position"),
 			onFilter: (value, record) => record.position.includes(value),
+		}),
+		createTableColumns({
+			title: t("status"),
+			dataIndex: "status",
+			key: "status",
+			displayAs: (value) => {
+				return (
+					<Tag
+						color={value === "On Site" ? "green" : "blue"}
+						key={value}
+					>
+						{value}
+					</Tag>
+				);
+			},
+			filters: getAllUniqueValues(tableData, "status"),
+			align:"center",
+			onFilter: (value, record) => record.status.indexOf(value) === 0,
 		}),
 		createTableColumns({
 			title: t("salary"),

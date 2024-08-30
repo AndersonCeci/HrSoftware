@@ -17,15 +17,19 @@ const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
 
 const EmploymentPage: React.FC = () => {
-	const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
-	const [open, setOpen] = useState(false);
-	const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(undefined);
-	const promoteRef = useRef<any>();
-	const [isLoading, , sendRequest] = useHttp();
-	const [form] = Form.useForm();
-	const [isDeleting, setIsDeleting] = useState(false);
-	const [isPromoted, setIsPromoted] = useState(false);
-	const [promotedData, setPromotedData] = useState<EmployeeDataType | undefined>(undefined);
+  const [tableData, setTableData] = useState<EmployeeDataType[]>([]);
+  const [open, setOpen] = useState(false);
+  const [editedData, setEditedData] = useState<EmployeeDataType | undefined>(
+    undefined
+  );
+  const promoteRef = useRef<any>();
+  const [isLoading, , sendRequest] = useHttp();
+  const [form] = Form.useForm();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPromoted, setIsPromoted] = useState(false);
+  const [promotedData, setPromotedData] = useState<
+    EmployeeDataType | undefined
+  >(undefined);
 
   const { t } = useTranslation();
 
@@ -37,7 +41,7 @@ const EmploymentPage: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-      setTableData,
+      setTableData
     );
   }, []);
 
@@ -58,7 +62,7 @@ const EmploymentPage: React.FC = () => {
           return editedEmployee;
         }
         return item;
-      }),
+      })
     );
   }
 
@@ -71,9 +75,9 @@ const EmploymentPage: React.FC = () => {
     setEditedData(record);
   }
 
-	function handleDeleteModalOk() {
-		const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
-		sendRequest(
+  function handleDeleteModalOk() {
+    const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
+    sendRequest(
       {
         url: `${API_DELETE_EMPLOYEE}/copy/${editedData?._id}`,
         method: "POST",
@@ -89,9 +93,9 @@ const EmploymentPage: React.FC = () => {
         setIsDeleting(false);
       }
     );
-		setIsDeleting(false);
-		setEditedData(undefined);
-	}
+    setIsDeleting(false);
+    setEditedData(undefined);
+  }
 
   function handlClose(fn: (arg: boolean) => void) {
     fn(false);
@@ -120,20 +124,21 @@ const EmploymentPage: React.FC = () => {
               };
             }
             return employee;
-          }),
+          })
         );
         setIsPromoted(false);
-      },
+      }
     );
   }
-
 
   const columns = getColumns(
     tableData,
     handleEditButtonClick,
     handleDeleteButtonClick,
-    handlePromoteButtonClick,
+    handlePromoteButtonClick
   );
+
+  console.log(tableData, "adadada");
 
   return (
     <>
@@ -160,7 +165,6 @@ const EmploymentPage: React.FC = () => {
           />
         </Form>
       </Modal>
-
       <Modal
         title={t("promote")}
         isOpen={isPromoted}

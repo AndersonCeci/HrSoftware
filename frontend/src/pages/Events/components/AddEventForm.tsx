@@ -9,7 +9,7 @@ import useMap from "../hook/useMap";
 import { t } from "i18next";
 
 type AddEventFormProps = {
-	onAdd: (event: any) => void;
+  onAdd: (event: any) => void;
 };
 
 const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
@@ -20,11 +20,11 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 
 	const map = useMap();
 
-	useImperativeHandle(ref, () => ({
-		submit: () => {
-			formRef.current.submit();
-		},
-	}));
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      formRef.current.submit();
+    },
+  }));
 
 	function onFinish(values: any) {
 		const valuesToSubmit = {
@@ -38,8 +38,8 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			location: map.locationData,
 		};
 
-		onAdd(valuesToSubmit);
-	}
+    onAdd(valuesToSubmit);
+  }
 
 	const handleUpload = async (files: (RcFile | undefined)[]) => {
 		const formData = new FormData();
