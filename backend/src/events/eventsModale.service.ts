@@ -25,11 +25,13 @@ export class EventsService {
   }
 
   async assignEmployee(eventID: string, joinEmployee: string): Promise<Event> {
-    const joinEmploy = await this.eventModel.findByIdAndUpdate(eventID, {
+    const joinEmploy = this.eventModel.findByIdAndUpdate(eventID, {
       $push: { eventParticipants: joinEmployee },
     });
     return joinEmploy;
   }
+
+  
 
   async getEvent(query: Query): Promise<Event[]> {
     const resPerPage = 10;
