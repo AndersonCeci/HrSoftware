@@ -7,6 +7,12 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
+export enum Evaluation {
+  Negative = 'Negative',
+  NotSure = 'Not Sure',
+  OK = 'OK',
+  Positive = 'Positive',
+}
 
 export class InterviewDTO {
   @IsDate()
@@ -22,7 +28,7 @@ export class InterviewDTO {
 
   @IsOptional()
   @IsString()
-  evaluation?: string;
+  evaluation?: Evaluation;
 
   @IsOptional()
   @IsMongoId({ each: true })

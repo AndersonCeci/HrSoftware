@@ -1,9 +1,10 @@
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 import { Injectable } from '@nestjs/common';
-import { Recruitment } from './schemas/recruitment.schema';
+import { OfferMade, Recruitment } from './schemas/recruitment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
+import { PaginatedDTO } from 'src/paginationDTO/paginated.dto';
 
 @Injectable()
 export class RecruitmentService {
@@ -23,7 +24,7 @@ export class RecruitmentService {
     }
   }
 
-  async getRecruitments(): Promise<Recruitment[]> {
+  async getRecruitments() {
     return await this.recruitmentModel.find({ isDeleted: false });
   }
 
@@ -67,10 +68,16 @@ export class RecruitmentService {
       },
     };
   }
-  async getRecruitmentWithInterviewerDetails() // applicantID: Types.ObjectId,
-  : Promise<Recruitment[]> {
+  async getRecruitmentWithInterviewerDetails(
+    page: number,
+    limit: number,
+    filters: any,
+  ) {
+    const skip = (page - 1) * limit;
     const pipeline = [
-      // { $match: { _id: applicantID } },
+      {
+        $match: filters,
+      },
       this.createLookupPipeline('firstInterview'),
       this.createLookupPipeline('secondInterview'),
       this.createAddFields('firstInterview'),
@@ -90,12 +97,18 @@ export class RecruitmentService {
           deleteDate: 1,
           firstInterview: 1,
           secondInterview: 1,
+          offerMade: 1,
         },
       },
     ];
-
-    return this.recruitmentModel.aggregate(pipeline);
+    const itemCount = await this.recruitmentModel.countDocuments();
+    const data = await this.recruitmentModel
+      .aggregate(pipeline)
+      .skip(skip)
+      .limit(limit);
+    return new PaginatedDTO<any>(data, page, limit, itemCount);
   }
+
   createAddFields(interviewRound: 'firstInterview' | 'secondInterview') {
     return {
       $addFields: {
@@ -109,13 +122,19 @@ export class RecruitmentService {
     id: string,
     updateRecruitmentDto: UpdateRecruitmentDto,
   ) {
-    return await this.recruitmentModel.findByIdAndUpdate(
-      id,
-      updateRecruitmentDto,
-      {
-        new: true,
-      },
-    );
+    try {
+      const res = await this.recruitmentModel.findByIdAndUpdate(
+        new Types.ObjectId(id),
+        updateRecruitmentDto,
+        {
+          new: true,
+        },
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async softDeleteRecruitById(id: string): Promise<Event> {
