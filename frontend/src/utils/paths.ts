@@ -11,7 +11,7 @@ function isOnlyHr(path: string, icon: any, pageElement: any) {
 export const Paths = {
 	Login: {
 		path: "/",
-		pageElement: PageRoutesComponents.LoginPAge,
+		pageElement: PageRoutesComponents.LoginPage,
 	},
 	Dashboard: {
 		path: "",

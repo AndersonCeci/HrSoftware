@@ -1,39 +1,26 @@
-import DashboardPage from "./Dashboard/DashboardPage";
-import PersonalCalendarPage from "./PersonalCalendar/PersonalCalendarPage";
-import CompanyBackgroundPage from "./CompanyBackground/CompanyBackgroundPage";
-import NotificationPage from "./NotificationPage";
-import EventPage from "./Events/EventPage";
-import AssetsPage from "./Assets/AssetsPage";
-import OrganisationalStructurePage from "./OrganisationalStructure/OrganisationalStructurePage";
-import SalariesPage from "./Salary/SalariesPage";
-import PromotionPage from "./Promotion/PromotionPage";
-import EmploymentPage from "./Employment/EmploymentPage";
-import RecruitmentPage from "./Recruitments/RecruitmentPage";
-import DismissedPage from "./DismissedPage";
 import LoginPAge from "./LoginPage";
-import RequestedLeavePage from "./DayOff/RequestedLeavePage";
-import CalendarLeavePage from "./CalendarLeaves/CalendarLeavePage";
-import SettingsPage from "./Settings/SettingsPage";
-import ProfilePage from "./Profile/ProfilePage";
+import { lazy } from "react";
 
 const PageRoutesComponents = {
-  LoginPAge,
-  DashboardPage,
-  PersonalCalendarPage,
-  CompanyBackgroundPage,
-  NotificationPage,
-  EventPage,
-  AssetsPage,
-  OrganisationalStructurePage,
-  SalariesPage,
-  PromotionPage,
-  RecruitmentPage,
-  EmploymentPage,
-  DismissedPage,
-  RequestedLeavePage,
-  CalendarLeavePage,
-  SettingsPage,
-  ProfilePage,
+	LoginPage: LoginPAge,
+	DashboardPage: lazy(() => import("./Dashboard/DashboardPage")),
+	PersonalCalendarPage: lazy(() => import("./PersonalCalendar/PersonalCalendarPage")),
+	CompanyBackgroundPage: lazy(() => import("./CompanyBackground/CompanyBackgroundPage")),
+	NotificationPage: lazy(() => import("./NotificationPage")),
+	EventPage: lazy(() => import("./Events/EventPage")),
+	AssetsPage: lazy(() => import("./Assets/AssetsPage")),
+	OrganisationalStructurePage: lazy(
+		() => import("./OrganisationalStructure/OrganisationalStructurePage"),
+	),
+	SalariesPage: lazy(() => import("./Salary/SalariesPage")),
+	PromotionPage: lazy(() => import("./Promotion/PromotionPage")),
+	RecruitmentPage: lazy(() => import("./Recruitments/RecruitmentPage")),
+	EmploymentPage: lazy(() => import("./Employment/EmploymentPage")),
+	DismissedPage: lazy(() => import("./DismissedPage")),
+	RequestedLeavePage: lazy(() => import("./DayOff/RequestedLeavePage")),
+	CalendarLeavePage: lazy(() => import("./CalendarLeaves/CalendarLeavePage")),
+	SettingsPage: lazy(() => import("./Settings/SettingsPage")),
+	ProfilePage: lazy(() => import("./Profile/ProfilePage")),
 };
 
 export default PageRoutesComponents;
