@@ -36,7 +36,7 @@ export function getInitialFormValues(data: EmployeeDataType | undefined) {
 function prepareInitialValues(selectedEmployee: EmployeeDataType) {
   return {
     ...selectedEmployee,
-    // birthDate: dayjs(selectedEmployee["birthDate"], "DD/MM/YYYY"),
+    birthDay: dayjs(selectedEmployee.birthDay),
     startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
   };
 }
@@ -70,7 +70,7 @@ export function getFormValues(form: any) {
     startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
     contract: form.getFieldValue("contract"),
     nID: form.getFieldValue("nID"),
-    birthDate: form.getFieldValue("birthDate").format("DD/MM/YYYY"),
+    birthDay: form.getFieldValue("birthDay"),
     // username: "ESHTE STRING",
     // password: "codevider",
     gender: form.getFieldValue("gender"),

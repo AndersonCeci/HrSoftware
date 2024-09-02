@@ -46,7 +46,7 @@ const FirstPanel = () => {
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 0, span: 5 }}>
 					<FormInputs.DatePicker
 						label={t("birthDate")}
-						name="birthDate"
+						name="birthDay"
 						required
 						disableFuture
 						isDisabledDate
