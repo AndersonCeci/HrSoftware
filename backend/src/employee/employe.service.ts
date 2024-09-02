@@ -1,65 +1,26 @@
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Employee, Position } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import { UserService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { Role } from 'src/users/schemas/user.schema';
+import { Role, User } from 'src/users/schemas/user.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
+    @Inject(forwardRef(() => InventoryService))
+    private readonly inventoryService: InventoryService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
   ) {}
-
-  // async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-  //   let role: Role;
-
-  //   switch (createEmployeeDto.position) {
-  //     case Position.JuniorFrontEnd:
-  //     case Position.JuniorBackEnd:
-  //     case Position.SeniorFrontEnd:
-  //     case Position.SeniorBackEnd:
-  //     case Position.FullStack:
-  //     case Position.DevOps:
-  //       role = Role.Employee;
-  //       break;
-  //     case Position.ProjectManager:
-  //       role = Role.ProjectManager;
-  //       break;
-  //     default:
-  //       throw new Error('Invalid position');
-  //   }
-
-  //   const fullName = await this.employeeModel.aggregate([
-  //     {
-  //       $project: {
-  //         fullName: { $concat: ['$name', '', '$surname'] },
-  //       },
-  //     },
-  //   ]);
-
-  //   const employeeData = { ...createEmployeeDto, role, fullName };
-
-  //   const createdEmploy = await new this.employeeModel(employeeData).save();
-
-  //   const createUserDto: CreateUserDto = {
-  //     employID: createdEmploy._id as Types.ObjectId,
-  //     username: createEmployeeDto.surname + 'codevider',
-  //     password: 'codevider',
-  //     email: createEmployeeDto.email,
-  //     role: role,
-  //     isDeleted: false,
-  //   };
-  //   await this.userService.createUser(createUserDto);
-  //   return createdEmploy;
-  // }
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     let role: Role;
@@ -80,7 +41,7 @@ export class EmployeeService {
         throw new Error('Invalid position');
     }
 
-    const createdEmploye = await new this.employeeModel ({
+    const createdEmploye = await new this.employeeModel({
       ...createEmployeeDto,
       role,
       teamLeaders:
@@ -135,11 +96,34 @@ export class EmployeeService {
     };
 
     await this.userService.createUser(createUserDto);
+    Logger.log('create');
     return updatedEmployee;
   }
 
   findAll(): Promise<Employee[]> {
     return this.employeeModel.find().exec();
+  }
+
+  async findStatusLength(): Promise<any[]> {
+    const employmentData = await this.employeeModel
+      .aggregate([
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            status: '$_id',
+            count: 1,
+          },
+        },
+      ])
+      .exec();
+
+    return employmentData;
   }
 
   findLeft(): Promise<Employee[]> {
@@ -157,6 +141,7 @@ export class EmployeeService {
   }
 
   delete(id: string): Promise<Employee | null> {
+    this.inventoryService.cleanUpInventories(id);
     return this.employeeModel.findByIdAndDelete(id);
   }
 
@@ -187,6 +172,80 @@ export class EmployeeService {
   async findName(name: string): Promise<Employee | null> {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
+
+  @Cron(CronExpression.EVERY_10_HOURS)
+  async handleCron() {
+    await this.notifyBirthdayOneDayBefore();
+    // await this.notifyOneYearAnniversary();
+  }
+
+  async notifyBirthdayOneDayBefore(): Promise<void> {
+    const oneDayBefore = new Date();
+    oneDayBefore.setDate(oneDayBefore.getDate() + 1);
+    oneDayBefore.setHours(0, 0, 0, 0);
+
+    const endOfOneDayBefore = new Date(oneDayBefore);
+    endOfOneDayBefore.setHours(23, 59, 59, 999);
+
+    const employeesWithUpcomingBirthdays = await this.employeeModel
+      .find({
+        birthDay: {
+          $gte: oneDayBefore,
+          $lte: endOfOneDayBefore,
+        },
+      })
+      .exec();
+
+    for (const employee of employeesWithUpcomingBirthdays) {
+      const message = `Reminder: ${employee.name} ${employee.surname}'s birthday is tomorrow!`;
+
+      const createNotificationDto: CreateNotificationDto = {
+        reminderTitle: 'Birthday Reminder',
+        message,
+        isRead: false,
+        userId: null,
+        path: `/dashboard`,
+        status: NotificationStatus.REMINDER,
+      };
+
+      await this.notificationService.createNotification(createNotificationDto);
+    }
+  }
+
+  // async notifyOneYearAnniversary(): Promise<void> {
+  //   const oneYearAgo = new Date();
+  //   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  //   oneYearAgo.setHours(0, 0, 0, 0);
+
+  //   const endOfDay = new Date(oneYearAgo);
+  //   endOfDay.setHours(23, 59, 59, 999);
+
+  //   const employeesWithAnniversary = await this.employeeModel
+  //     .find({
+  //       startingDate: {
+  //         $gte: oneYearAgo,
+  //         $lte: endOfDay,
+  //       },
+  //     })
+  //     .exec();
+
+  //   const hrUser = await this.userModel.findOne({ role: Role.HR }).exec();
+
+  //   if (!hrUser) {
+  //     throw new Error('No HR user found');
+  //   }
+
+  //   for (const employee of employeesWithAnniversary) {
+  //     const createNotificationDto: CreateNotificationDto = {
+  //       message: `Congratulations to ${employee.fullName} for one year at the company!`,
+  //       isRead: false,
+  //       userId: new Types.ObjectId(hrUser._id),
+  //       path: `/dashboard`,
+  //       status: NotificationStatus.REMINDER,
+  //     };
+  //     await this.notificationService.createNotification(createNotificationDto);
+  //   }
+  // }
 
   async searchEmployee(
     name?: string,

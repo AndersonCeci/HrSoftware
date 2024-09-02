@@ -1,4 +1,4 @@
-import { Avatar, Card, Flex } from "antd";
+import { Avatar, Card, Flex, Image } from "antd";
 import Meta from "antd/es/card/Meta";
 import "../Profile/style/ProfilePage.css";
 import Button from "../../components/Shared/Button";
@@ -8,12 +8,13 @@ import EditProfile from "./components/EditProfile";
 import { FaRegUser } from "react-icons/fa";
 import { MdLocalPhone, MdOutlineBadge, MdOutlineEmail } from "react-icons/md";
 import { RiMoneyEuroCircleLine } from "react-icons/ri";
-import { CalendarOutlined } from "@ant-design/icons";
+import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import useHttp from "../../hooks/useHttp";
 import { EmployeeDataType } from "../Employment/types/Employee";
 import SettingsPage from "../Settings/SettingsPage";
 import Loader from "../../components/Shared/Loader";
 import { useTranslation } from "react-i18next";
+import Title from "antd/es/typography/Title";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
@@ -32,6 +33,7 @@ const ProfilePage: React.FC = () => {
   const [isLoading, error, sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const { t } = useTranslation();
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
     sendRequest(
@@ -58,13 +60,15 @@ const ProfilePage: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  const handleImageUpload = (url: string) => {
+    setAvatarUrl(url);
+  };
+
   if (isLoading) {
     return <Loader />;
   }
 
-  // if (error) {
-  //   return <div>Something went wrong!!</div>;
-  // }
+  console.log(avatarUrl, "urlsetdryf7tr5ftl");
 
   const initialData: Data[] = [
     {
@@ -99,35 +103,38 @@ const ProfilePage: React.FC = () => {
     },
   ];
 
+  console.log(avatarUrl, "deded");
+
   return (
     <div>
       <Flex className="main-flex-profile">
         <Flex vertical>
           <Card className="avatar-profile-card">
-            <Meta
-              avatar={
-                <Avatar
-                  size={"large"}
-                  src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
+            <div className="inside-profile-card">
+              <div>
+                <img className="profile-pic" src={tableData?.profilePhoto} />
+              </div>
+              <div>
+                <h3>{userData.username}</h3>
+                <p>{userData.role.toUpperCase()}</p>
+                <Button
+                  className="edit-button"
+                  type={ButtonType.PRIMARY}
+                  onClick={showModal}
+                >
+                  {t("editProfile")}
+                </Button>
+                <EditProfile
+                  visible={isModalVisible}
+                  handleOk={handleOk}
+                  setIsModal={handleOk}
+                  handleCancel={handleCancel}
+                  currentData={tableData}
+                  onImageUpload={handleImageUpload}
+                  setTablaData={setTableData}
                 />
-              }
-              style={{ marginLeft: "10px" }}
-              title={userData.username}
-              description={userData.role.toUpperCase()}
-            />
-            <Button
-              className="edit-button"
-              type={ButtonType.PRIMARY}
-              onClick={showModal}
-            >
-              {t("editProfile")}
-            </Button>
-            <EditProfile
-              visible={isModalVisible}
-              handleOk={handleOk}
-              handleCancel={handleCancel}
-              currentData={tableData}
-            />
+              </div>
+            </div>
           </Card>
           <Card className="personal-info-card">
             {initialData.map((data) => {

@@ -7,4 +7,5 @@ export type initialValuesType = {
   teamLeader: string;
   position: string;
   startingDate: string;
+  status: string;
 };

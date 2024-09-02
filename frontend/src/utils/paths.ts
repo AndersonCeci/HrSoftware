@@ -1,10 +1,17 @@
 import NavigationIcons from "./NavigationIcons";
 import PageRoutesComponents from "../pages";
+import { isHR } from "./utils";
+
+const isHr = isHR();
+
+function isOnlyHr(path: string, icon: any, pageElement: any) {
+	return isHr ? [{ path, icon, pageElement }] : [];
+}
 
 export const Paths = {
 	Login: {
 		path: "/",
-		pageElement: PageRoutesComponents.LoginPAge,
+		pageElement: PageRoutesComponents.LoginPage,
 	},
 	Dashboard: {
 		path: "",
@@ -23,11 +30,11 @@ export const Paths = {
 		type: "group",
 		icon: null,
 		children: [
-			{
-				path: "recruitment",
-				icon: NavigationIcons.MdOutlinePersonSearch,
-				pageElement: PageRoutesComponents.RecruitmentPage,
-			},
+			...isOnlyHr(
+				"recruitment",
+				NavigationIcons.MdOutlinePersonSearch,
+				PageRoutesComponents.RecruitmentPage,
+			),
 		],
 	},
 	Employee: {
@@ -35,11 +42,7 @@ export const Paths = {
 		type: "group",
 		icon: null,
 		children: [
-			{
-				path: "employment",
-				icon: NavigationIcons.MdOutlineBadge,
-				pageElement: PageRoutesComponents.EmploymentPage,
-			},
+			...isOnlyHr("employee", NavigationIcons.UserOutlined, PageRoutesComponents.EmploymentPage),
 		],
 	},
 	PersonalCalendar: {
@@ -73,34 +76,20 @@ export const Paths = {
 	},
 	Management: {
 		path: "managment",
-		type: "",
+		type: !isHr ? "group" : "",
 		icon: NavigationIcons.Management,
 		children: [
-			// {
-			// 	path: "recruitment",
-			// 	icon: NavigationIcons.MdOutlinePersonSearch,
-			// 	pageElement: PageRoutesComponents.RecruitmentPage,
-			// },
 			{
 				path: "salary",
 				icon: NavigationIcons.RiMoneyEuroCircleLine,
 				pageElement: PageRoutesComponents.SalariesPage,
 			},
-			{
-				path: "promotions",
-				icon: NavigationIcons.PiChartLineUpBold,
-				pageElement: PageRoutesComponents.PromotionPage,
-			},
-			// {
-			// 	path: "employment",
-			// 	icon: NavigationIcons.MdOutlineBadge,
-			// 	pageElement: PageRoutesComponents.EmploymentPage,
-			// },
-			{
-				path: "dismissed",
-				icon: NavigationIcons.TbUserCancel,
-				pageElement: PageRoutesComponents.DismissedPage,
-			},
+			...isOnlyHr(
+				"promotions",
+				NavigationIcons.PiChartLineUpBold,
+				PageRoutesComponents.PromotionPage,
+			),
+			...isOnlyHr("dismissed", NavigationIcons.TbUserCancel, PageRoutesComponents.DismissedPage),
 		],
 	},
 	DayOff: {

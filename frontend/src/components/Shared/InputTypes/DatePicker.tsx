@@ -31,7 +31,7 @@ const DatePicker = ({
       validator(_: any, value: any) {
         const startTime = getFieldValue(dependsOn);
         if (value && startTime) {
-          if (value.isAfter(startTime) || value.isSame(startTime)) {
+          if (value.isAfter(startTime)) {
             return Promise.resolve();
           } else {
             return Promise.reject(t("errorMsgInvalidDate"));

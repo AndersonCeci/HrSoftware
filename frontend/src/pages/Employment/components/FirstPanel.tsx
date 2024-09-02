@@ -1,6 +1,6 @@
-import { Flex, Row, Col, Space } from "antd";
+import { Flex, Row, Col } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
-import flagOpt from "../utils/flags";
+
 import { useTranslation } from "react-i18next";
 
 const FirstPanel = () => {
@@ -44,7 +44,13 @@ const FirstPanel = () => {
 					/>
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 0, span: 5 }}>
-					<FormInputs.DatePicker label={t("birthDate")} name="birthDate" required />
+					<FormInputs.DatePicker
+						label={t("birthDate")}
+						name="birthDate"
+						required
+						disableFuture
+						isDisabledDate
+					/>
 				</Col>
 				<Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
 					<FormInputs.Select

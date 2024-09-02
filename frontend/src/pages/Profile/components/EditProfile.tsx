@@ -1,110 +1,143 @@
-import { Form, Modal, Upload, message } from "antd";
-import type { GetProp, UploadProps } from "antd";
-import { useEffect, useState } from "react";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Form, Modal, Upload, Button } from "antd";
+import { useEffect, useRef, useState } from "react";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import { useTranslation } from "react-i18next";
+import { RcFile } from "antd/lib/upload/interface";
+import { UploadOutlined } from "@ant-design/icons";
+import useHttp from "../../../hooks/useHttp";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-	const reader = new FileReader();
-	reader.addEventListener("load", () => callback(reader.result as string));
-	reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: FileType) => {
-	const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-	if (!isJpgOrPng) {
-		message.error("You can only upload JPG/PNG file!");
-	}
-	const isLt2M = file.size / 1024 / 1024 < 2;
-	if (!isLt2M) {
-		message.error("Image must smaller than 2MB!");
-	}
-	return isJpgOrPng && isLt2M;
-};
-
-const EditProfile = ({ visible, handleOk, handleCancel, currentData }: {
+const EditProfile = ({
+  visible,
+  selectedEmployee,
+  handleCancel,
+  currentData,
+  onImageUpload,
+  setTableData,
+  setIsModal,
+}: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
   handleCancel: () => void;
   currentData: EmployeeDataType | undefined;
+  onImageUpload: (url: string) => void;
+  setTableData: any;
+  setIsModal: any;
 }) => {
-	const [form] = Form.useForm<EmployeeDataType>();
-	const { t } = useTranslation();
+  const [form] = Form.useForm<EmployeeDataType>();
+  const { t } = useTranslation();
+  const [, , fetchData] = useHttp();
+  const formRef = useRef<any>();
+  const EmployeData = JSON.parse(
+    localStorage.getItem("userData") || "{}"
+  ).employID;
 
-	useEffect(() => {
-		if (currentData) {
-			form.setFieldsValue({
-				phoneNumber: currentData.phoneNumber,
-			});
-		}
-	}, [currentData, form]);
+  useEffect(() => {
+    if (currentData) {
+      form.setFieldsValue({
+        phoneNumber: currentData.phoneNumber,
+        profilePhoto: currentData.profilePhoto || "",
+      });
+    }
+  }, [currentData, form]);
 
-	const [loading, setLoading] = useState(false);
-	const [imageUrl, setImageUrl] = useState<string>();
+  // const onFinish = (values: any) => {
+  //   handleOk(values);
+  // };
 
-	const handleChange: UploadProps["onChange"] = (info) => {
-		if (info.file.status === "uploading") {
-			setLoading(true);
-			return;
-		}
-		if (info.file.status === "done") {
-			// Get this url from response in real world.
-			getBase64(info.file.originFileObj as FileType, (url) => {
-				setLoading(false);
-				setImageUrl(url);
-			});
-		}
-	};
+  const handleFinish = (value: EmployeeDataType) => {
+    console.log(value, "sasasasas");
 
-	const uploadButton = (
-		<button style={{ border: 0, background: "none" }} type="button">
-			{loading ? <LoadingOutlined /> : <PlusOutlined />}
-			<div style={{ marginTop: 8 }}>Upload</div>
-		</button>
-	);
+    fetchData(
+      useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
+        profilePhoto: value.profilePhoto[0],
+        phoneNumber: value.phoneNumber,
+      }),
+      () => {}
+	  );
+	setIsModal()
+  };
 
-	const onFinish = (values: any) => {
-		handleOk(values);
-	};
+  const handleUpload = async (files: RcFile[]) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file as File);
+    });
 
-	return (
-		<>
-			<Modal
-				title={t("editProfile")}
-				visible={visible}
-				onOk={() => form.submit()}
-				onCancel={handleCancel}
-			>
-				<Form form={form} layout="vertical" onFinish={onFinish}>
-					<Form.Item style={{ display: "flex", justifyContent: "center" }}>
-						<Upload
-							name="avatar"
-							listType="picture-circle"
-							className="avatar-uploader"
-							showUploadList={false}
-							action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-							beforeUpload={beforeUpload}
-							onChange={handleChange}
-						>
-							{imageUrl ? (
-								<img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
-							) : (
-								uploadButton
-							)}
-						</Upload>
-					</Form.Item>
-					<FormInputs.Input
-						label="Phone Number"
-						name="phoneNumber"
-						defaultValidateRule="phoneNumber"
-					/>
-				</Form>
-			</Modal>
-		</>
-	);
+    try {
+      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const uploadData = await uploadResponse.json();
+      const fileUrls = uploadData.fileUrls;
+
+      form.setFieldsValue({ profilePhoto: fileUrls });
+    } catch (error) {
+      console.error("File upload error:", error);
+    }
+  };
+
+  const handleFileChange = (info: any) => {
+    console.log(info, "infooo");
+    const files = info.fileList.map(
+      (file: any) => file.originFileObj as RcFile
+    );
+    console.log(files, "files");
+    if (files.length > 0) {
+      handleUpload(files);
+      console.log("hyriiiii");
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        title={t("editProfile")}
+        open={visible}
+        onOk={() => formRef.current.submit()}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          ref={formRef}
+          layout="vertical"
+          onFinish={handleFinish}
+        >
+          <Form.Item
+            name="profilePhoto"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <Upload
+              listType="picture-circle"
+              showUploadList={{
+                showPreviewIcon: false,
+              }}
+              maxCount={1}
+              className="avatar-uploader"
+              beforeUpload={() => {
+                return false;
+              }}
+              onChange={handleFileChange}
+            >
+              <Button
+                icon={<UploadOutlined />}
+                type="text"
+                size="large"
+                shape="circle"
+              ></Button>
+            </Upload>
+          </Form.Item>
+          <FormInputs.Input
+            label="Phone Number"
+            name="phoneNumber"
+            defaultValidateRule="phoneNumber"
+          />
+        </Form>
+      </Modal>
+    </>
+  );
 };
 export default EditProfile;
