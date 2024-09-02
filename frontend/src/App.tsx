@@ -2,6 +2,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
 import RootLayout from "./pages/Root/RootLayout";
 import { Paths } from "./utils/paths";
+import Loader from "./components/Shared/Loader";
+import { Suspense } from "react";
 
 import "./App.css";
 
@@ -34,7 +36,11 @@ const router = createBrowserRouter([
 					children: route.children.map((child) => {
 						return {
 							path: child.path,
-							element: <child.pageElement />,
+							element: (
+								<Suspense fallback={<Loader />}>
+									<child.pageElement />
+								</Suspense>
+							),
 						};
 					}),
 				};
