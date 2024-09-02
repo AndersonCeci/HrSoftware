@@ -1,9 +1,14 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
   IsDateString,
   IsOptional,
+  IsBoolean,
+  IsArray,
+  IsNumber,
 } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class CreateEventDto {
   @IsString()
@@ -19,18 +24,37 @@ export class CreateEventDto {
 
   @IsDateString()
   @IsOptional()
-  eventEndDate: Date;
+  eventEndDate?: Date;
 
+  @IsString()
+  @IsNotEmpty()
   eventStartTime: string;
 
-  eventEndTime: string;
+  @IsString()
+  @IsOptional()
+  eventEndTime?: string;
 
   @IsOptional()
-  location?: string;
+  location?: {
+    position?: {
+      lat?: number;
+      lng?: number;
+    };
 
+    address?: string;
+    name?: string;
+  };
+
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
   images?: string[];
 
-  isDeleted: boolean;
+  @IsBoolean()
+  @IsOptional()
+  isDeleted?: boolean;
+
+  @IsDateString()
+  @IsOptional()
   deleteDate?: Date;
 }
