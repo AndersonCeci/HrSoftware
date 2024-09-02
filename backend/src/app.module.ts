@@ -43,29 +43,6 @@ import { FileModule } from './upload/file.module';
     MongooseModule.forRoot(process.env.DBURL),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async () => ({
-        transport: {
-          host: process.env.HOST,
-          auth: {
-            user: process.env.MAILJET_API_KEY,
-            pass: process.env.MAILJET_API_SECRET,
-          },
-        },
-        defaults: {
-          from: '"No Reply" <no-reply@hrsofware.com>',
-        },
-        template: {
-          dir: join(__dirname, '..', 'src', 'modules', 'mail', 'templates'),
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true,
-          },
-        },
-      }),
-      inject: [ConfigService],
-    }),
     UsersModule,
     RecruitmentsModule,
     AuthModule,

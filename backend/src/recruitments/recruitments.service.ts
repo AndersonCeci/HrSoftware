@@ -1,6 +1,6 @@
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 import { Injectable } from '@nestjs/common';
-import { Recruitment } from './schemas/recruitment.schema';
+import { OfferMade, Recruitment } from './schemas/recruitment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
@@ -68,9 +68,16 @@ export class RecruitmentService {
       },
     };
   }
-  async getRecruitmentWithInterviewerDetails(page: number, limit: number) {
+  async getRecruitmentWithInterviewerDetails(
+    page: number,
+    limit: number,
+    filters: any,
+  ) {
     const skip = (page - 1) * limit;
     const pipeline = [
+      {
+        $match: filters,
+      },
       this.createLookupPipeline('firstInterview'),
       this.createLookupPipeline('secondInterview'),
       this.createAddFields('firstInterview'),
@@ -90,6 +97,7 @@ export class RecruitmentService {
           deleteDate: 1,
           firstInterview: 1,
           secondInterview: 1,
+          offerMade: 1,
         },
       },
     ];
@@ -114,13 +122,19 @@ export class RecruitmentService {
     id: string,
     updateRecruitmentDto: UpdateRecruitmentDto,
   ) {
-    return await this.recruitmentModel.findByIdAndUpdate(
-      id,
-      updateRecruitmentDto,
-      {
-        new: true,
-      },
-    );
+    try {
+      const res = await this.recruitmentModel.findByIdAndUpdate(
+        new Types.ObjectId(id),
+        updateRecruitmentDto,
+        {
+          new: true,
+        },
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async softDeleteRecruitById(id: string): Promise<Event> {

@@ -25,13 +25,13 @@ export class MailService {
     return templateContent;
   }
 
-  async sendEmail(template: string, dto: SentEmailDTO) {
+  async sendEmail(dto: SentEmailDTO) {
     try {
       const result = await this.mailerservice.sendMail({
         from: dto.sender,
         to: dto.recepients,
         subject: dto.subject,
-        template: template,
+        template: 'welcome-template',
         context: {
           title: 'Welcome',
           name: dto.name,

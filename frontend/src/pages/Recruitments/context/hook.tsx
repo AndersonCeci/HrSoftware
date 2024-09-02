@@ -3,7 +3,8 @@ import { ApplicantProps } from "../../../types/ApplicantProps";
 import useHttp from "../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
 import { Form, message } from "antd";
-import { sendMail } from "../../../helpers/mail.helper";
+import { Filters } from "../RecruitmentContent";
+import { RecruitmentStage } from "../columns/constants";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
 
@@ -19,12 +20,17 @@ export const useRecruitment = () => {
   const [form] = Form.useForm();
   const [file, setFile] = useState<File | null>(null);
 
-  const fetchApplicants = async (page: number, limit: number) => {
+  const fetchApplicants = async (
+    page: number,
+    limit: number,
+    filters: Filters
+  ) => {
     try {
       const response = await axios.get(API, {
-        params: { page, limit },
+        params: { page, limit, filters },
       });
       const { data, meta } = response.data;
+      console.log("data", data);
       setTableData(data);
       return meta.itemCount;
     } catch (error) {
@@ -36,6 +42,23 @@ export const useRecruitment = () => {
     }
   };
 
+  const createApplicant = async (newData: ApplicantProps) => {
+    try {
+      console.log("submitedDate", newData.dateSubmitted);
+      const updatedData = { ...newData, stage: RecruitmentStage.Applied };
+      const res = await axios.post(API, updatedData);
+      handleAddNew(res.data);
+      console.log("res submited date", res.data.submitedDate);
+      return res;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      message.error("Failed add applicant");
+    }
+  };
+
   const handleDelete = (id: string) => {
     sendRequest(useHttp.deleteRequestHelper(`${API}/${id}`));
     setTableData((prevData) =>
@@ -44,8 +67,11 @@ export const useRecruitment = () => {
   };
 
   const handleAddNew = (newData: ApplicantProps) => {
-    setTableData((prevData) => [...prevData, newData]);
+    setTableData((prevData) => [newData, ...prevData]);
     setIsEditModalVisible(false);
+    message.success(
+      `${newData.name} ${newData.surname} added to the applicants successfully`
+    );
   };
 
   const handleEdit = (newData: ApplicantProps) => {
@@ -86,10 +112,24 @@ export const useRecruitment = () => {
     }
   };
 
-  const updateApplicant = async (_id: string, values: any) => {
-    console.log(values);
+  const updateApplicant = async (_id: string, values: any, step: number) => {
+    let updatedValues = {};
+    if (step === 1) {
+      updatedValues = {
+        firstInterview: { ...values },
+      };
+    }
+    if (step === 2) {
+      updatedValues = {
+        secondInterview: { ...values },
+      };
+    }
+    if (step === 3) {
+      updatedValues = { offerMade: { ...values } };
+    }
+
     try {
-      const res = await axios.patch(`${API}/${_id}`, values);
+      const res = await axios.put(`${API}/${_id}`, updatedValues);
       handleEdit(res.data);
       message.success("Applicant updated successfully!");
       return res;
@@ -100,16 +140,16 @@ export const useRecruitment = () => {
         );
       }
     } finally {
-      sendMail("", {
-        sender: "",
-        recepients: [editingRecord?.email || ""],
-        subject: "",
-        text: "",
-        name: editingRecord?.name || "",
-        email: "",
-        password: "",
-        hr: "",
-      });
+      // sendMailHelper("", {
+      //   sender: "",
+      //   recepients: [editingRecord?.email || ""],
+      //   subject: "",
+      //   text: "",
+      //   name: editingRecord?.name || "",
+      //   email: "",
+      //   password: "",
+      //   hr: "",
+      // });
     }
   };
 
@@ -121,7 +161,9 @@ export const useRecruitment = () => {
       message.error("No file chose");
     }
   };
+
   return {
+    createApplicant,
     form,
     tableData,
     editingRecord,

@@ -14,7 +14,10 @@ interface EmailData {
   hr: string;
 }
 
-export const sendMail = async (template: string, emailData: EmailData) => {
+export const sendMailHelper = async (
+  template: string,
+  emailData: EmailData
+) => {
   try {
     const res = await axios.post(API, { template, emailData });
     return res.data;

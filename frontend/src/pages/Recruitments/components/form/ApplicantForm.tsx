@@ -1,14 +1,13 @@
 import React from "react";
 import { Form, Button, Col, Row, Upload, UploadProps, message } from "antd";
-import { useRecruitmentContext } from "../context";
-import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
-import { references } from "../columns/constants";
-import { getDevRoles } from "../../Employment/utils/helperFunctions";
+import { useRecruitmentContext } from "../../context";
+import { getDevRoles } from "../../../Employment/utils/helperFunctions";
+import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
 import { UploadOutlined } from "@ant-design/icons";
+import { references } from "../../columns/constants";
 
 const ApplicantForm: React.FC = () => {
-  const { handleFileChange, setFile } =
-    useRecruitmentContext();
+  const { handleFileChange, setFile } = useRecruitmentContext();
   const positions = getDevRoles().map((role) => ({ value: role, label: role }));
 
   const allowedFileTypes = ["application/pdf", "application/msword"];
@@ -36,9 +35,7 @@ const ApplicantForm: React.FC = () => {
       strokeWidth: 2,
       showInfo: true,
     },
-    onRemove: () => {
-      setFile(null);
-    },
+    onRemove: () => setFile(null),
     maxCount: 1,
     multiple: false,
     customRequest: async ({ file, onSuccess, onError }) => {
@@ -105,6 +102,11 @@ const ApplicantForm: React.FC = () => {
               </Button>
             </Upload>
           </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <FormInputs.DatePicker label="Submitted Date" name="submittedDate" />
         </Col>
       </Row>
     </>

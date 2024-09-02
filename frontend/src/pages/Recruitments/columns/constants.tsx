@@ -6,8 +6,10 @@ import {
   FrownOutlined,
   MehOutlined,
 } from "@ant-design/icons";
-import ApplicantForm from "../components/ApplicantForm";
-import InterviewForm from "../components/InterviewForm";
+import InterviewForm from "../components/form/InterviewForm";
+import OfferMadeForm from "../components/form/OfferMadeForm";
+import ApplicantForm from "../components/form/ApplicantForm";
+import { useRecruitmentContext } from "../context";
 
 const selectOption = [
   { label: "Applied", color: "cyan" },
@@ -25,6 +27,27 @@ const references = [
   { value: "Others", label: "Other" },
 ];
 
+const interviewTypes = [
+  { value: "Phone Interview", label: "Phone Interview" },
+  { value: "Video Interview", label: "Video Interview" },
+  { value: "In-Person Interview", label: "In-Person Interview" },
+  { value: "Panel Interview", label: "Panel Interview" },
+  { value: "Technical Interview", label: "Technical Interview" },
+  { value: "Informational Interview", label: "Informational Interview" },
+];
+
+enum ContractTypes {
+  FullTime = "Full Time",
+  PartTime = "Part Time",
+  Temporary = "Temporary",
+  Internship = "Internship",
+  Seasonal = "Seasonal",
+  FixedTerm = "Fixed Term",
+  Indefinite = "Indefinite",
+  Freelance = "Freelance",
+  Remote = "Remote",
+  Apprenticeship = "Apprenticeship",
+}
 enum RecruitmentStage {
   Applied = "Applied",
   FirstInterview = "1st Interview",
@@ -48,37 +71,101 @@ const evaluationSteps = [
   {
     title: "Not Sure",
     content: "😐",
+    value: "Not sure",
   },
   {
     title: "OK",
     content: "👍",
+    value: "OK",
   },
   {
     title: "Positive",
     content: "😊",
-  },
-];
-const items = [
-  {
-    title: RecruitmentStage.Applied,
-    icon: <UserOutlined />,
-    content: <ApplicantForm />,
-  },
-  {
-    title: RecruitmentStage.FirstInterview,
-    icon: <SolutionOutlined />,
-    content: <InterviewForm step={RecruitmentStage.FirstInterview} />,
-  },
-  {
-    title: RecruitmentStage.SecondInterview,
-    icon: <ProfileOutlined />,
-    content: <InterviewForm step={RecruitmentStage.SecondInterview} />,
-  },
-  {
-    title: RecruitmentStage.OfferMade,
-    icon: <SmileOutlined />,
-    content: <div>{RecruitmentStage.OfferMade}</div>,
+    value: "Positive",
   },
 ];
 
-export { selectOption, references, RecruitmentStage, evaluationSteps, items };
+// const items = [
+//   {
+//     title: RecruitmentStage.Applied,
+//     icon: <UserOutlined />,
+//     content: <ApplicantForm />,
+//   },
+//   {
+//     title: RecruitmentStage.FirstInterview,
+//     icon: <SolutionOutlined />,
+//     content: (
+//       <InterviewForm
+//         step={RecruitmentStage.FirstInterview}
+//         onInterviewersChange={handleInterviewersChange}
+//       />
+//     ),
+//   },
+//   {
+//     title: RecruitmentStage.SecondInterview,
+//     icon: <ProfileOutlined />,
+//     content: (
+//       <InterviewForm
+//         step={RecruitmentStage.SecondInterview}
+//         onInterviewersChange={handleInterviewersChange}
+//       />
+//     ),
+//   },
+//   {
+//     title: RecruitmentStage.OfferMade,
+//     icon: <SmileOutlined />,
+//     content: <OfferMadeForm />,
+//   },
+// ];
+
+const menuItems = [
+  {
+    key: RecruitmentStage.Applied,
+    label: RecruitmentStage.Applied,
+  },
+  {
+    key: RecruitmentStage.FirstInterview,
+    label: RecruitmentStage.FirstInterview,
+  },
+  {
+    key: RecruitmentStage.SecondInterview,
+    label: RecruitmentStage.SecondInterview,
+  },
+  {
+    key: RecruitmentStage.OfferMade,
+    label: RecruitmentStage.OfferMade,
+  },
+];
+const referenceItems = [
+  {
+    key: "LinkedIn",
+    label: "LinkedIn",
+  },
+  {
+    key: "Instagram",
+    label: "Instagram",
+  },
+  {
+    key: "Facebook",
+    label: "Facebook",
+  },
+  {
+    key: "DuaPune",
+    label: "Dua Pune",
+  },
+  {
+    key: "Others",
+    label: "Others",
+  },
+];
+
+export {
+  ContractTypes,
+  selectOption,
+  references,
+  RecruitmentStage,
+  evaluationSteps,
+  menuItems,
+  referenceItems,
+  interviewTypes,
+};

@@ -8,6 +8,7 @@ import {
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { InterviewDTO } from '../interviewDTO/interview.dto';
 import { Type } from 'class-transformer';
+import { OfferMadeDTO } from './OfferMade.dto';
 
 export class CreateRecruitmentDto {
   @IsNotEmpty()
@@ -22,7 +23,9 @@ export class CreateRecruitmentDto {
   @IsString()
   readonly position: string;
 
-  phoneNumber: number;
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -31,17 +34,21 @@ export class CreateRecruitmentDto {
   @IsNotEmpty()
   @IsEnum(RecruitmentStage, {
     message:
-      'Stage must be one of the following: Applied ,Approved, Rejected, 1st Interview, 2nd Interview',
+      'Stage must be one of the following: Applied, Rejected, 1st Interview, 2nd Interview, Offer Made',
   })
   readonly stage: RecruitmentStage;
 
   @IsOptional()
   @Type(() => InterviewDTO)
-  readonly firstIntervie?: InterviewDTO;
+  readonly firstInterview?: InterviewDTO;
 
   @IsOptional()
   @Type(() => InterviewDTO)
   readonly secondInterview?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => OfferMadeDTO)
+  readonly offerMade?: OfferMadeDTO;
 
   @IsOptional()
   @IsString()
@@ -52,12 +59,14 @@ export class CreateRecruitmentDto {
   readonly cv?: string;
 
   @IsOptional()
-  readonly submittedDate: Date;
+  @Type(() => Date)
+  readonly submittedDate?: Date;
 
   @IsOptional()
-  readonly isDeleted: boolean;
+  readonly isDeleted?: boolean;
 
   @IsOptional()
+  @Type(() => Date)
   readonly deleteDate?: Date;
 }
 

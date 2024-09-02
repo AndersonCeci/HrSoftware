@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { SentEmailDTO } from './dto/sendEmail.dto';
 import { MailService } from './mail.service';
-import { template } from 'handlebars';
 
 @Controller('mail')
 export class MailController {
@@ -21,11 +20,10 @@ export class MailController {
   }
 
   @Post()
-  // @Roles(['hr', 'ceo'])
-  sendEmail(@Body() body: { emailData: SentEmailDTO; template: string }) {
+  sendEmail(@Body() dto: SentEmailDTO) {
     try {
-      const { emailData, template } = body;
-      return this.mailService.sendEmail(template, emailData);
+      console.log('here', dto);
+      return this.mailService.sendEmail(dto);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
