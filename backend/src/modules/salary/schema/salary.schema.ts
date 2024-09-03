@@ -52,14 +52,7 @@ export class Salary extends Document {
 }
 
 const SalarySchema = SchemaFactory.createForClass(Salary);
-// SalarySchema.virtual('month').get(function () {
-//   return this.dateTaken.getMonth() + 1;
-// });
-// SalarySchema.virtual('year').get(function () {
-//   return this.dateTaken.getFullYear();
-// });
-// SalarySchema.set('toJSON', { virtuals: true });
-// SalarySchema.set('toObject', { virtuals: true });
+
 SalarySchema.index({ employeeID: 1, dateTaken: 1 }, { unique: true });
 
 SalarySchema.plugin(muv, {

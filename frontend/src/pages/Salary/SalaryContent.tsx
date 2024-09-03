@@ -9,6 +9,7 @@ import { Salary } from "../../types/SalaryProps";
 import { Button, Col, DatePicker, Input, Row, Space } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import TableHeader from "../../components/Table/TableHeader";
+import usePagination from "../../hooks/usePagination";
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -31,10 +32,6 @@ const SalaryContent = () => {
   const {
     tableData,
     itemCount,
-    page,
-    limit,
-    handlePageChange,
-    handleLimitChange,
     handleModal,
     handleAddBonus,
     handleAddBonusSubmit,
@@ -43,6 +40,7 @@ const SalaryContent = () => {
     filters,
     createSalary,
   } = useSalaryHook();
+  const { page, limit, handlePageChange, handleLimitChange } = usePagination();
 
   useEffect(() => {
     setFilters({

@@ -7,7 +7,7 @@ import "../../../node_modules/primereact/resources/themes/lara-light-blue/theme.
 import Button from "../../components/Shared/Button";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { ButtonSize, ButtonType } from "../../enums/Button";
-import AddNode from "./AddNode"
+import AddNode from "./AddNode";
 
 export default function SelectionDemo() {
   const [selection, setSelection] = useState<TreeNode[]>([]);
@@ -186,7 +186,10 @@ export default function SelectionDemo() {
         <PlusCircleOutlined />
         Add
       </Button>
-      <AddNode visible={isModalVisible} onCancel={() => setIsModalVisible(false)}/>
+      <AddNode
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+      />
       <OrganizationChart
         value={data}
         selectionMode="multiple"

@@ -1,5 +1,3 @@
-import { Form } from "antd";
-
 import Input from "./Input";
 import DatePicker from "./DatePicker";
 import FormSelect from "./FormSelect";
@@ -7,7 +5,14 @@ import TimePicker from "./TimePicker";
 import AutoComplete from "./AutoComplete";
 import Upload from "./Upload";
 
-const FormInputs = () => {};
+const FormInputs = {
+  Input,
+  Select: FormSelect,
+  DatePicker,
+  TimePicker,
+  AutoComplete,
+  Upload,
+};
 
 export default FormInputs;
 
