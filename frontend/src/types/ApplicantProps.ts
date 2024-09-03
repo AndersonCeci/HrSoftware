@@ -1,3 +1,4 @@
+import { ContractTypes } from "../pages/Recruitments/columns/constants";
 import { Interview } from "./InterviewProps";
 
 export type ApplicantProps = {
@@ -8,6 +9,11 @@ export type ApplicantProps = {
   position: string;
   firstInterview: Interview;
   secondInterview: Interview;
+  offerMade: {
+    offeredSalary: number;
+    contractType: ContractTypes;
+    startDate: Date;
+  };
   applicationPhase: string;
   dateSubmitted: string;
   reference: string;

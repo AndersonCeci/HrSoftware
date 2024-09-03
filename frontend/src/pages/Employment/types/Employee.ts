@@ -13,5 +13,7 @@ export type EmployeeDataType = {
 	nID: string;
 	status: string;
 	gender:string;
+	birthDay: Date;
+	// status: "Working" | "Remote" | "On Leave";
 	contract: string;
 };

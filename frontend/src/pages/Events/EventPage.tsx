@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import AddEventForm from "./components/AddEventForm";
 import { useTranslation } from "react-i18next";
 import { isHR, getFromLocalStorage } from "../../utils/utils";
+import useAlert from "../../hooks/useAlert";
 
 const EVENT_API = import.meta.env.REACT_APP_EVENTS_API;
 
@@ -19,8 +20,16 @@ const EventPage: React.FC = () => {
 	const user = getFromLocalStorage("userData");
 	const isHr = isHR();
 	const [isLoading, error, sendRequest] = useHttp();
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [loadedEvents, setLoadedEvents] = useState<EvenType[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
+	const { contextHolder, handleAlert } = useAlert({
+		displayDescription: error ? t("failedToAddEvent") : t("eventAddedSucesfuly"),
+		displayTitle: error ? t("errorEvent") : t("successEvent"),
+		type: error ? "error" : "success",
+	});
+
 	const formRef = useRef<any>();
 
 	function handleOpenModal() {
@@ -31,21 +40,25 @@ const EventPage: React.FC = () => {
 		setIsModalOpen(false);
 	}
 
-	function handleAddEvent(newEvent: EvenType) {
-		sendRequest(
-			useHttp.postRequestHelper(EVENT_API, newEvent),
+	function handleFileUpload(isUploading: boolean) {
+		setIsUploading(isUploading);
+	}
 
-			(responseData: EvenType) => {
-				setLoadedEvents((prevEvents) => {
-					console.log("prevEvents", responseData);
-					return [...prevEvents, responseData];
-				});
-				handleCloseModal();
-			},
-		);
+	function handleAddEvent(newEvent: EvenType) {
+		setIsSubmitting(true);
+		sendRequest(useHttp.postRequestHelper(EVENT_API, newEvent), (responseData: EvenType) => {
+			setLoadedEvents((prevEvents) => {
+				console.log("prevEvents", responseData);
+				return [...prevEvents, responseData];
+			});
+			handleCloseModal();
+			setIsSubmitting(false);
+			handleAlert();
+		});
 	}
 
 	function handleUserJoinEvent(eventId: string) {
+		setIsSubmitting(true);
 		sendRequest(
 			useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
 				joinEmployee: user.employID,
@@ -62,6 +75,7 @@ const EventPage: React.FC = () => {
 						return event;
 					});
 				});
+				setIsSubmitting(false);
 			},
 		);
 	}
@@ -79,8 +93,13 @@ const EventPage: React.FC = () => {
 
 	const { thsMonth, nextMonth } = devideEventsByMonth(loadedEvents);
 
-	return !isLoading ? (
+	if (isLoading && !isSubmitting) {
+		return <Loader />;
+	}
+
+	return (
 		<main>
+			{contextHolder}
 			<Modal
 				title={t("addEvent")}
 				isOpen={isModalOpen}
@@ -88,9 +107,11 @@ const EventPage: React.FC = () => {
 				onOk={() => {
 					formRef.current.submit();
 				}}
-				// width={500}
+				width={650}
+				isLoading={isLoading || isUploading}
+				okBtnTextSubmitting={isUploading ? t("uploading") : t("submitting")}
 			>
-				<AddEventForm ref={formRef} onAdd={handleAddEvent} />
+				<AddEventForm ref={formRef} onAdd={handleAddEvent} onUploadChange={handleFileUpload} />
 			</Modal>
 			<TableHeader title={t("eventTitle")} onClick={handleOpenModal} hideButton={!isHr} />
 			{error ? (
@@ -103,18 +124,18 @@ const EventPage: React.FC = () => {
 						displayNoResult
 						onOpenModal={handleOpenModal}
 						onUserJoinEvent={handleUserJoinEvent}
+						isSubmitting={isSubmitting}
 					/>
 					<EventMenu
 						title={t("upcoming")}
 						EventList={sortByDate(nextMonth)}
 						onOpenModal={handleOpenModal}
 						onUserJoinEvent={handleUserJoinEvent}
+						isSubmitting={isSubmitting}
 					/>
 				</>
 			)}
 		</main>
-	) : (
-		<Loader />
 	);
 };
 

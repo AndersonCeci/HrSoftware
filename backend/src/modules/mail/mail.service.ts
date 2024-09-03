@@ -5,10 +5,25 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { SentEmailDTO } from './dto/sendEmail.dto';
+import { join } from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class MailService {
   constructor(private readonly mailerservice: MailerService) {}
+  async getTemplate() {
+    const templatePath = join(
+      process.cwd(),
+      'modules',
+      'mail',
+      'templates',
+      'welcome-template.hbs',
+    );
+
+    console.log('Template path:', templatePath);
+    const templateContent = fs.readFileSync(templatePath, 'utf8');
+    return templateContent;
+  }
 
   async sendEmail(dto: SentEmailDTO) {
     try {

@@ -16,13 +16,16 @@ export class FirebaseService {
       clientEmail: this.configService.get<string>('FIREBASE_CLIENT_EMAIL'),
     };
 
-    admin.initializeApp({
-      credential: admin.credential.cert(adminConfig),
-      storageBucket: `${this.configService.get<string>('FIREBASE_STORAGE_BACKET')}`,
-    });
+    if (admin.apps.length === 0) {
+      admin.initializeApp({
+        credential: admin.credential.cert(adminConfig),
+        storageBucket: `${this.configService.get<string>('FIREBASE_STORAGE_BACKET')}`,
+      });
+    }
 
     this.storage = admin.storage();
   }
+
   getStorageInstance(): admin.storage.Storage {
     return this.storage;
   }

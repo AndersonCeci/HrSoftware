@@ -1,6 +1,8 @@
 import {
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -16,7 +18,7 @@ import { FileDocument } from './schema/files.schema';
 export class FileController {
   constructor(
     private readonly fileService: UploadService,
-    @InjectModel('File') private readonly fileModel: Model<FileDocument>, 
+    @InjectModel('File') private readonly fileModel: Model<FileDocument>,
   ) {}
 
   @Post('upload')
@@ -32,5 +34,17 @@ export class FileController {
     const fileUrls = files.map((file) => file.url);
     console.log(fileUrls, 'filesss');
     return { fileUrls };
+  }
+
+  @Delete('delete/:fileName')
+  async deleteFile(@Param('fileName') fileName: string) {
+    await this.fileService.deleteFile(fileName);
+    return { message: 'File deleted successfully' };
+  }
+
+  @Get('list')
+  async listFiles() {
+    const fileUrls = await this.fileService.getAllFiles();
+    return { files: fileUrls };
   }
 }

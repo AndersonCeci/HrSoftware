@@ -1,5 +1,5 @@
 import { RecruitmentProvider } from "./context";
-import RecruitmentContent from "./RecruitmentContent";
+import { RecruitmentContent } from "./RecruitmentContent";
 
 const RecruitmentPage: React.FC = () => {
   return (
