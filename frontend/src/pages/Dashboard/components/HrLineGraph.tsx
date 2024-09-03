@@ -1,5 +1,6 @@
 import ReactApexChart from "react-apexcharts";
 import React from "react";
+import { Card } from "antd";
 
 interface ApexChartState {
   series: {
@@ -92,12 +93,14 @@ class ApexChart extends React.Component<{}, ApexChartState> {
     return (
       <div>
         <div id="chart">
+          <Card style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}>
           <ReactApexChart
             options={this.state.options}
             series={this.state.series}
             type="line"
-            height={280}
+            height={265}
           />
+          </Card>
         </div>
         <div id="html-dist"></div>
       </div>
