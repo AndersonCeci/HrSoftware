@@ -4,13 +4,11 @@ import {
   Controller,
   Post,
   Get,
-  UsePipes,
-  ValidationPipe,
   Delete,
   Param,
-  Patch,
   HttpException,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import mongoose, { Types } from 'mongoose';
@@ -26,22 +24,36 @@ export class RecruitmentsController {
   }
 
   @Get()
-  async getRecruitmentById(@Query('id') id?: string) {
-    const data =
-      await this.recruitmentService.getRecruitmentWithInterviewerDetails();
-    return data;
-    // if (id) {
-    //   const isValid = Types.ObjectId.isValid(id);
-    //   if (!isValid) throw new HttpException('Invalid ID format', 400);
-
-    //   const objectId = new Types.ObjectId(id);
-
-    // } else {
-    //   return await this.recruitmentService.getRecruitments();
-    // }
+  async getRecruitments(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('filters') filters: any,
+  ) {
+    try {
+      if (!filters) {
+        filters = {};
+      } else {
+        for (const key in filters) {
+          if (filters[key]) {
+            filters[key] = { $regex: new RegExp(filters[key], 'i') };
+          }
+        }
+      }
+      const pageNo = parseInt(page.toString());
+      const limitNo = parseInt(limit.toString());
+      const data =
+        await this.recruitmentService.getRecruitmentWithInterviewerDetails(
+          pageNo,
+          limitNo,
+          filters,
+        );
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  @Patch(':id')
+  @Put(':id')
   async updateRecruitment(
     @Param('id') id: string,
     @Body() updateRecruitmentDto: UpdateRecruitmentDto,

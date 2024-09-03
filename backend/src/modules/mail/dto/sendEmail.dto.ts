@@ -15,15 +15,18 @@ export class SentEmailDTO {
   @IsNotEmpty()
   text: string;
 
+  interview: boolean;
+  date: string;
+
   @IsString()
   name: string;
 
   @IsString()
-  email: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @IsString()
   hr: string;

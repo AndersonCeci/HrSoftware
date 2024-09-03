@@ -1,59 +1,83 @@
-import { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useRef } from "react";
 import { ApplicantProps } from "../../../types/ApplicantProps";
 import useHttp from "../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
-import { message } from "antd";
+import { Form, message } from "antd";
+import { Filters } from "../RecruitmentContent";
+import { RecruitmentStage } from "../columns/constants";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
 
 export const useRecruitment = () => {
-  const { t } = useTranslation();
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
   const [editingRecord, setEditingRecord] = useState<ApplicantProps | null>(
-    null,
+    null
   );
   const [drawerState, setDrawerState] = useState<boolean>(false);
   const [isLoading, , sendRequest] = useHttp();
   const formRef = useRef<any>();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [file, setFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    sendRequest({ url: API }, (data) => {
-      setTableData(data);
-    });
-  }, []);
-  const fetchApplicant = async (id: string) => {
+  const fetchApplicants = async (
+    page: number,
+    limit: number,
+    filters: Filters
+  ) => {
     try {
-      return await axios.get(API, {
-        params: { id },
+      const response = await axios.get(API, {
+        params: { page, limit, filters },
       });
+      const { data, meta } = response.data;
+      console.log("data", data);
+      setTableData(data);
+      return meta.itemCount;
     } catch (error) {
       if (error instanceof AxiosError)
         message.error(
-          error.response?.data.errorDetails.message || error.message,
+          error.response?.data.errorDetails.message || error.message
         );
       message.error("Failed to retrieve applicant");
+    }
+  };
+
+  const createApplicant = async (newData: ApplicantProps) => {
+    try {
+      console.log("submitedDate", newData.dateSubmitted);
+      const updatedData = { ...newData, stage: RecruitmentStage.Applied };
+      const res = await axios.post(API, updatedData);
+      handleAddNew(res.data);
+      console.log("res submited date", res.data.submitedDate);
+      return res;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      message.error("Failed add applicant");
     }
   };
 
   const handleDelete = (id: string) => {
     sendRequest(useHttp.deleteRequestHelper(`${API}/${id}`));
     setTableData((prevData) =>
-      prevData.filter((item: ApplicantProps) => item._id !== id),
+      prevData.filter((item: ApplicantProps) => item._id !== id)
     );
   };
 
   const handleAddNew = (newData: ApplicantProps) => {
-    setTableData((prevData) => [...prevData, newData]);
+    setTableData((prevData) => [newData, ...prevData]);
     setIsEditModalVisible(false);
+    message.success(
+      `${newData.name} ${newData.surname} added to the applicants successfully`
+    );
   };
 
   const handleEdit = (newData: ApplicantProps) => {
     setTableData((prevData) =>
-      prevData.map((item) => (item._id === newData._id ? newData : item)),
+      prevData.map((item) => (item._id === newData._id ? newData : item))
     );
-    setIsEditModalVisible(false);
   };
 
   const handleEditButtonClick = (record: ApplicantProps) => {
@@ -78,24 +102,69 @@ export const useRecruitment = () => {
         throw new Error("File upload failed");
       }
 
-      // const uploadData = await uploadResponse.json();
-      // const fileUrl = uploadData.fileUrl;
+      const uploadData = await uploadResponse.json();
+      const fileUrl = uploadData.fileUrl;
 
-      // form.setFieldsValue({ cv: fileUrl });
-      // setFile(file);
+      form.setFieldsValue({ cv: fileUrl });
+      setFile(null);
     } catch (error) {
       console.error("File upload error:", error);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleUpload(file);
+  const updateApplicant = async (_id: string, values: any, step: number) => {
+    let updatedValues = {};
+    if (step === 1) {
+      updatedValues = {
+        firstInterview: { ...values },
+      };
+    }
+    if (step === 2) {
+      updatedValues = {
+        secondInterview: { ...values },
+      };
+    }
+    if (step === 3) {
+      updatedValues = { offerMade: { ...values } };
+    }
+
+    try {
+      const res = await axios.put(`${API}/${_id}`, updatedValues);
+      handleEdit(res.data);
+      message.success("Applicant updated successfully!");
+      return res;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      }
+    } finally {
+      // sendMailHelper("", {
+      //   sender: "",
+      //   recepients: [editingRecord?.email || ""],
+      //   subject: "",
+      //   text: "",
+      //   name: editingRecord?.name || "",
+      //   email: "",
+      //   password: "",
+      //   hr: "",
+      // });
     }
   };
+
+  const handleFileChange = async () => {
+    if (file) {
+      console.log(file, "fileeee");
+      // handleUpload(file);
+    } else {
+      message.error("No file chose");
+    }
+  };
+
   return {
-    t,
+    createApplicant,
+    form,
     tableData,
     editingRecord,
     drawerState,
@@ -109,7 +178,10 @@ export const useRecruitment = () => {
     handleEditButtonClick,
     handleOnClose,
     setEditingRecord,
-    fetchApplicant,
+    fetchApplicants,
     handleFileChange,
+    setFile,
+    handleUpload,
+    updateApplicant,
   };
 };

@@ -30,4 +30,5 @@ export type EventMenuProps = {
 	onOpenModal: () => void;
 	displayNoResult?: boolean;
 	onUserJoinEvent: (eventId: string) => void;
+	isSubmitting: boolean;
 };

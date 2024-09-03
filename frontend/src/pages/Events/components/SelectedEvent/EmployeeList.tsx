@@ -10,7 +10,7 @@ const API_URL = import.meta.env.REACT_APP_EVENTS_API;
 
 export default function EmployeeList() {
 	const [joinedEmployees, setJoinedEmlpoyees] = useState<EmployeeDataType[]>([]);
-	const [isLoading, error, fetchData] = useHttp();
+	const [isLoading, , fetchData] = useHttp();
 
 	useEffect(() => {
 		fetchData(
