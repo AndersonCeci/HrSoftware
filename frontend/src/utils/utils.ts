@@ -8,7 +8,7 @@ export function getFullName(name: string, surname: string) {
 	return `${name} ${surname}`;
 }
 
-export function getFromLocalStorage(key: string) {
+export function getFromLocalStorage(key: string = "userData") {
 	const value = localStorage.getItem(key);
 	if (value) {
 		return JSON.parse(value);
@@ -16,7 +16,7 @@ export function getFromLocalStorage(key: string) {
 	return null;
 }
 
-export function setToLocalStorage(key: string, value: any) {
+export function setToLocalStorage(key: string = "userData", value: any) {
 	localStorage.setItem(key, JSON.stringify(value));
 }
 
@@ -25,6 +25,6 @@ export function removeFromLocalStorage(key: string) {
 }
 
 export function isHR() {
-  const user = getFromLocalStorage("userData");
-  return user?.role === "hr";
+	const user = getFromLocalStorage("userData");
+	return user?.role === "hr";
 }
