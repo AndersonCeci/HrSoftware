@@ -12,6 +12,7 @@ type ModalProps = {
 	title?: string;
 	width?: number;
 	okBtnText?: string;
+	okBtnTextSubmitting?: string;
 };
 
 const Modal = ({
@@ -23,6 +24,7 @@ const Modal = ({
 	isLoading,
 	width,
 	okBtnText = t("submit"),
+	okBtnTextSubmitting = t("submitting"),
 }: ModalProps) => {
 	return (
 		<AntModal
@@ -43,8 +45,8 @@ const Modal = ({
 					</Button>
 				)}
 				{onOk && (
-					<Button type={ButtonType.PRIMARY} onClick={onOk}>
-						{isLoading ? t("submitting") : okBtnText}
+					<Button type={ButtonType.PRIMARY} onClick={onOk} disabled={isLoading}>
+						{isLoading ? okBtnTextSubmitting : okBtnText}
 					</Button>
 				)}
 			</Flex>

@@ -6,6 +6,9 @@ import {
   IsEnum,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
+import { Type } from 'class-transformer';
+import { InterviewDTO } from '../interviewDTO/interview.dto';
+import { OfferMadeDTO } from './OfferMade.dto';
 
 export class UpdateRecruitmentDto {
   @IsOptional()
@@ -35,6 +38,18 @@ export class UpdateRecruitmentDto {
   })
   @IsNotEmpty()
   readonly stage?: RecruitmentStage;
+
+  @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly firstInterview?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly secondInterview?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => OfferMadeDTO)
+  readonly offerMade?: OfferMadeDTO;
 
   @IsOptional()
   @IsString()
