@@ -1,15 +1,4 @@
-import {
-  ProfileOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-  FrownOutlined,
-  MehOutlined,
-} from "@ant-design/icons";
-import InterviewForm from "../components/form/InterviewForm";
-import OfferMadeForm from "../components/form/OfferMadeForm";
-import ApplicantForm from "../components/form/ApplicantForm";
-import { useRecruitmentContext } from "../context";
+import { SmileOutlined, FrownOutlined, MehOutlined } from "@ant-design/icons";
 
 const selectOption = [
   { label: "Applied", color: "cyan" },
@@ -84,39 +73,6 @@ const evaluationSteps = [
     value: "Positive",
   },
 ];
-
-// const items = [
-//   {
-//     title: RecruitmentStage.Applied,
-//     icon: <UserOutlined />,
-//     content: <ApplicantForm />,
-//   },
-//   {
-//     title: RecruitmentStage.FirstInterview,
-//     icon: <SolutionOutlined />,
-//     content: (
-//       <InterviewForm
-//         step={RecruitmentStage.FirstInterview}
-//         onInterviewersChange={handleInterviewersChange}
-//       />
-//     ),
-//   },
-//   {
-//     title: RecruitmentStage.SecondInterview,
-//     icon: <ProfileOutlined />,
-//     content: (
-//       <InterviewForm
-//         step={RecruitmentStage.SecondInterview}
-//         onInterviewersChange={handleInterviewersChange}
-//       />
-//     ),
-//   },
-//   {
-//     title: RecruitmentStage.OfferMade,
-//     icon: <SmileOutlined />,
-//     content: <OfferMadeForm />,
-//   },
-// ];
 
 const menuItems = [
   {

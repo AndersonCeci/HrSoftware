@@ -36,7 +36,7 @@ export class EventsService {
       throw new Error('Error creating event: ' + error.message);
     }
   }
-  
+
   async findAll(): Promise<Events[]> {
     return this.eventsModel.find({ isDeleted: false }).exec();
   }

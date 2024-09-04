@@ -1,5 +1,12 @@
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Employee, Position } from './schema/employe.schema';
@@ -126,12 +133,28 @@ export class EmployeeService {
     return employmentData;
   }
 
-  findLeft(): Promise<Employee[]> {
-    return this.employeeModel.find().exec();
-  }
+  // findLeft(): Promise<Employee[]> {
+  //   return this.employeeModel.find().exec();
+  // }
 
-  findOne(id: string) {
-    return this.employeeModel.findById(id).exec();
+  async findOne(id: string) {
+    try {
+      const employee = await this.employeeModel.findById(id);
+
+      if (!employee) {
+        throw new NotFoundException(`Employee with ID ${id} not found`);
+      }
+
+      return employee;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        `Failed to find employee with ID ${id}`,
+        error.message,
+      );
+    }
   }
 
   update(id: string, updateEmployeeDto: CreateEmployeeDto) {

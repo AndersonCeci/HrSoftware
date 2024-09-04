@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { TableProps } from "antd";
 import { createTableColumns } from "../../../components/Table/Table";
 import { IoDocumentAttach } from "react-icons/io5";
@@ -36,9 +36,6 @@ export const columns = ({
         </span>
       );
     },
-    // filterIcon: <SearchOutlined className="nav-menu-icon" />,
-    // onFilter: (inputValue, filter) =>
-    //   filter.name.toLowerCase().includes(inputValue.toLowerCase()),
   }),
   createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
   createTableColumns({
@@ -68,8 +65,6 @@ export const columns = ({
     dataIndex: "position",
     key: "position",
     width: "70px",
-    // filters: getAllUniqueValues(tableData, "position"),
-    // onFilter: (value, record) => record.position.indexOf(value) === 0,
   }),
   createTableColumns({
     title: "Application Phase",
@@ -84,7 +79,6 @@ export const columns = ({
         {value}
       </Tag>
     ),
-    // filters: getAllUniqueValues(tableData, "stage"),
     align: "center",
     width: 60,
     onFilter: (value, record) => record.stage.indexOf(value) === 0,
@@ -138,17 +132,6 @@ export const columns = ({
                 ></Button>
               </Tooltip>
             </Col>
-
-            {/* <Col>
-              <Tooltip title="Delete applicant" color="red">
-                <Button
-                  type={ButtonType.TEXT}
-                  block
-                  icon={<DeleteOutlined style={{ color: "red" }} />}
-                  onClick={() => {}}
-                ></Button>
-              </Tooltip>
-            </Col> */}
           </Row>
         </>
       );

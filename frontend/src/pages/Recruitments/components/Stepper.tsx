@@ -152,7 +152,6 @@ const Stepper = () => {
                   type="primary"
                   htmlType="submit"
                   onClick={() => {
-                    console.log("step", interviewers);
                     form.setFieldValue("interviewers", interviewers);
                     console.log("form values", form.getFieldsValue());
                     editingRecord
