@@ -1,32 +1,39 @@
 import { Form, Flex, Upload, Radio } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import MapInput from "./Map/MapInput";
-import Button from "../../../components/Shared/Button";
-import { UploadOutlined } from "@ant-design/icons";
-import { useRef, forwardRef, useImperativeHandle, useState } from "react";
-import { RcFile } from "antd/lib/upload/interface";
+
+import { useRef, forwardRef, useImperativeHandle, useState, useEffect } from "react";
 import useMap from "../hook/useMap";
+import useUpload from "../../../hooks/useUpload";
 import { t } from "i18next";
 
 type AddEventFormProps = {
-  onAdd: (event: any) => void;
+	onAdd: (event: any) => void;
+	onUploadChange: (isUploading: boolean) => void;
 };
 
-const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
+const AddEventForm = forwardRef(({ onAdd, onUploadChange }: AddEventFormProps, ref) => {
 	const [form] = Form.useForm();
 	const formRef = useRef<any>();
 	const [isMultipleDays, setIsMultipleDays] = useState(false);
-	const [isUploadingFiles, setIsUploadingFiles] = useState(false);
+	// const [fileList, setFileList] = useState<any[]>([]);
+	const { fileList, addNewFilesHandler, updateFilesUrlHandler, isUploading } = useUpload();
 
 	const map = useMap();
 
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      formRef.current.submit();
-    },
-  }));
+	useImperativeHandle(ref, () => ({
+		submit: () => {
+			formRef.current.submit();
+		},
+	}));
+
+	useEffect(() => {
+		onUploadChange(isUploading);
+	}, [isUploading]);
 
 	function onFinish(values: any) {
+		const images = fileList.map((file) => file.url);
+
 		const valuesToSubmit = {
 			...values,
 			eventDate: values.eventDate.format("YYYY-MM-DD"),
@@ -36,39 +43,11 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			eventStartTime: values.eventStartTime.format("HH:mm"),
 			eventEndTime: values.eventEndTime ? values.eventEndTime.format("HH:mm") : undefined,
 			location: map.locationData,
+			images: images,
 		};
 
-    onAdd(valuesToSubmit);
-  }
-
-	const handleUpload = async (files: (RcFile | undefined)[]) => {
-		const formData = new FormData();
-		files.forEach((file) => {
-			formData.append("files", file as File);
-		});
-
-		try {
-			setIsUploadingFiles(true);
-			const uploadResponse = await fetch("http://localhost:3000/files/upload", {
-				method: "POST",
-				body: formData,
-			});
-			const uploadData = await uploadResponse.json();
-			const fileUrls = uploadData.fileUrls;
-
-			form.setFieldsValue({ images: fileUrls });
-			setIsUploadingFiles(false);
-		} catch (error) {
-			console.error("File upload error:", error);
-		}
-	};
-
-	const handleFileChange = (info: any) => {
-		const files = info.fileList.map((file: any) => file.originFileObj as RcFile);
-		if (files.length > 0) {
-			handleUpload(files);
-		}
-	};
+		onAdd(valuesToSubmit);
+	}
 
 	return (
 		<Form
@@ -133,36 +112,14 @@ const AddEventForm = forwardRef(({ onAdd }: AddEventFormProps, ref) => {
 			<MapInput map={map} />
 
 			<FormInputs.Input label={t("eventDescription")} name="eventDescription" type="textarea" />
-
-			<Form.Item
-				label="Event Attachment"
+			<FormInputs.Upload
+				fileList={fileList}
+				addNewFilesHandler={addNewFilesHandler}
+				updateFilesUrlHandler={updateFilesUrlHandler}
 				name="images"
-				rules={[
-					{
-						required: true,
-						message: "Please upload event images",
-					},
-				]}
-			>
-				<Flex className="event-attachment-container">
-					<Upload
-						beforeUpload={() => {
-							return false;
-						}}
-						listType="picture-card"
-						multiple
-						maxCount={8}
-						onChange={(info) => {
-							const files: (RcFile | undefined)[] = info.fileList.map((file) => file.originFileObj);
-							if (files) {
-								handleUpload(files);
-							}
-						}}
-					>
-						<Button icon={<UploadOutlined />} type="dashed" size="large" shape="circle"></Button>
-					</Upload>
-				</Flex>
-			</Form.Item>
+				label={t("eventAttachment")}
+				required
+			/>
 		</Form>
 	);
 });

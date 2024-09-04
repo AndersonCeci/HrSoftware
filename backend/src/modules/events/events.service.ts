@@ -4,19 +4,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Events } from './schema/events.schema';
 import { Model } from 'mongoose';
 import { UpdateEventDto } from './eventsDTO/updateEvents.dto';
-import { User } from 'src/users/schemas/user.schema';
+import { Employee } from 'src/employee/schema/employe.schema';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(Events.name) private eventsModel: Model<Events>,
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Employee.name) private employeeModel: Model<Employee>,
   ) {}
 
   async create(createEventDto: CreateEventDto): Promise<Events> {
     try {
       const { creatorId, invitees, ...eventData } = createEventDto;
-      const user = await this.userModel.findById(creatorId);
+      const user = await this.employeeModel.findById(creatorId);
 
       if (!user) {
         throw new Error('User not found');
@@ -32,7 +32,8 @@ export class EventsService {
 
       return createdEvent.save();
     } catch (error) {
-      throw new Error(`Error creating event ${error}`);
+      console.error('Error creating event:', error);
+      throw new Error('Error creating event: ' + error.message);
     }
   }
 

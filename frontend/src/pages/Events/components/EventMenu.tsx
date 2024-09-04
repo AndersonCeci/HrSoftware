@@ -15,6 +15,7 @@ const EventMenu = ({
 	title,
 	displayNoResult = false,
 	onUserJoinEvent,
+	isSubmitting,
 }: EventMenuProps) => {
 	const isOnlyOneEvent = EventList.length === 1;
 	const [selectedEvent, setSelectedEvent] = useState<EvenType | undefined>(undefined);
@@ -28,9 +29,13 @@ const EventMenu = ({
 		if (selectedEvent) {
 			const isJoined = selectedEvent.eventParticipants.includes(employID);
 			setIsJoined(isJoined);
-			//! setSelectedEvent(selectedEvent);
 		}
 	}, [selectedEvent]);
+
+	function handleJoinButtonClick() {
+		onUserJoinEvent(selectedEvent!._id);
+		setIsJoined(true);
+	}
 
 	return EventList.length === 0 ? (
 		displayNoResult && <NoDataResult />
@@ -40,8 +45,10 @@ const EventMenu = ({
 				title={t("eventDetails")}
 				isOpen={!!selectedEvent}
 				onCancel={() => handleModalShow(undefined)}
-				onOk={!isJoined ? () => onUserJoinEvent(selectedEvent!._id) : undefined}
+				onOk={!isJoined ? () => handleJoinButtonClick() : undefined}
 				okBtnText={t("joinEvent")}
+				okBtnTextSubmitting={t("joining")}
+				isLoading={isSubmitting}
 			>
 				{selectedEvent && <ShowSelectedEvent selectedEvent={selectedEvent} />}
 			</Modal>

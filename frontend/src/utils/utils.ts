@@ -18,7 +18,7 @@ export function getFromLocalStorage(key: string = "userData") {
   return null;
 }
 
-export function setToLocalStorage(key: string, value: any) {
+export function setToLocalStorage(key: string = "userData", value: any) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
