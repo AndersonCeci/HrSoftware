@@ -24,6 +24,7 @@ const { Title } = Typography;
 interface User {
   _id: string;
   username: string;
+  employID: string;
 }
 
 interface NewEvent {
@@ -79,15 +80,15 @@ const EditNewEventForm = ({
     const user = users.find((user) => user._id === userId);
     if (user) {
       setSelectedUsers((prevSelectedUsers) => {
-        if (prevSelectedUsers.some((u) => u._id === user._id)) {
+        if (prevSelectedUsers.some((u) => u.employID === user.employID)) {
           message.info(`User ${user.username} is already selected`);
           return prevSelectedUsers;
         }
         message.info(`Selected user: ${user.username}`);
         const newSelectedUsers = [...prevSelectedUsers, user];
         onChanges(
-          newSelectedUsers.map((u) => u._id),
-          "invitee",
+          newSelectedUsers.map((u) => u.employID), 
+          "invitee"
         );
         return newSelectedUsers;
       });
@@ -110,28 +111,28 @@ const EditNewEventForm = ({
     message.info("User removed");
   };
 
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedUsers([]);
-      onChanges([], "invitee");
-    } else {
-      const allUsersExceptLoggedIn = users.filter(
-        (user) => user._id !== loggedInUserId,
-      );
-      setSelectedUsers(allUsersExceptLoggedIn);
-      onChanges(
-        allUsersExceptLoggedIn.map((u) => u._id),
-        "invitee",
-      );
-    }
-    setSelectAll(!selectAll);
-  };
+ const handleSelectAll = () => {
+   if (selectAll) {
+     setSelectedUsers([]);
+     onChanges([], "invitee");
+   } else {
+     const allUsersExceptLoggedIn = users.filter(
+       (user) => user.employID !== loggedInUserId
+     );
+     setSelectedUsers(allUsersExceptLoggedIn);
+     onChanges(
+       allUsersExceptLoggedIn.map((u) => u.employID),
+       "invitee"
+     );
+   }
+   setSelectAll(!selectAll);
+ };
 
   const menuItems = users
-    .filter((user) => user._id !== loggedInUserId)
+    .filter((user) => user.employID !== loggedInUserId)
     .map((user) => ({
       label: user.username,
-      key: user._id,
+      key: user._id, 
       icon: <UserOutlined />,
     }));
 
