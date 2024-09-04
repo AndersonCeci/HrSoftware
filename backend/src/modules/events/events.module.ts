@@ -4,16 +4,17 @@ import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { Events } from './schema/events.schema';
 import { EventsSchema } from './schema/events.schema';
-import { User, UserSchema } from 'src/users/schemas/user.schema';
-import { UsersModule } from 'src/users/users.module';
+
+import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
+import { EmployeeModule } from 'src/employee/employe.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Events.name, schema: EventsSchema },
-      { name: User.name, schema: UserSchema },
+      {name: Employee.name, schema: EmployeeSchema},
     ]),
-    UsersModule,
+    EmployeeModule,
   ],
   controllers: [EventsController],
   providers: [EventsService],
