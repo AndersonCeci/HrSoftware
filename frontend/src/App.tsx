@@ -16,13 +16,12 @@ const iterationRoutes = [
 	Paths.Employee,
 	Paths.Background,
 	Paths.DayOff,
-	// Paths.Settings,
 	Paths.Profile,
 ];
 
 const router = createBrowserRouter([
 	{
-		index: true,
+		path: Paths.Login.path,
 		element: <Paths.Login.pageElement />,
 	},
 	{

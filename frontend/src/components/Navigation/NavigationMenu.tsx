@@ -8,19 +8,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LogedUserPanel from "./LogedUserPanel";
 import { isHR } from "../../utils/utils";
-
-const isHr = isHR();
-
-const navElements = [
-	Paths.Dashboard,
-	...(isHr ? [Paths.Recruitment] : []),
-	...(isHr ? [Paths.Employee] : []),
-	Paths.Management,
-	Paths.DayOff,
-	Paths.Company,
-];
-
-console.log(navElements, "navElements");
+import { getMenuItemsByRole, getMenuItemType } from "../../utils/NavMenuHelper";
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
@@ -31,24 +19,30 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 
 	const location = useLocation();
 	const navigate = useNavigate();
-
+	const isHr = isHR();
+	const navElements = [
+		Paths.Dashboard,
+		...(isHr ? [Paths.Recruitment] : []),
+		...(isHr ? [Paths.Employee] : []),
+		Paths.Management,
+		Paths.DayOff,
+		Paths.Company,
+	];
 	const { t } = useTranslation();
 
 	const items: any = navElements.map((element) => {
 		return {
 			key: `${element.path}`,
 			label: t(element.path),
-			type: element.type ? element.type : null,
+			type: getMenuItemType(element, isHr),
 			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
 			children: element.children.map((subElement) => {
-				return {
-					key: `${subElement.path}`,
-					label: <NavLink to={`${element.path}/${subElement.path}`}>{t(subElement.path)}</NavLink>,
-					icon: <subElement.icon className="nav-menu-icon" />,
-				};
+				return getMenuItemsByRole(element, subElement, isHr);
 			}),
 		};
 	});
+
+	// const items = getNavMenuItems();
 
 	useEffect(() => {
 		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
@@ -59,9 +53,9 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		navigate("/");
 	};
 
-	console.log(defaultSelectedKey, "defaultSelectedKey");
+	// console.log(defaultSelectedKey, "defaultSelectedKey");
 	const [defaultSelect, defaultSubSelect] = defaultSelectedKey;
-	console.log(defaultSelect, defaultSubSelect, "defaultSelect, defaultSubSelect");
+	// console.log(defaultSelect, defaultSubSelect, "defaultSelect, defaultSubSelect");
 
 	return (
 		<Flex

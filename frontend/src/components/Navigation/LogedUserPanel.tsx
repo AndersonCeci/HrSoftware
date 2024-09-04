@@ -9,46 +9,47 @@ import { EmployeeDataType } from "../../pages/Employment/types/Employee";
 const { Meta } = Card;
 
 type LogedUserPanelProps = {
-  colapsed: boolean;
+	colapsed: boolean;
 };
-const userData = getFromLocalStorage("userData");
+
+const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
+	const userData = getFromLocalStorage();
 
-  const [employData, setEmployData] = useState<EmployeeDataType>();
-  const [, , fetchData] = useHttp();
+	const [employData, setEmployData] = useState<EmployeeDataType>();
+	const [, , fetchData] = useHttp();
 
-  useEffect(() => {
-    fetchData(
-      {
-        url: `http://localhost:3000/employees/${userData.employID}`,
-      },
+	useEffect(() => {
+		fetchData(
+			{
+				url: `${API}/${userData?.employID}`,
+			},
 
-      setEmployData
-    );
-  }, []);
+			setEmployData,
+		);
+	}, []);
 
-
-  return (
-    <>
-      <Link to={"/profile"}>
-        {!colapsed ? (
-          <Card className="loged-user-card">
-            <Meta
-              avatar={<Avatar size={"large"} src={employData?.profilePhoto} />}
-              title={userData.username}
-              description={userData.role}
-              className="loged-user-panel"
-            />
-          </Card>
-        ) : (
-          <Flex className="colapsed-avatar-container" justify="center">
-            <Avatar size={"large"} src={employData?.profilePhoto} />
-          </Flex>
-        )}
-      </Link>
-    </>
-  );
+	return (
+		<>
+			<Link to={"/profile"}>
+				{!colapsed ? (
+					<Card className="loged-user-card">
+						<Meta
+							avatar={<Avatar size={"large"} src={employData?.profilePhoto} />}
+							title={userData?.username}
+							description={userData?.role}
+							className="loged-user-panel"
+						/>
+					</Card>
+				) : (
+					<Flex className="colapsed-avatar-container" justify="center">
+						<Avatar size={"large"} src={employData?.profilePhoto} />
+					</Flex>
+				)}
+			</Link>
+		</>
+	);
 };
 
 export default LogedUserPanel;

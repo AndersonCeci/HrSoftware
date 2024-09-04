@@ -1,15 +1,22 @@
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 import { Injectable } from '@nestjs/common';
-import { OfferMade, Recruitment } from './schemas/recruitment.schema';
+import {
+  OfferMade,
+  Recruitment,
+  RecruitmentStage,
+} from './schemas/recruitment.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import { PaginatedDTO } from 'src/paginationDTO/paginated.dto';
+import { EventsService } from 'src/modules/events/events.service';
+import { Status } from 'src/modules/events/schema/events.schema';
 
 @Injectable()
 export class RecruitmentService {
   constructor(
     @InjectModel(Recruitment.name) private recruitmentModel: Model<Recruitment>,
+    private readonly eventsService: EventsService,
   ) {}
   async createRecruitment(
     createRecruitmentDto: CreateRecruitmentDto,
@@ -20,7 +27,7 @@ export class RecruitmentService {
       ).save();
       return newRecruit;
     } catch (error) {
-      throw new Error('Failed to create ');
+      throw new Error(`Failed to create ${error}`);
     }
   }
 
@@ -122,18 +129,55 @@ export class RecruitmentService {
     id: string,
     updateRecruitmentDto: UpdateRecruitmentDto,
   ) {
+    console.log('Update DTO:', updateRecruitmentDto);
     try {
-      const res = await this.recruitmentModel.findByIdAndUpdate(
+      const updatedRecruitment = await this.recruitmentModel.findByIdAndUpdate(
         new Types.ObjectId(id),
         updateRecruitmentDto,
-        {
-          new: true,
-        },
+        { new: true },
       );
-      console.log(res);
-      return res;
+
+      let interviewData;
+      if (updateRecruitmentDto.stage === RecruitmentStage.FirstInterview) {
+        interviewData = updateRecruitmentDto.firstInterview;
+      } else if (
+        updateRecruitmentDto.stage === RecruitmentStage.SecondInterview
+      ) {
+        interviewData = updateRecruitmentDto.secondInterview;
+      }
+
+      if (interviewData) {
+        console.log('herererertrrereryrfygdfwgjd');
+        console.log('Creating event with data:', {
+          title: `Interview scheduled for ${updateRecruitmentDto.stage}`,
+          startDate: interviewData.date || new Date(),
+          endDate: interviewData.date,
+          startTime: interviewData.date,
+          endTime: interviewData.date,
+          location: interviewData.location || '',
+          creatorId: interviewData.interviewers[0],
+          invitees: interviewData.interviewers,
+          status: Status.Scheduled,
+          isDeleted: false,
+        });
+        const event = await this.eventsService.create({
+          title: `Interview scheduled for ${updateRecruitmentDto.stage}`,
+          startDate: interviewData.date ?? new Date(),
+          endDate: interviewData.date ?? new Date(),
+          startTime: interviewData.date ?? new Date(),
+          endTime: interviewData.date ?? new Date(),
+          location: interviewData.location ?? '',
+          creatorId: interviewData.interviewers[0] ?? '',
+          invitees: interviewData.interviewers ?? '',
+          status: Status.Scheduled,
+          isDeleted: false,
+        });
+        console.log('Event Created:', event);
+      }
+
+      return updatedRecruitment;
     } catch (error) {
-      throw new Error(error);
+      throw new Error('Failed to update recruitment: ' + error);
     }
   }
 
@@ -145,5 +189,45 @@ export class RecruitmentService {
       { isDeleted: true, deleteDate: currentDate },
       { new: true },
     );
+  }
+  async getApplicationsPerMonth() {
+    const year = new Date().getFullYear();
+
+    const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
+    const endOfYear = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+    const dataset = await this.recruitmentModel.aggregate([
+      {
+        $match: {
+          submittedDate: {
+            $gte: startOfYear,
+            $lt: endOfYear,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$submittedDate' },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+    const allMonths = Array.from({ length: 12 }, (_, i) => ({
+      month: i,
+      count: 0,
+    }));
+
+    const result = allMonths.map((monthObj) => {
+      const existing = dataset.find((item) => item._id === monthObj.month);
+      return {
+        label: monthObj.month,
+        value: existing ? existing.count : 0,
+      };
+    });
+
+    return result;
   }
 }
