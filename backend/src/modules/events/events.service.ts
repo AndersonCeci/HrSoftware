@@ -32,7 +32,7 @@ export class EventsService {
 
       return createdEvent.save();
     } catch (error) {
-      throw new Error('Error creating event');
+      throw new Error(`Error creating event ${error}`);
     }
   }
 

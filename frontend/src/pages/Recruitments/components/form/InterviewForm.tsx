@@ -1,4 +1,4 @@
-import { Form, Input, Steps, Row, Select, Col, Button } from "antd";
+import { Form, Input, Steps, Row, Select, Col } from "antd";
 import { useRecruitmentContext } from "../../context";
 import {
   evaluationSteps,
@@ -6,11 +6,15 @@ import {
   RecruitmentStage,
 } from "../../columns/constants";
 import { EmployeeDetails } from "../../../../types/EmployeeDetailsProps";
-import { fetchEmployee } from "../../../../helpers/employee.helper";
+import {
+  fetchEmployee,
+  fetchEmployeeByID,
+} from "../../../../helpers/employee.helper";
 import { useState, useCallback, useEffect } from "react";
 import tagRender from "../tagRenderer";
 import { debounce } from "../../../../helpers/debounce.helper";
 import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
+import { getFromLocalStorage } from "../../../../utils/utils";
 
 const InterviewForm: React.FC<{
   step: string;
@@ -25,10 +29,23 @@ const InterviewForm: React.FC<{
   const [employeeOptions, setEmployeeOptions] = useState<EmployeeDetails[]>([]);
   const [selectedInterviewers, setSelectedInterviewers] = useState<
     EmployeeDetails[]
-  >(stage.interviewers || []);
+  >(stage.interviewers ?? []);
   const [current, setCurrent] = useState<number>(0);
 
   useEffect(() => {
+    const { employID } = getFromLocalStorage();
+    if (employID) {
+      fetchEmployeeByID(employID).then((user) => {
+        if (user) {
+          setEmployeeOptions((prevOptions) => {
+            if (!prevOptions.some((emp) => emp._id === user._id)) {
+              return [...prevOptions, user];
+            }
+            return prevOptions;
+          });
+        }
+      });
+    }
     const interviewerIds: string[] = selectedInterviewers
       .map((emp: any) => emp._id)
       .filter((id): id is string => id !== undefined);
@@ -132,13 +149,6 @@ const InterviewForm: React.FC<{
               />
             ))}
           </Steps>
-          <Button
-            onClick={() => {
-              console.log(selectedInterviewers);
-            }}
-          >
-            kot
-          </Button>
         </Row>
       </Form.Item>
     </>

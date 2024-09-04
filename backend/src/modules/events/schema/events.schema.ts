@@ -7,6 +7,7 @@ export enum Status {
   Cancelled = 'cancelled',
   Finished = 'finished',
   Ongoing = 'ongoing',
+  Scheduled = 'scheduled',
 }
 
 @Schema()

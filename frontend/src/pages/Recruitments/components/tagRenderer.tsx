@@ -14,7 +14,7 @@ const tagRender: CustomTagProps = (props) => {
 
   return (
     <Tag
-      color={"#1677ff"}
+      color={"cyan"}
       onMouseDown={onPreventMouseDown}
       closable={closable}
       onClose={onClose}
@@ -22,10 +22,8 @@ const tagRender: CustomTagProps = (props) => {
         marginInlineEnd: 4,
         padding: "2px 8px",
         margin: "3px",
-        backgroundColor: "rgba(24, 144, 255, 0.8)",
-        borderColor: "rgba(24, 144, 255, 1)",
       }}
-      closeIcon={<CloseOutlined style={{ color: "white" }} />}
+      closeIcon={<CloseOutlined />}
     >
       {capitalizeFirstLetter(label!.toString())}
     </Tag>
