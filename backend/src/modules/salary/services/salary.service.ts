@@ -239,4 +239,55 @@ export class SalaryService {
 
     return { start: startDate, end: endDate };
   }
+
+  async getTotalBonusesPerMonth(id: Types.ObjectId) {
+    const year = new Date().getFullYear();
+    const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
+    const endOfYear = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+    // Aggregate bonuses per month
+    const dataset = await this.salaryModel.aggregate([
+      {
+        $match: {
+          employeeID: id,
+          dateTaken: {
+            $gte: startOfYear,
+            $lt: endOfYear,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$dateTaken' },
+          totalBonuses: {
+            $sum: {
+              $reduce: {
+                input: '$bonuses',
+                initialValue: 0,
+                in: { $add: ['$$value', '$$this.amount'] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    const allMonths = Array.from({ length: 12 }, (_, i) => ({
+      month: i,
+      totalBonuses: 0,
+    }));
+
+    const result = allMonths.map((monthObj) => {
+      const existing = dataset.find((item) => item._id === monthObj.month);
+      return {
+        label: monthObj.month,
+        value: existing ? existing.totalBonuses : 0,
+      };
+    });
+
+    return result;
+  }
 }
