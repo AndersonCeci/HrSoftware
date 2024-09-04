@@ -68,7 +68,7 @@ export default function Upload({
 							handleUpload(files);
 						}
 					}}
-					disabled={isUploading}
+					disabled={isUploading || fileList.length >= 8}
 				>
 					<Button
 						icon={<UploadOutlined />}

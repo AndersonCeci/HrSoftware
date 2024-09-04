@@ -9,9 +9,11 @@ import {
   HttpException,
   Query,
   Put,
+  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 
 @Controller('recruitments')
@@ -19,10 +21,32 @@ export class RecruitmentsController {
   constructor(private recruitmentService: RecruitmentService) {}
 
   @Post()
-  createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
-    return this.recruitmentService.createRecruitment(createRecruitmentDto);
-  }
+  async createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
+    try {
+      const { submittedDate, ...rest } = createRecruitmentDto;
+      const formattedDate = new Date(submittedDate);
 
+      if (isNaN(formattedDate.getTime())) {
+        throw new BadRequestException('Invalid date format');
+      }
+
+      const result = await this.recruitmentService.createRecruitment({
+        ...rest,
+        submittedDate: formattedDate,
+      });
+
+      return result;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      console.error(`Error creating recruitment: ${error.message}`, error);
+
+      throw new InternalServerErrorException(
+        'An error occurred while creating recruitment',
+      );
+    }
+  }
   @Get()
   async getRecruitments(
     @Query('page') page: number = 1,
@@ -50,6 +74,15 @@ export class RecruitmentsController {
       return data;
     } catch (error) {
       throw new Error(error);
+    }
+  }
+
+  @Get('chart')
+  async getChartData() {
+    try {
+      return await this.recruitmentService.getApplicationsPerMonth();
+    } catch (error) {
+      throw new Error(`Error getting chart data : ${error}`);
     }
   }
 

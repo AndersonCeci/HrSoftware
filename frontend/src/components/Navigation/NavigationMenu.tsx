@@ -34,15 +34,15 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 
 	const { t } = useTranslation();
 
-	const items: any = navElements.map((element, index) => {
+	const items: any = navElements.map((element) => {
 		return {
-			key: `${element.path} ${index}`,
+			key: `${element.path}`,
 			label: t(element.path),
 			type: element.type ? element.type : null,
 			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
-			children: element.children.map((subElement, subIndex) => {
+			children: element.children.map((subElement) => {
 				return {
-					key: `${element.path}/${subElement.path} ${subIndex}`,
+					key: `${subElement.path}`,
 					label: <NavLink to={`${element.path}/${subElement.path}`}>{t(subElement.path)}</NavLink>,
 					icon: <subElement.icon className="nav-menu-icon" />,
 				};
@@ -59,6 +59,10 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		navigate("/");
 	};
 
+	console.log(defaultSelectedKey, "defaultSelectedKey");
+	const [defaultSelect, defaultSubSelect] = defaultSelectedKey;
+	console.log(defaultSelect, defaultSubSelect, "defaultSelect, defaultSubSelect");
+
 	return (
 		<Flex
 			vertical
@@ -73,10 +77,9 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 			<div className="top-menu-elements">
 				<LogedUserPanel colapsed={colapsed} />
 				<Menu
-					// onClick={onClick}/
 					className="side-nevigation-menu"
-					defaultSelectedKeys={[defaultSelectedKey[defaultSelectedKey.length - 1]]}
-					defaultOpenKeys={[defaultSelectedKey[defaultSelectedKey.length - 2]]}
+					defaultSelectedKeys={[defaultSubSelect ? defaultSubSelect : defaultSelect]}
+					defaultOpenKeys={[defaultSelect]}
 					spellCheck={true}
 					mode="inline"
 					items={items}

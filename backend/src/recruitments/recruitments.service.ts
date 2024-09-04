@@ -146,4 +146,44 @@ export class RecruitmentService {
       { new: true },
     );
   }
+  async getApplicationsPerMonth() {
+    const year = new Date().getFullYear();
+
+    const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
+    const endOfYear = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+    const dataset = await this.recruitmentModel.aggregate([
+      {
+        $match: {
+          submittedDate: {
+            $gte: startOfYear,
+            $lt: endOfYear,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$submittedDate' },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+    const allMonths = Array.from({ length: 12 }, (_, i) => ({
+      month: i,
+      count: 0,
+    }));
+
+    const result = allMonths.map((monthObj) => {
+      const existing = dataset.find((item) => item._id === monthObj.month);
+      return {
+        label: monthObj.month,
+        value: existing ? existing.count : 0,
+      };
+    });
+
+    return result;
+  }
 }
