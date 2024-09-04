@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsDate,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { InterviewDTO } from '../interviewDTO/interview.dto';
@@ -65,6 +66,7 @@ export class CreateRecruitmentDto {
   @IsOptional()
   readonly isDeleted?: boolean;
 
+  @IsDate()
   @IsOptional()
   @Type(() => Date)
   readonly deleteDate?: Date;

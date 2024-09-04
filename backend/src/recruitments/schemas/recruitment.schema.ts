@@ -71,7 +71,7 @@ export class Recruitment extends Document {
   cv: string;
 
   @Prop()
-  submittedDate: string;
+  submittedDate: Date;
 
   @Prop({ default: false })
   isDeleted: boolean;

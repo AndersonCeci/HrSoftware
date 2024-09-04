@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsDate,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { Type } from 'class-transformer';
@@ -59,5 +60,7 @@ export class UpdateRecruitmentDto {
   @IsString()
   readonly cv?: string;
 
+  @IsOptional()
+  @IsDate()
   readonly submittedDate: Date;
 }
