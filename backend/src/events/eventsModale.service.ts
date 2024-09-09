@@ -25,23 +25,19 @@ export class EventsService {
   }
 
   async assignEmployee(eventID: string, joinEmployee: string): Promise<any> {
-    
     await this.eventModel.findByIdAndUpdate(
       eventID,
       {
         $push: { eventParticipants: joinEmployee },
       },
-      { new: true }, 
+      { new: true },
     );
 
-    
     const events = await this.eventModel.aggregate([
       {
-       
         $match: { _id: new Types.ObjectId(eventID), isDeleted: false },
       },
       {
-       
         $addFields: {
           eventParticipants: {
             $map: {
@@ -60,16 +56,14 @@ export class EventsService {
         },
       },
       {
-        
         $lookup: {
-          from: 'employees', 
+          from: 'employees',
           localField: 'eventParticipants',
           foreignField: '_id',
           as: 'eventParticipants',
         },
       },
       {
-       
         $addFields: {
           eventParticipants: {
             $map: {
@@ -78,14 +72,13 @@ export class EventsService {
               in: {
                 _id: '$$participant._id',
                 fullName: '$$participant.fullName',
-               
               },
             },
           },
         },
       },
+   
       {
-       
         $project: {
           _id: 1,
           eventName: 1,
@@ -105,22 +98,22 @@ export class EventsService {
           eventStartTime: 1,
           eventEndTime: 1,
           location: 1,
-          eventParticipants: 1, 
+          eventParticipants: 1,
           images: 1,
           isDeleted: 1,
           __v: 1,
         },
       },
       // {
-       
+
       //   $sort: { eventDate: 1 },
       // },
       // {
-       
+
       //   $skip: 0,
       // },
       // {
-      //   $limit: 1, 
+      //   $limit: 1,
       // },
     ]);
 
@@ -175,9 +168,17 @@ export class EventsService {
   // }
 
   async findAll(): Promise<Event[]> {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     const events = await this.eventModel.aggregate([
       {
         $match: { isDeleted: false },
+      },
+
+      {
+        $match: {
+          eventDate: { $gte: currentDate },
+        },
       },
       {
         $addFields: {
