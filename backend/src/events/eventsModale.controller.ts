@@ -6,13 +6,13 @@ import {
   Delete,
   HttpException,
   Param,
-  Query,
+  
   Patch,
   BadRequestException,
 } from '@nestjs/common';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { EventsService } from './eventsModale.service';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Query, Types } from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
 
 
@@ -27,10 +27,15 @@ export class EventsController {
     return this.eventsService.createEvent(createEventDto);
   }
 
-  @Get()
-  async getEvent() {
-    return this.eventsService.findAll();
-  }
+  //  @Get()
+  //  async getEvent(query:Query) {
+  //    return this.eventsService.getEvent(query);
+  //  }
+
+    @Get()
+   async getEvent() {
+     return this.eventsService.findAll();
+   }
 
   @Patch('assign/:id')
   async assignEmployee(
