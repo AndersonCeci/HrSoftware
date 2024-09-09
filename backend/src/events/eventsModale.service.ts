@@ -28,35 +28,135 @@ export class EventsService {
     const joinEmploy = this.eventModel.findByIdAndUpdate(eventID, {
       $push: { eventParticipants: joinEmployee },
     });
+    console.log(typeof joinEmploy);
     return joinEmploy;
+  }
+
+  async populateEmployee(
+    eventID: string,
+    joinEmployee: string,
+  ): Promise<Event> {
+    const joinEmploy = this.eventModel.findByIdAndUpdate(eventID, {
+      $push: { eventParticipants: joinEmployee },
+    });
+    const ok = await this.eventModel.findById(eventID).populate('joinEmploy');
+    return ok;
+  }
+
+  async checkParticipantType() {
+    const event = await this.eventModel.findOne({ eventName: 'hockey' });
+    console.log(typeof event.eventParticipants[0]);
+    return event;
   }
 
   async unassignAllEmployeesFromAllEvents() {
     const result = await this.eventModel
       .updateMany(
-        {}, 
+        {},
         {
-          $set: { eventParticipants: [] }, 
+          $set: { eventParticipants: [] },
         },
       )
       .exec();
   }
 
-  async getEvent(query: Query): Promise<Event[]> {
-    const resPerPage = 10;
-    const currentPage = Number(query.page) || 1;
-    const skip = resPerPage * (currentPage - 1);
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+  // async getEvent(query: Query): Promise<Event[]> {
+  //   const resPerPage = 10;
+  //   const currentPage = Number(query.page) || 1;
+  //   const skip = resPerPage * (currentPage - 1);
+  //   const currentDate = new Date();
+  //   currentDate.setHours(0, 0, 0, 0);
 
-    const events = await this.eventModel
-      .find({
-        eventDate: { $gte: currentDate },
-        isDeleted: false,
-      })
-      .limit(resPerPage)
-      .skip(skip)
-      .exec();
+  //   const events = await this.eventModel
+  //     .find({
+  //       eventDate: { $gte: currentDate },
+  //       isDeleted: false,
+  //     })
+  //     .limit(resPerPage)
+  //     .skip(skip)
+  //     .exec();
+
+  //   return events;
+  // }
+
+  async findAll(): Promise<Event[]> {
+    const events = await this.eventModel.aggregate([
+      {
+        $match: { isDeleted: false },
+      },
+      {
+        $addFields: {
+          eventParticipants: {
+            $map: {
+              input: '$eventParticipants',
+              as: 'participantId',
+              in: {
+                $convert: {
+                  input: '$$participantId',
+                  to: 'objectId',
+                  onError: '$$participantId',
+                  onNull: '$$participantId',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'employees',
+          localField: 'eventParticipants',
+          foreignField: '_id',
+          as: 'eventParticipants',
+        },
+      },
+      {
+        $addFields: {
+          eventParticipants: {
+            $map: {
+              input: '$eventParticipants',
+              as: 'participant',
+              in: {
+                _id: '$$participant._id',
+                fullName: '$$participant.fullName',
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          eventName: 1,
+          eventDescription: 1,
+          eventDate: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$eventDate',
+            },
+          },
+          eventEndDate: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$eventEndDate',
+            },
+          },
+          eventStartTime: 1,
+          eventEndTime: 1,
+          location: 1,
+          eventParticipants: 1,
+          images: 1,
+          isDeleted: 1,
+          __v: 1,
+        },
+      },
+      {
+        $sort: { eventDate: 1 },
+      },
+
+      { $skip: 10 },
+      { $limit: 10 },
+    ]);
 
     return events;
   }
