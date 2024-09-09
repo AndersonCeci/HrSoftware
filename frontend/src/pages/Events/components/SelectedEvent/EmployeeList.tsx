@@ -24,7 +24,9 @@ export default function EmployeeList({ selectedEvent }: { selectedEvent: any }) 
 								<Avatar
 									style={{
 										backgroundColor: stringToHashCodeHelper(item.fullName),
-										color: "white",
+										color: "black",
+										fontSize: "1.2rem",
+										fontFamily: "Roboto",
 									}}
 									alt={item.fullName}
 								>

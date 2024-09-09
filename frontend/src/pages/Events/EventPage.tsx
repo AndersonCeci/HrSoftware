@@ -70,7 +70,7 @@ const EventPage: React.FC = () => {
 						if (event._id === eventId) {
 							return {
 								...event,
-								eventParticipants: [...event.eventParticipants, response.eventParticipants],
+								eventParticipants: [...event.eventParticipants, ...response.eventParticipants],
 							};
 						}
 						return event;

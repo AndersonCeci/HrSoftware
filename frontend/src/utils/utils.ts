@@ -42,3 +42,5 @@ function hashCode(str: string) {
 export function stringToHashCodeHelper(str: string) {
 	return `hsl(${hashCode(str) % 360}, 100%, 80%)`;
 }
+
+
