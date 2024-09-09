@@ -23,7 +23,7 @@ const RootLayout: React.FC = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		console.log("Token is null");
+		// console.log("Token is null");
 		if (token === null) {
 			navigate("/");
 		}

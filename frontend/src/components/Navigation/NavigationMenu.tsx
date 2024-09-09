@@ -1,22 +1,16 @@
 import Button from "../Shared/Button";
 import { Flex, Menu } from "antd";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Paths } from "../../utils/paths";
 import "../../styles/Navigation/NavigationMenu.css";
 import { LogoutOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LogedUserPanel from "./LogedUserPanel";
 import { isHR } from "../../utils/utils";
 import { getMenuItemsByRole, getMenuItemType } from "../../utils/NavMenuHelper";
+import { useEffect } from "react";
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
-	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-		useLocation()
-			.pathname.split("/")
-			.filter((x) => x),
-	);
-
 	const location = useLocation();
 	const navigate = useNavigate();
 	const isHr = isHR();
@@ -30,9 +24,9 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	];
 	const { t } = useTranslation();
 
-	const items: any = navElements.map((element) => {
+	const items: any = navElements.map((element, index) => {
 		return {
-			key: `${element.path}`,
+			key: `${element.path} ${index}`,
 			label: t(element.path),
 			type: getMenuItemType(element, isHr),
 			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
@@ -42,20 +36,23 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		};
 	});
 
-	// const items = getNavMenuItems();
-
 	useEffect(() => {
-		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+		const currentPath = location.pathname.split("/").filter((x) => x);
+		
+		console.log("currentPath", currentPath);
+
+
+
 	}, [location.pathname]);
 
-	const handleClick = () => {
+	const handleLogOutClick = () => {
 		localStorage.removeItem("userData");
 		navigate("/");
 	};
 
-	// console.log(defaultSelectedKey, "defaultSelectedKey");
+	const defaultSelectedKey = location.pathname.split("/").filter((x) => x);
 	const [defaultSelect, defaultSubSelect] = defaultSelectedKey;
-	// console.log(defaultSelect, defaultSubSelect, "defaultSelect, defaultSubSelect");
+	const itemKey = items.find((item: any) => item.key.includes(defaultSelect));
 
 	return (
 		<Flex
@@ -73,7 +70,8 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 				<Menu
 					className="side-nevigation-menu"
 					defaultSelectedKeys={[defaultSubSelect ? defaultSubSelect : defaultSelect]}
-					defaultOpenKeys={[defaultSelect]}
+					defaultOpenKeys={[itemKey?.key]}
+					activeKey={""}
 					spellCheck={true}
 					mode="inline"
 					items={items}
@@ -81,7 +79,7 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 			</div>
 
 			<div className="logout-button-container">
-				<Button type="text" danger size="large" onClick={handleClick}>
+				<Button type="text" danger size="large" onClick={handleLogOutClick}>
 					<LogoutOutlined />
 					{!colapsed ? t(`logOut`) : ""}
 				</Button>
