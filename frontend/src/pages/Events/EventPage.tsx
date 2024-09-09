@@ -63,13 +63,14 @@ const EventPage: React.FC = () => {
 			useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
 				joinEmployee: user.employID,
 			}),
-			() => {
+			(response) => {
+				console.log("response", response);
 				setLoadedEvents((prevEvents) => {
 					return prevEvents.map((event) => {
 						if (event._id === eventId) {
 							return {
 								...event,
-								eventParticipants: [...event.eventParticipants, user.employID],
+								eventParticipants: [...event.eventParticipants, response.eventParticipants],
 							};
 						}
 						return event;

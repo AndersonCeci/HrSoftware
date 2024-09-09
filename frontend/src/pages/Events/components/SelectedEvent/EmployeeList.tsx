@@ -1,53 +1,64 @@
 import { Avatar, List, Typography } from "antd";
-import { useState, useEffect } from "react";
-import useHttp from "../../../../hooks/useHttp";
-import { EmployeeDataType } from "../../../Employment/types/Employee";
-import Loader from "../../../../components/Shared/Loader";
 import { t } from "i18next";
-import CODEVIDERNOIMAGELOGO from "../../../../assets/image 99.png";
 
-const API_URL = import.meta.env.REACT_APP_EVENTS_API;
+function hashmapValueToColor(value: string) {
+	const allChars = value.split("");
 
-export default function EmployeeList() {
-	const [joinedEmployees, setJoinedEmlpoyees] = useState<EmployeeDataType[]>([]);
-	const [isLoading, , fetchData] = useHttp();
+	let sum = 0;
+	for (let i in allChars) {
+		sum += allChars[i].charCodeAt(0) ^ 255;
+	}
 
-	useEffect(() => {
-		fetchData(
-			{
-				url: `${API_URL}/events/joined-employees`,
-			},
-			(data) => {
-				setJoinedEmlpoyees(data ? data : []);
-			},
-		);
-	}, []);
+	const scaledSum = Math.abs(sum) % 0xffffff;
+	return convertNumToColorHex(scaledSum);
+}
+
+function convertNumToColorHex(num: number) {
+	const hex = num.toString(16).padStart(3, "0");
+	console.log("hex", hex);
+	const reversedHex = hex.split("").reverse().join("");
+
+	console.log(`#${hex}${reversedHex}`);
+	return `#${reversedHex}${hex}`;
+}
+
+export default function EmployeeList({ selectedEvent }: { selectedEvent: any }) {
+	const joinedEmployees = selectedEvent.eventParticipants.map(
+		(employee: { fullName: string; _id: string }) => employee.fullName,
+	);
+
+	console.log("selectedEvent", joinedEmployees);
 
 	return (
 		<section className="employee-list-container">
-			{!isLoading ? (
-				<List
-					header={
-						<Typography.Title level={4}>
-							<strong>{t("joinedEmployees")}:</strong> {joinedEmployees.length}
-						</Typography.Title>
-					}
-					size="small"
-					itemLayout="horizontal"
-					dataSource={[1, 2, 34]}
-					renderItem={(item) => (
-						<List.Item>
-							<List.Item.Meta
-								title={item}
-								avatar={<Avatar src={CODEVIDERNOIMAGELOGO} size={"small"} />}
-								// description={<span>{new Date().toLocaleDateString()}</span>}
-							/>
-						</List.Item>
-					)}
-				/>
-			) : (
-				<Loader />
-			)}
+			<List
+				header={
+					<Typography.Title level={4}>
+						<strong>{t("joinedEmployees")}:</strong> {joinedEmployees.length}
+					</Typography.Title>
+				}
+				size="small"
+				itemLayout="horizontal"
+				dataSource={joinedEmployees}
+				renderItem={(item: string) => (
+					<List.Item>
+						<List.Item.Meta
+							title={item}
+							avatar={
+								<Avatar
+									style={{
+										backgroundColor: hashmapValueToColor(item),
+										color: "white",
+									}}
+									alt={item}
+								>
+									{item[0]}
+								</Avatar>
+							}
+						/>
+					</List.Item>
+				)}
+			/>
 		</section>
 	);
 }

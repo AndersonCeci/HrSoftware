@@ -12,9 +12,8 @@ import EmployeeList from "./EmployeeList";
 import { isHR } from "../../../../utils/utils";
 import { t } from "i18next";
 
-const isHr = isHR();
-
 const ShowSelectedEvent = ({ selectedEvent }: { selectedEvent: EvenType }) => {
+	const isHr = isHR();
 	return (
 		<section className="show-event-container">
 			<Typography.Title className="event-name-text">{selectedEvent.eventName}</Typography.Title>
@@ -35,7 +34,7 @@ const ShowSelectedEvent = ({ selectedEvent }: { selectedEvent: EvenType }) => {
 				<SelectedEventInformation selectedEvent={selectedEvent} />
 			</Flex>
 
-			{isHr && <EmployeeList />}
+			{isHr && <EmployeeList selectedEvent={selectedEvent} />}
 		</section>
 	);
 };
