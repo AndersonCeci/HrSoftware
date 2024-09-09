@@ -32,7 +32,7 @@ export class EventsController {
   //    return this.eventsService.getEvent(query);
   //  }
 
-    @Get()
+  @Get()
    async getEvent() {
      return this.eventsService.findAll();
    }

@@ -25,18 +25,23 @@ export class EventsService {
   }
 
   async assignEmployee(eventID: string, joinEmployee: string): Promise<any> {
-    const joinEmploy = await this.eventModel.findByIdAndUpdate(
+    
+    await this.eventModel.findByIdAndUpdate(
       eventID,
       {
         $push: { eventParticipants: joinEmployee },
       },
-      { new: true },
+      { new: true }, 
     );
+
+    
     const events = await this.eventModel.aggregate([
       {
-        $match: { isDeleted: false },
+       
+        $match: { _id: new Types.ObjectId(eventID), isDeleted: false },
       },
       {
+       
         $addFields: {
           eventParticipants: {
             $map: {
@@ -55,14 +60,16 @@ export class EventsService {
         },
       },
       {
+        
         $lookup: {
-          from: 'employees',
+          from: 'employees', 
           localField: 'eventParticipants',
           foreignField: '_id',
           as: 'eventParticipants',
         },
       },
       {
+       
         $addFields: {
           eventParticipants: {
             $map: {
@@ -71,12 +78,14 @@ export class EventsService {
               in: {
                 _id: '$$participant._id',
                 fullName: '$$participant.fullName',
+               
               },
             },
           },
         },
       },
       {
+       
         $project: {
           _id: 1,
           eventName: 1,
@@ -96,21 +105,26 @@ export class EventsService {
           eventStartTime: 1,
           eventEndTime: 1,
           location: 1,
-          eventParticipants: 1,
+          eventParticipants: 1, 
           images: 1,
           isDeleted: 1,
           __v: 1,
         },
       },
-      {
-        $sort: { eventDate: 1 },
-      },
-
-      { $skip: 10 },
-      { $limit: 10 },
+      // {
+       
+      //   $sort: { eventDate: 1 },
+      // },
+      // {
+       
+      //   $skip: 0,
+      // },
+      // {
+      //   $limit: 1, 
+      // },
     ]);
 
-    return events;
+    return events[0];
   }
 
   async populateEmployee(
@@ -231,12 +245,12 @@ export class EventsService {
           __v: 1,
         },
       },
-      {
-        $sort: { eventDate: 1 },
-      },
+      // {
+      //   $sort: { eventDate: 1 },
+      // },
 
-      { $skip: 10 },
-      { $limit: 10 },
+      // { $skip: 10 },
+      // { $limit: 10 },
     ]);
 
     return events;
