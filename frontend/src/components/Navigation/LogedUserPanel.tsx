@@ -1,7 +1,7 @@
 import { Avatar, Card, Flex } from "antd";
 import "../../styles/Navigation/LogedUserPanel.css";
 import { Link } from "react-router-dom";
-import { getFromLocalStorage } from "../../utils/utils";
+import { getFromLocalStorage, stringToHashCodeHelper } from "../../utils/utils";
 import useHttp from "../../hooks/useHttp";
 import { useEffect, useState } from "react";
 import { EmployeeDataType } from "../../pages/Employment/types/Employee";
@@ -18,6 +18,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 	const userData = getFromLocalStorage();
 
 	const [employData, setEmployData] = useState<EmployeeDataType>();
+	const hasProfilePicture = !!employData?.profilePhoto;
 	const [, , fetchData] = useHttp();
 
 	useEffect(() => {
@@ -30,13 +31,31 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 		);
 	}, []);
 
+	function renderAvatar() {
+		if (hasProfilePicture) {
+			return <Avatar size={"large"} src={employData?.profilePhoto} />;
+		} else {
+			return (
+				<Avatar
+					size={"large"}
+					style={{
+						backgroundColor: stringToHashCodeHelper(userData?.username),
+						color: "white",
+					}}
+				>
+					{userData?.username[0]}
+				</Avatar>
+			);
+		}
+	}
+
 	return (
 		<>
 			<Link to={"/profile"}>
 				{!colapsed ? (
 					<Card className="loged-user-card">
 						<Meta
-							avatar={<Avatar size={"large"} src={employData?.profilePhoto} />}
+							avatar={renderAvatar()}
 							title={userData?.username}
 							description={userData?.role}
 							className="loged-user-panel"
@@ -44,7 +63,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 					</Card>
 				) : (
 					<Flex className="colapsed-avatar-container" justify="center">
-						<Avatar size={"large"} src={employData?.profilePhoto} />
+						{renderAvatar()}
 					</Flex>
 				)}
 			</Link>

@@ -24,12 +24,93 @@ export class EventsService {
     return event;
   }
 
-  async assignEmployee(eventID: string, joinEmployee: string): Promise<Event> {
-    const joinEmploy = this.eventModel.findByIdAndUpdate(eventID, {
-      $push: { eventParticipants: joinEmployee },
-    });
-    console.log(typeof joinEmploy);
-    return joinEmploy;
+  async assignEmployee(eventID: string, joinEmployee: string): Promise<any> {
+    const joinEmploy = await this.eventModel.findByIdAndUpdate(
+      eventID,
+      {
+        $push: { eventParticipants: joinEmployee },
+      },
+      { new: true },
+    );
+    const events = await this.eventModel.aggregate([
+      {
+        $match: { isDeleted: false },
+      },
+      {
+        $addFields: {
+          eventParticipants: {
+            $map: {
+              input: '$eventParticipants',
+              as: 'participantId',
+              in: {
+                $convert: {
+                  input: '$$participantId',
+                  to: 'objectId',
+                  onError: '$$participantId',
+                  onNull: '$$participantId',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'employees',
+          localField: 'eventParticipants',
+          foreignField: '_id',
+          as: 'eventParticipants',
+        },
+      },
+      {
+        $addFields: {
+          eventParticipants: {
+            $map: {
+              input: '$eventParticipants',
+              as: 'participant',
+              in: {
+                _id: '$$participant._id',
+                fullName: '$$participant.fullName',
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          eventName: 1,
+          eventDescription: 1,
+          eventDate: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$eventDate',
+            },
+          },
+          eventEndDate: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$eventEndDate',
+            },
+          },
+          eventStartTime: 1,
+          eventEndTime: 1,
+          location: 1,
+          eventParticipants: 1,
+          images: 1,
+          isDeleted: 1,
+          __v: 1,
+        },
+      },
+      {
+        $sort: { eventDate: 1 },
+      },
+
+      { $skip: 10 },
+      { $limit: 10 },
+    ]);
+
+    return events;
   }
 
   async populateEmployee(
