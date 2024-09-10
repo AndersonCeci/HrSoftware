@@ -7,12 +7,13 @@ import { columns as generateColumns } from "./columns/columns";
 import usePagination from "../../hooks/usePagination";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Col, message, Row, Select } from "antd";
+import { Button, Col, message, Row, Select } from "antd";
 import { menuItems, referenceItems } from "./columns/constants";
 import React from "react";
 import Search from "antd/lib/input/Search";
 import { useSearchParams } from "react-router-dom";
 import { getDevRoles } from "../Employment/utils/helperFunctions";
+import { ButtonType } from "../../enums/Button";
 
 export interface Filters {
   name?: string | null;
@@ -107,6 +108,18 @@ export const RecruitmentContent: React.FC = () => {
     setFilters(newFilters);
     updateSearchParams(newFilters);
   };
+  const handleClearFilters = () => {
+    const clearedFilters: Filters = {
+      name: null,
+      surname: null,
+      stage: null,
+      reference: null,
+      position: null,
+    };
+    setFilters(clearedFilters);
+    setSearchParams(new URLSearchParams());
+  };
+
   const positions = getDevRoles().map((role) => ({
     label: role,
     value: role,
@@ -153,7 +166,7 @@ export const RecruitmentContent: React.FC = () => {
               label: item?.label,
               value: item?.key,
             }))}
-            defaultValue={filters.stage!}
+            value={filters.stage}
             onChange={handleStageChange}
           />
         </Col>
@@ -166,7 +179,7 @@ export const RecruitmentContent: React.FC = () => {
               label: item?.label,
               value: item?.key,
             }))}
-            defaultValue={filters.reference!}
+            value={filters.reference}
             onChange={handleReferenceChange}
           />
         </Col>
@@ -177,8 +190,13 @@ export const RecruitmentContent: React.FC = () => {
             style={{ width: 200 }}
             options={positions}
             onChange={handlePositionChange}
-            defaultValue={filters.position!}
+            value={filters.position}
           />
+        </Col>
+        <Col>
+          <Button onClick={handleClearFilters} type={ButtonType.PRIMARY}>
+            Clear filters
+          </Button>
         </Col>
       </Row>
       <Table

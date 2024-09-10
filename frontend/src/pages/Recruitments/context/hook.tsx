@@ -112,20 +112,39 @@ export const useRecruitment = () => {
     }
   };
 
-  const updateApplicant = async (_id: string, values: any, step: number) => {
+  const updateApplicant = async (
+    _id: string,
+    values: ApplicantProps,
+    step: number
+  ) => {
     let updatedValues = {};
-    if (step === 1) {
-      updatedValues = {
-        firstInterview: { ...values },
-      };
-    }
-    if (step === 2) {
-      updatedValues = {
-        secondInterview: { ...values },
-      };
-    }
-    if (step === 3) {
-      updatedValues = { offerMade: { ...values } };
+    let stage: RecruitmentStage = RecruitmentStage.Applied;
+
+    const { stage: currentStage } = editingRecord || {};
+
+    switch (step) {
+      case 0:
+        updatedValues = { ...values };
+        break;
+      case 1:
+        if (currentStage === RecruitmentStage.Applied) {
+          stage = RecruitmentStage.FirstInterview;
+        }
+        updatedValues = { stage, firstInterview: { ...values } };
+        break;
+      case 2:
+        if (currentStage !== RecruitmentStage.OfferMade) {
+          stage = RecruitmentStage.SecondInterview;
+        }
+        updatedValues = { stage, secondInterview: { ...values } };
+        break;
+      case 3:
+        stage = RecruitmentStage.OfferMade;
+        updatedValues = { stage, offerMade: { ...values } };
+        break;
+      default:
+        message.error("Invalid step");
+        return;
     }
 
     try {
@@ -138,6 +157,8 @@ export const useRecruitment = () => {
         message.error(
           error.response?.data.errorDetails.message || error.message
         );
+      } else {
+        message.error("An unexpected error occurred.");
       }
     } finally {
       // sendMailHelper("", {

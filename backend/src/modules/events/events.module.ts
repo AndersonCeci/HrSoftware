@@ -18,5 +18,6 @@ import { EmployeeModule } from 'src/employee/employe.module';
   ],
   controllers: [EventsController],
   providers: [EventsService],
+  exports: [EventsService],
 })
 export class EventsModule {}
