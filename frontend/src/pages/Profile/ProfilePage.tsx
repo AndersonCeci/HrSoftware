@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
     localStorage.getItem("userData") || "{}"
   ).employID;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isLoading, error, sendRequest] = useHttp();
+  const [isLoading, , sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const { t } = useTranslation();
   const [avatarUrl, setAvatarUrl] = useState<string>("");

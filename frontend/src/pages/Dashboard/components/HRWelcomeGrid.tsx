@@ -60,7 +60,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
             style={{ justifyContent: "space-between" }}
           >
             <Col>
-              <Card className="pie-chart">
+              <Card className="pie-chart" style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}>
                 <Title className="title-piechart">
                   {t(`attendanceOverview`)}
                 </Title>
