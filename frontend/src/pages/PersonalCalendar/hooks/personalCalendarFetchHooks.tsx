@@ -62,12 +62,12 @@ const useEvents = () => {
 
   useEffect(() => {
     const fetchAllEvents = async () => {
-      const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}",
-      ).userId;
+      const employID = JSON.parse(
+        localStorage.getItem("userData") || "{}"
+      ).employID;
       const [creatorEvents, inviteeEvents] = await Promise.all([
-        fetchEventsByCriteria("byCreator", userId),
-        fetchEventsByCriteria("invitee", userId),
+        fetchEventsByCriteria("byCreator", employID),
+        fetchEventsByCriteria("invitee", employID),
       ]);
       setAllEvents([...creatorEvents, ...inviteeEvents]);
     };
@@ -78,8 +78,8 @@ const useEvents = () => {
   const addNewEvent = async (newEvent: NewEvent) => {
     try {
       const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}",
-      ).userId;
+        localStorage.getItem("userData") || "{}"
+      ).employID;
       const response = await fetch(`http://localhost:3000/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

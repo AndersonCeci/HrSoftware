@@ -48,7 +48,7 @@ export class Employee extends Document {
 
   @Prop({ type: String, enum: EmploymentStatus })
   @IsEnum(EmploymentStatus)
-  status: EmploymentStatus;
+  status: string;
 
   @Prop()
   startingDate: string;

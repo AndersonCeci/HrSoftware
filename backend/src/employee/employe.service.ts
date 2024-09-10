@@ -1,5 +1,12 @@
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Employee, Position } from './schema/employe.schema';
@@ -10,13 +17,15 @@ import { Role, User } from 'src/users/schemas/user.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-
+    // @InjectModel(User.name) private readonly userModel: Model<User>,
+    @Inject(forwardRef(() => InventoryService))
+    private readonly inventoryService: InventoryService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
   ) {}
@@ -95,6 +104,7 @@ export class EmployeeService {
     };
 
     await this.userService.createUser(createUserDto);
+    Logger.log('create');
     return updatedEmployee;
   }
 
@@ -124,12 +134,28 @@ export class EmployeeService {
     return employmentData;
   }
 
-  findLeft(): Promise<Employee[]> {
-    return this.employeeModel.find().exec();
-  }
+  // findLeft(): Promise<Employee[]> {
+  //   return this.employeeModel.find().exec();
+  // }
 
-  findOne(id: string) {
-    return this.employeeModel.findById(id).exec();
+  async findOne(id: string) {
+    try {
+      const employee = await this.employeeModel.findById(id);
+
+      if (!employee) {
+        throw new NotFoundException(`Employee with ID ${id} not found`);
+      }
+
+      return employee;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        `Failed to find employee with ID ${id}`,
+        error.message,
+      );
+    }
   }
 
   update(id: string, updateEmployeeDto: CreateEmployeeDto) {
@@ -139,6 +165,7 @@ export class EmployeeService {
   }
 
   delete(id: string): Promise<Employee | null> {
+    this.inventoryService.cleanUpInventories(id);
     return this.employeeModel.findByIdAndDelete(id);
   }
 
@@ -226,7 +253,7 @@ export class EmployeeService {
       })
       .exec();
 
-    const hrUser = await this.userModel.findOne({ role: Role.HR }).exec();
+    const hrUser = await this.employeeModel.findOne({ role: Role.HR }).exec();
 
     if (!hrUser) {
       throw new Error('No HR user found');
@@ -236,7 +263,7 @@ export class EmployeeService {
       const createNotificationDto: CreateNotificationDto = {
         message: `Congratulations to ${employee.fullName} for one year at the company!`,
         isRead: false,
-        userId: new Types.ObjectId(hrUser._id),
+        userId: null,
         path: `/dashboard`,
         status: NotificationStatus.REMINDER,
       };

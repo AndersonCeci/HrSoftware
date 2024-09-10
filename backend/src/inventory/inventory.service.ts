@@ -1,6 +1,4 @@
 import {
-  ConflictException,
-  ConsoleLogger,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,16 +8,18 @@ import mongoose, { Model, Types } from 'mongoose';
 import { CreateInventoryDto } from './dto/createInventory.dto';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import { AssetsService } from 'src/assets/assets.service';
-import { EmployeeService } from 'src/employee/employe.service';
+
 import { Employee } from 'src/employee/schema/employe.schema';
+import { Asset } from 'src/assets/schemas/Asset.schema';
+
 
 @Injectable()
 export class InventoryService {
   constructor(
     @InjectModel(Inventory.name) private inventoryModel: Model<Inventory>,
     @InjectModel(Employee.name) private employeeModel: Model<Employee>,
+
     private readonly assetsService: AssetsService,
-    private readonly employeeService: EmployeeService,
   ) {}
 
   async createInventory(
@@ -52,12 +52,27 @@ export class InventoryService {
 
     // const createdInventories =
     //   await this.inventoryModel.create(inventoryEntries);
-     return  await this.inventoryModel.create(inventoryEntries);
+    return await this.inventoryModel.create(inventoryEntries);
     // return this.inventoryModel
     //   .find({ _id: { $in: createdInventories.map((item) => item._id) } })
     //   .populate('assetID')
     //   .exec();
   }
+  async findAssetByEmployeeName(employeeDetails: string): Promise<Inventory[]> {
+    return this.inventoryModel.find({ employeeDetails: employeeDetails });
+  }
+
+  async cleanUpInventories(employeeDetails): Promise<void> {
+    const deletedEmployees = await this.inventoryModel
+      .find({
+        employeeDetails: employeeDetails,
+      })
+
+    for (const delEmployee of deletedEmployees) {
+      await this.unassignFromEmployee(delEmployee._id.toString());
+    }
+  }
+
 
   async assignToEmployee(
     inventoryID: string,
@@ -67,9 +82,11 @@ export class InventoryService {
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
-    // if (!foundEmployee) {
-    //   throw new NotFoundException(Employee with ID ${employeeDetails} not found);
-    // }
+    if (!foundEmployee) {
+      throw new NotFoundException(
+        `Employee with ID ${employeeDetails} not found`,
+      );
+    }
 
     await this.inventoryModel.findByIdAndUpdate(inventoryID, {
       employeeDetails: foundEmployee._id,
@@ -124,9 +141,10 @@ export class InventoryService {
     return response as unknown as Inventory;
   }
 
-  // async findAll(): Promise<any> {
-  //   return this.assetsService.findAll();
-  // }
+  async findAll(): Promise<Inventory[]> {
+    console.log('find all inventories');
+    return this.inventoryModel.find().exec();
+  }
 
   async delete(id: string): Promise<Inventory> {
     const deletedInventory = await this.inventoryModel.findByIdAndDelete(id);

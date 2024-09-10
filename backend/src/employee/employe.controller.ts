@@ -17,7 +17,6 @@ import {
 import { EmployeeService } from './employe.service';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
-import { UserService } from 'src/users/users.service';
 
 @Controller('employees')
 export class EmployeeController {

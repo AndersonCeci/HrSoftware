@@ -1,12 +1,13 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IsDate, IsDateString, IsNotEmpty, IsOptional } from 'class-validator';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { User } from 'src/users/schemas/user.schema';
+import { Employee } from 'src/employee/schema/employe.schema';
 
 export enum Status {
   Cancelled = 'cancelled',
   Finished = 'finished',
   Ongoing = 'ongoing',
+  Scheduled = 'scheduled',
 }
 
 @Schema()
@@ -43,12 +44,16 @@ export class Events extends Document {
   @IsNotEmpty()
   status: Status;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-  creator: User;
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Employee',
+    required: true,
+  })
+  creator: Employee;
 
-  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'User' })
+  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Employee' })
   @IsOptional()
-  invitees?: User[];
+  invitees?: Employee[];
 
   @Prop({ default: false })
   isDeleted: boolean;

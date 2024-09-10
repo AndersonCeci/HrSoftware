@@ -45,7 +45,9 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
                       className="active-dashboard"
                       style={{ backgroundColor: data.color, padding: "20px" }}
                     >
-                      <Title className="hr-card-title">{data.noEmployee}</Title>
+                      <Title className="hr-card-title">
+                        {data?.noEmployee}
+                      </Title>
                       <h1 className="hr-card-status">{data.status}</h1>
                     </Button>
                   </NavLink>
@@ -53,7 +55,10 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
               );
             })}
           </Flex>
-          <Row className="graph-row" style={{ justifyContent: "space-between" }}>
+          <Row
+            className="graph-row"
+            style={{ justifyContent: "space-between" }}
+          >
             <Col>
               <Card className="pie-chart">
                 <Title className="title-piechart">

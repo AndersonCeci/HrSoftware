@@ -1,10 +1,17 @@
 import NavigationIcons from "./NavigationIcons";
 import PageRoutesComponents from "../pages";
+import { isHR } from "./utils";
+
+const isHr = isHR();
+
+function isOnlyHr(path: string, icon: any, pageElement: any) {
+	return isHr ? [{ path, icon, pageElement }] : [];
+}
 
 export const Paths = {
 	Login: {
 		path: "/",
-		pageElement: PageRoutesComponents.LoginPAge,
+		pageElement: PageRoutesComponents.LoginPage,
 	},
 	Dashboard: {
 		path: "",
@@ -12,6 +19,7 @@ export const Paths = {
 		icon: null,
 		children: [
 			{
+				isHrOnly: false,
 				path: "dashboard",
 				icon: NavigationIcons.AppstoreOutlined,
 				pageElement: PageRoutesComponents.DashboardPage,
@@ -24,6 +32,7 @@ export const Paths = {
 		icon: null,
 		children: [
 			{
+				isHrOnly: true,
 				path: "recruitment",
 				icon: NavigationIcons.MdOutlinePersonSearch,
 				pageElement: PageRoutesComponents.RecruitmentPage,
@@ -35,9 +44,11 @@ export const Paths = {
 		type: "group",
 		icon: null,
 		children: [
+			// ...isOnlyHr("employee", NavigationIcons.UserOutlined, PageRoutesComponents.EmploymentPage),
 			{
-				path: "employment",
-				icon: NavigationIcons.MdOutlineBadge,
+				isHrOnly: true,
+				path: "employee",
+				icon: NavigationIcons.UserOutlined,
 				pageElement: PageRoutesComponents.EmploymentPage,
 			},
 		],
@@ -76,27 +87,20 @@ export const Paths = {
 		type: "",
 		icon: NavigationIcons.Management,
 		children: [
-			// {
-			// 	path: "recruitment",
-			// 	icon: NavigationIcons.MdOutlinePersonSearch,
-			// 	pageElement: PageRoutesComponents.RecruitmentPage,
-			// },
 			{
+				isOnlyHr: false,
 				path: "salary",
 				icon: NavigationIcons.RiMoneyEuroCircleLine,
 				pageElement: PageRoutesComponents.SalariesPage,
 			},
 			{
+				isHrOnly: true,
 				path: "promotions",
 				icon: NavigationIcons.PiChartLineUpBold,
 				pageElement: PageRoutesComponents.PromotionPage,
 			},
-			// {
-			// 	path: "employment",
-			// 	icon: NavigationIcons.MdOutlineBadge,
-			// 	pageElement: PageRoutesComponents.EmploymentPage,
-			// },
 			{
+				isHrOnly: true,
 				path: "dismissed",
 				icon: NavigationIcons.TbUserCancel,
 				pageElement: PageRoutesComponents.DismissedPage,
@@ -109,11 +113,13 @@ export const Paths = {
 		icon: NavigationIcons.SandClock,
 		children: [
 			{
+				isHrOnly: false,
 				path: "requestedLeave",
 				icon: NavigationIcons.VscRequestChanges,
 				pageElement: PageRoutesComponents.RequestedLeavePage,
 			},
 			{
+				isHrOnly: false,
 				path: "calendarLeave",
 				icon: NavigationIcons.BsCalendar4Range,
 				pageElement: PageRoutesComponents.CalendarLeavePage,
@@ -126,16 +132,19 @@ export const Paths = {
 		icon: NavigationIcons.Building,
 		children: [
 			{
+				isHrOnly: false,
 				path: "events",
 				icon: NavigationIcons.MdOutlineEventAvailable,
 				pageElement: PageRoutesComponents.EventPage,
 			},
 			{
+				isHrOnly: false,
 				path: "assets",
 				icon: NavigationIcons.RiComputerLine,
 				pageElement: PageRoutesComponents.AssetsPage,
 			},
 			{
+				isHrOnly: false,
 				path: "organisationalStructure",
 				icon: NavigationIcons.ApartmentOutlined,
 				pageElement: PageRoutesComponents.OrganisationalStructurePage,

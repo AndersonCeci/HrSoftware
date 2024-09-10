@@ -1,13 +1,6 @@
 import "../styles/EventCard.css";
-import TempImage from "../../../assets/image 99.png";
-import ICONTEMP from "../../../assets/Group 14.svg";
 import { Carousel, Flex } from "antd";
-import { EvenType } from "../types/EventTypes";
-
-type EventCardProps = {
-  event: EvenType;
-  isAlone?: boolean;
-};
+import { EventCardProps } from "../types/EventTypes";
 
 const EventCard = ({ event, isAlone }: EventCardProps) => {
   const { eventName, eventDate, eventStartTime, eventEndTime, images } = event;
@@ -15,13 +8,24 @@ const EventCard = ({ event, isAlone }: EventCardProps) => {
   const date = new Date(eventDate);
   const month = date.toLocaleString("default", { month: "short" });
   const day = date.getDate();
+  const isMultipleDays = event.eventEndDate === event.eventDate;
+
+  const displayedTime = !isMultipleDays
+    ? eventStartTime
+    : `${eventStartTime} - ${eventEndTime}`;
+
   return (
-    <div className={`event-item ${isAlone ? "alone-event" : undefined}`}>
+    <div className={`event-item ${isAlone ? "alone-event" : ""}`}>
       <article>
-        <Carousel pauseOnHover adaptiveHeight draggable>
+        <Carousel
+          pauseOnHover
+          adaptiveHeight
+          draggable
+          className="carousel-events"
+        >
           {images?.map((image, index) => (
             <div key={index} className="event-image-container">
-              <img src={image} alt={`Event ${index}`} />
+              <img className="event-image" src={image} alt={`Event Picture`} />
             </div>
           ))}
         </Carousel>
@@ -38,7 +42,7 @@ const EventCard = ({ event, isAlone }: EventCardProps) => {
             justify="flex-start"
             className="event-time-name-container"
           >
-            <h5 className="event-date-time">{`${eventStartTime} - ${eventEndTime}`}</h5>
+            <h5 className="event-date-time">{displayedTime}</h5>
             <h2 className="event-name">{eventName}</h2>
           </Flex>
         </Flex>

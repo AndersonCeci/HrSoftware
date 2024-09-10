@@ -4,12 +4,9 @@ import { Model } from 'mongoose';
 import { FirebaseService } from './firebaseUpload.service';
 import { FileDocument } from './schema/files.schema';
 
-
 @Injectable()
 export class UploadService {
-  constructor(
-    private readonly firebaseService: FirebaseService,
-  ) {}
+  constructor(private readonly firebaseService: FirebaseService) {}
 
   async uploadFiles(files: Express.Multer.File[]): Promise<string[] | string> {
     const storage = this.firebaseService.getStorageInstance();
@@ -46,5 +43,34 @@ export class UploadService {
     });
 
     return Promise.all(uploadPromises);
+  }
+
+  async deleteFile(fileName: string): Promise<void> {
+    const storage = this.firebaseService.getStorageInstance();
+    const bucket = storage.bucket();
+    const file = bucket.file(fileName);
+
+    return new Promise((resolve, reject) => {
+      file.delete((error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  async getAllFiles(): Promise<string[]> {
+    const storage = this.firebaseService.getStorageInstance();
+    const bucket = storage.bucket();
+
+    const [files] = await bucket.getFiles();
+
+    const fileUrls = files.map((file) => {
+      return `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    });
+
+    return fileUrls;
   }
 }
