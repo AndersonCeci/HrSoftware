@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import { getFromLocalStorage } from "../../../utils/utils";
 import { t } from "i18next";
 
-// const { employID } = getFromLocalStorage("userData");
-
 const EventMenu = ({
 	EventList = [],
 	title,
@@ -25,18 +23,18 @@ const EventMenu = ({
 	function handleModalShow(event: EvenType | undefined) {
 		setSelectedEvent(event);
 	}
-	//TODO FIX THIS
+
 	useEffect(() => {
 		if (selectedEvent) {
 			const allIds = selectedEvent.eventParticipants.map((employee) => employee._id);
 			const isJoined = allIds.includes(employee.employID);
-
-			// const isJoined = selectedEvent.eventParticipants.find(
-			// 	(employee) => employee._id === employID,
-			// );
 			setIsJoined(isJoined);
 		}
 	}, [selectedEvent]);
+
+	useEffect(() => {
+		setSelectedEvent((prev) => EventList.find((event) => event._id === prev?._id));
+	}, [EventList]);
 
 	function handleJoinButtonClick() {
 		onUserJoinEvent(selectedEvent!._id);

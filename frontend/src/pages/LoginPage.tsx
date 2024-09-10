@@ -24,6 +24,7 @@ const LoginPage: React.FC = () => {
 			useHttp.postRequestHelper("http://localhost:3000/login", form.getFieldsValue()),
 			(responseData: any) => {
 				const { accessToken, ...rest } = responseData;
+				console.log("responseData", responseData);
 				const userData = {
 					...rest,
 					token: accessToken,

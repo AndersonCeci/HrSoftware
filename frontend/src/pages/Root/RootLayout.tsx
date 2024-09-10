@@ -9,7 +9,6 @@ import { Flex, FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "antd";
 import "./Style/RootStyle.css";
-import { redirect } from "react-router-dom";
 import { getFromLocalStorage } from "../../utils/utils";
 
 const { Content, Sider } = Layout;

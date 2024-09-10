@@ -16,7 +16,7 @@ const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 	const userData = getFromLocalStorage();
-	const color = stringToHashCodeHelper(userData?.username);
+	const color = stringToHashCodeHelper(userData?.employID);
 	const [employData, setEmployData] = useState<EmployeeDataType>();
 	const hasProfilePicture = !!employData?.profilePhoto;
 	const [, , fetchData] = useHttp();
@@ -41,7 +41,6 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 						backgroundColor: color,
 						color: "black",
 						fontSize: "1.5rem",
-						
 					}}
 				>
 					{userData?.username[0]}
