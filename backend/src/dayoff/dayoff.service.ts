@@ -69,10 +69,17 @@ export class DayoffService {
     return createdDayoff.save();
   }
 
-  async findAll(employeeId: string): Promise<DayOff[]> {
+  async findById(employeeId: string): Promise<DayOff[]> {
     const employe = await this.employeeService;
     return this.dayoffModel
       .find({ isDeleted: false, employeeId })
+      .populate('EmployeeName', 'name')
+      .exec();
+  }
+
+  async findAll(): Promise<DayOff[]> {
+    return this.dayoffModel
+      .find({ isDeleted: false })
       .populate('EmployeeName', 'name')
       .exec();
   }
