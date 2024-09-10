@@ -9,6 +9,7 @@ import RequestForm from "../../DayOff/components/RequestForm";
 import { createColumns } from "../utils/tableColumns";
 import useHttp from "../../../hooks/useHttp";
 import { useTranslation } from "react-i18next";
+import { getFromLocalStorage } from "../../../utils/utils";
 
 export interface RequestedTableProps {
 	data?: RequestedDataType[];
@@ -48,10 +49,47 @@ const RequestedTable = () => {
 		);
 	}
 
+	// useEffect(() => {
+	// 	fetchData({ url: API }, (data) => {
+	// 		setData(data);
+	// 	});
+	// }, []);
+
 	useEffect(() => {
-		fetchData({ url: API }, (data) => {
-			setData(data);
-		});
+		const user = getFromLocalStorage();
+		const employeeId = user?.employID;
+		const role = user?.role;
+
+		fetchData(
+			{
+				url: `${API}/${employeeId}`,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${user?.token}`,
+				},
+			},
+			(response) => {
+				setData(response);
+			},
+		);
+
+		// function fetchDataBasedOnRole(employeeId?: string, role?: string) {
+		// 	if (role === "employee" && employeeId) {
+		// 		const url = `${API}/${employeeId}`;
+		// 		fetchData({ url }, (response) => {
+		// 			setData(response);
+		// 		});
+		// 	} else if (role === "hr") {
+		// 		const url = `${API}`;
+		// 		fetchData({ url }, (response) => {
+		// 			setData(response);
+		// 		});
+		// 	}
+		// }
+
+		// if (role) {
+		// 	fetchDataBasedOnRole(employeeId, role);
+		// }
 	}, []);
 
 	function handleDecline(id?: string) {
