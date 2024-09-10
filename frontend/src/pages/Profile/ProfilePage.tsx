@@ -112,7 +112,7 @@ const ProfilePage: React.FC = () => {
           <Card className="avatar-profile-card">
             <div className="inside-profile-card">
               <div>
-                <img className="profile-pic" src={tableData?.profilePhoto} />
+                <img className="profile-pic" src={tableData?.profilePhoto || "https://api.dicebear.com/7.x/miniavs/svg?seed=1"}  />
               </div>
               <div>
                 <h3>{userData.username}</h3>

@@ -36,7 +36,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 				{!colapsed ? (
 					<Card className="loged-user-card">
 						<Meta
-							avatar={<Avatar size={"large"} src={employData?.profilePhoto} />}
+							avatar={<Avatar size={"large"} src={employData?.profilePhoto || "https://api.dicebear.com/7.x/miniavs/svg?seed=1"} />}
 							title={userData?.username}
 							description={userData?.role}
 							className="loged-user-panel"
@@ -44,7 +44,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 					</Card>
 				) : (
 					<Flex className="colapsed-avatar-container" justify="center">
-						<Avatar size={"large"} src={employData?.profilePhoto} />
+						<Avatar size={"large"} src={employData?.profilePhoto || "https://api.dicebear.com/7.x/miniavs/svg?seed=1"} />
 					</Flex>
 				)}
 			</Link>
