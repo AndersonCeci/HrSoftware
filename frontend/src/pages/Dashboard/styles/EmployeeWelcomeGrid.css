@@ -53,6 +53,7 @@ h1.ant-typography.card-text.css-dev-only-do-not-override-1pg9a38 {
 .card-quote {
     height: auto;
     margin-bottom: 30px;
+    box-shadow: 3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407);
 }
 
 .card-employee {
@@ -93,7 +94,6 @@ p,
 .bonus-graph {
     width: 65%;
     justify-content: space-between;
-    margin-top: 20px;
     margin-left: 20px;
 }
 

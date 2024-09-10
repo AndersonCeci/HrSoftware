@@ -90,6 +90,7 @@ const CalendarGrid: React.FC = () => {
   return (
     <div className="calendarWrapper" style={wrapperStyle}>
       <Calendar
+      style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}
         fullscreen={false}
         onPanelChange={(value, mode) =>
           console.log(value.format("YYYY-MM-DD"), mode)

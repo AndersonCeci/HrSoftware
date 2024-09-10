@@ -8,6 +8,7 @@ import {
   Form,
   DatePicker,
   Button,
+  Card,
 } from "antd";
 import { PlusOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -166,7 +167,7 @@ const TaskGrid: React.FC = () => {
   };
 
 	return (
-		<div className="container">
+		<Card className="container" style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}>
 			<div className="header-container">
 				<h1 className="task-title">{t(`reminders`)}</h1>
 				<Search onChange={onSearch} placeholder={t("searchAReminder")} allowClear style={{ width: 300 }} />
@@ -312,7 +313,7 @@ const TaskGrid: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </Card>
   );
 };
 

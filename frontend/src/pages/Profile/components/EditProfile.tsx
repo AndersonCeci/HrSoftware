@@ -56,8 +56,8 @@ const EditProfile = ({
         phoneNumber: value.phoneNumber,
       }),
       () => {}
-	  );
-	setIsModal()
+    );
+    setIsModal();
   };
 
   const handleUpload = async (files: RcFile[]) => {
