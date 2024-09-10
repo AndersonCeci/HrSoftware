@@ -1,74 +1,34 @@
-import { Button, Form, Input } from "antd";
+import { Form, Typography } from "antd";
+import Button from "../components/Shared/Button";
 import "../styles/LoginPage.css";
-import React, { useEffect, useState } from "react";
+import FormInputs from "../components/Shared/InputTypes/FormInputs";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useHttp from "../hooks/useHttp";
-
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
-import { IoLockClosedOutline } from "react-icons/io5";
-import { MdOutlineEmail } from "react-icons/md";
 import { setToLocalStorage } from "../utils/utils";
 
 const LoginPage: React.FC = () => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
+	const [form] = Form.useForm();
 	const [isLoading, error, sendRequest] = useHttp();
 	const navigate = useNavigate();
 
-	// const handleSubmit = async (e: React.FormEvent) => {
-	// 	e.preventDefault();
-	// 	try {
-	// 		const response = await fetch("http://localhost:3000/login", {
-	// 			method: "POST",
-	// 			headers: { "Content-Type": "application/json" },
-	// 			body: JSON.stringify({ username, password }),
-	// 		});
-	// 		const data = await response.json();
-
-	// 		if (!response.ok) {
-	// 			throw new Error(data.message || "Authentication failed");
-	// 		}
-
-	// 		const userData = {
-	// 			token: data.accessToken,
-	// 			username: data.username,
-	// 			userId: data._id,
-	// 			role: data.role,
-	// 			loginRole: data.loginRole,
-	// 		};
-
-	// 		localStorage.setItem("userData", JSON.stringify(userData));
-
-	// 		console.log("Logged in successfully");
-	// 		navigate("/dashboard");
-	// 	} catch (error) {
-	// 		console.error("Login error:", error);
-	// 	}
-	// };
-
 	function handleSubmit() {
-		if (!username || !password) {
-			return;
-		}
+		const dataToSubmit = {
+			username: form.getFieldValue("username"),
+			password: form.getFieldValue("password"),
+		};
 
 		sendRequest(
-			{
-				url: "http://localhost:3000/login",
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: { username, password },
-			},
+			useHttp.postRequestHelper("http://localhost:3000/login", form.getFieldsValue()),
 			(responseData: any) => {
+				const { accessToken, ...rest } = responseData;
+				console.log("responseData", responseData);
 				const userData = {
-					token: responseData.accessToken,
-					username: responseData.username,
-					userId: responseData._id,
-					role: responseData.role,
-					loginRole: responseData.loginRole,
-					employID: responseData.employID,
+					...rest,
+					token: accessToken,
 				};
-
 				setToLocalStorage("userData", userData);
 				navigate("/dashboard");
 			},
@@ -84,56 +44,64 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<div className="login-page">
-			<div className="image-container">
-				<img src={Login} alt="Logo" />
-			</div>
-			<Form
-				name="normal-login"
-				className="login-form"
-				initialValues={{ remember: true }}
-				// onFinish={handleSubmit}
-			>
-				<img src={LoginLogo} className="loginlogo"></img>
+			<div className="login-form-image-container">
+				<div className="image-container">
+					<img src={Login} alt="Logo" />
+				</div>
+
 				<div className="login-inputs">
-					<h2 className="login-title">Login</h2>
-					<Form.Item
-						name="username"
-						className="username-input"
-						rules={[{ required: true, message: "Please input your email" }]}
+					<img src={LoginLogo} className="loginlogo"></img>
+					<Form
+						layout="vertical"
+						form={form}
+						initialValues={{ remember: true }}
+						onFinish={handleSubmit}
+						onFinishFailed={() => console.log("Failed")}
 					>
-						<Input
-							prefix={<MdOutlineEmail className="site-form-item-icon" />}
-							placeholder="E-mail"
-							onChange={(e) => setUsername(e.target.value)}
-							required
-						/>
-					</Form.Item>
-					<Form.Item
-						name="password"
-						className="password-input-login"
-						rules={[{ required: true, message: "Please input your password" }]}
-					>
-						<Input.Password
-							prefix={<IoLockClosedOutline />}
-							placeholder="Password"
-							onChange={(e) => setPassword(e.target.value)}
-							required
-						/>
-					</Form.Item>
-					<Form.Item>
-						<Button
-							type="primary"
-							// htmlType="submit"
-							className="login-form-button"
-							onClick={handleSubmit}
-						>
+						<h2 className="login-title">Login</h2>
+
+						<FormInputs.Input name="username" label="Email" defaultValidateRule="email" required />
+						<FormInputs.Input name="password" label="Password" type="password" required />
+
+						{error && <Typography.Text type="danger">Invalid Email or Password</Typography.Text>}
+						<Button htmlType="submit" type="primary" size="large" block>
 							{isLoading ? "Loading..." : "Log in"}
 						</Button>
-					</Form.Item>
+					</Form>
 				</div>
-			</Form>
+			</div>
 		</div>
 	);
 };
 
 export default LoginPage;
+// const handleSubmit = async (e: React.FormEvent) => {
+// 	e.preventDefault();
+// 	try {
+// 		const response = await fetch("http://localhost:3000/login", {
+// 			method: "POST",
+// 			headers: { "Content-Type": "application/json" },
+// 			body: JSON.stringify({ username, password }),
+// 		});
+// 		const data = await response.json();
+
+// 		if (!response.ok) {
+// 			throw new Error(data.message || "Authentication failed");
+// 		}
+
+// 		const userData = {
+// 			token: data.accessToken,
+// 			username: data.username,
+// 			userId: data._id,
+// 			role: data.role,
+// 			loginRole: data.loginRole,
+// 		};
+
+// 		localStorage.setItem("userData", JSON.stringify(userData));
+
+// 		console.log("Logged in successfully");
+// 		navigate("/dashboard");
+// 	} catch (error) {
+// 		console.error("Login error:", error);
+// 	}
+// };

@@ -9,8 +9,14 @@ export type EvenType = {
 	eventStartTime: string;
 	eventEndTime?: string;
 	location: SelectedLocationData;
-	eventParticipants: string[];
+	eventParticipants: EventParticipantsType[];
 	images: string[];
+};
+
+export type EventParticipantsType = {
+	_id: string;
+	fullName: string;
+	profilePhoto: string | undefined;
 };
 
 export type EventListItemProps = {

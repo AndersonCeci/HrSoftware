@@ -13,8 +13,8 @@ import { Role, User } from 'src/users/schemas/user.schema';
 @Injectable()
 export class DayoffService {
   constructor(
-     @InjectModel( DayOff.name ) private dayoffModel: Model<DayOff>,
-     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(DayOff.name) private dayoffModel: Model<DayOff>,
+    @InjectModel(User.name) private userModel: Model<User>,
     private readonly employeeService: EmployeeService,
     private readonly notificationService: NotificationsService,
   ) {}
@@ -54,7 +54,7 @@ export class DayoffService {
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
-    console.log( hrUsers,  'hrUsers')
+    console.log(hrUsers, 'hrUsers');
 
     hrUsers.forEach(async (hrUser) => {
       const createNotification: CreateNotificationDto = {
@@ -69,12 +69,21 @@ export class DayoffService {
     return createdDayoff.save();
   }
 
-  async findAll(): Promise<DayOff[]> {
+  async findById(employeeId: string): Promise<DayOff[]> {
+    const employe = await this.employeeService;
     return this.dayoffModel
-      .find({ isDeleted: false})
+      .find({ isDeleted: false, employeeId })
       .populate('EmployeeName', 'name')
       .exec();
   }
+
+  async findAll(): Promise<DayOff[]> {
+    return this.dayoffModel
+      .find({ isDeleted: false })
+      .populate('EmployeeName', 'name')
+      .exec();
+  }
+
   async accepted(): Promise<DayOff[]> {
     return this.dayoffModel
       .find({ isApproved: true })

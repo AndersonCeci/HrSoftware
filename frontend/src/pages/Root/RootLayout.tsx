@@ -9,7 +9,6 @@ import { Flex, FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "antd";
 import "./Style/RootStyle.css";
-import { redirect } from "react-router-dom";
 import { getFromLocalStorage } from "../../utils/utils";
 
 const { Content, Sider } = Layout;
@@ -23,7 +22,7 @@ const RootLayout: React.FC = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		console.log("Token is null");
+		// console.log("Token is null");
 		if (token === null) {
 			navigate("/");
 		}

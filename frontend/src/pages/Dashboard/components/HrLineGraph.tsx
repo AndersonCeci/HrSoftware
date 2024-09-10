@@ -1,108 +1,84 @@
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import React from "react";
+import useHttp from "../../../hooks/useHttp";
+import { ApexChartState, getMonthName, SalaryData } from "../types/DashboardTypes"
 
-interface ApexChartState {
-  series: {
-    name: string;
-    data: number[];
-  }[];
-  options: {
-    chart: {
-      height: number;
-      type: "line";
-      zoom: {
-        enabled: boolean;
-      };
-    };
-    dataLabels: {
-      enabled: boolean;
-    };
-    stroke: {
-      curve: "straight";
-    };
-    title: {
-      text: string;
-      align: "left";
-    };
-    grid: {
-      row: {
-        colors: string[];
-        opacity: number;
-      };
-    };
-    xaxis: {
-      categories: string[];
-    };
-  };
-}
 
-class ApexChart extends React.Component<{}, ApexChartState> {
-  constructor(props: {}) {
-    super(props);
-
-    this.state = {
-      series: [
-        {
-          name: "Applicants",
-          data: [10, 2, 3, 1, 20, 5, 4, 0, 2],
-        },
-      ],
-      options: {
-        chart: {
-          height: 350,
-          type: "line",
-          zoom: {
-            enabled: false,
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: "straight",
-        },
-        title: {
-          text: "Applicants by Month",
-          align: "left",
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"],
-            opacity: 0.5,
-          },
-        },
-        xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-          ],
-        },
+const ApexChart: React.FC = () => {
+  const [, , fetchData] = useHttp();
+  const [data, setData] = useState<SalaryData[]>([]);
+  const [chartState, setChartState] = useState<ApexChartState>({
+    series: [{ name: "Applicants", data: [] }],
+    options: {
+      chart: {
+        height: 370,
+        type: "line",
+        zoom: { enabled: false },
       },
-    };
-  }
+      dataLabels: { enabled: false },
+      stroke: { curve: "straight" },
+      title: { text: "Applicants by Month", align: "left" },
+      grid: {
+        row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 },
+      },
+      xaxis: { categories: [] },
+    },
+  });
 
-  render() {
-    return (
-      <div>
-        <div id="chart">
-          <ReactApexChart
-            options={this.state.options}
-            series={this.state.series}
-            type="line"
-            height={280}
-          />
-        </div>
-        <div id="html-dist"></div>
+  useEffect(() => {
+
+      fetchData(
+        { url: `http://localhost:3000/recruitments/chart` },
+        (data: SalaryData[]) => {
+          setData(data);
+        }
+      );
+  }, []);
+
+
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setChartState({
+        series: [
+          {
+            name: "Bonus",
+            data: data.map((bonus) => bonus.value),
+          },
+        ],
+        options: {
+          chart: {
+            height: 350,
+            type: "line",
+            zoom: { enabled: false },
+          },
+          dataLabels: { enabled: false },
+          stroke: { curve: "straight" },
+          title: { text: "Applicants by Month", align: "left" },
+          grid: {
+            row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 },
+          },
+          xaxis: {
+            categories: data.map((month) => getMonthName(month.label)),
+          },
+        },
+      });
+    }
+  }, [data]);
+
+  return (
+    <div>
+      <div id="chart">
+        <ReactApexChart
+          options={chartState.options}
+          series={chartState.series}
+          type="line"
+          height={355}
+        />
       </div>
-    );
-  }
-}
+      <div id="html-dist"></div>
+    </div>
+  );
+};
 
 export default ApexChart;
