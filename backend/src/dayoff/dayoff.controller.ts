@@ -23,10 +23,11 @@ export class DayoffController {
     return this.dayoffService.createDayOff(createDayOffDto);
   }
 
-  @Get()
-  findAll(): Promise<DayOff[]> {
-    return this.dayoffService.findAll();
+  @Get('/:employeeId')
+  findAll(@Param('employeeId') employeeId: string): Promise<DayOff[]> {
+    return this.dayoffService.findAll(employeeId);
   }
+
 
   @Get('accepted')
   accepted(): Promise<DayOff[]> {
