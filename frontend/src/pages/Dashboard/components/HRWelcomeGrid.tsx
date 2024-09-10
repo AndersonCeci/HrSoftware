@@ -10,6 +10,9 @@ import TaskGrid from "./TaskGrid";
 import QouteCard from "./QouteCard";
 import CalendarGrid from "./CalendarGrid";
 import HrLineGraph from "./HrLineGraph";
+import { LeftDataType } from "../../Dismissed/types/Left";
+import { useEffect, useState } from "react";
+import useHttp from "../../../hooks/useHttp";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,6 +23,22 @@ interface WelcomeGridProps {
 export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   const options = {};
   const { t } = useTranslation();
+  const [tableData, setTableData] = useState<LeftDataType[]>([]);
+  const [isLoading, error, sendRequest] = useHttp();
+
+  useEffect(() => {
+    sendRequest(
+      {
+        url: `http://localhost:3000/left`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      (response) => {
+        setTableData(response.data);
+      }
+    );
+  }, []);
 
   const data = {
     labels: ["Off", "on"],
