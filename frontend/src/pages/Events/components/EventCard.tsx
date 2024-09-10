@@ -11,7 +11,6 @@ const EventCard = ({ event, isAlone }: EventCardProps) => {
 	const isMultipleDays = event.eventEndDate === event.eventDate;
 
 	const displayedTime = !isMultipleDays ? eventStartTime : `${eventStartTime} - ${eventEndTime}`;
-
 	return (
 		<div className={`event-item ${isAlone ? "alone-event" : ""}`}>
 			<article>

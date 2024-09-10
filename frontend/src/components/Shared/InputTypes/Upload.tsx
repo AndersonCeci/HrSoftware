@@ -60,7 +60,7 @@ export default function Upload({
 					}}
 					listType="picture-card"
 					multiple
-					maxCount={8}
+					maxCount={4}
 					fileList={fileList}
 					onChange={(info) => {
 						const files: (RcFile | undefined)[] = info.fileList.map((file) => file.originFileObj);

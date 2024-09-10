@@ -17,6 +17,7 @@ import {
 import { useRef } from "react";
 import { SchedulerProps } from "../types/ScheduleProps";
 import { fieldsData, onDragStart, applyCategoryColor } from "../utils/util";
+
 registerLicense(
   "ORg4AjUWIQA/Gnt2U1hhQlJBfVddXmNWfFN0QXNadVxyflRBcC0sT3RfQFljTn1SdkZhUH1fdnZUQA==",
 );
@@ -44,7 +45,7 @@ const Scheduler = ({
         height={"90vh"}
         eventSettings={eventSettings}
         currentView={currentView}
-        selectedDate={new Date(2024, 7, 1)}
+        selectedDate={new Date()}
         allowDragAndDrop={allowDragAndDrop}
         allowResizing={allowResizing}
         dragStart={onDragStart}

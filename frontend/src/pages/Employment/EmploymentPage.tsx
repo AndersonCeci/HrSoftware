@@ -141,8 +141,6 @@ const EmploymentPage: React.FC = () => {
 		handlePromoteButtonClick,
 	);
 
-	console.log(tableData, "adadada");
-
 	return (
 		<>
 			<Drawer height={500} isOpen={open} onClose={() => handlClose(setOpen)}>

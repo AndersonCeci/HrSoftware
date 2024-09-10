@@ -2,7 +2,7 @@ import { QuantityFormProps } from "../types/AddAssetsForm";
 import { Form, Input } from "antd";
 import Button from "../../../components/Shared/Button";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useImperativeHandle, useRef, forwardRef } from "react";
+import { useImperativeHandle, useRef, forwardRef, useState } from "react";
 import { t } from "i18next";
 
 const QuantityForm = forwardRef(
@@ -28,6 +28,7 @@ const QuantityForm = forwardRef(
 				ref={formRef}
 				layout="vertical"
 				autoComplete="off"
+				// validateTrigger={["onChange", "onBlur"]}
 				onFinish={(values) => onFinish(values, selectedAsset ? "codes" : "assetName")}
 			>
 				<Form.List
@@ -42,18 +43,26 @@ const QuantityForm = forwardRef(
 						},
 						{
 							validator: async (_, values) => {
-								const uniqueValues = new Set(values);
+								const nonEmptyValues = values.filter(
+									(value: string) => value !== "" && value !== undefined,
+								);
 
-								if (values.length !== uniqueValues.size) {
+								const uniqueValues = new Set(nonEmptyValues);
+
+								if (nonEmptyValues.length !== uniqueValues.size) {
 									const duplicateValues = new Set(
-										values.filter(
-											(value: string) => values.indexOf(value) !== values.lastIndexOf(value),
+										nonEmptyValues.filter(
+											(value: string) =>
+												nonEmptyValues.indexOf(value) !== nonEmptyValues.lastIndexOf(value),
 										),
 									);
+
 									return Promise.reject(
 										new Error(`${t("duplicatedValue")} ${duplicateValues.values().next().value}`),
 									);
 								}
+
+								return Promise.resolve();
 							},
 						},
 					]}
@@ -68,7 +77,6 @@ const QuantityForm = forwardRef(
 											: ""
 									}
 									name={index}
-									required={false}
 									key={field.key}
 								>
 									<Form.Item
