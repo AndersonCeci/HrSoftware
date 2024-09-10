@@ -13,7 +13,6 @@
 }
 
 .edit-button {
-  margin-left: 75px;
   margin-top: 10px;
 }
 
@@ -34,6 +33,28 @@
   margin-left: 10px;
   align-items: center;
   margin-bottom: 30px;
+}
+
+.inside-profile-card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+h3 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  color: rgb(120, 120, 120);
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
 }
 
 @media (max-width: 1023px) {

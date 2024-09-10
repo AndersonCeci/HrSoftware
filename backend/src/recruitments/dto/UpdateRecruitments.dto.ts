@@ -4,8 +4,12 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsDate,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
+import { Type } from 'class-transformer';
+import { InterviewDTO } from '../interviewDTO/interview.dto';
+import { OfferMadeDTO } from './OfferMade.dto';
 
 export class UpdateRecruitmentDto {
   @IsOptional()
@@ -37,6 +41,18 @@ export class UpdateRecruitmentDto {
   readonly stage?: RecruitmentStage;
 
   @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly firstInterview?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => InterviewDTO)
+  readonly secondInterview?: InterviewDTO;
+
+  @IsOptional()
+  @Type(() => OfferMadeDTO)
+  readonly offerMade?: OfferMadeDTO;
+
+  @IsOptional()
   @IsString()
   readonly reference?: string;
 
@@ -44,5 +60,7 @@ export class UpdateRecruitmentDto {
   @IsString()
   readonly cv?: string;
 
+  @IsOptional()
+  @IsDate()
   readonly submittedDate: Date;
 }

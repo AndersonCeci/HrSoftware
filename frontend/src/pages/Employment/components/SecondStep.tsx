@@ -24,7 +24,7 @@ const SecondStep = ({ form }: any) => {
         const response = await fetch(TEAM_LEADERS);
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch team leaders: ${response.statusText}`,
+            `Failed to fetch team leaders: ${response.statusText}`
           );
         }
 
@@ -70,8 +70,6 @@ const SecondStep = ({ form }: any) => {
     form.setFieldsValue({ teamLeaders: selectedTeamLeaders });
   };
 
-
-
   return (
     <Flex vertical>
       <Row gutter={16}>
@@ -94,15 +92,26 @@ const SecondStep = ({ form }: any) => {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 10 }}>
+        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 1, span: 5 }}>
           <Form.Item label={t("teamLeader")} name="teamLeaders">
             <Select
               mode="multiple"
               options={selectTeamLeader}
               placeholder={t("Select Team Leaders")}
               onChange={handleTeamLeaderChange}
+              size="large"
             />
           </Form.Item>
+        </Col>
+        <Col xs={{ offset: 1, span: 23 }} md={{ offset: 0, span: 5 }}>
+          <FormInputs.Select
+            label= {t("status")}
+            name="status"
+            options={[
+              { label: "On Site", value: "On Site" },
+              { label: "Remote", value: "Remote" },
+            ]}
+          />
         </Col>
         <Col
           xs={{ offset: 1, span: 23 }}
@@ -113,7 +122,6 @@ const SecondStep = ({ form }: any) => {
             label={t("startingOn")}
             name="startingDate"
             required
-            isDisabledDate
           />
         </Col>
         <Col

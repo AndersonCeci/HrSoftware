@@ -14,13 +14,12 @@ import { Notifications, NotificationStatus } from './notification.schema';
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
-
   @Get()
   getNotifications(
     @Query('userId') userId?: string,
     @Query('status') status?: NotificationStatus,
   ): Promise<Notifications[]> {
-    return this.notificationsService.getNotificationsByUser(userId);
+    return this.notificationsService.getNotificationsByUser(userId, status);
   }
 
   @Post()

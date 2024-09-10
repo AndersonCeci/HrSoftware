@@ -17,7 +17,6 @@ import {
 import { EmployeeService } from './employe.service';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
-import { UserService } from 'src/users/users.service';
 
 @Controller('employees')
 export class EmployeeController {
@@ -32,6 +31,11 @@ export class EmployeeController {
   @Get('team-leaders')
   async getTeamLeaders(): Promise<Employee[]> {
     return this.employeeService.getTeamLeaders();
+  }
+
+  @Get('/status-length')
+  async findStatusLength(): Promise<Employee[]> {
+    return this.employeeService.findStatusLength();
   }
 
   @Get('/search')

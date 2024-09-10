@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Employee, EmployeeSchema } from './schema/employe.schema';
 import { EmployeeController } from './employe.controller';
 import { EmployeeService } from './employe.service';
 import { UsersModule } from 'src/users/users.module';
-import { UserService } from 'src/users/users.service';
-import { PromotionModule } from 'src/promotion/promotion.module';
 import { NotificationsModule } from 'src/notificationsGateway/notification.module';
+import { InventoryModule } from 'src/inventory/inventory.module';
+import { Inventory, InventorySchema } from 'src/inventory/schemas/Inventory.schema';
 
 @Module({
   imports: [
@@ -15,9 +15,11 @@ import { NotificationsModule } from 'src/notificationsGateway/notification.modul
         name: Employee.name,
         schema: EmployeeSchema,
       },
+      { name: Inventory.name, schema: InventorySchema },
     ]),
     UsersModule,
-    NotificationsModule
+    NotificationsModule,
+    forwardRef(() => InventoryModule),
   ],
   providers: [EmployeeService],
   controllers: [EmployeeController],

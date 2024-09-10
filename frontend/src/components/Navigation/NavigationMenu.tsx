@@ -7,91 +7,87 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LogedUserPanel from "./LogedUserPanel";
-
-const navElements = [
-  Paths.Dashboard,
-  Paths.Recruitment,
-  Paths.Employee,
-  Paths.Management,
-  Paths.DayOff,
-  Paths.Company,
-];
+import { isHR } from "../../utils/utils";
+import { getMenuItemsByRole, getMenuItemType } from "../../utils/NavMenuHelper";
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
-  const [defaultSelectedKey, setDefaultSelectedKey] = useState(
-    useLocation()
-      .pathname.split("/")
-      .filter((x) => x),
-  );
+	const [defaultSelectedKey, setDefaultSelectedKey] = useState(
+		useLocation()
+			.pathname.split("/")
+			.filter((x) => x),
+	);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const isHr = isHR();
+	const navElements = [
+		Paths.Dashboard,
+		...(isHr ? [Paths.Recruitment] : []),
+		...(isHr ? [Paths.Employee] : []),
+		Paths.Management,
+		Paths.DayOff,
+		Paths.Company,
+	];
+	const { t } = useTranslation();
 
-  const { t } = useTranslation();
+	const items: any = navElements.map((element) => {
+		return {
+			key: `${element.path}`,
+			label: t(element.path),
+			type: getMenuItemType(element, isHr),
+			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
+			children: element.children.map((subElement) => {
+				return getMenuItemsByRole(element, subElement, isHr);
+			}),
+		};
+	});
 
-  const items: any = navElements.map((element, index) => {
-    return {
-      key: `${element.path} ${index}`,
-      label: t(element.path),
-      type: element.type ? element.type : null,
-      icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
-      children: element.children.map((subElement, subIndex) => {
-        return {
-          key: `${element.path}/${subElement.path} ${subIndex}`,
-          label: (
-            <NavLink to={`${element.path}/${subElement.path}`}>
-              {t(subElement.path)}
-            </NavLink>
-          ),
-          icon: <subElement.icon className="nav-menu-icon" />,
-        };
-      }),
-    };
-  });
+	// const items = getNavMenuItems();
 
-  useEffect(() => {
-    setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
-  }, [location.pathname]);
+	useEffect(() => {
+		setDefaultSelectedKey(location.pathname.split("/").filter((x) => x));
+	}, [location.pathname]);
 
-  const handleClick = () => {
-    localStorage.removeItem("userData");
-    navigate("/");
-  };
+	const handleClick = () => {
+		localStorage.removeItem("userData");
+		navigate("/");
+	};
 
-  return (
-    <Flex
-      vertical
-      align="stretch"
-      justify="stretch"
-      style={{
-        height: "100%",
-        width: "100%",
-        overflow: "scroll",
-      }}
-    >
-      <div className="top-menu-elements">
-        <LogedUserPanel colapsed={colapsed} />
-        <Menu
-          // onClick={onClick}/
-          className="side-nevigation-menu"
-          defaultSelectedKeys={[
-            defaultSelectedKey[defaultSelectedKey.length - 1],
-          ]}
-          defaultOpenKeys={[defaultSelectedKey[defaultSelectedKey.length - 2]]}
-          spellCheck={true}
-          mode="inline"
-          items={items}
-        />
-      </div>
+	// console.log(defaultSelectedKey, "defaultSelectedKey");
+	const [defaultSelect, defaultSubSelect] = defaultSelectedKey;
+	// console.log(defaultSelect, defaultSubSelect, "defaultSelect, defaultSubSelect");
 
-      <div className="logout-button-container">
-        <Button type="text" danger size="large" onClick={handleClick}>
-          <LogoutOutlined />
-          {!colapsed ? t(`logOut`) : ""}
-        </Button>
-      </div>
-    </Flex>
-  );
+	return (
+		<Flex
+			vertical
+			align="stretch"
+			justify="stretch"
+			style={{
+				height: "100%",
+				width: "100%",
+				overflow: "scroll",
+			}}
+		>
+			<div className="top-menu-elements">
+				<LogedUserPanel colapsed={colapsed} />
+				<Menu
+					className="side-nevigation-menu"
+					defaultSelectedKeys={[defaultSubSelect ? defaultSubSelect : defaultSelect]}
+					defaultOpenKeys={[defaultSelect]}
+					spellCheck={true}
+					mode="inline"
+					items={items}
+				/>
+			</div>
+
+			<div className="logout-button-container">
+				<Button type="text" danger size="large" onClick={handleClick}>
+					<LogoutOutlined />
+					{!colapsed ? t(`logOut`) : ""}
+				</Button>
+			</div>
+		</Flex>
+	);
 };
 
 export default NavigationMenu;

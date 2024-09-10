@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+
 
 @Schema()
 export class Event extends Document {
@@ -18,11 +19,32 @@ export class Event extends Document {
   @Prop({ required: true })
   eventStartTime: string;
 
-  @Prop({ required: true })
-  eventEndTime: string;
-
   @Prop()
-  location: string;
+  eventEndTime?: string;
+
+  @Prop({
+    type: {
+      position: {
+        lat: { type: Number },
+        lng: { type: Number },
+      },
+      address: { type: String },
+      name: { type: String },
+    },
+  })
+  location?: {
+    position?: {
+      lat: number;
+      lng: number;
+    };
+    address?: string;
+    name?: string;
+  };
+  @Prop({ type: Types.ObjectId, ref: 'Employee' })
+  joinEmployee: Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Employee' }] })
+  eventParticipants?: Types.ObjectId[];
 
   @Prop([String])
   images: string[];

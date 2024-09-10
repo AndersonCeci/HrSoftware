@@ -64,10 +64,9 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
                       className="active-dashboard"
                       style={{ backgroundColor: data.color, padding: "20px" }}
                     >
-                       <Title className="hr-card-title">
-                          {data.noEmployee}
-                        </Title>
-
+                      <Title className="hr-card-title">
+                        {data?.noEmployee}
+                      </Title>
                       <h1 className="hr-card-status">{data.status}</h1>
                     </Button>
                   </NavLink>
@@ -80,7 +79,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
             style={{ justifyContent: "space-between" }}
           >
             <Col>
-              <Card className="pie-chart">
+              <Card className="pie-chart" style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}>
                 <Title className="title-piechart">
                   {t(`attendanceOverview`)}
                 </Title>

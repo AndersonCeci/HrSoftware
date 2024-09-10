@@ -8,6 +8,7 @@ import {
   Query,
   BadRequestException,
   Patch,
+  NotFoundException,
 } from '@nestjs/common';
 import { SalaryService } from './services/salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
@@ -113,6 +114,20 @@ export class SalaryController {
       return { message: `Job '${jobName}' scheduled successfully.` };
     } catch (error) {
       return { message: `Error scheduling job: ${error.message}` };
+    }
+  }
+
+  @Get('chart')
+  async getChartData(@Query('id') id: string) {
+    try {
+      const objectId = new Types.ObjectId(id);
+      const data = await this.salaryService.getTotalBonusesPerMonth(objectId);
+      return data;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException('Invalid ID format');
+      }
+      throw new NotFoundException('Data not found or an error occurred');
     }
   }
 }

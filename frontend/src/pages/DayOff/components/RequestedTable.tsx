@@ -27,6 +27,25 @@ const RequestedTable = () => {
     RequestedDataType | undefined
   >(undefined);
 
+ const getEmployeeIdFromLocalStorage = () => {
+   const userData = localStorage.getItem("userData");
+   if (userData) {
+     try {
+       const parsedData = JSON.parse(userData);
+       return {
+         employID: parsedData.employID,
+         role: parsedData.role,
+       };
+     } catch (e) {
+       console.error("Failed to parse user data from local storage:", e);
+       return null;
+     }
+   }
+   return null;
+ };
+
+ const employeeId = getEmployeeIdFromLocalStorage();
+
   function handleDrawerClose() {
     setisDrawerOpen(false);
   }
@@ -44,17 +63,35 @@ const RequestedTable = () => {
               return { ...item, isApproved: true };
             }
             return item;
-          }),
+          })
         );
-      },
+      }
     );
   }
 
   useEffect(() => {
-    fetchData({ url: API }, (data) => {
-      setData(data);
-    });
-  }, []);
+    const user = getEmployeeIdFromLocalStorage();
+    const employeeId = user?.employID;
+    const role = user?.role;
+    function fetchDataBasedOnRole(employeeId?: string, role?: string) {
+      if (role === "employee" && employeeId) {
+        const url = `${API}/${employeeId}`;
+        fetchData({ url }, (response) => {
+          setData(response);
+        });
+      } else if (role === "hr") {
+        const url = `${API}`;
+        fetchData({ url }, (response) => {
+          setData(response);
+        });
+      }
+    }
+
+    if (role) {
+      fetchDataBasedOnRole(employeeId, role);
+    }
+  }, [fetchData]);
+
 
   function handleDecline(id?: string) {
     fetchData(
@@ -64,7 +101,7 @@ const RequestedTable = () => {
       },
       () => {
         setData((prev) => prev.filter((item) => item._id !== id));
-      },
+      }
     );
   }
 
@@ -91,14 +128,14 @@ const RequestedTable = () => {
       (response) => {
         handleAddNew(response);
         setisDrawerOpen(false);
-      },
+      }
     );
   }
 
   const columns: TableProps<RequestedDataType>["columns"] = createColumns(
     data,
     handleApprove,
-    onDecline,
+    onDecline
   );
 
   return (
