@@ -27,22 +27,21 @@ const RequestedTable = () => {
     RequestedDataType | undefined
   >(undefined);
 
-  const getEmployeeIdFromLocalStorage = () => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      try {
-        const parsedData = JSON.parse(userData);
-        return {
-          employID: parsedData.employID,
-          role: parsedData.role,
-        };
-      } catch (e) {
-        console.error("Failed to parse user data from local storage:", e);
-        return null;
-      }
-    }
-    return null;
-  };
+ const getEmployeeIdFromLocalStorage = () => {
+   const userData = localStorage.getItem("userData");
+   if (userData) {
+     try {
+       const parsedData = JSON.parse(userData);
+       return parsedData.employID; 
+     } catch (e) {
+       console.error("Failed to parse user data from local storage:", e);
+       return null;
+     }
+   }
+   return null;
+ };
+
+ const employeeId = getEmployeeIdFromLocalStorage();
 
   function handleDrawerClose() {
     setisDrawerOpen(false);
@@ -68,27 +67,20 @@ const RequestedTable = () => {
   }
 
   useEffect(() => {
-    const user = getEmployeeIdFromLocalStorage();
-    const employeeId = user?.employID;
-    const role = user?.role;
-    function fetchDataBasedOnRole(employeeId?: string, role?: string) {
-      if (role === "employee" && employeeId) {
+    function fetchByEmployeeId(employeeId?: string) {
+      if (employeeId) {
         const url = `${API}/${employeeId}`;
-        fetchData({ url }, (response) => {
-          setData(response);
-        });
-      } else if (role === "hr") {
-        const url = `${API}`;
         fetchData({ url }, (response) => {
           setData(response);
         });
       }
     }
 
-    if (role) {
-      fetchDataBasedOnRole(employeeId, role);
+    if (employeeId) {
+      fetchByEmployeeId(employeeId);
     }
-  }, [fetchData]);
+  }, [employeeId, fetchData]);
+
 
   function handleDecline(id?: string) {
     fetchData(
