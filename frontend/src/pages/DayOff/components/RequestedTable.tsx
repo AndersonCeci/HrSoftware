@@ -49,48 +49,28 @@ const RequestedTable = () => {
 		);
 	}
 
-	// useEffect(() => {
-	// 	fetchData({ url: API }, (data) => {
-	// 		setData(data);
-	// 	});
-	// }, []);
-
 	useEffect(() => {
-		const user = getFromLocalStorage();
-		const employeeId = user?.employID;
-		const role = user?.role;
+    const user = getFromLocalStorage();
+    const employeeId = user?._id;
+	
+    if (employeeId) {
+      fetchData(
+        {
+          url: `${API}/${employeeId}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+        },
+        (response) => {
+          setData(response);
+        }
+      );
+    } else {
+      console.error("No employee ID found");
+    }
+  }, []);
 
-		fetchData(
-			{
-				url: `${API}/${employeeId}`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${user?.token}`,
-				},
-			},
-			(response) => {
-				setData(response);
-			},
-		);
-
-		// function fetchDataBasedOnRole(employeeId?: string, role?: string) {
-		// 	if (role === "employee" && employeeId) {
-		// 		const url = `${API}/${employeeId}`;
-		// 		fetchData({ url }, (response) => {
-		// 			setData(response);
-		// 		});
-		// 	} else if (role === "hr") {
-		// 		const url = `${API}`;
-		// 		fetchData({ url }, (response) => {
-		// 			setData(response);
-		// 		});
-		// 	}
-		// }
-
-		// if (role) {
-		// 	fetchDataBasedOnRole(employeeId, role);
-		// }
-	}, []);
 
 	function handleDecline(id?: string) {
 		fetchData(
