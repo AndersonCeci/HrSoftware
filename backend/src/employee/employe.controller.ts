@@ -38,6 +38,11 @@ export class EmployeeController {
     return this.employeeService.findStatusLength();
   }
 
+  @Get('organizational-tree')
+  async getEmployeesAndTeamLeaders(): Promise<Employee[]> {
+    return this.employeeService.getEmployeesAndTeamLeaders();
+  }
+
   @Get('/search')
   async search(
     @Query('name') name?: string,
