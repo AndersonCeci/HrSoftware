@@ -9,3 +9,11 @@ export type RequestedDataType = {
   EmployeeName: string;
   isApproved: boolean;
 };
+
+export type valueSubmit = {
+	employeeId: string;
+	StartTime: any;
+	EndTime: any;
+	leaveType: string;
+	description: string;
+};

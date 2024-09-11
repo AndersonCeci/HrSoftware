@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TableProps } from "antd";
 import Modal from "../../../components/Shared/Modal";
 import Table from "../../../components/Table/Table";
-import { RequestedDataType } from "../types/RequestedLeave";
+import { RequestedDataType, valueSubmit } from "../types/RequestedLeave";
 import TableHeader from "../../../components/Table/TableHeader";
 import Drawer from "../../../components/Shared/Drawer";
 import RequestForm from "../../DayOff/components/RequestForm";
@@ -23,7 +23,7 @@ const RequestedTable = () => {
 	const [data, setData] = useState<RequestedDataType[]>([]);
 	const [isDrawerOpen, setisDrawerOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [, , fetchData] = useHttp();
+	const [isLoading, , fetchData] = useHttp();
 	const [selectedRecord, setSelectedRecord] = useState<RequestedDataType | undefined>(undefined);
 
 	function handleDrawerClose() {
@@ -49,47 +49,18 @@ const RequestedTable = () => {
 		);
 	}
 
-	// useEffect(() => {
-	// 	fetchData({ url: API }, (data) => {
-	// 		setData(data);
-	// 	});
-	// }, []);
-
 	useEffect(() => {
 		const user = getFromLocalStorage();
 		const employeeId = user?.employID;
-		const role = user?.role;
 
 		fetchData(
 			{
 				url: `${API}/${employeeId}`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${user?.token}`,
-				},
 			},
 			(response) => {
 				setData(response);
 			},
 		);
-
-		// function fetchDataBasedOnRole(employeeId?: string, role?: string) {
-		// 	if (role === "employee" && employeeId) {
-		// 		const url = `${API}/${employeeId}`;
-		// 		fetchData({ url }, (response) => {
-		// 			setData(response);
-		// 		});
-		// 	} else if (role === "hr") {
-		// 		const url = `${API}`;
-		// 		fetchData({ url }, (response) => {
-		// 			setData(response);
-		// 		});
-		// 	}
-		// }
-
-		// if (role) {
-		// 	fetchDataBasedOnRole(employeeId, role);
-		// }
 	}, []);
 
 	function handleDecline(id?: string) {
@@ -114,7 +85,7 @@ const RequestedTable = () => {
 		setData((prev) => [data, ...prev]);
 	}
 
-	function handleAddNewRequest(newRequest: RequestedDataType) {
+	function handleAddNewRequest(newRequest: valueSubmit) {
 		fetchData(useHttp.postRequestHelper(API, newRequest), (response) => {
 			handleAddNew(response);
 			setisDrawerOpen(false);
@@ -135,7 +106,7 @@ const RequestedTable = () => {
 				isOpen={isDrawerOpen}
 				onClose={handleDrawerClose}
 			>
-				<RequestForm onAdd={handleAddNewRequest} />
+				<RequestForm onAdd={handleAddNewRequest} isSubmitting={isLoading} />
 			</Drawer>
 			<Modal
 				isOpen={isModalOpen}
