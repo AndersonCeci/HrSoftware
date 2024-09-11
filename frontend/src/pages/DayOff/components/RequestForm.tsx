@@ -1,41 +1,38 @@
 import { Form } from "antd";
 import FormInputs from "../../../components/Shared/InputTypes/FormInputs";
 import Button from "../../../components/Shared/Button";
-import { getFullName } from "../../../utils/utils";
+import { getFromLocalStorage, getFullName } from "../../../utils/utils";
 import { ButtonType } from "../../../enums/Button";
 import { RequestedDataType } from "../types/RequestedLeave";
 import { useEffect, useState } from "react";
 import useHttp from "../../../hooks/useHttp";
+import { valueSubmit } from "../types/RequestedLeave";
+import { t } from "i18next";
 
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
-
-type valueSubmit = {
-	employeeId: string;
-	StartTime: any;
-	EndTime: any;
-	leaveType: string;
-	description: string;
-};
 
 type RequestFormProps = {
 	onAdd: (value: valueSubmit) => void;
 	isSubmitting: boolean;
 };
 
-const RequestForm = ({ onAdd, isSubmitting }: any) => {
+const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
+	const userData = getFromLocalStorage();
+	const isHr = userData?.role === "hr";
 	const [form] = Form.useForm<RequestedDataType>();
 	const [, , fetchData] = useHttp();
 	const [employee, setEmployee] = useState<any[]>([]);
 
 	useEffect(() => {
-		fetchData({ url: `${EMPLOYEE}/search` }, (responseData: any) => setEmployee(responseData));
+		isHr &&
+			fetchData({ url: `${EMPLOYEE}/search` }, (responseData: any) => setEmployee(responseData));
 	}, []);
 
 	const handleSubmit = (value: any) => {
 		const selected = employee.find((e) => getFullName(e.name, e.surname) === value.username);
-    console.log();
+		console.log();
 		const values: valueSubmit = {
-			employeeId: selected._id,
+			employeeId: isHr ? selected._id : userData?.employID,
 			StartTime: value.StartTime.format("YYYY-MM-DD"),
 			EndTime: value.EndTime ? value.EndTime.format("YYYY-MM-DD") : null,
 			leaveType: value.leaveType,
@@ -45,29 +42,37 @@ const RequestForm = ({ onAdd, isSubmitting }: any) => {
 	};
 
 	const type = [
-		{ label: "Annual Leave", value: "annual" },
-		{ label: "Sick Leave", value: "sick" },
-		{ label: "Other", value: "other" },
+		{ label: t("annual"), value: "annual" },
+		{ label: t("sick"), value: "sick" },
+		{ label: t("other"), value: "other" },
 	];
 
 	return (
 		<Form form={form} name="basic" layout="vertical" onFinish={handleSubmit} autoComplete="off">
-			<FormInputs.AutoComplete
-				name="username"
-				label="Username"
-				required
-				options={employee.map((e) => ({
-					label: getFullName(e.name, e.surname),
-					value: getFullName(e.name, e.surname),
-				}))}
-				isMatchWithOption
-			/>
-			<FormInputs.DatePicker name="StartTime" label="Leave From" required isDisabledDate />
-			<FormInputs.DatePicker name="EndTime" label="Leave To" isDisabledDate dependsOn="StartTime" />
-			<FormInputs.Select name="leaveType" label="Leave Type" options={type} required />
-			<FormInputs.Input name="reason" label="Reason" type="textarea" />
-			<Button type={ButtonType.PRIMARY} htmlType="submit">
-				Apply
+			{isHr && (
+				<FormInputs.AutoComplete
+					name="username"
+					label={t("fullname")}
+					required
+					options={employee.map((e) => ({
+						label: getFullName(e.name, e.surname),
+						value: getFullName(e.name, e.surname),
+					}))}
+					isMatchWithOption
+				/>
+			)}
+			<FormInputs.DatePicker name="StartTime" label={t('startLEaveDate')} required isDisabledDate />
+			<FormInputs.DatePicker name="EndTime" label={t('endLeaveDate')}isDisabledDate dependsOn="StartTime" />
+			<FormInputs.Select name="leaveType" label={t('leaveType')} options={type} required />
+			<FormInputs.Input name="reason" label={t('reason')} type="textarea" />
+			<Button
+				type={ButtonType.PRIMARY}
+				htmlType="submit"
+				block
+				size="large"
+				disabled={isSubmitting}
+			>
+				{t("submit")}
 			</Button>
 		</Form>
 	);
