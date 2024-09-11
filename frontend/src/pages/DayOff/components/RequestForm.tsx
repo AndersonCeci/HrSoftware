@@ -7,6 +7,7 @@ import { RequestedDataType } from "../types/RequestedLeave";
 import { useEffect, useState } from "react";
 import useHttp from "../../../hooks/useHttp";
 import { valueSubmit } from "../types/RequestedLeave";
+import { t } from "i18next";
 
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 
@@ -41,9 +42,9 @@ const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
 	};
 
 	const type = [
-		{ label: "Annual Leave", value: "annual" },
-		{ label: "Sick Leave", value: "sick" },
-		{ label: "Other", value: "other" },
+		{ label: t("annual"), value: "annual" },
+		{ label: t("sick"), value: "sick" },
+		{ label: t("other"), value: "other" },
 	];
 
 	return (
@@ -51,7 +52,7 @@ const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
 			{isHr && (
 				<FormInputs.AutoComplete
 					name="username"
-					label="Username"
+					label={t("fullname")}
 					required
 					options={employee.map((e) => ({
 						label: getFullName(e.name, e.surname),
@@ -60,10 +61,10 @@ const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
 					isMatchWithOption
 				/>
 			)}
-			<FormInputs.DatePicker name="StartTime" label="Leave From" required isDisabledDate />
-			<FormInputs.DatePicker name="EndTime" label="Leave To" isDisabledDate dependsOn="StartTime" />
-			<FormInputs.Select name="leaveType" label="Leave Type" options={type} required />
-			<FormInputs.Input name="reason" label="Reason" type="textarea" />
+			<FormInputs.DatePicker name="StartTime" label={t('startLEaveDate')} required isDisabledDate />
+			<FormInputs.DatePicker name="EndTime" label={t('endLeaveDate')}isDisabledDate dependsOn="StartTime" />
+			<FormInputs.Select name="leaveType" label={t('leaveType')} options={type} required />
+			<FormInputs.Input name="reason" label={t('reason')} type="textarea" />
 			<Button
 				type={ButtonType.PRIMARY}
 				htmlType="submit"
@@ -71,7 +72,7 @@ const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
 				size="large"
 				disabled={isSubmitting}
 			>
-				Apply
+				{t("submit")}
 			</Button>
 		</Form>
 	);
