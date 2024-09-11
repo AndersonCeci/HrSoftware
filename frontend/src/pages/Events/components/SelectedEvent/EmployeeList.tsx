@@ -4,14 +4,14 @@ import { stringToHashCodeHelper } from "../../../../utils/utils";
 import { EventParticipantsType } from "../../types/EventTypes";
 
 export default function EmployeeList({ participants }: { participants: EventParticipantsType[] }) {
-	function renderAvatar(profilePhoto: string | undefined, fullName: string) {
+	function renderAvatar(profilePhoto: string | undefined, fullName: string, id: string) {
 		if (profilePhoto) {
 			return <Avatar src={profilePhoto} alt={fullName} />;
 		}
 		return (
 			<Avatar
 				style={{
-					backgroundColor: stringToHashCodeHelper(fullName),
+					backgroundColor: stringToHashCodeHelper(id),
 					color: "black",
 					fontSize: "1.2rem",
 					fontFamily: "Roboto",
@@ -38,7 +38,7 @@ export default function EmployeeList({ participants }: { participants: EventPart
 					<List.Item>
 						<List.Item.Meta
 							title={item.fullName}
-							avatar={renderAvatar(item.profilePhoto, item.fullName)}
+							avatar={renderAvatar(item.profilePhoto, item.fullName, item._id)}
 						/>
 					</List.Item>
 				)}
