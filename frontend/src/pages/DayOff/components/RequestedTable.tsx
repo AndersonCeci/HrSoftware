@@ -50,18 +50,28 @@ const RequestedTable = () => {
 	}
 
 	useEffect(() => {
-		const user = getFromLocalStorage();
-		const employeeId = user?.employID;
+    const user = getFromLocalStorage();
+    const employeeId = user?._id;
 
-		fetchData(
-			{
-				url: `${API}/${employeeId}`,
-			},
-			(response) => {
-				setData(response);
-			},
-		);
-	}, []);
+    if (employeeId) {
+      fetchData(
+        {
+          url: `${API}/${employeeId}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+        },
+        (response) => {
+          setData(response);
+        }
+      );
+    } else {
+      console.error("No employee ID found");
+    }
+  }, []);
+
+
 
 	function handleDecline(id?: string) {
 		fetchData(
