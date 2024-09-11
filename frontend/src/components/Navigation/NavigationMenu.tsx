@@ -14,6 +14,7 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const isHr = isHR();
+	const { t } = useTranslation();
 	const navElements = [
 		Paths.Dashboard,
 		...(isHr ? [Paths.Recruitment] : []),
@@ -22,7 +23,6 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		Paths.DayOff,
 		Paths.Company,
 	];
-	const { t } = useTranslation();
 
 	const items: any = navElements.map((element, index) => {
 		return {
@@ -35,15 +35,6 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 			}),
 		};
 	});
-
-	useEffect(() => {
-		const currentPath = location.pathname.split("/").filter((x) => x);
-		
-		console.log("currentPath", currentPath);
-
-
-
-	}, [location.pathname]);
 
 	const handleLogOutClick = () => {
 		localStorage.removeItem("userData");
@@ -71,7 +62,7 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 					className="side-nevigation-menu"
 					defaultSelectedKeys={[defaultSubSelect ? defaultSubSelect : defaultSelect]}
 					defaultOpenKeys={[itemKey?.key]}
-					activeKey={""}
+					selectedKeys={[defaultSubSelect ? defaultSubSelect : defaultSelect]}
 					spellCheck={true}
 					mode="inline"
 					items={items}
