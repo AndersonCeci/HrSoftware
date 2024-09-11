@@ -1,6 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateDayOffDto } from './dto/CreateDayOff.dto';
 import { DayOff } from './schema/dayoff.schema';
 import { EmployeeService } from 'src/employee/employe.service';
@@ -69,19 +73,34 @@ export class DayoffService {
     return createdDayoff.save();
   }
 
-  async findById(employeeId: string): Promise<DayOff[]> {
-    const employe = await this.employeeService;
-    return this.dayoffModel
-      .find({ isDeleted: false, employeeId })
-      .populate('EmployeeName', 'name')
-      .exec();
-  }
+  async findAll(userId: string): Promise<DayOff[]> {
+    const userObjectId = new Types.ObjectId(userId);
+    const user = await this.userModel.findById(userObjectId);
 
-  async findAll(): Promise<DayOff[]> {
-    return this.dayoffModel
-      .find({ isDeleted: false })
-      .populate('EmployeeName', 'name')
-      .exec();
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (user.role === Role.HR) {
+      const dayOffs = await this.dayoffModel
+        .find({ isDeleted: false })
+        .populate('EmployeeName', 'name')
+        .exec();
+      return dayOffs;
+    } else if (user.role === Role.Employee) {
+      const dayOffs = await this.dayoffModel
+        .find({
+          isDeleted: false,
+          employeeId: user.employID.toString(),
+        })
+        .populate('EmployeeName', 'name')
+        .exec();
+      return dayOffs;
+    } else {
+      throw new UnauthorizedException(
+        'User does not have permission to view day offs',
+      );
+    }
   }
 
   async accepted(): Promise<DayOff[]> {

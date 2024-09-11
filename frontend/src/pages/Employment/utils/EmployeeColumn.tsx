@@ -24,8 +24,11 @@ export function getColumns(
 			dataIndex: "name",
 			key: "name",
 			filterDropdown: true,
-			onFilter: (inputValue, filter) =>
-				filter.username.toLowerCase().includes(inputValue.toLowerCase()),
+			onFilter: (inputValue, filter) => {
+				const value = filter.name + " " + filter.surname;
+
+				return value.toLowerCase().includes(inputValue.toLowerCase());
+			},
 			filterIcon: <SearchOutlined className="nav-menu-icon" />,
 			displayAs: (_, record) => {
 				const value = record.name + " " + record.surname;
@@ -57,16 +60,13 @@ export function getColumns(
 			key: "status",
 			displayAs: (value) => {
 				return (
-					<Tag
-						color={value === "On Site" ? "green" : "blue"}
-						key={value}
-					>
+					<Tag color={value === "On Site" ? "green" : "blue"} key={value}>
 						{value}
 					</Tag>
 				);
 			},
 			filters: getAllUniqueValues(tableData, "status"),
-			align:"center",
+			align: "center",
 			onFilter: (value, record) => record.status.indexOf(value) === 0,
 		}),
 		createTableColumns({
