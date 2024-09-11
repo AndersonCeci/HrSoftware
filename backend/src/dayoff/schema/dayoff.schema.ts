@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Types } from 'mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class DayOff extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
   //employeeId: Types.ObjectId;
@@ -39,6 +39,8 @@ export class DayOff extends Document {
 
   @Prop()
   approvedDate: Date;
+
+  createdAt: Date;
 }
 
 export const DayOffSchema = SchemaFactory.createForClass(DayOff);

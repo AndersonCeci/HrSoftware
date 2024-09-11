@@ -84,6 +84,7 @@ export class DayoffService {
     if (user.role === Role.HR) {
       const dayOffs = await this.dayoffModel
         .find({ isDeleted: false })
+        .sort({ createdAt: -1})
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
@@ -93,6 +94,7 @@ export class DayoffService {
           isDeleted: false,
           employeeId: user.employID.toString(),
         })
+        .sort({createdAt: -1})
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
@@ -106,6 +108,7 @@ export class DayoffService {
   async accepted(): Promise<DayOff[]> {
     return this.dayoffModel
       .find({ isApproved: true })
+      .sort({ createdAt: -1 })
       .populate('EmployeeName', 'name')
       .exec();
   }
