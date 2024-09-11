@@ -31,7 +31,11 @@ export function isHR() {
 
 //? Future ilvi you will need to remember where you got this code from
 //?https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-function hashCode(str: string) {
+function hashCode(str: string | undefined) {
+	if (!str) {
+		return 0;
+	}
+
 	let hash = 0;
 	for (var i = 0; i < str.length; i++) {
 		hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -42,5 +46,3 @@ function hashCode(str: string) {
 export function stringToHashCodeHelper(str: string) {
 	return `hsl(${hashCode(str) % 360}, 100%, 80%)`;
 }
-
-
