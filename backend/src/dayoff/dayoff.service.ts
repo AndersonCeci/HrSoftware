@@ -74,10 +74,6 @@ export class DayoffService {
   }
 
   async accepted(userId: string): Promise<DayOff[]> {
-    // return this.dayoffModel
-    //   .find({ isApproved: true })
-    //   .sort({ createdAt: -1 })
-    //   .exec();
     const userObjectId = new Types.ObjectId(userId);
     const user = await this.userModel.findById(userObjectId);
 
@@ -85,7 +81,7 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR) {
+    if (user.role === Role.HR || user.role === Role.CEO) {
       const approvedDayOffs = await this.dayoffModel
         .find({ isApproved: true })
         .exec();
@@ -113,7 +109,7 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR) {
+    if (user.role === Role.HR || user.role === Role.CEO) {
       const dayOffs = await this.dayoffModel
         .find({ isDeleted: false })
         .sort({ createdAt: -1 })
