@@ -45,6 +45,9 @@ export class EmployeeService {
       case Position.ProjectManager:
         role = Role.ProjectManager;
         break;
+      case Position.HR:
+        role = Role.HR;
+        break;
       default:
         throw new Error('Invalid position');
     }

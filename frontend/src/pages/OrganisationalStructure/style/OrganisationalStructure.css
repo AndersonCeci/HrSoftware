@@ -27,6 +27,9 @@
   width: 50px;
   align-items: center;
   margin: 10px;
+  max-width: 80px;
+  min-width:60px;
+  max-height: 80px;
 }
 
 .hr-card {
