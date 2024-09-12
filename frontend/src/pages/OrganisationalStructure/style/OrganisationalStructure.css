@@ -30,6 +30,7 @@
   max-width: 80px;
   min-width:60px;
   max-height: 80px;
+  border-radius: 10px;
 }
 
 .hr-card {
@@ -52,7 +53,7 @@
 
 .label {
   width: auto;
-  padding: 5px;
+  padding: 7px;
   height: auto;
   border-radius: 5px;
 }

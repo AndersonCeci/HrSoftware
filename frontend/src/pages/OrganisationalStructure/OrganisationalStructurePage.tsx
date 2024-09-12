@@ -58,7 +58,7 @@ export default function SelectionDemo() {
           value={data}
           selectionMode="multiple"
           selection={selection}
-          onSelectionChange={(e: any) => setSelection(e.data)}
+          onSelectionChange={(e) => setSelection(e.data)}
           nodeTemplate={nodeTemplate}
         />
       )}

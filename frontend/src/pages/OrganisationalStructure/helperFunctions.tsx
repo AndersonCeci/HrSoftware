@@ -1,21 +1,39 @@
 import { TreeNode } from "primereact/treenode";
-import { EmployData, HrAndCeo, OrganizationData, TeamLeader } from "./types/OrganizationalTypes";
+import {
+  EmployData,
+  HrAndCeo,
+  OrganizationData,
+  TeamLeader,
+} from "./types/OrganizationalTypes";
+import { Avatar } from "antd";
 
 export const nodeTemplate = (node: TreeNode) => {
+  console.log(node, "nodeeee");
   if (node.className?.includes("card")) {
     return (
       <div className="flex flex-column">
         <div className="flex flex-column align-items-center">
-          <img
-            src={node.data.image}
-            className="mb-3 w-3rem h-3rem"
-          />
+          {node.data.image ? (
+            <img src={node.data.image} className="mb-3 w-3rem h-3rem" />
+          ) : (
+            <Avatar
+              size={"large"}
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                fontSize: "1.5rem",
+              }}
+            >
+              {node?.data.name[0]}
+            </Avatar>
+          )}
           <span className="font-bold mb-2">{node.data.name}</span>
           <span>{node.data.title}</span>
         </div>
       </div>
     );
   }
+
   if (node.className?.includes("label")) {
     return (
       <div className="flex-label label">
@@ -25,7 +43,6 @@ export const nodeTemplate = (node: TreeNode) => {
   }
   return node.label || null;
 };
-
 
 export const formatData = async (
   organizationData: OrganizationData,
