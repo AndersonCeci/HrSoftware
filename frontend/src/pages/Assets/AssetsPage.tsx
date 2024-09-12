@@ -3,10 +3,10 @@ import AssetContent from "./components/AssetContent";
 import InventaryContent from "./components/InventaryContent";
 import AssetInventaryContextProvider from "./context/AssetInventaryContext";
 import { Tabs } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { t } from "i18next";
 import useHttp from "../../hooks/useHttp";
-import { isHR } from "../../utils/utils";
+import { isHR, getFromLocalStorage } from "../../utils/utils";
 
 const INVENTARY_TAB = "inventary";
 const ASSETS_TAB = "assets";
@@ -17,7 +17,8 @@ const AssetsPage: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [, , sendRequest] = useHttp();
 	const [tableData, setTableData] = useState([]);
-	const isHr = isHR();
+	const loggedUser = getFromLocalStorage();
+	const isHr = loggedUser.role === "hr";
 
 	function handleTabChange(key: string) {
 		setActiveTab(key);
@@ -33,13 +34,18 @@ const AssetsPage: React.FC = () => {
 	function getNewData() {
 		sendRequest(
 			{
-				url: `${API}/employee`,
+				url: `${API}/user/${loggedUser._id}`,
+				// url: `${API}/employee`, THIS IS HOW IT WAS BEFORE
 			},
 			(data) => {
 				setTableData(data);
 			},
 		);
 	}
+
+	useEffect(() => {
+		getNewData();
+	}, []);
 
 	return (
 		<section className="test">

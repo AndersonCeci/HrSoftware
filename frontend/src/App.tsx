@@ -9,49 +9,48 @@ import "./App.css";
 import { ConfigProvider } from "antd";
 
 const iterationRoutes = [
-  Paths.Dashboard,
-  Paths.Recruitment,
-  Paths.PersonalCalendar,
-  Paths.Company,
-  Paths.Management,
-  Paths.Employee,
-  Paths.Background,
-  Paths.DayOff,
-  // Paths.Settings,
-  Paths.Profile,
+	Paths.Dashboard,
+	Paths.Recruitment,
+	Paths.PersonalCalendar,
+	Paths.Company,
+	Paths.Management,
+	Paths.Employee,
+	Paths.Background,
+	Paths.DayOff,
+	Paths.Profile,
 ];
 
 const router = createBrowserRouter([
-  {
-    index: true,
-    element: <Paths.Login.pageElement />,
-  },
-  {
-    path: "/",
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      ...iterationRoutes.map((route) => {
-        return {
-          path: route.path,
-          children: route.children.map((child) => {
-            return {
-              path: child.path,
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <child.pageElement />
-                </Suspense>
-              ),
-            };
-          }),
-        };
-      }),
-      {
-        path: "*",
-        element: <ErrorPage />,
-      },
-    ],
-  },
+	{
+		path: Paths.Login.path,
+		element: <Paths.Login.pageElement />,
+	},
+	{
+		path: "/",
+		element: <RootLayout />,
+		errorElement: <ErrorPage />,
+		children: [
+			...iterationRoutes.map((route) => {
+				return {
+					path: route.path,
+					children: route.children.map((child) => {
+						return {
+							path: child.path,
+							element: (
+								<Suspense fallback={<Loader />}>
+									<child.pageElement />
+								</Suspense>
+							),
+						};
+					}),
+				};
+			}),
+			{
+				path: "*",
+				element: <ErrorPage />,
+			},
+		],
+	},
 ]);
 
 function App() {

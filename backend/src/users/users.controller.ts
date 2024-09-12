@@ -25,6 +25,11 @@ export class UsersController {
     return await this.userService.createUser(createUserDto);
   }
 
+  @Get('one')
+  async getOneUser(@Param('userId') userId:string) {
+    return await this.userService.findOne(userId);
+  }
+
   @Get()
   async getUsers() {
     return await this.userService.getUsers();

@@ -12,6 +12,8 @@ import PromoteForm from "./components/PromoteForm";
 import { useTranslation } from "react-i18next";
 import FormInputs from "../../components/Shared/InputTypes/FormInputs";
 import { Form } from "antd";
+import { useNavigate } from "react-router-dom";
+import { isHR } from "../../utils/utils";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
@@ -30,8 +32,15 @@ const EmploymentPage: React.FC = () => {
   const [promotedData, setPromotedData] = useState<
     EmployeeDataType | undefined
   >(undefined);
-
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const isHr = isHR();
+
+  useEffect(() => {
+    if (!isHr) {
+      navigate("/error");
+    }
+  }, [isHr]);
 
   useEffect(() => {
     sendRequest(
@@ -138,8 +147,6 @@ const EmploymentPage: React.FC = () => {
     handlePromoteButtonClick
   );
 
-  console.log(tableData, "adadada");
-
   return (
     <>
       <Drawer height={500} isOpen={open} onClose={() => handlClose(setOpen)}>
@@ -147,7 +154,6 @@ const EmploymentPage: React.FC = () => {
           selectedEmployee={editedData}
           onAdd={handleAddNewEmployee}
           onEdit={handleEditEmployee}
-          applicant={false}
         />
       </Drawer>
 

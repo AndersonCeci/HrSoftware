@@ -5,7 +5,6 @@ import { Content } from "antd/es/layout/layout";
 import HRWelcomeGrid from "./components/HRWelcomeGrid";
 import useHttp from "../../hooks/useHttp";
 import { useEffect, useState } from "react";
-import { EmployeeDataType } from "../Employment/types/Employee";
 import { LeftDataType } from "../Dismissed/types/Left";
 
 export interface Data {
@@ -19,17 +18,16 @@ type EmployeStatus = {
 count: number;
 status: string;
 }
-
-const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
 const DISSMISED = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
 
 const DashboardPage: React.FC = () => {
+
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const [employeeTableData, setEmployeeTableData] = useState<EmployeStatus[]>([]);
   const [dismissedTableData, setDismissedTableData] = useState<LeftDataType[]>(
     []
   );
-  const [isLoading, error, sendRequest] = useHttp();
+  const [,, sendRequest] = useHttp();
 
   useEffect(() => {
     sendRequest(

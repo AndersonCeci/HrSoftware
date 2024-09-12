@@ -19,6 +19,7 @@ export const Paths = {
 		icon: null,
 		children: [
 			{
+				isHrOnly: false,
 				path: "dashboard",
 				icon: NavigationIcons.AppstoreOutlined,
 				pageElement: PageRoutesComponents.DashboardPage,
@@ -30,11 +31,12 @@ export const Paths = {
 		type: "group",
 		icon: null,
 		children: [
-			...isOnlyHr(
-				"recruitment",
-				NavigationIcons.MdOutlinePersonSearch,
-				PageRoutesComponents.RecruitmentPage,
-			),
+			{
+				isHrOnly: true,
+				path: "recruitment",
+				icon: NavigationIcons.MdOutlinePersonSearch,
+				pageElement: PageRoutesComponents.RecruitmentPage,
+			},
 		],
 	},
 	Employee: {
@@ -42,7 +44,13 @@ export const Paths = {
 		type: "group",
 		icon: null,
 		children: [
-			...isOnlyHr("employee", NavigationIcons.UserOutlined, PageRoutesComponents.EmploymentPage),
+			// ...isOnlyHr("employee", NavigationIcons.UserOutlined, PageRoutesComponents.EmploymentPage),
+			{
+				isHrOnly: true,
+				path: "employee",
+				icon: NavigationIcons.UserOutlined,
+				pageElement: PageRoutesComponents.EmploymentPage,
+			},
 		],
 	},
 	PersonalCalendar: {
@@ -76,20 +84,27 @@ export const Paths = {
 	},
 	Management: {
 		path: "managment",
-		type: !isHr ? "group" : "",
+		type: "",
 		icon: NavigationIcons.Management,
 		children: [
 			{
+				isOnlyHr: false,
 				path: "salary",
 				icon: NavigationIcons.RiMoneyEuroCircleLine,
 				pageElement: PageRoutesComponents.SalariesPage,
 			},
-			...isOnlyHr(
-				"promotions",
-				NavigationIcons.PiChartLineUpBold,
-				PageRoutesComponents.PromotionPage,
-			),
-			...isOnlyHr("dismissed", NavigationIcons.TbUserCancel, PageRoutesComponents.DismissedPage),
+			{
+				isHrOnly: true,
+				path: "promotions",
+				icon: NavigationIcons.PiChartLineUpBold,
+				pageElement: PageRoutesComponents.PromotionPage,
+			},
+			{
+				isHrOnly: true,
+				path: "dismissed",
+				icon: NavigationIcons.TbUserCancel,
+				pageElement: PageRoutesComponents.DismissedPage,
+			},
 		],
 	},
 	DayOff: {
@@ -98,11 +113,13 @@ export const Paths = {
 		icon: NavigationIcons.SandClock,
 		children: [
 			{
+				isHrOnly: false,
 				path: "requestedLeave",
 				icon: NavigationIcons.VscRequestChanges,
 				pageElement: PageRoutesComponents.RequestedLeavePage,
 			},
 			{
+				isHrOnly: false,
 				path: "calendarLeave",
 				icon: NavigationIcons.BsCalendar4Range,
 				pageElement: PageRoutesComponents.CalendarLeavePage,
@@ -115,16 +132,19 @@ export const Paths = {
 		icon: NavigationIcons.Building,
 		children: [
 			{
+				isHrOnly: false,
 				path: "events",
 				icon: NavigationIcons.MdOutlineEventAvailable,
 				pageElement: PageRoutesComponents.EventPage,
 			},
 			{
+				isHrOnly: false,
 				path: "assets",
 				icon: NavigationIcons.RiComputerLine,
 				pageElement: PageRoutesComponents.AssetsPage,
 			},
 			{
+				isHrOnly: false,
 				path: "organisationalStructure",
 				icon: NavigationIcons.ApartmentOutlined,
 				pageElement: PageRoutesComponents.OrganisationalStructurePage,

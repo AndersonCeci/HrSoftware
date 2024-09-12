@@ -1,6 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateDayOffDto } from './dto/CreateDayOff.dto';
 import { DayOff } from './schema/dayoff.schema';
 import { EmployeeService } from 'src/employee/employe.service';
@@ -13,8 +17,8 @@ import { Role, User } from 'src/users/schemas/user.schema';
 @Injectable()
 export class DayoffService {
   constructor(
-     @InjectModel( DayOff.name ) private dayoffModel: Model<DayOff>,
-     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(DayOff.name) private dayoffModel: Model<DayOff>,
+    @InjectModel(User.name) private userModel: Model<User>,
     private readonly employeeService: EmployeeService,
     private readonly notificationService: NotificationsService,
   ) {}
@@ -54,7 +58,7 @@ export class DayoffService {
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
-    console.log( hrUsers,  'hrUsers')
+    console.log(hrUsers, 'hrUsers');
 
     hrUsers.forEach(async (hrUser) => {
       const createNotification: CreateNotificationDto = {
@@ -69,17 +73,64 @@ export class DayoffService {
     return createdDayoff.save();
   }
 
-  async findAll(): Promise<DayOff[]> {
-    return this.dayoffModel
-      .find({ isDeleted: false})
-      .populate('EmployeeName', 'name')
-      .exec();
+  async accepted(userId: string): Promise<DayOff[]> {
+    const userObjectId = new Types.ObjectId(userId);
+    const user = await this.userModel.findById(userObjectId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (user.role === Role.HR || user.role === Role.CEO) {
+      const approvedDayOffs = await this.dayoffModel
+        .find({ isApproved: true })
+        .exec();
+      return approvedDayOffs;
+    } else if (user.role === Role.Employee) {
+      const approvedDayOffs = await this.dayoffModel
+        .find({
+          isApproved: true,
+          employeeId: user.employID.toString(),
+        })
+        .exec();
+      return approvedDayOffs;
+    } else {
+      throw new UnauthorizedException(
+        'User does not have permission to view day approved offs',
+      );
+    }
   }
-  async accepted(): Promise<DayOff[]> {
-    return this.dayoffModel
-      .find({ isApproved: true })
-      .populate('EmployeeName', 'name')
-      .exec();
+
+  async findAll(userId: string): Promise<DayOff[]> {
+    const userObjectId = new Types.ObjectId(userId);
+    const user = await this.userModel.findById(userObjectId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (user.role === Role.HR || user.role === Role.CEO) {
+      const dayOffs = await this.dayoffModel
+        .find({ isDeleted: false })
+        .sort({ createdAt: -1 })
+        .populate('EmployeeName', 'name')
+        .exec();
+      return dayOffs;
+    } else if (user.role === Role.Employee) {
+      const dayOffs = await this.dayoffModel
+        .find({
+          isDeleted: false,
+          employeeId: user.employID.toString(),
+        })
+        .sort({ createdAt: -1 })
+        .populate('EmployeeName', 'name')
+        .exec();
+      return dayOffs;
+    } else {
+      throw new UnauthorizedException(
+        'User does not have permission to view day offs',
+      );
+    }
   }
 
   private calculateTotalDays(startDate: Date, endDate: Date): number {

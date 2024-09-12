@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
     localStorage.getItem("userData") || "{}"
   ).employID;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isLoading, error, sendRequest] = useHttp();
+  const [isLoading, , sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const { t } = useTranslation();
   const [avatarUrl, setAvatarUrl] = useState<string>("");
@@ -112,7 +112,7 @@ const ProfilePage: React.FC = () => {
           <Card className="avatar-profile-card">
             <div className="inside-profile-card">
               <div>
-                <img className="profile-pic" src={tableData?.profilePhoto} />
+                <img className="profile-pic" src={tableData?.profilePhoto || "https://api.dicebear.com/7.x/miniavs/svg?seed=1"}  />
               </div>
               <div>
                 <h3>{userData.username}</h3>

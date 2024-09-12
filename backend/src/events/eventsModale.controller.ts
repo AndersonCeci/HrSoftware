@@ -6,13 +6,13 @@ import {
   Delete,
   HttpException,
   Param,
-  Query,
+  
   Patch,
   BadRequestException,
 } from '@nestjs/common';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { EventsService } from './eventsModale.service';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Query, Types } from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
 
 
@@ -27,22 +27,25 @@ export class EventsController {
     return this.eventsService.createEvent(createEventDto);
   }
 
+  //  @Get()
+  //  async getEvent(query:Query) {
+  //    return this.eventsService.getEvent(query);
+  //  }
+
   @Get()
-  async getEvent(@Query() query) {
-    return this.eventsService.getEvent(query);
-  }
+   async getEvent() {
+     return this.eventsService.findAll();
+   }
 
   @Patch('assign/:id')
   async assignEmployee(
     @Param('id') id: string,
     @Body() assignEmployeeDto: AssignEmployeeDto,
   ) {
-    
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid event ID');
     }
 
-    
     if (!Types.ObjectId.isValid(assignEmployeeDto.joinEmployee)) {
       throw new BadRequestException('Invalid joinEmployee ID');
     }
@@ -50,8 +53,36 @@ export class EventsController {
     return this.eventsService.assignEmployee(
       id,
       assignEmployeeDto.joinEmployee,
-     
     );
+  }
+
+  @Patch('populate/:id')
+  async populateEmployee(
+    @Param('id') id: string,
+    @Body() assignEmployeeDto: AssignEmployeeDto,
+  ) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid event ID');
+    }
+
+    if (!Types.ObjectId.isValid(assignEmployeeDto.joinEmployee)) {
+      throw new BadRequestException('Invalid joinEmployee ID');
+    }
+
+    return this.eventsService.populateEmployee(
+      id,
+      assignEmployeeDto.joinEmployee,
+    );
+  }
+
+  @Get('check')
+  async check(){
+    return this.eventsService.checkParticipantType()
+  }
+
+  @Delete('deleteAll')
+  async unassignAllEmployeesFromAllEvents() {
+    return this.eventsService.unassignAllEmployeesFromAllEvents();
   }
 
   @Delete(':id')

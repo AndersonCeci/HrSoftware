@@ -23,14 +23,14 @@ export class DayoffController {
     return this.dayoffService.createDayOff(createDayOffDto);
   }
 
-  @Get()
-  findAll(): Promise<DayOff[]> {
-    return this.dayoffService.findAll();
+  @Get('accepted/:employeeId')
+  accepted(@Param('employeeId') employeeId: string): Promise<DayOff[]> {
+    return this.dayoffService.accepted(employeeId);
   }
 
-  @Get('accepted')
-  accepted(): Promise<DayOff[]> {
-    return this.dayoffService.accepted();
+  @Get('/:employeeId')
+  findAll(@Param('employeeId') employeeId: string): Promise<DayOff[]> {
+    return this.dayoffService.findAll(employeeId);
   }
 
   @Delete(':id/soft-delete')
