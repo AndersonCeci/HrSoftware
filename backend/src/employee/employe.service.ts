@@ -23,6 +23,7 @@ import { InventoryService } from 'src/inventory/inventory.service';
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private readonly employeeModel: Model<Employee>,
+    // @InjectModel(User.name) private readonly userModel: Model<User>,
     @Inject(forwardRef(() => InventoryService))
     private readonly inventoryService: InventoryService,
     private readonly userService: UserService,
@@ -43,6 +44,9 @@ export class EmployeeService {
         break;
       case Position.ProjectManager:
         role = Role.ProjectManager;
+        break;
+      case Position.HR:
+        role = Role.HR;
         break;
       default:
         throw new Error('Invalid position');
@@ -289,6 +293,92 @@ export class EmployeeService {
       throw new Error('An error occurred while searching for employees.');
     }
   }
+
+  // async getTeamLeaders(): Promise<Employee[]> {
+  //   const employeesWithTeamLeaders = await this.employeeModel
+  //     .aggregate([
+  //       {
+  //         $match: {
+  //           teamLeaders: { $exists: true, $not: { $size: 0 } },
+  //         },
+  //         $project: {},
+  //       },
+  //     ])
+  //     .exec();
+
+  //   return employeesWithTeamLeaders;
+  // }
+
+  async getEmployeesAndTeamLeaders(): Promise<any> {
+    const results = await this.employeeModel
+      .aggregate([
+        {
+          $facet: {
+            teamLeaders: [
+              {
+                $match: {
+                  teamLeaders: { $exists: true, $not: { $size: 0 } },
+                },
+              },
+              {
+                $unwind: '$teamLeaders',
+              },
+              {
+                $lookup: {
+                  from: 'employees',
+                  localField: 'teamLeaders',
+                  foreignField: '_id',
+                  as: 'teamLeaderDetails',
+                },
+              },
+              {
+                $unwind: '$teamLeaderDetails',
+              },
+              {
+                $group: {
+                  _id: '$teamLeaderDetails._id',
+                  teamLeaderName: { $first: '$teamLeaderDetails.name' },
+                  teamLeaderProfilePhoto: {
+                    $first: '$teamLeaderDetails.profilePhoto',
+                  },
+                  teamLeaderPosition: {
+                    $first: '$teamLeaderDetails.position',
+                  },
+                  employees: {
+                    $push: {
+                      id: '$_id',
+                      name: '$name',
+                      position: '$position',
+                      profilePhoto: '$profilePhoto',
+                    },
+                  },
+                },
+              },
+            ],
+            hrAndCeo: [
+              {
+                $match: {
+                  role: { $in: ['hr', 'ceo'] },
+                },
+              },
+              {
+                $project: {
+                  id: '$_id',
+                  name: 1,
+                  position: 1,
+                  role: 1,
+                  profilePhoto: 1,
+                },
+              },
+            ],
+          },
+        },
+      ])
+      .exec();
+
+    return results;
+  }
+
   async getTeamLeaders(): Promise<Employee[]> {
     const teamLeaders = await this.employeeModel
       .aggregate([

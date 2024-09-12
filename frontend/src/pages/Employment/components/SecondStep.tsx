@@ -40,7 +40,10 @@ const SecondStep = ({ form }: any) => {
     };
 
     fetchTeamLeaders();
-  }, []);
+  }, [] );
+  
+
+  console.log(selectTeamLeader, 'selecteddTeamLeader')
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();

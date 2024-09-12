@@ -12,6 +12,7 @@ export enum Position {
   FullStack = 'FullStack',
   DevOps = 'DevOps',
   ProjectManager = 'projectManager',
+  HR= 'hr'
 }
 
 export enum EmploymentStatus
