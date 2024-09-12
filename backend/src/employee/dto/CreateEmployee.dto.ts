@@ -41,8 +41,9 @@ export class CreateEmployeeDto {
 
   phoneNumber: string;
 
+  @IsOptional()
   @IsString()
-  profilePhoto: string;
+  profilePhoto?: string;
 
   @IsOptional()
   birthDay: Date;
@@ -58,8 +59,9 @@ export class CreateEmployeeDto {
   @IsOptional()
   teamLeaders?: Types.ObjectId[];
 
+  @IsOptional()
   @IsString()
-  contract: string;
+  contract?: string;
 
   isDeleted: boolean;
 }

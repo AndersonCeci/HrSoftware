@@ -64,6 +64,7 @@ export function createTableColumns({
 
 interface ExtendedTablePropsType extends TablePropsType {
   onChange?: TableProps<any>["onChange"];
+  rowSelection?: TableProps<any>["rowSelection"];
 }
 
 const Table = ({
@@ -72,6 +73,7 @@ const Table = ({
   fixed = false,
   pageSize,
   pagination,
+  rowSelection,
   showHeader = true,
   expandable,
   onChange,
@@ -101,6 +103,7 @@ const Table = ({
       scroll={{ x: fixed ? 1500 : undefined }}
       expandable={expandable ? expandable : undefined}
       onChange={onChange}
+      rowSelection={rowSelection ? rowSelection : undefined}
     />
   );
 };

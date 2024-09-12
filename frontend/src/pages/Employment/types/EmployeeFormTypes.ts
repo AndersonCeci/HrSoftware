@@ -1,6 +1,7 @@
 import { EmployeeDataType } from "./Employee";
 
 export type AddEmployeeFormProps = {
+  applicant?: boolean;
   selectedEmployee?: EmployeeDataType | undefined;
   onEdit: (editedEmployee: EmployeeDataType) => void;
   onAdd: (newEmployee: EmployeeDataType) => void;

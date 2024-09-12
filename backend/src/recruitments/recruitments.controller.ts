@@ -8,12 +8,12 @@ import {
   Param,
   HttpException,
   Query,
-  Put,
   BadRequestException,
   InternalServerErrorException,
+  Patch,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
 
 @Controller('recruitments')
@@ -86,9 +86,9 @@ export class RecruitmentsController {
     }
   }
 
-  @Put(':id')
+  @Patch(':id')
   async updateRecruitment(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() updateRecruitmentDto: UpdateRecruitmentDto,
   ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);

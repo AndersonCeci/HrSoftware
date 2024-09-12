@@ -24,4 +24,6 @@ export class Interview {
   evaluation: string;
   @Prop()
   interviewers: [{ type: Types.ObjectId; ref: 'Employee' }];
+  @Prop({ default: false })
+  notified: boolean;
 }

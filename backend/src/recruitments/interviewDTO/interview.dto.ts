@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsEnum,
   IsMongoId,
@@ -33,4 +34,8 @@ export class InterviewDTO {
   @IsOptional()
   @IsMongoId({ each: true })
   interviewers?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  notified?: boolean;
 }

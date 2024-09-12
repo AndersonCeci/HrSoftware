@@ -1,20 +1,20 @@
+import React, { useState, useRef, useEffect } from "react";
+import { Button, Col, DatePicker, Input, Row, Space } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 import Table from "../../components/Table/Table";
 import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
-import columns, { expandedRowRender } from "./components/TableColumns";
-import { useRef, useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useSalaryHook } from "./context/hook";
-import { Salary } from "../../types/SalaryProps";
-import { Button, Col, DatePicker, Input, Row, Space } from "antd";
-import dayjs, { Dayjs } from "dayjs";
+import columns from "./components/TableColumns";
 import TableHeader from "../../components/Table/TableHeader";
 import usePagination from "../../hooks/usePagination";
+import { useSalaryHook } from "./context/hook";
+import { Salary } from "../../types/SalaryProps";
+import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 
-const SalaryContent = () => {
+const SalaryContent: React.FC = () => {
   const { t } = useTranslation();
 
   const addBonusRef = useRef<Salary>(null);
@@ -78,9 +78,8 @@ const SalaryContent = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader title={t("salarys")} onClick={handleModal} />
-
-      <Row title="Filters" gutter={10}>
+      <TableHeader title={t("salaries")} onClick={handleModal} />
+      <Row gutter={10} title="Filters">
         <Col>
           <Space direction="vertical" size={12}>
             <RangePicker
@@ -114,7 +113,6 @@ const SalaryContent = () => {
         columns={columns({
           handleAddBonus,
           handleModal,
-          handleEditSubmit,
           tableData,
         })}
         fixed
@@ -126,13 +124,8 @@ const SalaryContent = () => {
           onChange: handlePageChange,
           onShowSizeChange: handleLimitChange,
         }}
-        expandable={{
-          columnTitle: "Show Taxes",
-          showExpandColumn: false,
-          rowExpandable: () => true,
-          expandedRowRender,
-        }}
       />
+
       <AddBonusModal
         addBonusRef={addBonusRef}
         handleAddBonusSubmit={handleAddBonusSubmit}

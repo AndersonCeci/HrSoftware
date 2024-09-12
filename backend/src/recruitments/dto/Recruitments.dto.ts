@@ -5,11 +5,13 @@ import {
   IsString,
   IsEnum,
   IsDate,
+  IsMongoId,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { InterviewDTO } from '../interviewDTO/interview.dto';
 import { Type } from 'class-transformer';
 import { OfferMadeDTO } from './OfferMade.dto';
+import { Types } from 'mongoose';
 
 export class CreateRecruitmentDto {
   @IsNotEmpty()
@@ -70,6 +72,10 @@ export class CreateRecruitmentDto {
   @IsOptional()
   @Type(() => Date)
   readonly deleteDate?: Date;
+
+  @IsOptional()
+  @IsMongoId({ message: 'Invalid MongoDB ObjectId format' })
+  readonly eventID?: Types.ObjectId;
 }
 
 export class RecruitmentWithFileDto extends CreateRecruitmentDto {

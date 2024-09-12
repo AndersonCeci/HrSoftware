@@ -147,6 +147,7 @@ const EmploymentPage: React.FC = () => {
           selectedEmployee={editedData}
           onAdd={handleAddNewEmployee}
           onEdit={handleEditEmployee}
+          applicant={false}
         />
       </Drawer>
 
