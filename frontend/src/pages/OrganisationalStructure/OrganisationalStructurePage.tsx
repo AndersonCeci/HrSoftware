@@ -39,20 +39,6 @@ export default function SelectionDemo() {
 
   return (
     <div className="card overflow-x-auto">
-      <Button
-        size={ButtonSize.LARGE}
-        type={ButtonType.PRIMARY}
-        style={{ float: "right" }}
-        onClick={showModal}
-      >
-        <PlusCircleOutlined />
-        Add
-      </Button>
-      <AddNode
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-      />
-
       {data && data.length > 0 && (
         <OrganizationChart
           value={data}
