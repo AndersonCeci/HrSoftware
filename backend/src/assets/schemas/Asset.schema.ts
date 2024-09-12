@@ -13,6 +13,9 @@ export class Asset extends Document {
   @Prop()
   reserved: number;
 
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userID: Types.ObjectId;
+
   @Prop({ default: false })
   isDeleted: boolean;
 

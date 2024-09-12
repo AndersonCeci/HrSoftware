@@ -20,6 +20,8 @@ const CalendarLeavePage: React.FC = () => {
 		);
 	}, []);
 
+	console.log(dataSource);
+
 	return (
 		<section className="scheduler-container">
 			<Scheduler dataSource={dataSource} allowDragAndDrop allowResizing />

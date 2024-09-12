@@ -4,11 +4,15 @@ import { Model, Types } from 'mongoose';
 import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
-import { Query } from 'express-serve-static-core';
+import { UserService } from 'src/users/users.service';
+import { Role } from 'src/users/schemas/user.schema';  
 
 @Injectable()
 export class AssetsService {
-  constructor(@InjectModel(Asset.name) private assetModel: Model<Asset>) {}
+  constructor(
+    @InjectModel(Asset.name) private assetModel: Model<Asset>,
+    private userService: UserService,
+  ) {}
 
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
     const { assetName, isDeleted = false, deleteDate } = createAssetDto;
@@ -24,7 +28,6 @@ export class AssetsService {
   }
 
   async findAll(): Promise<Asset[]> {
-   
     const data = await this.assetModel
       .aggregate([
         {
@@ -114,14 +117,14 @@ export class AssetsService {
         },
         {
           $match: {
-            'inventories.status': 'Assigned', 
+            'inventories.status': 'Assigned',
           },
         },
         {
           $project: {
             _id: 0,
             assetName: 1,
-            inventory: '$inventories', 
+            inventory: '$inventories',
           },
         },
         {
@@ -136,6 +139,79 @@ export class AssetsService {
     return await this.assetModel.findOne({ assetName: name }).exec();
   }
 
+  async findMyAssets(userId: string): Promise<Asset[]> {
+   
+    const user = await this.userService.findOne(userId);
+
+    
+    
+
+    
+    const employeeDetails = user.employID;
+     const employeeObjectId = new Types.ObjectId(employeeDetails);
+    if (!employeeDetails) {
+      throw new Error('Employee ID not found for this user');
+    }
+    
+
+    if (user.role === Role.HR) {
+      return this.findAllEmployee(); 
+    }else{
+      const data = await this.assetModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: '_id',
+            foreignField: 'assetID',
+            as: 'inventories',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories',
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'inventories.employeeDetails',
+            foreignField: '_id',
+            as: 'inventories.employeeDetails',
+          },
+        },
+        {
+          $unwind: {
+            path: '$inventories.employeeDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $match: {
+            'inventories.status': 'Assigned',
+            'inventories.employeeDetails._id': employeeObjectId,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            assetName: 1,
+            inventory: '$inventories',
+          },
+        },
+        {
+          $sort: { assetName: 1 },
+        },
+      ])
+      .exec();
+
+    return data;
+    }
+    
+    
+  }
+
   async updateAsset(
     id: string,
     updateAssetDto: UpdateAssetDto,
@@ -144,8 +220,6 @@ export class AssetsService {
       .findByIdAndUpdate(id, updateAssetDto, { new: true })
       .exec();
   }
-
-  
 
   async softDeleteAssetById(id: string): Promise<Asset> {
     const currentDate = new Date();
