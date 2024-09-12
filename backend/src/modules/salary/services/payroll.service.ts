@@ -44,12 +44,10 @@ export class PayrollService {
 
     return {
       netSalary: this.roundToTwoDecimalPlaces(netSalary),
-      socialInsuranceEmployee: this.roundToTwoDecimalPlaces(
+      socialSecurityContributions: this.roundToTwoDecimalPlaces(
         socialInsuranceEmployee,
       ),
-      healthInsuranceEmployee: this.roundToTwoDecimalPlaces(
-        healthInsuranceEmployee,
-      ),
+      healthInsurance: this.roundToTwoDecimalPlaces(healthInsuranceEmployee),
       incomeTax: this.roundToTwoDecimalPlaces(incomeTax),
       socialInsuranceCompany: this.roundToTwoDecimalPlaces(
         socialInsuranceCompany,

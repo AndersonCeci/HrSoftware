@@ -15,10 +15,9 @@ export enum Position {
   HR= 'hr'
 }
 
-export enum EmploymentStatus
-{
+export enum EmploymentStatus {
   REMOTE = 'Remote',
-  ONSITE = 'On Site'
+  ONSITE = 'On Site',
 }
 
 @Schema()

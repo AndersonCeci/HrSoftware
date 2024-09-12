@@ -10,24 +10,11 @@ import * as fs from 'fs';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerservice: MailerService) {}
-  async getTemplate() {
-    const templatePath = join(
-      process.cwd(),
-      'modules',
-      'mail',
-      'templates',
-      'welcome-template.hbs',
-    );
-
-    console.log('Template path:', templatePath);
-    const templateContent = fs.readFileSync(templatePath, 'utf8');
-    return templateContent;
-  }
+  constructor(private readonly mailerService: MailerService) {}
 
   async sendEmail(dto: SentEmailDTO) {
     try {
-      const result = await this.mailerservice.sendMail({
+      const result = await this.mailerService.sendMail({
         from: dto.sender,
         to: dto.recepients,
         subject: dto.subject,
@@ -44,6 +31,38 @@ export class MailService {
         text: dto.text,
       });
       return result;
+    } catch (error) {
+      console.error('Email sending failed:', error);
+
+      if (error.response) {
+        const errorMessage = error.response.body
+          ? error.response.body
+          : 'An unknown error occurred';
+        console.error('Mailjet Error Details:', errorMessage);
+
+        throw new BadRequestException(`Mailjet Error: ${errorMessage}`);
+      }
+
+      throw new InternalServerErrorException(
+        'Failed to send email. Please try again later.',
+      );
+    }
+  }
+
+  async sendInterviewEmail(dto: SentEmailDTO) {
+    try {
+      console.log(dto);
+      const res = await this.mailerService.sendMail({
+        from: dto.sender,
+        to: dto.recepients,
+        template: 'interview-template',
+        subject: dto.subject,
+        context: {
+          content: dto.text,
+          closure: dto.closure,
+        },
+      });
+      return res;
     } catch (error) {
       console.error('Email sending failed:', error);
 

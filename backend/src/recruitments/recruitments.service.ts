@@ -81,7 +81,8 @@ export class RecruitmentService {
     filters: any,
   ) {
     const skip = (page - 1) * limit;
-    const pipeline = [
+    const itemCount = await this.recruitmentModel.countDocuments(filters);
+    const dataPipeline = [
       {
         $match: filters,
       },
@@ -105,14 +106,13 @@ export class RecruitmentService {
           firstInterview: 1,
           secondInterview: 1,
           offerMade: 1,
+          rejected: 1,
         },
       },
+      { $skip: skip },
+      { $limit: limit },
     ];
-    const itemCount = await this.recruitmentModel.countDocuments();
-    const data = await this.recruitmentModel
-      .aggregate(pipeline)
-      .skip(skip)
-      .limit(limit);
+    const data = await this.recruitmentModel.aggregate(dataPipeline);
     return new PaginatedDTO<any>(data, page, limit, itemCount);
   }
 
@@ -126,13 +126,13 @@ export class RecruitmentService {
     };
   }
   async updateRecruitment(
-    id: string,
+    id: Types.ObjectId,
     updateRecruitmentDto: UpdateRecruitmentDto,
   ) {
-    console.log('Update DTO:', updateRecruitmentDto);
     try {
+      const { name, surname, ...others } = updateRecruitmentDto;
       const updatedRecruitment = await this.recruitmentModel.findByIdAndUpdate(
-        new Types.ObjectId(id),
+        id,
         updateRecruitmentDto,
         { new: true },
       );
@@ -147,21 +147,8 @@ export class RecruitmentService {
       }
 
       if (interviewData) {
-        console.log('herererertrrereryrfygdfwgjd');
-        console.log('Creating event with data:', {
-          title: `Interview scheduled for ${updateRecruitmentDto.stage}`,
-          startDate: interviewData.date || new Date(),
-          endDate: interviewData.date,
-          startTime: interviewData.date,
-          endTime: interviewData.date,
-          location: interviewData.location || '',
-          creatorId: interviewData.interviewers[0],
-          invitees: interviewData.interviewers,
-          status: Status.Scheduled,
-          isDeleted: false,
-        });
         const event = await this.eventsService.create({
-          title: `Interview scheduled for ${updateRecruitmentDto.stage}`,
+          title: `Interview scheduled for ${name} ${surname} `,
           startDate: interviewData.date ?? new Date(),
           endDate: interviewData.date ?? new Date(),
           startTime: interviewData.date ?? new Date(),
@@ -172,7 +159,8 @@ export class RecruitmentService {
           status: Status.Scheduled,
           isDeleted: false,
         });
-        console.log('Event Created:', event);
+
+        console.log(event);
       }
 
       return updatedRecruitment;

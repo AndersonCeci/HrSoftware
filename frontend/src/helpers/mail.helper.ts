@@ -7,19 +7,18 @@ interface EmailData {
   sender?: string;
   recepients: string[];
   subject: string;
+  template: string;
   text: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   password?: string;
-  hr: string;
+  hr?: string;
+  closure: string;
 }
 
-export const sendMailHelper = async (
-  template: string,
-  emailData: EmailData
-) => {
+export const sendMailHelper = async (emailData: EmailData) => {
   try {
-    const res = await axios.post(API, { template, emailData });
+    const res = await axios.post(API, emailData);
     return res.data;
   } catch (error) {
     message.error("Failed to send mail");

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Button, Checkbox, Col, Row, Form } from "antd";
+import { Button, Col, Row, Form, Drawer } from "antd";
 import { useForm } from "antd/es/form/Form";
 import Steps from "../../../components/Shared/Steps";
-import { Text } from "../../../components/Shared/Typography";
-import { RecruitmentStage } from "../columns/constants";
+import { findStepIndex, RecruitmentStage } from "../columns/constants";
 import { useRecruitmentContext } from "../context";
 import moment from "moment";
 import ProfileCard from "./ProfileCard";
@@ -17,13 +16,26 @@ import {
 } from "@ant-design/icons";
 import InterviewForm from "./form/InterviewForm";
 import OfferMadeForm from "./form/OfferMadeForm";
+import EmailContent from "./EmailContent";
+import AddEmployeeForm from "../../Employment/components/AddEmployeeForm";
 const { Title } = Typography;
 
 const Stepper = () => {
   const [form] = useForm();
-  const [current, setCurrent] = useState(0);
+
   const { editingRecord, updateApplicant, createApplicant } =
     useRecruitmentContext();
+  const [current, setCurrent] = useState(findStepIndex(editingRecord.stage));
+  const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [employmentDrawer, setEmploymentDrawer] = useState(false);
+
+  const showChildrenDrawer = () => {
+    setChildrenDrawer(true);
+  };
+
+  const onChildrenDrawerClose = () => {
+    setChildrenDrawer(false);
+  };
 
   const stage =
     current === 1
@@ -66,6 +78,7 @@ const Stepper = () => {
       }
     }
   }, [current, editingRecord, form]);
+  const isHired = editingRecord?.stage === RecruitmentStage.Hired;
   const items = [
     {
       title: RecruitmentStage.Applied,
@@ -118,7 +131,7 @@ const Stepper = () => {
         </>
       )}
       <div>
-        <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical" disabled={isHired}>
           {editingRecord && (
             <div style={{ justifyItems: "inherit" }}>
               {items[current].content}
@@ -139,10 +152,7 @@ const Stepper = () => {
                 maxWidth: "100%",
                 gap: "10",
               }}
-            >
-              <Text style={{ paddingRight: 10 }}>Notify applicant</Text>
-              <Checkbox onChange={() => {}}></Checkbox>
-            </Row>
+            ></Row>
           </Form.Item>
 
           <Row gutter={6} style={{ marginTop: 16 }}>
@@ -153,7 +163,6 @@ const Stepper = () => {
                   htmlType="submit"
                   onClick={() => {
                     form.setFieldValue("interviewers", interviewers);
-                    console.log("form values", form.getFieldsValue());
                     editingRecord
                       ? updateApplicant(
                           editingRecord._id,
@@ -168,11 +177,65 @@ const Stepper = () => {
               </Form.Item>
             </Col>
             {editingRecord && (
-              <Col>
-                <Form.Item>
-                  <Button type="default">Reject</Button>
-                </Form.Item>
-              </Col>
+              <>
+                <Col>
+                  <Form.Item>
+                    <Button type="default" onClick={showChildrenDrawer}>
+                      Notify
+                    </Button>
+                  </Form.Item>
+                  <Drawer
+                    title={`Notify ${editingRecord.name} ${editingRecord.surname}`}
+                    width={"30%"}
+                    closable={true}
+                    onClose={onChildrenDrawerClose}
+                    open={childrenDrawer}
+                  >
+                    <EmailContent onCancel={onChildrenDrawerClose} />
+                  </Drawer>
+                </Col>
+                <Col flex="auto">
+                  <Row justify="end" style={{ width: "100%" }} gutter={8}>
+                    <Col>
+                      <Button
+                        type="primary"
+                        danger
+                        onClick={() => {
+                          updateApplicant(
+                            editingRecord._id,
+                            { rejected: true },
+                            0
+                          );
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </Col>
+                    {current === 3 && (
+                      <Col>
+                        <Button
+                          type="primary"
+                          onClick={() => setEmploymentDrawer(true)}
+                        >
+                          Hire
+                        </Button>
+                        <Drawer
+                          width="100%"
+                          onClose={() => setEmploymentDrawer(false)}
+                          open={employmentDrawer}
+                        >
+                          <AddEmployeeForm
+                            applicant={true}
+                            selectedEmployee={editingRecord}
+                            onAdd={() => {}}
+                            onEdit={() => {}}
+                          />
+                        </Drawer>
+                      </Col>
+                    )}
+                  </Row>
+                </Col>
+              </>
             )}
           </Row>
         </Form>
