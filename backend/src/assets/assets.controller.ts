@@ -38,6 +38,11 @@ export class AssetsController {
     return this.assetsService.findName(name);
   }
 
+  @Get('user/:userId')
+  async findMyAssets(@Param('userId') userId: string) {
+    return this.assetsService.findMyAssets(userId);
+  }
+
   @Patch(':id')
   async updateUser(
     @Param('id') id: string,

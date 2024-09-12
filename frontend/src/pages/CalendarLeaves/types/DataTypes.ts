@@ -1,6 +1,6 @@
 export type OnLeaveData = {
-	: string;
-	Emplo_idyeeName: string;
+	_id: string;
+	EmployeeName: string;
 	StartTime: Date;
 	EndTime: Date;
 	type: "annual" | "sick" | "other";

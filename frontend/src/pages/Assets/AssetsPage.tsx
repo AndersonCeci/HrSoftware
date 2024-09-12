@@ -3,7 +3,7 @@ import AssetContent from "./components/AssetContent";
 import InventaryContent from "./components/InventaryContent";
 import AssetInventaryContextProvider from "./context/AssetInventaryContext";
 import { Tabs } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { t } from "i18next";
 import useHttp from "../../hooks/useHttp";
 import { isHR, getFromLocalStorage } from "../../utils/utils";
@@ -34,7 +34,7 @@ const AssetsPage: React.FC = () => {
 	function getNewData() {
 		sendRequest(
 			{
-				url: `${API}/employee/${loggedUser._id}`,
+				url: `${API}/user/${loggedUser._id}`,
 				// url: `${API}/employee`, THIS IS HOW IT WAS BEFORE
 			},
 			(data) => {
@@ -42,6 +42,10 @@ const AssetsPage: React.FC = () => {
 			},
 		);
 	}
+
+	useEffect(() => {
+		getNewData();
+	}, []);
 
 	return (
 		<section className="test">
