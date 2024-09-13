@@ -3,7 +3,11 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class SentEmailDTO {
   @IsNotEmpty()
+  template: string;
+
+  @IsNotEmpty()
   sender?: string | Address;
+
   @IsNotEmpty()
   recepients: string | Address[];
 
@@ -13,21 +17,21 @@ export class SentEmailDTO {
 
   @IsString()
   @IsNotEmpty()
-  text: string;
+  text?: string;
 
-  interview: boolean;
-  date: string;
+  @IsOptional()
+  name?: string;
 
-  @IsString()
-  name: string;
-
-  @IsString()
+  @IsOptional()
   email?: string;
 
   @IsOptional()
-  @IsString()
   password?: string;
 
+  @IsOptional()
+  hr?: string;
+
+  @IsOptional()
   @IsString()
-  hr: string;
+  closure?: string;
 }

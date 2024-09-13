@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Interview } from './interview.schema';
 export enum RecruitmentStage {
   Applied = 'Applied',
-  Rejected = 'Rejected',
   FirstInterview = '1st Interview',
   SecondInterview = '2nd Interview',
   OfferMade = 'Offer Made',
+  Hired = 'Hired',
 }
 export enum ContractTypes {
   FullTime = 'Full Time',
@@ -78,6 +78,12 @@ export class Recruitment extends Document {
 
   @Prop()
   deleteDate: Date;
+
+  @Prop({ default: false })
+  rejected?: boolean;
+
+  @Prop({ required: false, ref: 'Events' })
+  eventID?: Types.ObjectId;
 }
 
 export const RecruitmentSchema = SchemaFactory.createForClass(Recruitment);

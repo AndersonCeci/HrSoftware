@@ -131,7 +131,7 @@ const ProfilePage: React.FC = () => {
                   handleCancel={handleCancel}
                   currentData={tableData}
                   onImageUpload={handleImageUpload}
-                  setTablaData={setTableData}
+                  setTableData={setTableData}
                 />
               </div>
             </div>

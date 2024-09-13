@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
+  IsMongoId,
   IsNotEmpty,
   IsNumber,
   Max,
@@ -12,8 +13,8 @@ import { BonusDTO } from '../bonusDTO/createBonus.dto';
 import { Types } from 'mongoose';
 
 export class SalaryDTO {
-  @Type(() => Types.ObjectId)
   @IsNotEmpty()
+  @IsMongoId()
   readonly employeeID: Types.ObjectId;
 
   @IsNotEmpty()

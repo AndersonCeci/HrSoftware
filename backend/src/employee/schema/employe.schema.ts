@@ -12,12 +12,12 @@ export enum Position {
   FullStack = 'FullStack',
   DevOps = 'DevOps',
   ProjectManager = 'projectManager',
+  HR= 'hr'
 }
 
-export enum EmploymentStatus
-{
+export enum EmploymentStatus {
   REMOTE = 'Remote',
-  ONSITE = 'On Site'
+  ONSITE = 'On Site',
 }
 
 @Schema()

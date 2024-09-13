@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import { ApplicantProps } from "../../../types/ApplicantProps";
-import useHttp from "../../../hooks/useHttp";
+import { ApplicantProps } from "../../../../types/ApplicantProps";
+import useHttp from "../../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
 import { Form, message } from "antd";
-import { Filters } from "../RecruitmentContent";
-import { RecruitmentStage } from "../columns/constants";
+import { RecruitmentStage } from "../../columns/constants";
+import { Filters } from "./filter.hook";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
 
@@ -30,13 +30,12 @@ export const useRecruitment = () => {
         params: { page, limit, filters },
       });
       const { data, meta } = response.data;
-      console.log("data", data);
       setTableData(data);
       return meta.itemCount;
     } catch (error) {
       if (error instanceof AxiosError)
         message.error(
-          error.response?.data.errorDetails.message || error.message
+          error.message || error.response?.data.errorDetails.message
         );
       message.error("Failed to retrieve applicant");
     }
@@ -48,14 +47,13 @@ export const useRecruitment = () => {
       const updatedData = { ...newData, stage: RecruitmentStage.Applied };
       const res = await axios.post(API, updatedData);
       handleAddNew(res.data);
-      console.log("res submited date", res.data.submitedDate);
       return res;
     } catch (error) {
       if (error instanceof AxiosError)
         message.error(
           error.response?.data.errorDetails.message || error.message
         );
-      message.error("Failed add applicant");
+      message.error("Failed to add applicant");
     }
   };
 
@@ -130,17 +128,32 @@ export const useRecruitment = () => {
         if (currentStage === RecruitmentStage.Applied) {
           stage = RecruitmentStage.FirstInterview;
         }
-        updatedValues = { stage, firstInterview: { ...values } };
+        updatedValues = {
+          name: editingRecord?.name,
+          surname: editingRecord?.surname,
+          stage,
+          firstInterview: { ...values },
+        };
         break;
       case 2:
         if (currentStage !== RecruitmentStage.OfferMade) {
           stage = RecruitmentStage.SecondInterview;
         }
-        updatedValues = { stage, secondInterview: { ...values } };
+        updatedValues = {
+          name: editingRecord?.name,
+          surname: editingRecord?.surname,
+          stage,
+          secondInterview: { ...values },
+        };
         break;
       case 3:
         stage = RecruitmentStage.OfferMade;
-        updatedValues = { stage, offerMade: { ...values } };
+        updatedValues = {
+          name: editingRecord?.name,
+          surname: editingRecord?.surname,
+          stage,
+          offerMade: { ...values },
+        };
         break;
       default:
         message.error("Invalid step");
@@ -148,29 +161,22 @@ export const useRecruitment = () => {
     }
 
     try {
-      const res = await axios.put(`${API}/${_id}`, updatedValues);
+      const res = await axios.patch(`${API}/${_id}`, updatedValues);
       handleEdit(res.data);
       message.success("Applicant updated successfully!");
       return res;
     } catch (error) {
       if (error instanceof AxiosError) {
-        message.error(
-          error.response?.data.errorDetails.message || error.message
-        );
+        if (error instanceof AxiosError) {
+          const errorMessage =
+            error.response?.data?.message?.[0] ||
+            error.message ||
+            "An error occurred.";
+          message.error(errorMessage);
+        }
       } else {
         message.error("An unexpected error occurred.");
       }
-    } finally {
-      // sendMailHelper("", {
-      //   sender: "",
-      //   recepients: [editingRecord?.email || ""],
-      //   subject: "",
-      //   text: "",
-      //   name: editingRecord?.name || "",
-      //   email: "",
-      //   password: "",
-      //   hr: "",
-      // });
     }
   };
 

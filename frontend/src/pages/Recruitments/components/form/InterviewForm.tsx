@@ -29,7 +29,7 @@ const InterviewForm: React.FC<{
   const [employeeOptions, setEmployeeOptions] = useState<EmployeeDetails[]>([]);
   const [selectedInterviewers, setSelectedInterviewers] = useState<
     EmployeeDetails[]
-  >(stage.interviewers ?? []);
+  >(stage.interviewers || []);
   const [current, setCurrent] = useState<number>(0);
 
   useEffect(() => {
@@ -78,9 +78,9 @@ const InterviewForm: React.FC<{
       );
       if (
         selected &&
-        !selectedInterviewers.some((emp) => emp.email === selected.email)
+        !selectedInterviewers!.some((emp) => emp.email === selected.email)
       ) {
-        setSelectedInterviewers([...selectedInterviewers, selected]);
+        setSelectedInterviewers([...selectedInterviewers!, selected]);
       }
     }
   };

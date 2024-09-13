@@ -45,7 +45,7 @@ export const useSalaryHook = () => {
   const fetchSalaries = async (
     page: number,
     limit: number,
-    filters: Filter,
+    filters: Filter
   ) => {
     setLoading(true);
     try {
@@ -78,7 +78,7 @@ export const useSalaryHook = () => {
       dateTaken: new Date(newSalary.dateTaken),
     };
     try {
-      const res = await axios.put(`${API}/${salaryID}`, sentSalary);
+      const res = await axios.patch(`${API}/${salaryID}`, sentSalary);
       setTableData((prevData) =>
         prevData.map((salary) =>
           salary._id === salaryID
@@ -87,14 +87,14 @@ export const useSalaryHook = () => {
                 employeeDetails: salary.employeeDetails,
                 ...res.data,
               }
-            : salary,
-        ),
+            : salary
+        )
       );
       message.success("Salary updated successfully.");
     } catch (error) {
       if (error instanceof AxiosError) {
         message.error(
-          error.response?.data.errorDetails.message || error.message,
+          error.response?.data.errorDetails.message || error.message
         );
       } else {
         console.error("Cannot update salary", error);
@@ -152,15 +152,15 @@ export const useSalaryHook = () => {
       bonuses: selectedSalary.bonuses,
       socialSecurityContributions: parseInt(
         values.socialSecurityContributions.toString(),
-        10,
+        10
       ),
       incomeTax: parseInt(values.incomeTax.toString()),
       healthInsurance: parseInt(values.healthInsurance.toString(), 10),
       healthInsuranceCompany: parseInt(
-        values.healthInsuranceCompany.toString(),
+        values.healthInsuranceCompany.toString()
       ),
       socialInsuranceCompany: parseInt(
-        values.socialInsuranceCompany.toString(),
+        values.socialInsuranceCompany.toString()
       ),
       grossSalary: parseInt(values.grossSalary.toString(), 10),
       total: parseInt(values.total.toString(), 10),
@@ -175,35 +175,16 @@ export const useSalaryHook = () => {
   const createSalary = async (values: Salary) => {
     try {
       const salary: Salary = {
-        _id: values._id,
-        employeeID: values.employeeID,
-        NSSH: values.NSSH,
-        dateTaken: new Date(values.dateTaken),
-        netSalary: parseInt(values.netSalary.toString(), 10),
-        workDays: parseInt(values.workDays.toString(), 10),
-        socialSecurityContributions: parseInt(
-          values.socialSecurityContributions.toString(),
-          10,
-        ),
-        incomeTax: parseInt(values.incomeTax.toString()),
-        healthInsurance: parseInt(values.healthInsurance.toString(), 10),
-        grossSalary: parseInt(values.grossSalary.toString(), 10),
-        total: parseInt(values.total.toString(), 10),
-        healthInsuranceCompany: parseInt(
-          values.healthInsuranceCompany.toString(),
-        ),
-        socialInsuranceCompany: parseInt(
-          values.socialInsuranceCompany.toString(),
-        ),
+        ...values,
         paid: false,
       };
-
+      console.log("POST", salary);
       await axios.post(API, salary);
       message.success("Salary inserted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {
         message.error(
-          error.response?.data.errorDetails.message || error.message,
+          error.response?.data?.errorDetails.message || error.message
         );
       } else {
         message.error("Cannot insert the salary");
