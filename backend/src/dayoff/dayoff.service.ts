@@ -97,15 +97,7 @@ export class DayoffService {
         .find({ isApproved: true })
         .exec();
       return approvedDayOffs;
-    } else if (user.role === Role.CEO) {
-      const approvedDayOffs = await this.dayoffModel
-        .find({
-          isApproved: true,
-          employeeId: user.employID.toString(),
-        })
-        .exec();
-      return approvedDayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const approvedDayOffs = await this.dayoffModel
         .find({
           isApproved: true,
@@ -135,16 +127,7 @@ export class DayoffService {
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
-    } else if (user.role === Role.CEO) {
-      const dayOffs = await this.dayoffModel
-        .find({
-          isDeleted: false,
-          employeeId: user.employID.toString(),
-        })
-        .populate('EmployeeName', 'name')
-        .exec();
-      return dayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const dayOffs = await this.dayoffModel
         .find({
           isDeleted: false,
