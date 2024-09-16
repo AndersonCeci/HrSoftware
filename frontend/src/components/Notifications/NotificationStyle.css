@@ -18,3 +18,7 @@
     background-color: rgb(255, 253, 254);
     margin-top: 8px;
 }
+
+.notification-NavList {
+    height: fit-content;
+}

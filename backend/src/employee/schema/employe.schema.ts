@@ -51,7 +51,7 @@ export class Employee extends Document {
   status: string;
 
   @Prop()
-  startingDate: string;
+  startingDate: Date;
 
   @Prop()
   phoneNumber: string;
@@ -83,6 +83,7 @@ export class Employee extends Document {
   salary: number;
 
   @Prop()
+  @IsOptional()
   contract: string;
 
   @Prop({ default: false })

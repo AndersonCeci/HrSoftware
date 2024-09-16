@@ -48,7 +48,6 @@ const EditProfile = ({
   // };
 
   const handleFinish = (value: EmployeeDataType) => {
-    console.log(value, "sasasasas");
 
     fetchData(
       useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
@@ -81,14 +80,11 @@ const EditProfile = ({
   };
 
   const handleFileChange = (info: any) => {
-    console.log(info, "infooo");
     const files = info.fileList.map(
       (file: any) => file.originFileObj as RcFile
     );
-    console.log(files, "files");
     if (files.length > 0) {
       handleUpload(files);
-      console.log("hyriiiii");
     }
   };
 
@@ -107,7 +103,7 @@ const EditProfile = ({
           onFinish={handleFinish}
         >
           <Form.Item
-            name="profilePhoto"
+            name="contract"
             style={{ display: "flex", justifyContent: "center" }}
           >
             <Upload

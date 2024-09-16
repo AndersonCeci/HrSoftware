@@ -30,7 +30,6 @@ const RequestForm = ({ onAdd, isSubmitting }: RequestFormProps) => {
 
 	const handleSubmit = (value: any) => {
 		const selected = employee.find((e) => getFullName(e.name, e.surname) === value.username);
-		console.log();
 		const values: valueSubmit = {
 			employeeId: isHr ? selected._id : userData?.employID,
 			StartTime: value.StartTime.format("YYYY-MM-DD"),

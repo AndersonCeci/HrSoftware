@@ -54,6 +54,8 @@ import { FileModule } from './upload/file.module';
     DayoffModule,
     InventoryModule,
     GmailApiModule,
+    NotificationsModule,
+    NotificationsGatewayModule,
     PromotionModule,
     SchedulerModule,
   ],
