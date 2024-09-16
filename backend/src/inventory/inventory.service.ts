@@ -101,7 +101,7 @@ export class InventoryService {
       message: `You have been assigned an asset: ${assignedInventory.assetName}`,
       isRead: false,
       userId: foundEmployee._id as unknown as Types.ObjectId,
-      path: `/inventory/${inventoryID}`,
+      path: `/company/assets`,
       status: NotificationStatus.NOTIFICATION,
     };
 

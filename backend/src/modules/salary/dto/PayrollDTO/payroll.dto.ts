@@ -1,7 +1,7 @@
 export interface Payroll {
   netSalary: number;
-  socialInsuranceEmployee: number;
-  healthInsuranceEmployee: number;
+  socialSecurityContributions: number;
+  healthInsurance: number;
   incomeTax: number;
   socialInsuranceCompany: number;
   healthInsuranceCompany: number;

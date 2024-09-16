@@ -1,29 +1,16 @@
-import {
-  Button,
-  Checkbox,
-  Dropdown,
-  Popconfirm,
-  Table,
-  TableColumnsType,
-} from "antd";
+import { Button, Dropdown, Table, TableColumnsType } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
 import { capitalizeFirstLetter, getMonthName } from "../../../utils/generals";
-import { Salary } from "../../../types/SalaryProps";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
   handleModal: (employeeID: string) => void;
-  handleEditSubmit: (salary: Salary) => void;
   tableData: any[];
 }
 
-const columns = ({
-  handleAddBonus,
-  handleModal,
-  handleEditSubmit,
-}: ColumnsParams) => [
+const columns = ({ handleAddBonus, handleModal }: ColumnsParams) => [
   createTableColumns({
     dataIndex: "employeeDetails",
     title: "Employee Details",
@@ -65,7 +52,6 @@ const columns = ({
     title: "Work Days",
     key: "_id",
   }),
-  Table.EXPAND_COLUMN,
   createTableColumns({
     dataIndex: "bonuses",
     title: "Bonuses Total",
@@ -73,7 +59,7 @@ const columns = ({
     displayAs: (bonuses: { desc: string; amount: number }[]) => {
       const totalBonuses = bonuses.reduce(
         (acc, bonus) => acc + bonus.amount,
-        0,
+        0
       );
       return <span>{totalBonuses}</span>;
     },
@@ -87,22 +73,6 @@ const columns = ({
     dataIndex: "total",
     title: "Total",
     key: "_id",
-  }),
-  createTableColumns({
-    dataIndex: "paid",
-    title: "Compensated",
-    key: "_id",
-    displayAs: (paid: boolean, record: any) => {
-      const handleConfirm = () => {
-        handleEditSubmit({ ...record, paid: !paid });
-      };
-
-      return (
-        <Popconfirm title="Sure to confirm?" onConfirm={handleConfirm}>
-          <Checkbox checked={paid}></Checkbox>
-        </Popconfirm>
-      );
-    },
   }),
   createTableColumns({
     title: "Action",

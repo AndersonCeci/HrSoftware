@@ -5,11 +5,14 @@ import {
   IsString,
   IsEnum,
   IsDate,
+  IsBoolean,
+  IsMongoId,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { Type } from 'class-transformer';
 import { InterviewDTO } from '../interviewDTO/interview.dto';
 import { OfferMadeDTO } from './OfferMade.dto';
+import { Types } from 'mongoose';
 
 export class UpdateRecruitmentDto {
   @IsOptional()
@@ -62,5 +65,14 @@ export class UpdateRecruitmentDto {
 
   @IsOptional()
   @IsDate()
+  @Type(() => Date)
   readonly submittedDate: Date;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly rejected: boolean;
+
+  @IsOptional()
+  @IsMongoId({ message: 'Invalid MongoDB ObjectId format' })
+  readonly eventID?: Types.ObjectId;
 }

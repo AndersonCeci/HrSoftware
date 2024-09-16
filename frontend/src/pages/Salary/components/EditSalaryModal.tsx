@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useContext } from "react";
+import React, { MutableRefObject, useCallback, useContext } from "react";
 import Modal from "../../../components/Shared/Modal";
 import Form from "antd/es/form";
 import {
@@ -19,6 +19,8 @@ import { EmployeeDataType } from "../../Employment/types/Employee";
 import { Bonus } from "../../../types/BonusProps";
 import { Payroll } from "../../../types/Payroll";
 import { fetchEmployee } from "../../../helpers/employee.helper";
+import { debounce } from "../../../helpers/debounce.helper";
+import Title from "../../../components/Shared/Title";
 
 const SALARY_API = import.meta.env.REACT_APP_SALARY;
 const { Option } = Select;
@@ -31,18 +33,18 @@ interface EditSalaryProps {
 
 const getPayroll = async (
   grossSalary: number,
-  workDays: number,
+  workDays: number
 ): Promise<Payroll | null> => {
   try {
     const res = await axios.get(`${SALARY_API}/net-salary`, {
       params: { grossSalary, workDays },
     });
+    console.log(res.data);
     return res.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       message.error(error.response?.data.errorDetails.message || error.message);
     } else {
-      console.error("Cannot calculate salary", error);
       message.error("Failed to calculate salary.");
     }
     return null;
@@ -63,52 +65,54 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
   const { isEditModalOpen, setIsEditModalOpen } = useContext(ModalContext)!;
   const defaultDate = selectedSalary?.dateTaken
     ? moment(new Date(selectedSalary.dateTaken))
-    : null;
+    : moment();
   const title = selectedSalary ? "Edit Salary: " : "Add Salary";
 
-  const handleSearch = async (value: string) => {
-    setLoading(true);
-    const [name, surname] = value.split(" ");
-    const data = await fetchEmployee(name, surname);
-    if (data) {
-      setEmployeeDet(data);
-    }
-    setLoading(false);
-  };
-
-  const handleModalOk = () => {
-    if (selectedSalary) {
-      editFormRef.current.submit();
-    } else {
-      handleCreateSubmit(editFormRef.current.getFieldsValue());
-    }
-  };
+  const handleSearch = useCallback(
+    debounce(async (value: string) => {
+      setLoading(true);
+      const [name, surname] = value.split(" ");
+      const data = await fetchEmployee(name, surname);
+      if (data) {
+        setEmployeeDet(data);
+      }
+      setLoading(false);
+    }, 300),
+    []
+  );
 
   const handleFinish = async (values: any) => {
-    if (selectedSalary) {
-      handleEditSubmit(values);
-    } else {
-      handleCreateSubmit(values);
-    }
+    selectedSalary ? handleEditSubmit(values) : handleCreateSubmit(values);
+    setIsEditModalOpen(false);
     editFormRef.current.resetFields();
+    setEmployeeDet(null);
   };
 
   const calculatePayroll = async () => {
-    const { inGrossSalary, workDays, bonuses } =
-      editFormRef.current.getFieldsValue();
+    const values = await editFormRef.current.validateFields([
+      "inGrossSalary",
+      "workDays",
+    ]);
+    const { inGrossSalary, workDays, bonuses } = values;
+    console.log("Form values:", { inGrossSalary, workDays, bonuses });
+
     if (inGrossSalary && workDays) {
       const payroll = await getPayroll(
         parseInt(inGrossSalary),
-        parseInt(workDays),
+        parseInt(workDays)
       );
+
       if (payroll) {
+        const bonusesTotal =
+          bonuses?.reduce(
+            (total: number, bonus: Bonus) => total + bonus.amount,
+            0
+          ) || 0;
+        const total = payroll.netSalary + bonusesTotal;
+
         editFormRef.current.setFieldsValue({
           ...payroll,
-          total:
-            bonuses?.reduce(
-              (total: number, bonus: Bonus) => total + bonus.amount,
-              0,
-            ) + payroll.netSalary,
+          total: total,
         });
       }
     }
@@ -120,9 +124,10 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
       onCancel={() => {
         setIsEditModalOpen(false);
         editFormRef.current.resetFields();
+        setEmployeeDet(null);
       }}
       title={title}
-      onOk={handleModalOk}
+      onOk={() => editFormRef.current.submit()}
       width={700}
     >
       <Form
@@ -138,11 +143,12 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
             surname: selectedSalary?.employeeDetails?.surname,
             NSSH: selectedSalary?.employeeDetails?.NSSH,
           },
+          workDays: selectedSalary?.workDays ?? 22,
           dateTaken: defaultDate,
           bonusesTotal:
             selectedSalary?.bonuses?.reduce(
               (total, bonus) => total + bonus.amount,
-              0,
+              0
             ) || 0,
         }}
         style={{ padding: 35 }}
@@ -231,10 +237,9 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                         { required: true, message: "Work days are required" },
                       ]}
                     >
-                      <Input
+                      <InputNumber
                         type="number"
                         style={{ width: "100%" }}
-                        defaultValue={22}
                         min={0}
                         max={22}
                       />
@@ -242,7 +247,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                   </Col>
                   <Col span={12}>
                     <Button
-                      type="text"
+                      type="primary"
                       style={{ marginTop: "32px", width: "100%" }}
                       onClick={calculatePayroll}
                       color="primary"
@@ -250,6 +255,13 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                       Calculate Payroll
                     </Button>
                   </Col>
+                </Row>
+                <Row>
+                  <Title
+                    level={5}
+                    style={{ fontWeight: "bold" }}
+                    title={"Employee Taxes"}
+                  />
                 </Row>
                 <Row gutter={16}>
                   <Col span={12}>
@@ -266,6 +278,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                       <Input type="number" disabled />
                     </Form.Item>
                   </Col>
+
                   <Col span={12}>
                     <Form.Item
                       label="Income Tax"
@@ -311,6 +324,13 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                     </Form.Item>
                   </Col>
                 </Row>
+                <Row>
+                  <Title
+                    level={5}
+                    style={{ fontWeight: "bold" }}
+                    title={"Company's Taxes"}
+                  />
+                </Row>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
@@ -340,6 +360,13 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
                       <Input type="number" disabled style={{ width: "100%" }} />
                     </Form.Item>
                   </Col>
+                </Row>
+                <Row>
+                  <Title
+                    level={5}
+                    style={{ fontWeight: "bold" }}
+                    title={"Salary Summary"}
+                  />
                 </Row>
                 <Row gutter={16}>
                   <Col span={12}>

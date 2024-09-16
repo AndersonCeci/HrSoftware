@@ -26,19 +26,18 @@ export class SalaryService {
       const createdSalary = new this.salaryModel({
         ...createSalaryDto,
         employeeID: new Types.ObjectId(createSalaryDto.employeeID),
-        dateTaken: new Date(createSalaryDto.dateTaken),
       });
+      console.log(createdSalary);
       return await createdSalary.save();
     } catch (error) {
       if (error.code === 11000) {
-        const duplicateKey = Object.keys(error.keyPattern).join(', ');
         throw new ConflictException(
-          `A salary record with the same ${duplicateKey} already exists.`,
+          `A salary record with the same date taken and employee already exists.`,
         );
-      } else if (error instanceof mongoose.Error.ValidationError) {
-        const duplicateKey = Object.keys(error).join(', ');
+      }
+      if (error instanceof mongoose.Error.ValidationError) {
         throw new ConflictException(
-          `A salary record with the same ${duplicateKey} already exists.`,
+          `A salary record with the same date taken and employee already exists.`,
         );
       }
       throw new InternalServerErrorException('Failed to create salary');
@@ -190,36 +189,63 @@ export class SalaryService {
     try {
       const employees: Employee[] = await this.employeeService.findAll();
 
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
       for (const employee of employees) {
+        const existingSalary = await this.salaryModel.findOne({
+          employeeID: employee._id,
+          dateTaken: { $gte: startOfMonth, $lte: endOfMonth },
+        });
+
+        if (existingSalary) {
+          console.log(
+            `Salary for employee ${employee._id} already exists for this month.`,
+          );
+          continue;
+        }
+
         const prevSalaryData = await this.getPrevSalaryDataPerEmployee(
           employee._id as Types.ObjectId,
         );
 
-        if (prevSalaryData) {
-          const newSalary: SalaryDTO = {
-            employeeID: employee._id as Types.ObjectId,
-            dateTaken: new Date(),
-            netSalary: prevSalaryData.netSalary,
-            workDays: prevSalaryData.workDays,
-            bonuses: [],
-            socialSecurityContributions:
-              prevSalaryData.socialSecurityContributions,
-            healthInsurance: prevSalaryData.healthInsurance,
-            grossSalary: prevSalaryData.grossSalary,
-            total: prevSalaryData.total,
-            paid: false,
-            isDeleted: false,
-            incomeTax: prevSalaryData.incomeTax,
-            healthInsuranceCompany: prevSalaryData.healthInsuranceCompany,
-            socialInsuranceCompany: prevSalaryData.socialInsuranceCompany,
-          };
+        const newSalary: SalaryDTO = prevSalaryData
+          ? {
+              employeeID: employee._id as Types.ObjectId,
+              dateTaken: new Date(),
+              netSalary: prevSalaryData.netSalary,
+              workDays: prevSalaryData.workDays,
+              bonuses: prevSalaryData.bonuses || [],
+              socialSecurityContributions:
+                prevSalaryData.socialSecurityContributions,
+              healthInsurance: prevSalaryData.healthInsurance,
+              grossSalary: prevSalaryData.grossSalary,
+              total: prevSalaryData.total,
+              paid: false,
+              isDeleted: false,
+              incomeTax: prevSalaryData.incomeTax,
+              healthInsuranceCompany: prevSalaryData.healthInsuranceCompany,
+              socialInsuranceCompany: prevSalaryData.socialInsuranceCompany,
+            }
+          : {
+              employeeID: employee._id as Types.ObjectId,
+              dateTaken: new Date(),
+              netSalary: 0,
+              workDays: 22,
+              bonuses: [],
+              socialSecurityContributions: 0,
+              healthInsurance: 0,
+              grossSalary: 0,
+              total: 0,
+              paid: false,
+              isDeleted: false,
+              incomeTax: 0,
+              healthInsuranceCompany: 0,
+              socialInsuranceCompany: 0,
+            };
 
-          await this.create(newSalary);
-        } else {
-          console.warn(
-            `No previous salary data found for employee ${employee._id}`,
-          );
-        }
+        await this.create(newSalary);
       }
     } catch (error) {
       throw new InternalServerErrorException('Failed to create salaries');
@@ -245,7 +271,6 @@ export class SalaryService {
     const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
     const endOfYear = new Date(`${year + 1}-01-01T00:00:00.000Z`);
 
-    // Aggregate bonuses per month
     const dataset = await this.salaryModel.aggregate([
       {
         $match: {

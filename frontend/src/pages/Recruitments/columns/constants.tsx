@@ -1,4 +1,5 @@
 import { SmileOutlined, FrownOutlined, MehOutlined } from "@ant-design/icons";
+import { getDevRoles } from "../../Employment/utils/helperFunctions";
 
 const selectOption = [
   { label: "Applied", color: "cyan" },
@@ -6,6 +7,7 @@ const selectOption = [
   { label: "1st Interview", color: "gold" },
   { label: "2nd Interview", color: "lime" },
   { label: "Offer Made", color: "blue" },
+  { label: "Hired", color: "purple" },
 ];
 
 const references = [
@@ -42,6 +44,7 @@ enum RecruitmentStage {
   FirstInterview = "1st Interview",
   SecondInterview = "2nd Interview",
   OfferMade = "Offer Made",
+  Hired = "Hired",
 }
 export const customIcons: Record<number, React.ReactNode> = {
   1: <FrownOutlined />,
@@ -78,18 +81,27 @@ const menuItems = [
   {
     key: RecruitmentStage.Applied,
     label: RecruitmentStage.Applied,
+    index: 0,
   },
   {
     key: RecruitmentStage.FirstInterview,
     label: RecruitmentStage.FirstInterview,
+    index: 1,
   },
   {
     key: RecruitmentStage.SecondInterview,
     label: RecruitmentStage.SecondInterview,
+    index: 2,
   },
   {
     key: RecruitmentStage.OfferMade,
     label: RecruitmentStage.OfferMade,
+    index: 3,
+  },
+  {
+    key: RecruitmentStage.Hired,
+    label: RecruitmentStage.Hired,
+    index: 4,
   },
 ];
 const referenceItems = [
@@ -115,6 +127,16 @@ const referenceItems = [
   },
 ];
 
+const positions = getDevRoles().map((role) => ({
+  label: role,
+  value: role,
+}));
+const findStepIndex = (stage: RecruitmentStage): number => {
+  const item = menuItems.find((item) => item.label === stage);
+  const index = item ? item.index : 0;
+  return index < 4 ? index : 0;
+};
+
 export {
   ContractTypes,
   selectOption,
@@ -124,4 +146,6 @@ export {
   menuItems,
   referenceItems,
   interviewTypes,
+  positions,
+  findStepIndex
 };
