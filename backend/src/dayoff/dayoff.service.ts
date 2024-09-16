@@ -51,22 +51,23 @@ export class DayoffService {
       );
     }
 
-    const ceoUser = await this.userModel.find({ role: Role.CEO}).exec();
+  const requester = await this.userModel
+    .findOne({ employID: createDayOff.employeeId })
+    .exec();
 
     let isApproved = false;
     let approvedDate : Date | null = null;
-
-    if (ceoUser) {
-      isApproved = true;
-      approvedDate = new Date();
-    }
+     if (requester && requester.role === Role.CEO) {
+       isApproved = true;
+       approvedDate = new Date();
+     }
 
     const createdDayoff = new this.dayoffModel({
       ...createDayOff,
       EmployeeName: employeeName,
       totalDays,
       isApproved,
-      approvedDate,    
+      approvedDate,
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
@@ -136,30 +137,21 @@ export class DayoffService {
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
-    } else if (user.role === Role.CEO) {
-          const dayOffs = await this.dayoffModel
-            .find({
-              isDeleted: false,
-              employeeId: user.employID.toString(),
-            })
-            .populate('EmployeeName', 'name')
-            .exec();
-          return dayOffs;
-  }else if (user.role === Role.Employee) {
-      const dayOffs = await this.dayoffModel
-        .find({
-          isDeleted: false,
-          employeeId: user.employID.toString(),
-        })
-        .sort({ createdAt: -1 })
-        .populate('EmployeeName', 'name')
-        .exec();
-      return dayOffs;
-    } else {
-      throw new UnauthorizedException(
-        'User does not have permission to view day offs',
-      );
-    }
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
+    const dayOffs = await this.dayoffModel
+      .find({
+        isDeleted: false,
+        employeeId: user.employID.toString(),
+      })
+      .sort({ createdAt: -1 })
+      .populate('EmployeeName', 'name')
+      .exec();
+    return dayOffs;
+  } else {
+    throw new UnauthorizedException(
+      'User does not have permission to view day offs',
+    );
+  }
   }
 
   private calculateTotalDays(startDate: Date, endDate: Date): number {
