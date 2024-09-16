@@ -51,10 +51,22 @@ export class DayoffService {
       );
     }
 
+    const ceoUser = await this.userModel.find({ role: Role.CEO}).exec();
+
+    let isApproved = false;
+    let approvedDate : Date | null = null;
+
+    if (ceoUser) {
+      isApproved = true;
+      approvedDate = new Date();
+    }
+
     const createdDayoff = new this.dayoffModel({
       ...createDayOff,
       EmployeeName: employeeName,
       totalDays,
+      isApproved,
+      approvedDate,    
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
@@ -81,11 +93,19 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR || user.role === Role.CEO) {
+    if (user.role === Role.HR) {
       const approvedDayOffs = await this.dayoffModel
         .find({ isApproved: true })
         .exec();
       return approvedDayOffs;
+    } else if (user.role === Role.CEO) {
+     const approvedDayOffs = await this.dayoffModel
+       .find({
+         isApproved: true,
+         employeeId: user.employID.toString(),
+       })
+       .exec();
+     return approvedDayOffs;
     } else if (user.role === Role.Employee) {
       const approvedDayOffs = await this.dayoffModel
         .find({
@@ -109,14 +129,23 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR || user.role === Role.CEO) {
+    if (user.role === Role.HR) {
       const dayOffs = await this.dayoffModel
         .find({ isDeleted: false })
         .sort({ createdAt: -1 })
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.CEO) {
+          const dayOffs = await this.dayoffModel
+            .find({
+              isDeleted: false,
+              employeeId: user.employID.toString(),
+            })
+            .populate('EmployeeName', 'name')
+            .exec();
+          return dayOffs;
+  }else if (user.role === Role.Employee) {
       const dayOffs = await this.dayoffModel
         .find({
           isDeleted: false,
