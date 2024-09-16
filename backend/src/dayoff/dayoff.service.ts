@@ -51,15 +51,18 @@ export class DayoffService {
       );
     }
 
-    const ceoUser = await this.userModel.find({ role: Role.CEO}).exec();
+  const ceoUser = await this.userModel
+    .findOne({ employID: createDayOff.employeeId })
+    .exec();
 
     let isApproved = false;
     let approvedDate : Date | null = null;
 
-    if (ceoUser) {
-      isApproved = true;
-      approvedDate = new Date();
-    }
+     if (ceoUser && ceoUser.role === Role.CEO) {
+       isApproved = true;
+       approvedDate = new Date();
+     }
+
 
     const createdDayoff = new this.dayoffModel({
       ...createDayOff,
