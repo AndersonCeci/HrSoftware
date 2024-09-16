@@ -103,7 +103,6 @@ const ProfilePage: React.FC = () => {
     },
   ];
 
-  console.log(avatarUrl, "deded");
 
   return (
     <div>

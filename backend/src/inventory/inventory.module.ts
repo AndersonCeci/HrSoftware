@@ -6,6 +6,8 @@ import { Inventory, InventorySchema } from './schemas/Inventory.schema';
 import { AssetsModule } from 'src/assets/assets.module';
 import { EmployeeModule } from 'src/employee/employe.module';
 import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
+import { NotificationsGatewayModule } from 'src/notificationsGateway/notificationgateAway.module';
+import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
       { name: Employee.name, schema: EmployeeSchema },
     ]),
     AssetsModule,
+    NotificationsGatewayModule,
+    NotificationsModule,
     forwardRef(() => EmployeeModule),
   ],
   controllers: [InventoryController],

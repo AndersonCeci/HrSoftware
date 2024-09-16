@@ -4,16 +4,11 @@ import { TreeNode } from "primereact/treenode";
 import "../OrganisationalStructure/style/OrganisationalStructure.css";
 import "../../../node_modules/primereact/resources/primereact.css";
 import "../../../node_modules/primereact/resources/themes/lara-light-blue/theme.css";
-import Button from "../../components/Shared/Button";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { ButtonSize, ButtonType } from "../../enums/Button";
-import AddNode from "./AddNode";
 import useHttp from "../../hooks/useHttp";
 import { formatData, nodeTemplate } from "./helperFunctions";
 
 export default function SelectionDemo() {
   const [selection, setSelection] = useState<TreeNode[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [, , sendRequest] = useHttp();
 
   useEffect(() => {
@@ -32,10 +27,6 @@ export default function SelectionDemo() {
   }, []);
 
   const [data, setData] = useState<TreeNode[]>([]);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
 
   return (
     <div className="card overflow-x-auto">

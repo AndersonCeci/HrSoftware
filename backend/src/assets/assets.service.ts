@@ -5,7 +5,7 @@ import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateAssetDto } from './dto/createAsset.dto';
 import { UpdateAssetDto } from './dto/updateAsset.dto';
 import { UserService } from 'src/users/users.service';
-import { Role } from 'src/users/schemas/user.schema';  
+import { Role } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AssetsService {
@@ -140,76 +140,68 @@ export class AssetsService {
   }
 
   async findMyAssets(userId: string): Promise<Asset[]> {
-   
     const user = await this.userService.findOne(userId);
 
-    
-    
-
-    
     const employeeDetails = user.employID;
-     const employeeObjectId = new Types.ObjectId(employeeDetails);
+    const employeeObjectId = new Types.ObjectId(employeeDetails);
     if (!employeeDetails) {
       throw new Error('Employee ID not found for this user');
     }
-    
 
     if (user.role === Role.HR) {
-      return this.findAllEmployee(); 
-    }else{
+      return this.findAllEmployee();
+    } else {
       const data = await this.assetModel
-      .aggregate([
-        {
-          $lookup: {
-            from: 'inventories',
-            localField: '_id',
-            foreignField: 'assetID',
-            as: 'inventories',
+        .aggregate([
+          {
+            $lookup: {
+              from: 'inventories',
+              localField: '_id',
+              foreignField: 'assetID',
+              as: 'inventories',
+            },
           },
-        },
-        {
-          $unwind: {
-            path: '$inventories',
-            preserveNullAndEmptyArrays: false,
+          {
+            $unwind: {
+              path: '$inventories',
+              preserveNullAndEmptyArrays: false,
+            },
           },
-        },
-        {
-          $lookup: {
-            from: 'employees',
-            localField: 'inventories.employeeDetails',
-            foreignField: '_id',
-            as: 'inventories.employeeDetails',
+          {
+            $lookup: {
+              from: 'employees',
+              localField: 'inventories.employeeDetails',
+              foreignField: '_id',
+              as: 'inventories.employeeDetails',
+            },
           },
-        },
-        {
-          $unwind: {
-            path: '$inventories.employeeDetails',
-            preserveNullAndEmptyArrays: true,
+          {
+            $unwind: {
+              path: '$inventories.employeeDetails',
+              preserveNullAndEmptyArrays: true,
+            },
           },
-        },
-        {
-          $match: {
-            'inventories.status': 'Assigned',
-            'inventories.employeeDetails._id': employeeObjectId,
+          {
+            $match: {
+              'inventories.status': 'Assigned',
+              'inventories.employeeDetails._id': employeeObjectId,
+            },
           },
-        },
-        {
-          $project: {
-            _id: 0,
-            assetName: 1,
-            inventory: '$inventories',
+          {
+            $project: {
+              _id: 0,
+              assetName: 1,
+              inventory: '$inventories',
+            },
           },
-        },
-        {
-          $sort: { assetName: 1 },
-        },
-      ])
-      .exec();
+          {
+            $sort: { assetName: 1 },
+          },
+        ])
+        .exec();
 
-    return data;
+      return data;
     }
-    
-    
   }
 
   async updateAsset(
@@ -234,9 +226,9 @@ export class AssetsService {
       .exec();
   }
 }
-        // {
-        //   $skip: resPerPage * page,
-        // },
-        // {
-        //   $limit: resPerPage,
-        // },
+// {
+//   $skip: resPerPage * page,
+// },
+// {
+//   $limit: resPerPage,
+// },

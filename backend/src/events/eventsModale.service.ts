@@ -1,27 +1,43 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { Event } from './schema/events.schema';
-import { Query } from 'express-serve-static-core';
 import { NotificationsGateway } from 'src/notificationsGateway/notifications.gateway';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { AssignEmployeeDto } from './dto/assignEmployee.dto';
 import { Employee } from 'src/employee/schema/employe.schema';
-import { profile } from 'console';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(Event.name) private eventModel: Model<Event>,
-    @InjectModel(Employee.name) private employeeModel: Model<Employee>,
-    private readonly notificationsGateway: NotificationsGateway,
     private readonly notificationService: NotificationsService,
   ) {}
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-    const event = this.eventModel.create(createEventDto);
+
+    const event = await this.eventModel.create(createEventDto);
+    console.log('Event created:', event);
+
+    const createNotificationDto: CreateNotificationDto = {
+      message: `A new event has been created: ${event.eventName}`,
+      isRead: false,
+      userId: null,
+      path: `/company/events`,
+      status: NotificationStatus.NOTIFICATION,
+    };
+
+    try {
+      const notification = await this.notificationService.createNotification(
+        createNotificationDto,
+      );
+      console.log('Notification created:', notification);
+    } catch (error) {
+      console.error('Error creating notification:', error);
+    }
+
     return event;
   }
 
