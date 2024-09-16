@@ -37,7 +37,7 @@ export class CreateEmployeeDto {
   @IsEnum(EmploymentStatus)
   status: EmploymentStatus;
 
-  startingDate?: string;
+  startingDate?: Date;
 
   phoneNumber: string;
 

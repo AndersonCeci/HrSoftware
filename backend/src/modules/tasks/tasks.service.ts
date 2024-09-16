@@ -57,13 +57,14 @@ export class TasksService {
       );
     });
     const createNotificationDto: CreateNotificationDto = {
-      message: 'Your task is due tommorow',
+      message: `Your task is due tommorow`,
       isRead: false,
       userId: null,
       path: `/dashboard`,
     };
     await this.notificationService.createNotification(createNotificationDto);
   }
+
 
   findAllTasks(): Promise<Task[]> {
     return this.taskModel.find({ isDeleted: false }).exec();

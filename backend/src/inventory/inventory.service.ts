@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Inventory, InventoryStatus } from './schemas/Inventory.schema';
 import mongoose, { Model, Types } from 'mongoose';
@@ -11,14 +8,16 @@ import { AssetsService } from 'src/assets/assets.service';
 
 import { Employee } from 'src/employee/schema/employe.schema';
 import { Asset } from 'src/assets/schemas/Asset.schema';
-
+import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 
 @Injectable()
 export class InventoryService {
   constructor(
     @InjectModel(Inventory.name) private inventoryModel: Model<Inventory>,
     @InjectModel(Employee.name) private employeeModel: Model<Employee>,
-
+    private readonly notificationService: NotificationsService,
     private readonly assetsService: AssetsService,
   ) {}
 
@@ -63,16 +62,14 @@ export class InventoryService {
   }
 
   async cleanUpInventories(employeeDetails): Promise<void> {
-    const deletedEmployees = await this.inventoryModel
-      .find({
-        employeeDetails: employeeDetails,
-      })
+    const deletedEmployees = await this.inventoryModel.find({
+      employeeDetails: employeeDetails,
+    });
 
     for (const delEmployee of deletedEmployees) {
       await this.unassignFromEmployee(delEmployee._id.toString());
     }
   }
-
 
   async assignToEmployee(
     inventoryID: string,
@@ -80,7 +77,7 @@ export class InventoryService {
     assignDate: string,
     status: InventoryStatus,
   ): Promise<Inventory> {
-    const foundEmployee = await this.employeeModel.findById(employeeDetails);
+    const foundEmployee = await this.employeeModel.findById( employeeDetails );
 
     if (!foundEmployee) {
       throw new NotFoundException(
@@ -94,9 +91,30 @@ export class InventoryService {
       status: InventoryStatus.Assigned,
     });
 
-    return await this.inventoryModel
+    const assignedInventory = await this.inventoryModel
       .findById(inventoryID)
       .populate('employeeDetails');
+
+    console.log(assignedInventory, 'inventoryy');
+
+    const createNotificationDto: CreateNotificationDto = {
+      message: `You have been assigned an asset: ${assignedInventory.assetName}`,
+      isRead: false,
+      userId: foundEmployee._id as unknown as Types.ObjectId,
+      path: `/inventory/${inventoryID}`,
+      status: NotificationStatus.NOTIFICATION,
+    };
+
+    try {
+      const notification = await this.notificationService.createNotification(
+        createNotificationDto,
+      );
+      console.log('Notification sent to employee:', notification);
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+
+    return assignedInventory;
   }
 
   async unassignFromEmployee(inventoryID: string): Promise<Inventory> {

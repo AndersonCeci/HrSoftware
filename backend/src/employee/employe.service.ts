@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, Types, ObjectId } from 'mongoose';
 import { Employee, Position } from './schema/employe.schema';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import { UserService } from 'src/users/users.service';
@@ -31,90 +31,94 @@ export class EmployeeService {
   ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    let role: Role;
+    try {
+      let role: Role;
+      switch (createEmployeeDto.position) {
+        case Position.JuniorFrontEnd:
+        case Position.JuniorBackEnd:
+        case Position.SeniorFrontEnd:
+        case Position.SeniorBackEnd:
+        case Position.FullStack:
+        case Position.DevOps:
+          role = Role.Employee;
+          break;
+        case Position.ProjectManager:
+          role = Role.ProjectManager;
+          break;
+        case Position.HR:
+          role = Role.HR;
+          break;
+        default:
+          throw new Error('Invalid position');
+      }
 
-    switch (createEmployeeDto.position) {
-      case Position.JuniorFrontEnd:
-      case Position.JuniorBackEnd:
-      case Position.SeniorFrontEnd:
-      case Position.SeniorBackEnd:
-      case Position.FullStack:
-      case Position.DevOps:
-        role = Role.Employee;
-        break;
-      case Position.ProjectManager:
-        role = Role.ProjectManager;
-        break;
-      case Position.HR:
-        role = Role.HR;
-        break;
-      default:
-        throw new Error('Invalid position');
-    }
+      const createdEmployee = await new this.employeeModel({
+        ...createEmployeeDto,
+        role,
+        teamLeaders:
+          createEmployeeDto.teamLeaders?.map((id) => new Types.ObjectId(id)) ||
+          [],
+      }).save();
 
-    const createdEmploye = await new this.employeeModel({
-      ...createEmployeeDto,
-      role,
-      teamLeaders:
-        createEmployeeDto.teamLeaders?.map((id) => new Types.ObjectId(id)) ||
-        [],
-    }).save();
-
-    const fullNameAggregation = await this.employeeModel.aggregate([
-      {
-        $match: { _id: createdEmploye._id },
-      },
-      {
-        $project: {
-          fullName: {
-            $concat: [
-              { $toUpper: { $substrCP: [`$name`, 0, 1] } },
-              {
-                $substrCP: [
-                  `$name`,
-                  1,
-                  { $subtract: [{ $strLenCP: `$name` }, 1] },
-                ],
-              },
-              ' ',
-              { $toUpper: { $substrCP: [`$surname`, 0, 1] } },
-              {
-                $substrCP: [
-                  `$surname`,
-                  1,
-                  { $subtract: [{ $strLenCP: `$surname` }, 1] },
-                ],
-              },
-            ],
+      const fullNameAggregation = await this.employeeModel.aggregate([
+        {
+          $match: { _id: createdEmployee._id },
+        },
+        {
+          $project: {
+            fullName: {
+              $concat: [
+                { $toUpper: { $substrCP: [`$name`, 0, 1] } },
+                {
+                  $substrCP: [
+                    `$name`,
+                    1,
+                    { $subtract: [{ $strLenCP: `$name` }, 1] },
+                  ],
+                },
+                ' ',
+                { $toUpper: { $substrCP: [`$surname`, 0, 1] } },
+                {
+                  $substrCP: [
+                    `$surname`,
+                    1,
+                    { $subtract: [{ $strLenCP: `$surname` }, 1] },
+                  ],
+                },
+              ],
+            },
           },
         },
-      },
-    ]);
+      ]);
 
-    const updatedEmployee = await this.employeeModel.findByIdAndUpdate(
-      createdEmploye._id,
-      { fullName: fullNameAggregation[0].fullName },
-      { new: true },
-    );
+      const updatedEmployee = await this.employeeModel.findByIdAndUpdate(
+        createdEmployee._id,
+        { fullName: fullNameAggregation[0].fullName },
+        { new: true },
+      );
 
-    const createUserDto: CreateUserDto = {
-      employID: updatedEmployee._id as Types.ObjectId,
-      username: `${createEmployeeDto.surname}codevider`,
-      password: 'codevider',
-      email: createEmployeeDto.email,
-      role: role,
-      isDeleted: false,
-    };
+      const createUserDto: CreateUserDto = {
+        employID: updatedEmployee._id as Types.ObjectId,
+        username: `${createEmployeeDto.surname}codevider`,
+        password: 'codevider',
+        email: createEmployeeDto.email,
+        role: role,
+        isDeleted: false,
+      };
 
-    await this.userService.createUser(createUserDto);
-    Logger.log('create');
-    return updatedEmployee;
+      await this.userService.createUser(createUserDto);
+
+      return updatedEmployee;
+    } catch (error) {
+      console.error('Error creating employee:', error);
+
+      throw new Error(`Employee creation failed: ${error.message}`);
+    }
   }
 
   findAll(): Promise<Employee[]> {
-    return this.employeeModel.find().exec();
+    return this.employeeModel.find().sort({ createdAt: -1 }).exec();
   }
-
   async findStatusLength(): Promise<any[]> {
     const employmentData = await this.employeeModel
       .aggregate([
@@ -136,10 +140,6 @@ export class EmployeeService {
 
     return employmentData;
   }
-
-  // findLeft(): Promise<Employee[]> {
-  //   return this.employeeModel.find().exec();
-  // }
 
   async findOne(id: string) {
     try {
@@ -169,7 +169,9 @@ export class EmployeeService {
 
   delete(id: string): Promise<Employee | null> {
     this.inventoryService.cleanUpInventories(id);
-    return this.employeeModel.findByIdAndDelete(id);
+    const deleteEmploy = this.employeeModel.findByIdAndDelete(id);
+    this.userService.deleteUserByEmployID(id as unknown as Types.ObjectId);
+    return deleteEmploy;
   }
 
   async findNameById(id: string): Promise<string | null> {
@@ -180,22 +182,6 @@ export class EmployeeService {
     return null;
   }
 
-  softDeleteEmployeeById(id: string): Promise<Employee> {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-
-    const updatedEmployee = this.employeeModel.findByIdAndUpdate(
-      id,
-      { isDeleted: true, deleteDate: currentDate },
-      { new: true },
-    );
-
-    if (updatedEmployee) {
-      this.userService.deleteUserByEmployID(id);
-    }
-    return updatedEmployee;
-  }
-
   async findName(name: string): Promise<Employee | null> {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
@@ -203,7 +189,7 @@ export class EmployeeService {
   @Cron(CronExpression.EVERY_10_HOURS)
   async handleCron() {
     await this.notifyBirthdayOneDayBefore();
-    // await this.notifyOneYearAnniversary();
+    await this.notifyOneYearAnniversary();
   }
 
   async notifyBirthdayOneDayBefore(): Promise<void> {
@@ -239,40 +225,34 @@ export class EmployeeService {
     }
   }
 
-  // async notifyOneYearAnniversary(): Promise<void> {
-  //   const oneYearAgo = new Date();
-  //   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-  //   oneYearAgo.setHours(0, 0, 0, 0);
+  async notifyOneYearAnniversary(): Promise<void> {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    oneYearAgo.setHours(0, 0, 0, 0);
 
-  //   const endOfDay = new Date(oneYearAgo);
-  //   endOfDay.setHours(23, 59, 59, 999);
+    const endOfDay = new Date(oneYearAgo);
+    endOfDay.setHours(23, 59, 59, 999);
 
-  //   const employeesWithAnniversary = await this.employeeModel
-  //     .find({
-  //       startingDate: {
-  //         $gte: oneYearAgo,
-  //         $lte: endOfDay,
-  //       },
-  //     })
-  //     .exec();
+    const employeesWithAnniversary = await this.employeeModel
+      .find({
+        startingDate: {
+          $gte: oneYearAgo,
+          $lte: endOfDay,
+        },
+      })
+      .exec();
 
-  //   const hrUser = await this.userModel.findOne({ role: Role.HR }).exec();
-
-  //   if (!hrUser) {
-  //     throw new Error('No HR user found');
-  //   }
-
-  //   for (const employee of employeesWithAnniversary) {
-  //     const createNotificationDto: CreateNotificationDto = {
-  //       message: `Congratulations to ${employee.fullName} for one year at the company!`,
-  //       isRead: false,
-  //       userId: new Types.ObjectId(hrUser._id),
-  //       path: `/dashboard`,
-  //       status: NotificationStatus.REMINDER,
-  //     };
-  //     await this.notificationService.createNotification(createNotificationDto);
-  //   }
-  // }
+    for (const employee of employeesWithAnniversary) {
+      const createNotificationDto: CreateNotificationDto = {
+        message: `Congratulations to ${employee.fullName} for one year at the company!`,
+        isRead: false,
+        userId: null,
+        path: `/dashboard`,
+        status: NotificationStatus.REMINDER,
+      };
+      await this.notificationService.createNotification(createNotificationDto);
+    }
+  }
 
   async searchEmployee(
     name?: string,
@@ -293,21 +273,6 @@ export class EmployeeService {
       throw new Error('An error occurred while searching for employees.');
     }
   }
-
-  // async getTeamLeaders(): Promise<Employee[]> {
-  //   const employeesWithTeamLeaders = await this.employeeModel
-  //     .aggregate([
-  //       {
-  //         $match: {
-  //           teamLeaders: { $exists: true, $not: { $size: 0 } },
-  //         },
-  //         $project: {},
-  //       },
-  //     ])
-  //     .exec();
-
-  //   return employeesWithTeamLeaders;
-  // }
 
   async getEmployeesAndTeamLeaders(): Promise<any> {
     const results = await this.employeeModel

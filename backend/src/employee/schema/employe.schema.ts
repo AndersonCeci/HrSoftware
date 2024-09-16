@@ -15,10 +15,9 @@ export enum Position {
   HR= 'hr'
 }
 
-export enum EmploymentStatus
-{
+export enum EmploymentStatus {
   REMOTE = 'Remote',
-  ONSITE = 'On Site'
+  ONSITE = 'On Site',
 }
 
 @Schema()
@@ -52,7 +51,7 @@ export class Employee extends Document {
   status: string;
 
   @Prop()
-  startingDate: string;
+  startingDate: Date;
 
   @Prop()
   phoneNumber: string;
@@ -84,6 +83,7 @@ export class Employee extends Document {
   salary: number;
 
   @Prop()
+  @IsOptional()
   contract: string;
 
   @Prop({ default: false })
