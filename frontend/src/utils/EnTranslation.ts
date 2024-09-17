@@ -171,4 +171,6 @@ export const EnTranslation = {
   startLEaveDate: "Start Leave Date",
   endLeaveDate: "End Leave Date",
   reason: "Reason",
+  get: "Get",
+  you: "You",
 };

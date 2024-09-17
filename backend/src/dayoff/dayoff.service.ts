@@ -51,12 +51,11 @@ export class DayoffService {
       );
     }
 
-    const ceoUser = await this.userModel.find({ role: Role.CEO}).exec();
-
     let isApproved = false;
-    let approvedDate : Date | null = null;
+    let approvedDate: Date | null = null;
 
-    if (ceoUser) {
+    console.log('Employee role:', employee.role);
+    if (employee.role.toLowerCase() === Role.CEO) {
       isApproved = true;
       approvedDate = new Date();
     }
@@ -66,7 +65,7 @@ export class DayoffService {
       EmployeeName: employeeName,
       totalDays,
       isApproved,
-      approvedDate,    
+      approvedDate,
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
@@ -98,15 +97,7 @@ export class DayoffService {
         .find({ isApproved: true })
         .exec();
       return approvedDayOffs;
-    } else if (user.role === Role.CEO) {
-     const approvedDayOffs = await this.dayoffModel
-       .find({
-         isApproved: true,
-         employeeId: user.employID.toString(),
-       })
-       .exec();
-     return approvedDayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const approvedDayOffs = await this.dayoffModel
         .find({
           isApproved: true,
@@ -136,16 +127,7 @@ export class DayoffService {
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
-    } else if (user.role === Role.CEO) {
-          const dayOffs = await this.dayoffModel
-            .find({
-              isDeleted: false,
-              employeeId: user.employID.toString(),
-            })
-            .populate('EmployeeName', 'name')
-            .exec();
-          return dayOffs;
-  }else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const dayOffs = await this.dayoffModel
         .find({
           isDeleted: false,

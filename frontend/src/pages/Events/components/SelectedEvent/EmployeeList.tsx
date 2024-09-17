@@ -1,9 +1,10 @@
 import { Avatar, List, Typography } from "antd";
 import { t } from "i18next";
-import { stringToHashCodeHelper } from "../../../../utils/utils";
+import { getFromLocalStorage, stringToHashCodeHelper } from "../../../../utils/utils";
 import { EventParticipantsType } from "../../types/EventTypes";
 
 export default function EmployeeList({ participants }: { participants: EventParticipantsType[] }) {
+	const logedUser = getFromLocalStorage();
 	function renderAvatar(profilePhoto: string | undefined, fullName: string, id: string) {
 		if (profilePhoto) {
 			return <Avatar src={profilePhoto} alt={fullName} />;
@@ -37,9 +38,12 @@ export default function EmployeeList({ participants }: { participants: EventPart
 				renderItem={(item: { fullName: string; _id: string; profilePhoto: string | undefined }) => (
 					<List.Item>
 						<List.Item.Meta
-							title={item.fullName}
+							title={<Typography.Text strong>{`${item.fullName} `}</Typography.Text>}
 							avatar={renderAvatar(item.profilePhoto, item.fullName, item._id)}
 						/>
+						<Typography.Text>{`${
+							item._id === logedUser?.employID ? `( ${t("you")} )` : ""
+						}`}</Typography.Text>
 					</List.Item>
 				)}
 			/>

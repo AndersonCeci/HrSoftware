@@ -9,24 +9,49 @@ import { getFullName } from "../../../utils/utils";
 import { t } from "i18next";
 
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
+const SEARCH_API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API;
 
 const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 	const formRef = useRef<any>();
 	const [form] = Form.useForm();
 	const [employeeList, setEmployeeList] = useState<EmployeeDataType[]>([]);
+	const lastChange = useRef<number | null>(null);
 	const [, , sendRequest] = useHttp();
 
-	useEffect(() => {
-		sendRequest({ url: `${EMPLOYEE}/search` }, (responseData: EmployeeDataType[]) =>
-			setEmployeeList(responseData),
-		);
-	}, []);
+	// useEffect(() => {
+	// 	sendRequest({ url: `${EMPLOYEE}/search` }, (responseData: EmployeeDataType[]) =>
+	// 		setEmployeeList(responseData),
+	// 	);
+	// }, []);
 
 	useImperativeHandle(ref, () => ({
 		submit: () => {
 			formRef.current.submit();
 		},
 	}));
+
+	function onSearch(value: string) {
+		if (lastChange.current) {
+			clearTimeout(lastChange.current);
+		}
+
+		const name = value.split(" ")[0];
+		const surname = value.split(" ")[1] || "";
+
+		lastChange.current = setTimeout(() => {
+			lastChange.current = null;
+			if (value.trim() !== "") {
+				sendRequest(
+					{
+						url: `${SEARCH_API}?name=${name}&surname=${surname}`,
+					},
+					(responseData: EmployeeDataType[]) => setEmployeeList(responseData),
+				);
+			} else {
+				setEmployeeList([]);
+			}
+		}, 500);
+	}
 
 	function onFinish(values: any) {
 		const selectedEmployee = employeeList.find(
@@ -53,6 +78,7 @@ const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
 					label: getFullName(employee.name, employee.surname),
 				}))}
 				isMatchWithOption
+				onChange={onSearch}
 			/>
 		</Form>
 	);

@@ -1,12 +1,5 @@
 import NavigationIcons from "./NavigationIcons";
 import PageRoutesComponents from "../pages";
-import { isHR } from "./utils";
-
-const isHr = isHR();
-
-function isOnlyHr(path: string, icon: any, pageElement: any) {
-	return isHr ? [{ path, icon, pageElement }] : [];
-}
 
 export const Paths = {
 	Login: {
