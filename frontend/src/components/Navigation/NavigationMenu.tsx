@@ -6,19 +6,18 @@ import "../../styles/Navigation/NavigationMenu.css";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import LogedUserPanel from "./LogedUserPanel";
-import { isHR } from "../../utils/utils";
+import { isEmployee } from "../../utils/utils";
 import { getMenuItemsByRole, getMenuItemType } from "../../utils/NavMenuHelper";
-import { useEffect } from "react";
 
 const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const isHr = isHR();
+	const isEmp = isEmployee();
 	const { t } = useTranslation();
 	const navElements = [
 		Paths.Dashboard,
-		...(isHr ? [Paths.Recruitment] : []),
-		...(isHr ? [Paths.Employee] : []),
+		...(isEmp ? [] : [Paths.Recruitment]),
+		...(isEmp ? [] : [Paths.Employee]),
 		Paths.Management,
 		Paths.DayOff,
 		Paths.Company,
@@ -28,10 +27,10 @@ const NavigationMenu = ({ colapsed }: { colapsed: boolean }) => {
 		return {
 			key: `${element.path} ${index}`,
 			label: t(element.path),
-			type: getMenuItemType(element, isHr),
+			type: getMenuItemType(element, isEmp),
 			icon: element.icon ? <element.icon className="nav-menu-icon" /> : null,
 			children: element.children.map((subElement) => {
-				return getMenuItemsByRole(element, subElement, isHr);
+				return getMenuItemsByRole(element, subElement, isEmp);
 			}),
 		};
 	});

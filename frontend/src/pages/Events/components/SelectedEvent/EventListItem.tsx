@@ -13,7 +13,7 @@ export default function EventListItem({ title, children, level = 1 }: EventListI
 			>
 				{title}
 			</Typography.Title>
-			<Typography.Text>{children}</Typography.Text>
+			<Typography.Text >{children}</Typography.Text>
 		</li>
 	);
 }

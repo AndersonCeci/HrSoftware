@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Loader from "../../components/Shared/Loader";
 import { PromoteType } from "./types/PromoteType";
 import { useNavigate } from "react-router-dom";
-import { isHR } from "../../utils/utils";
+import { isEmployee } from "../../utils/utils";
 
 const { Search } = Input;
 
@@ -16,13 +16,13 @@ const PromotionPage: React.FC = () => {
 	const [tableData, setTableData] = useState<PromoteType[]>([]);
 	const [searchValue, setSearchValue] = useState<string>("");
 	const navigate = useNavigate();
-	const isHr = isHR();
+	const isEmp = isEmployee();
 
 	useEffect(() => {
-		if (!isHr) {
+		if (isEmp) {
 			navigate("/error");
 		}
-	}, [isHr]);
+	}, [isEmp]);
 
 	useEffect(() => {
 		sendRequest(

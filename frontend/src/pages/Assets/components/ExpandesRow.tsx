@@ -9,6 +9,7 @@ import { AssetInventaryContext } from "../context/AssetInventaryContext";
 import useHttp from "../../../hooks/useHttp";
 
 import { AssetDatatype, InventaryDataType, AssetStatus } from "../types/AssetsDataType";
+import { getFromLocalStorage, isCEO } from "../../../utils/utils";
 
 const INVENTARY_API = import.meta.env.REACT_APP_INVENTARY_API;
 
@@ -64,6 +65,23 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 		);
 	}
 
+	function handleOnCeoAssign(recordId: string) {
+		const dataToSubmit = {
+			employeeDetails: getFromLocalStorage().employID,
+			assignDate: new Date().toISOString(),
+		};
+
+		fetchData(
+			useHttp.patchRequestHelper(`${INVENTARY_API}/assign/${recordId}`, dataToSubmit),
+			(response) => {
+				updateInventaryItemHandler(response, {
+					onRepairModifier: 0,
+					reservedModifier: 1,
+				});
+			},
+		);
+	}
+
 	function handleUnassign(record: InventaryDataType) {
 		fetchData(useHttp.patchRequestHelper(`${INVENTARY_API}/unassign/${record._id}`), (response) => {
 			updateInventaryItemHandler(response, {
@@ -99,6 +117,7 @@ const ExpandedRow = ({ record }: { record: AssetDatatype }) => {
 		handleAddAsset,
 		handleUnassign,
 		handleDeleteFromInventary,
+		handleOnCeoAssign,
 	);
 
 	return (

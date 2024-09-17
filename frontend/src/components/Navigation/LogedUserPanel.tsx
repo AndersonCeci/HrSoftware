@@ -57,7 +57,7 @@ const LogedUserPanel = ({ colapsed }: LogedUserPanelProps) => {
 						<Meta
 							avatar={renderAvatar()}
 							title={userData?.username}
-							description={userData?.role}
+							description={userData?.role.toUpperCase()}
 							className="loged-user-panel"
 						/>
 					</Card>
