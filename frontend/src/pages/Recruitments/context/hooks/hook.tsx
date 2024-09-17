@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ApplicantProps } from "../../../../types/ApplicantProps";
 import useHttp from "../../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
@@ -15,7 +15,6 @@ export const useRecruitment = () => {
   );
   const [drawerState, setDrawerState] = useState<boolean>(false);
   const [isLoading, , sendRequest] = useHttp();
-  const formRef = useRef<any>();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [file, setFile] = useState<File | null>(null);
@@ -197,7 +196,6 @@ export const useRecruitment = () => {
     drawerState,
     setDrawerState,
     isLoading,
-    formRef,
     isEditModalVisible,
     handleDelete,
     handleAddNew,
@@ -210,5 +208,6 @@ export const useRecruitment = () => {
     setFile,
     handleUpload,
     updateApplicant,
+    setTableData,
   };
 };

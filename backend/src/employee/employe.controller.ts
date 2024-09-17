@@ -93,4 +93,9 @@ export class EmployeeController {
 
     return result;
   }
+
+  @Get('/employees')
+  async findByIds(@Query('ids') ids: string[]) {
+    return this.employeeService.findByIds(ids);
+  }
 }

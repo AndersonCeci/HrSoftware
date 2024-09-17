@@ -5,8 +5,6 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { SentEmailDTO } from './dto/sendEmail.dto';
-import { join } from 'path';
-import * as fs from 'fs';
 
 @Injectable()
 export class MailService {
@@ -26,7 +24,7 @@ export class MailService {
           password: dto.password,
           hr: dto.hr,
           imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/hrsoftware-75457.appspot.com/o/loginlogo.png?alt=media&token=22a63636-b29c-4ac6-a0b9-2ab66880564b',
+            'https://firebasestorage.googleapis.com/v0/b/hrsoftware-75457.appspot.com/o/loginlogo.png?alt=media',
         },
         text: dto.text,
       });

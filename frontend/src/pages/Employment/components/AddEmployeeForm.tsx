@@ -93,7 +93,7 @@ const AddEmployeeForm = ({
           setTableData((prev: ApplicantProps[]) =>
             prev.map((item) => {
               if (item._id === editingRecord._id) {
-                return editingRecord;
+                item.stage = RecruitmentStage.Hired;
               }
               return item;
             })

@@ -9,7 +9,7 @@ export class SchedulerService implements OnModuleInit {
   private readonly logger = new Logger(SchedulerService.name);
 
   constructor(
-    private readonly scheduleRegistry: SchedulerRegistry,
+    private readonly schedulerRegistry: SchedulerRegistry,
     private readonly cronService: CronService,
   ) {}
   onModuleInit() {
@@ -17,59 +17,76 @@ export class SchedulerService implements OnModuleInit {
   }
 
   scheduleJob(dto: SchedulerDTO): void {
-    const cronExpression = this.cronService.getCronExpression(
-      dto.startDate,
-      dto.step,
-    );
-    const job = new CronJob(cronExpression, () => {
-      const currentDate = new Date();
-      if (currentDate >= dto.startDate && currentDate <= dto.endDate) {
-        dto.task;
-      }
-    });
+    try {
+      const cronExpression = this.cronService.getCronExpression(
+        dto.startDate,
+        dto.step,
+      );
+      const job = new CronJob(cronExpression, () => {
+        const currentDate = new Date();
+        if (currentDate >= dto.startDate && currentDate <= dto.endDate) {
+          if (typeof dto.task === 'function') {
+            dto.task();
+          } else {
+            this.logger.warn(`Task for job ${dto.jobName} is not a function.`);
+          }
+        }
+      });
 
-    this.scheduleRegistry.addCronJob(dto.jobName, job);
-
-    ``;
-    job.start();
-    this.logger.log(
-      `Job ${dto.jobName} started with cron expression "${cronExpression}".`,
-    );
+      this.schedulerRegistry.addCronJob(dto.jobName, job);
+      job.start();
+      this.logger.log(
+        `Job ${dto.jobName} started with cron expression "${cronExpression}".`,
+      );
+    } catch (error) {
+      this.logger.error(`Failed to schedule job ${dto.jobName}`, error.stack);
+    }
   }
-
   stopJob(jobName: string): void {
-    const job = this.scheduleRegistry.getCronJob(jobName);
-    if (job) {
+    try {
+      const job = this.schedulerRegistry.getCronJob(jobName);
       job.stop();
       this.logger.log(`Job ${jobName} stopped.`);
+    } catch (error) {
+      this.logger.error(`Failed to stop job ${jobName}`, error.stack);
     }
   }
 
   rescheduleJob(jobName: string, newCronExpression: string): void {
-    const job = this.scheduleRegistry.getCronJob(jobName);
-    if (job) {
+    try {
+      const job = this.schedulerRegistry.getCronJob(jobName);
       job.setTime(new CronTime(newCronExpression));
       job.start();
       this.logger.log(
         `Job ${jobName} rescheduled with new cron expression "${newCronExpression}".`,
       );
+    } catch (error) {
+      this.logger.error(`Failed to reschedule job ${jobName}`, error.stack);
     }
   }
 
-  getJob(jobName: string): CronJob {
-    return this.scheduleRegistry.getCronJob(jobName);
+  getJob(jobName: string): CronJob | null {
+    try {
+      return this.schedulerRegistry.getCronJob(jobName);
+    } catch (error) {
+      this.logger.error(`Job ${jobName} not found`, error.stack);
+      return null;
+    }
   }
 
-  getAllJobs(): any[] {
-    const jobsMap = this.scheduleRegistry.getCronJobs();
-    return Array.from(jobsMap.values()).map((job) => ({
-      cronTime: job.cronTime.source,
-      nextInvocation: job.nextDates().toString(),
-      lastExecution: job.lastDate().toString(),
-      running: job.running,
-    }));
+  getCrons() {
+    const jobs = this.schedulerRegistry.getCronJobs();
+    jobs.forEach((value, key, map) => {
+      let next: string | Date;
+      this.logger.log(`value:${value}`);
+      try {
+        next = value.nextDate().toJSDate();
+      } catch (e) {
+        next = 'error: next fire date is in the past!';
+      }
+      this.logger.log(`job: ${key} -> next: ${next}`);
+    });
   }
-
   devLog(): void {
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',

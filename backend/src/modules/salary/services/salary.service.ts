@@ -27,7 +27,6 @@ export class SalaryService {
         ...createSalaryDto,
         employeeID: new Types.ObjectId(createSalaryDto.employeeID),
       });
-      console.log(createdSalary);
       return await createdSalary.save();
     } catch (error) {
       if (error.code === 11000) {

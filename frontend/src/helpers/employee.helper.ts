@@ -25,3 +25,17 @@ export const fetchEmployeeByID = async (id: string) => {
     return null;
   }
 };
+
+export const fetchEmployees = async (ids: string[]) => {
+  try {
+    const res = await axios.get(`${FETCH_EMPLOYEE_API}/employees`, {
+      params: {
+        ids: ids,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    message.error("Failed to fetch employees");
+    return null;
+  }
+};

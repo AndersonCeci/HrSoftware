@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import useHttp from "../../../hooks/useHttp";
-import { ApexChartState, getMonthName, SalaryData } from "../types/DashboardTypes"
-
+import {
+  ApexChartState,
+  getMonthName,
+  SalaryData,
+} from "../types/DashboardTypes";
 
 const ApexChart: React.FC = () => {
   const [, , fetchData] = useHttp();
@@ -26,16 +29,13 @@ const ApexChart: React.FC = () => {
   });
 
   useEffect(() => {
-
-      fetchData(
-        { url: `http://localhost:3000/recruitments/chart` },
-        (data: SalaryData[]) => {
-          setData(data);
-        }
-      );
+    fetchData(
+      { url: `http://localhost:3000/recruitments/chart` },
+      (data: SalaryData[]) => {
+        setData(data);
+      }
+    );
   }, []);
-
-
 
   useEffect(() => {
     if (data.length > 0) {
@@ -48,7 +48,7 @@ const ApexChart: React.FC = () => {
         ],
         options: {
           chart: {
-            height: 350,
+            height: 300,
             type: "line",
             zoom: { enabled: false },
           },
@@ -73,7 +73,7 @@ const ApexChart: React.FC = () => {
           options={chartState.options}
           series={chartState.series}
           type="line"
-          height={355}
+          height={300}
         />
       </div>
       <div id="html-dist"></div>
