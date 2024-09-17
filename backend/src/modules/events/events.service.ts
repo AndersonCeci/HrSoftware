@@ -5,14 +5,17 @@ import { Events } from './schema/events.schema';
 import { Model } from 'mongoose';
 import { UpdateEventDto } from './eventsDTO/updateEvents.dto';
 import { Employee } from 'src/employee/schema/employe.schema';
+import { NotificationsService } from 'src/notificationsGateway/notifications.service';
+import { Types } from 'mongoose';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(Events.name) private eventsModel: Model<Events>,
     @InjectModel(Employee.name) private employeeModel: Model<Employee>,
+    private readonly notificationService: NotificationsService,
   ) {}
-
   async create(createEventDto: CreateEventDto): Promise<Events> {
     try {
       const { creatorId, invitees, ...eventData } = createEventDto;
@@ -23,6 +26,15 @@ export class EventsService {
       }
 
       const sanitizedInvitees = invitees && invitees.length > 0 ? invitees : [];
+      console.log(sanitizedInvitees, 'sanitizedInvitees');
+
+      const inviteeUsers = await this.employeeModel.find({
+        _id: { $in: sanitizedInvitees },
+      });
+
+      if (inviteeUsers.length !== sanitizedInvitees.length) {
+        throw new Error('Some invitees not found');
+      }
 
       const createdEvent = new this.eventsModel({
         ...eventData,
@@ -30,7 +42,17 @@ export class EventsService {
         invitees: sanitizedInvitees,
       });
 
-      return createdEvent.save();
+      const savedEvent = await createdEvent.save();
+      for (const invitee of inviteeUsers) {
+        await this.notificationService.createNotification({
+          userId: invitee._id as unknown as Types.ObjectId,
+          message: `You have been invited to the event: ${savedEvent.title}`,
+          path: `/personal-calendar`,
+          status: NotificationStatus.NOTIFICATION,
+        });
+      }
+
+      return savedEvent;
     } catch (error) {
       console.error('Error creating event:', error);
       throw new Error('Error creating event: ' + error.message);

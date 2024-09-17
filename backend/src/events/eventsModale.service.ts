@@ -17,7 +17,6 @@ export class EventsService {
   ) {}
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-
     const event = await this.eventModel.create(createEventDto);
     console.log('Event created:', event);
 

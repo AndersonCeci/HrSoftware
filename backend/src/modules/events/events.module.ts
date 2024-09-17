@@ -7,14 +7,16 @@ import { EventsSchema } from './schema/events.schema';
 
 import { Employee, EmployeeSchema } from 'src/employee/schema/employe.schema';
 import { EmployeeModule } from 'src/employee/employe.module';
+import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Events.name, schema: EventsSchema },
-      {name: Employee.name, schema: EmployeeSchema},
+      { name: Employee.name, schema: EmployeeSchema },
     ]),
     EmployeeModule,
+    NotificationsModule,
   ],
   controllers: [EventsController],
   providers: [EventsService],

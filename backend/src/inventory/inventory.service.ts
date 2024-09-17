@@ -77,7 +77,7 @@ export class InventoryService {
     assignDate: string,
     status: InventoryStatus,
   ): Promise<Inventory> {
-    const foundEmployee = await this.employeeModel.findById( employeeDetails );
+    const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
     if (!foundEmployee) {
       throw new NotFoundException(
@@ -93,7 +93,11 @@ export class InventoryService {
 
     const assignedInventory = await this.inventoryModel
       .findById(inventoryID)
-      .populate('employeeDetails');
+      .populate('employeeDetails')
+      .populate({
+        path: 'assetID',
+        select: 'assetName',
+      });
 
     console.log(assignedInventory, 'inventoryy');
 

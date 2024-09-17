@@ -186,7 +186,7 @@ export class EmployeeService {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
 
-  @Cron(CronExpression.EVERY_10_HOURS)
+  @Cron(CronExpression.EVERY_WEEK)
   async handleCron() {
     await this.notifyBirthdayOneDayBefore();
     await this.notifyOneYearAnniversary();

@@ -7,8 +7,9 @@ import {
 } from "./types/OrganizationalTypes";
 import { Avatar } from "antd";
 
-export const nodeTemplate = (node: TreeNode) => {
-  console.log(node, "nodeeee");
+export const nodeTemplate = ( node: TreeNode ) =>
+{
+  
   if (node.className?.includes("card")) {
     return (
       <div className="flex flex-column">
