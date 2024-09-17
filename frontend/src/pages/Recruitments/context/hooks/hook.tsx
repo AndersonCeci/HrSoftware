@@ -183,7 +183,6 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      console.log(file, "fileeee");
       // handleUpload(file);
     } else {
       message.error("No file chose");

@@ -13,9 +13,8 @@ const EditProfile = ({
   visible,
   handleCancel,
   currentData,
-  onImageUpload,
-  setTableData,
   setIsModal,
+  setTablaData,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
@@ -41,10 +40,6 @@ const EditProfile = ({
       });
     }
   }, [currentData, form]);
-
-  // const onFinish = (values: any) => {
-  //   handleOk(values);
-  // };
 
   const handleFinish = (value: EmployeeDataType) => {
     fetchData(

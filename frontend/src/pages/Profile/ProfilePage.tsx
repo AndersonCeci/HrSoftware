@@ -33,7 +33,6 @@ const ProfilePage: React.FC = () => {
   const [isLoading, , sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
   const { t } = useTranslation();
-  const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
     sendRequest(
@@ -59,15 +58,10 @@ const ProfilePage: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const handleImageUpload = (url: string) => {
-    setAvatarUrl(url);
-  };
-
   if (isLoading) {
     return <Loader />;
   }
 
-  console.log(avatarUrl, "urlsetdryf7tr5ftl");
 
   const initialData: Data[] = [
     {
@@ -118,7 +112,7 @@ const ProfilePage: React.FC = () => {
                 />
               </div>
               <div>
-                <h3>{userData.username}</h3>
+                <h3 className="username-title-profile">{userData.username}</h3>
                 <p>{userData.role.toUpperCase()}</p>
                 <Button
                   className="edit-button"

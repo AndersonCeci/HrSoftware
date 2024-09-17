@@ -108,9 +108,9 @@ const EmployeeWelcomeGrid: React.FC = () => {
                         {holidayData.map((data) => {
                           return (
                             <>
-                              <p>{data.paragraph}</p>
+                              <p style={{color:"white"}}>{data.paragraph}</p>
                               <br />
-                              <p>{data.days}</p>
+                              <p style={{color:"white"}}>{data.days}</p>
                             </>
                           );
                         })}
@@ -123,7 +123,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
               );
             })}
           </Flex>
-          <Row style={{ justifyContent: "space-between" }}>
+          <Row style={{ justifyContent: "space-between", marginTop:"20px" }}>
             <Col>
               <Card className="card-promotions">
                 <h2 className="promo-title">{t("promotions")}</h2>

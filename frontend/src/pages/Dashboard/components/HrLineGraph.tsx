@@ -39,8 +39,8 @@ const ApexChart: React.FC = () => {
       setChartState({
         series: [
           {
-            name: "Bonus",
-            data: data.map((bonus) => bonus.value),
+            name: "Applicants",
+            data: data.map((applicants) => applicants.value),
           },
         ],
         options: {
@@ -70,7 +70,7 @@ const ApexChart: React.FC = () => {
           options={chartState.options}
           series={chartState.series}
           type="line"
-          height={355}
+          height={345}
         />
       </div>
       <div id="html-dist"></div>

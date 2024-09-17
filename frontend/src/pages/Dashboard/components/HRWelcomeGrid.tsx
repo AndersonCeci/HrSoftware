@@ -24,7 +24,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   const options = {};
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<LeftDataType[]>([]);
-  const [isLoading, error, sendRequest] = useHttp();
+  const [, , sendRequest] = useHttp();
 
   useEffect(() => {
     sendRequest(
@@ -41,7 +41,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   }, []);
 
   const data = {
-    labels: ["Off", "on"],
+    labels: ["Off", "On"],
     datasets: [
       {
         label: "Days",
@@ -53,7 +53,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
 
   return (
     <>
-      <Flex className="welcome-grid" justify="space-around">
+      <Flex className="welcome-grid" justify="space-around" gap={20}>
         <div>
           <Flex justify="space-between">
             {initialData.map((data) => {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Calendar, Badge, theme } from "antd";
+import { Calendar, Badge, theme, ConfigProvider } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -86,17 +86,29 @@ const CalendarGrid: React.FC = () => {
   };
 
   return (
-    <div className="calendarWrapper" style={wrapperStyle}>
-      <Calendar
-        style={{ boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)" }}
-        fullscreen={false}
-        onPanelChange={(value, mode) =>
-          console.log(value.format("YYYY-MM-DD"), mode)
-        }
-        cellRender={cellRender}
-        onSelect={onSelect}
-      />
-    </div>
+    <ConfigProvider
+      theme={{
+        components: {
+          Calendar: {
+            miniContentHeight: 395,
+            borderRadiusLG: 10,
+            boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)",
+          },
+        },
+      }}
+    >
+      <div className="calendarWrapper" style={wrapperStyle}>
+        <Calendar
+          style={{ boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)" }}
+          fullscreen={false}
+          onPanelChange={(value, mode) =>
+            console.log(value.format("YYYY-MM-DD"), mode)
+          }
+          cellRender={cellRender}
+          onSelect={onSelect}
+        />
+      </div>
+    </ConfigProvider>
   );
 };
 

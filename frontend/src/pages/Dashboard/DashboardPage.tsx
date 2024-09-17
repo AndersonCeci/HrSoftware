@@ -92,7 +92,6 @@ const DashboardPage: React.FC = () => {
     <Content
       className="site-layout-background"
       style={{
-        margin: "24px 16px",
         padding: 10,
         minHeight: "750px",
         color: "grey",
