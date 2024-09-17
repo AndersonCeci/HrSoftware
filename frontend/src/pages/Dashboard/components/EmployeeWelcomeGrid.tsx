@@ -35,7 +35,6 @@ const EmployeeWelcomeGrid: React.FC = () => {
     localStorage.getItem("userData") || "{}"
   ).employID;
 
-
   const initialItem: Item[] = [
     {
       title: t("projectManager"),
@@ -75,7 +74,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
   useEffect(() => {
     sendRequest(
       {
-        url: `http://localhost:3000/employees/${EmployeData}`,
+        endpoint: `employees/${EmployeData}`,
       },
       (data: EmployeeDataType) => {
         setTableData(data);

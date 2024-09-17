@@ -5,6 +5,7 @@ import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 // import "../../../styles/Dashboard/CalendarGrid.css";
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 interface Event {
   id: string;
@@ -19,16 +20,13 @@ const CalendarGrid: React.FC = () => {
 
   const fetchEventsByCriteria = async (
     endpoint: string,
-    userId: string,
+    userId: string
   ): Promise<Event[]> => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/events/${endpoint}/${userId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        },
-      );
+      const response = await fetch(`${main_api}/events/${endpoint}/${userId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || `Failed to fetch ${endpoint} events`);
@@ -43,7 +41,7 @@ const CalendarGrid: React.FC = () => {
   useEffect(() => {
     const fetchAllEvents = async () => {
       const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}",
+        localStorage.getItem("userData") || "{}"
       ).userId;
       const [creatorEvents, inviteeEvents] = await Promise.all([
         fetchEventsByCriteria("byCreator", userId),
@@ -57,7 +55,7 @@ const CalendarGrid: React.FC = () => {
 
   const getListData = (value: Dayjs) => {
     const eventsForDate = allEvents.filter((event) =>
-      dayjs(event.startDate).isSame(value, "day"),
+      dayjs(event.startDate).isSame(value, "day")
     );
     return eventsForDate.length > 0 ? [{ type: "default" }] : [];
   };
@@ -90,7 +88,7 @@ const CalendarGrid: React.FC = () => {
   return (
     <div className="calendarWrapper" style={wrapperStyle}>
       <Calendar
-      style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}
+        style={{ boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)" }}
         fullscreen={false}
         onPanelChange={(value, mode) =>
           console.log(value.format("YYYY-MM-DD"), mode)

@@ -51,6 +51,7 @@ const EditNewEventForm = ({
   const [error, setError] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [selectAll, setSelectAll] = useState<boolean>(false);
+  const main_api = import.meta.env.REACT_APP_MAIN;
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -58,7 +59,7 @@ const EditNewEventForm = ({
 
     const fetchAllUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
+        const response = await fetch(`${main_api}/users`);
         if (!response.ok) {
           setError("Failed to fetch users");
           return;
@@ -100,11 +101,11 @@ const EditNewEventForm = ({
   const handleRemoveUser = (userId: string) => {
     setSelectedUsers((prevSelectedUsers) => {
       const newSelectedUsers = prevSelectedUsers.filter(
-        (user) => user._id !== userId,
+        (user) => user._id !== userId
       );
       onChanges(
         newSelectedUsers.map((u) => u._id),
-        "invitee",
+        "invitee"
       );
       return newSelectedUsers;
     });

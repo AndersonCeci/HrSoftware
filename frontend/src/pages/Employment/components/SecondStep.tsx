@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 const TEAM_LEADERS = import.meta.env.REACT_APP_TEAM_LEADERS_SEARCH_API;
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 //!THIS MIGHT NEED ATTENTION
 
@@ -52,7 +53,7 @@ const SecondStep = ({ form }: any) => {
     });
 
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
         body: formData,
       });
