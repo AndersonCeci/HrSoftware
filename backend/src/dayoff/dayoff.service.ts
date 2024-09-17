@@ -55,7 +55,8 @@ export class DayoffService {
     let isApproved = false;
     let approvedDate: Date | null = null;
 
-    if (employee.role === Role.CEO) {
+    console.log('Employee role:', employee.role);
+    if (employee.role.toLowerCase() === Role.CEO) {
       isApproved = true;
       approvedDate = new Date();
     }

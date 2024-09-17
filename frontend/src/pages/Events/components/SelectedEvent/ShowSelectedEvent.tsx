@@ -34,7 +34,7 @@ const ShowSelectedEvent = ({ selectedEvent }: { selectedEvent: EvenType }) => {
 				<SelectedEventInformation selectedEvent={selectedEvent} />
 			</Flex>
 
-			{isHr && <EmployeeList participants={selectedEvent.eventParticipants} />}
+			<EmployeeList participants={selectedEvent.eventParticipants} />
 		</section>
 	);
 };

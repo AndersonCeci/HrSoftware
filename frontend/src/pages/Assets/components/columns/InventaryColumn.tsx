@@ -5,11 +5,11 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { TableProps, Typography } from "antd";
 import Progress from "../../../../components/Shared/Progress";
 import { t } from "i18next";
-import create from "@ant-design/icons/lib/components/IconFont";
+import { isHR } from "../../../../utils/utils";
 
 type InventaryColumnType = (
-  data: AssetDatatype[],
-  onEdit: (record: AssetDatatype) => void,
+	data: AssetDatatype[],
+	onEdit: (record: AssetDatatype) => void,
 ) => TableProps<InventaryDataType>["columns"];
 
 function calcPercantage(reserved: number, quantity: number) {
@@ -17,6 +17,7 @@ function calcPercantage(reserved: number, quantity: number) {
 }
 
 const createColumns: InventaryColumnType = (data, onEdit) => {
+	const isHr = isHR();
 	return [
 		createTableColumns({
 			title: t("assetType"),
@@ -69,7 +70,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			dataIndex: "onRepair",
 			key: "onRepair",
 		}),
-		createTableColumns({
+		...(isHr ? [createTableColumns({
 			title: t("edit"),
 			dataIndex: "_id",
 			key: "quantity",
@@ -82,7 +83,7 @@ const createColumns: InventaryColumnType = (data, onEdit) => {
 			},
 			align: "center",
 			width: 50,
-		}),
+		})] : []),
 	];
 };
 
