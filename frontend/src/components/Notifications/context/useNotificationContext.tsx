@@ -35,7 +35,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   const markAsRead = (notificationId: string) => {
     fetchData(
       {
-        url: `${API}/${notificationId}/read`,
+        endpoint: `${API}/${notificationId}/read`,
         method: "PATCH",
       },
       () => {

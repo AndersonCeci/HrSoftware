@@ -21,10 +21,7 @@ const LoginPage: React.FC = () => {
     };
 
     sendRequest(
-      useHttp.postRequestHelper(
-        "http://localhost:3000/login",
-        form.getFieldsValue()
-      ),
+      useHttp.postRequestHelper("login", form.getFieldsValue()),
       (responseData: any) => {
         const { accessToken, ...rest } = responseData;
         console.log("responseData", responseData);
