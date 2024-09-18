@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { join } from 'path';
 import * as express from 'express';
 import { HttpExceptionFilter } from './exception-filters/http.exception-filter';
-declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,10 +17,5 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
-
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close);
-  }
 }
 bootstrap();
