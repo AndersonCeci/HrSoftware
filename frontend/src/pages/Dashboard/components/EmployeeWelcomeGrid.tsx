@@ -12,6 +12,7 @@ import EmployeeLineGraph from "./EmployeeLineGraph";
 import { useTranslation } from "react-i18next";
 import JokeCard from "./JokeCard";
 import { PromoteType } from "../../Promotion/types/PromoteType";
+import QouteCard from "./QouteCard";
 
 interface Item {
   title: string;
@@ -92,7 +93,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
 
   return (
     <>
-      <Flex className="flex-main" justify="space-between">
+      <Flex className="flex-main" justify="space-between" gap={20}>
         <div>
           <Flex justify="space-between">
             {initialItem.map((item) => {
@@ -139,7 +140,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
         <Flex align="flex-start">
           <Row className="qoute-row">
             <Col>
-              <JokeCard />
+              <QouteCard />
             </Col>
             <Col className="calendar-col">
               <CalendarGrid />

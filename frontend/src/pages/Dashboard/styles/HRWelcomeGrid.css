@@ -5,6 +5,7 @@
 	border-radius: 10px;
 	flex-direction: column;
 	box-shadow: 3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407);
+	font-family: "Montserrat", sans-serif;
 }
 
 .hr-card-status {

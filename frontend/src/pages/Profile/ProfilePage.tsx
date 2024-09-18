@@ -32,6 +32,7 @@ const ProfilePage: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, , sendRequest] = useHttp();
   const [tableData, setTableData] = useState<EmployeeDataType>();
+  const [avatarUrl, setAvatarUrl] = useState<string>("")
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -57,6 +58,10 @@ const ProfilePage: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleImageUpload = (url:string) => {
+    setAvatarUrl(url)
+  }
 
   if (isLoading) {
     return <Loader />;

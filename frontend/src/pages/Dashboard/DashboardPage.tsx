@@ -72,13 +72,13 @@ const DashboardPage: React.FC = () => {
       noEmployee: onSite,
       status: t("onSiteEmployees"),
       color: "#136F63",
-      path: "/employment",
+      path: "/employee",
     },
     {
       noEmployee: remote,
       status: t("remoteEmployees"),
       color: "#474CCC",
-      path: `/employment`,
+      path: "/employees",
     },
     {
       noEmployee: countDismissedEmployees,

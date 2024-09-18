@@ -14,7 +14,7 @@ const EditProfile = ({
   handleCancel,
   currentData,
   setIsModal,
-  setTablaData,
+  setTableData,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
@@ -42,12 +42,13 @@ const EditProfile = ({
   }, [currentData, form]);
 
   const handleFinish = (value: EmployeeDataType) => {
+    console.log(value, 'hhhhh')
     fetchData(
       useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
         profilePhoto: value.profilePhoto[0],
         phoneNumber: value.phoneNumber,
       }),
-      () => {}
+      ()=>{}
     );
     setIsModal();
   };
@@ -97,7 +98,7 @@ const EditProfile = ({
           onFinish={handleFinish}
         >
           <Form.Item
-            name="contract"
+            name="profilePhoto"
             style={{ display: "flex", justifyContent: "center" }}
           >
             <Upload

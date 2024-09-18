@@ -1,43 +1,18 @@
 import { Card, ConfigProvider } from "antd";
 import { PromoteType } from "../types/PromoteType";
 import { useEffect, useState } from "react";
-// import useHttp from "../../../hooks/useHttp";
-// import Loader from "../../../components/Shared/Loader";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Button from "../../../components/Shared/Button";
 import ReactCardFlip from "react-card-flip";
 
-// const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
 type PromoteCardProps = {
   promote?: PromoteType;
 };
 const PromoteCard = ({ promote }: PromoteCardProps) => {
   const { t } = useTranslation();
-  // const [isLoading, error, sendRequest] = useHttp();
   const [isFlipped, setIsFlipped] = useState(false);
-
-  // useEffect(() => {
-  //   sendRequest(
-  //     {
-  //       url: `${API}/${EmployeData}`,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     },
-  //     setTableData,
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
-
-  // if (error) {
-  //   return <div>Something went wrong!!</div>;
-  // }
 
   const handleClick = () => {
     setIsFlipped(!isFlipped);
@@ -45,13 +20,13 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "No date provided";
-    const formattedDate = moment(dateString, "DD/MM/YYYY", true).format(
-      "DD/MM/YYYY",
-    );
-    return formattedDate === "Invalid date"
-      ? "Invalid date format"
-      : formattedDate;
+    
+    const formats = ["DD/MM/YYYY", "MM/DD/YYYY", "YYYY-MM-DD"];
+    const date = moment(dateString, formats, true);
+  
+    return date.isValid() ? date.format("DD/MM/YYYY") : "Invalid date format";
   };
+  
 
   return (
     <div
@@ -88,16 +63,16 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 }}
                 hoverable
               >
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("oldPosition")}:</b> {promote?.oldPosition}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("dateOfHire")}:</b> {promote?.dateOfHire}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("salary")}:</b> {promote?.oldSalary}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("trainedBy")}:</b> {promote?.trainedBy}
                 </p>
                 <Button
@@ -124,18 +99,17 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                 }}
                 hoverable
               >
-                {/* <Tag style={{width:"70px", marginTop:"10px"}} color="gold">Promoted</Tag> */}
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("newPosition")}:</b> {promote?.newPosition}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("dateOfPromotion")}:</b>{" "}
                   {formatDate(promote?.dateOfPromotion)}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("salary")}:</b> {promote?.newSalary}
                 </p>
-                <p>
+                <p style={{color:"black", margin:"5px"}}>
                   <b>{t("trainedBy")}:</b> {promote?.trainedBy}
                 </p>
                 <Button
