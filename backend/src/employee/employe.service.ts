@@ -404,6 +404,7 @@ export class EmployeeService {
 
   async findByIds(ids: string[]): Promise<Employee[]> {
     try {
+      console.warn('herererrerererrer tetstst', ids);
       const objectIds = ids.map((id) => {
         if (!Types.ObjectId.isValid(id)) {
           throw new BadRequestException(`Invalid ID format: ${id}`);
@@ -411,9 +412,20 @@ export class EmployeeService {
         return new Types.ObjectId(id);
       });
 
-      return await this.employeeModel.find({ _id: { $in: objectIds } }).exec();
+      const employees = await this.employeeModel.find({
+        _id: { $in: objectIds },
+      });
+
+      if (employees.length === 0) {
+        throw new NotFoundException('No employees found with the provided IDs');
+      }
+
+      return employees;
     } catch (error) {
-      if (error instanceof BadRequestException) {
+      if (
+        error instanceof BadRequestException ||
+        error instanceof NotFoundException
+      ) {
         throw error;
       } else {
         throw new InternalServerErrorException(

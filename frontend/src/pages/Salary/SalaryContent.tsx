@@ -39,6 +39,7 @@ const SalaryContent: React.FC = () => {
     setFilters,
     filters,
     createSalary,
+    updateSalary,
   } = useSalaryHook();
   const { page, limit, handlePageChange, handleLimitChange } = usePagination();
 
@@ -107,6 +108,11 @@ const SalaryContent: React.FC = () => {
             {t("resetFilters")}
           </Button>
         </Col>
+        <Col flex="auto" style={{ textAlign: "left" }}>
+          <Button type="primary" onClick={handleResetFilters}>
+            {"Compensate All"}
+          </Button>
+        </Col>
       </Row>
       <Table
         data={tableData}
@@ -114,6 +120,7 @@ const SalaryContent: React.FC = () => {
           handleAddBonus,
           handleModal,
           tableData,
+          updateSalary,
         })}
         fixed
         pagination={{

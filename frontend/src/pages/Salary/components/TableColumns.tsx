@@ -1,16 +1,23 @@
-import { Button, Dropdown, Table, TableColumnsType } from "antd";
+import { Button, Dropdown, Space, Table, TableColumnsType, Tag } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { createTableColumns } from "../../../components/Table/Table";
 import { ButtonType } from "../../../enums/Button";
 import { capitalizeFirstLetter, getMonthName } from "../../../utils/generals";
+import { Salary } from "../../../types/SalaryProps";
 
 interface ColumnsParams {
   handleAddBonus: (employeeID: string) => void;
   handleModal: (employeeID: string) => void;
   tableData: any[];
+  updateSalary: (salaryID: string, newSalary: Salary) => Promise<void>;
 }
 
-const columns = ({ handleAddBonus, handleModal }: ColumnsParams) => [
+const columns = ({
+  handleAddBonus,
+  handleModal,
+  tableData,
+  updateSalary,
+}: ColumnsParams) => [
   createTableColumns({
     dataIndex: "employeeDetails",
     title: "Employee Details",
@@ -75,6 +82,26 @@ const columns = ({ handleAddBonus, handleModal }: ColumnsParams) => [
     key: "_id",
   }),
   createTableColumns({
+    title: "Paid",
+    dataIndex: "paid",
+    key: "action",
+    align: "center",
+    width: 120,
+    displayAs: (_, record) =>
+      record.paid ? (
+        <Tag color={"blue"}>Paid</Tag>
+      ) : (
+        <Space size="middle">
+          <Button
+            onClick={() => updateSalary(record._id, { ...record, paid: true })}
+            type={ButtonType.PRIMARY}
+          >
+            Compensate
+          </Button>
+        </Space>
+      ),
+  }),
+  createTableColumns({
     title: "Action",
     dataIndex: "_id",
     key: "action",
@@ -121,48 +148,3 @@ const columns = ({ handleAddBonus, handleModal }: ColumnsParams) => [
 ];
 
 export default columns;
-
-export const expandedRowRender = (record: any) => {
-  const columns: TableColumnsType<any> = [
-    {
-      title: "Tax Income",
-      dataIndex: "taxIncome",
-      key: "_id",
-      render: (data: any) => {
-        if (data) {
-          return <span>data</span>;
-        }
-        return <span>0</span>;
-      },
-    },
-    {
-      title: "Social Security Contributions",
-      dataIndex: "socialSecurityContributions",
-      key: "_id",
-    },
-    {
-      title: "Health Insurance",
-      dataIndex: "healthInsurance",
-      key: "_id",
-    },
-    {
-      title: "Health Insurance Company",
-      dataIndex: "healthInsuranceCompany",
-      key: "_id",
-    },
-    {
-      title: "Social Insurance Company",
-      dataIndex: "socialInsuranceCompany",
-      key: "_id",
-    },
-  ];
-
-  return (
-    <Table
-      columns={columns}
-      dataSource={[record]}
-      pagination={false}
-      style={{ margin: "0px" }}
-    />
-  );
-};
