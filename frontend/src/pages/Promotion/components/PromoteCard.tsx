@@ -43,11 +43,9 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
     setIsFlipped(!isFlipped);
   };
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "No date provided";
-    const formattedDate = moment(dateString, "DD/MM/YYYY", true).format(
-      "DD/MM/YYYY",
-    );
+  const formatDate = (dateInput?: string | Date) => {
+    if (!dateInput) return "No date provided";
+    const formattedDate = moment(dateInput).format("DD/MM/YYYY");
     return formattedDate === "Invalid date"
       ? "Invalid date format"
       : formattedDate;
@@ -92,8 +90,9 @@ const PromoteCard = ({ promote }: PromoteCardProps) => {
                   <b>{t("oldPosition")}:</b> {promote?.oldPosition}
                 </p>
                 <p>
-                  <b>{t("dateOfHire")}:</b> {promote?.dateOfHire}
+                  <b>{t("dateOfHire")}:</b> {formatDate(promote?.dateOfHire)}
                 </p>
+
                 <p>
                   <b>{t("salary")}:</b> {promote?.oldSalary}
                 </p>
