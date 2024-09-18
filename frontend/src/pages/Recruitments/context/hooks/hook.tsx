@@ -7,6 +7,7 @@ import { RecruitmentStage } from "../../columns/constants";
 import { Filters } from "./filter.hook";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 export const useRecruitment = () => {
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
@@ -90,7 +91,7 @@ export const useRecruitment = () => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
         body: formData,
       });
@@ -181,7 +182,6 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      console.log(file, "fileeee");
       // handleUpload(file);
     } else {
       message.error("No file chose");

@@ -29,6 +29,18 @@ export function isHR() {
 	return user?.role === "hr";
 }
 
+export function isCEO() {
+	const user = getFromLocalStorage("userData");
+	return user?.role === "ceo";
+}
+
+export function isEmployee() {
+	const user = getFromLocalStorage("userData");
+	return user?.role === "employee";
+}
+
+
+
 //? Future ilvi you will need to remember where you got this code from
 //?https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
 function hashCode(str: string | undefined) {

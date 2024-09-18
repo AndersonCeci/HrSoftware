@@ -29,12 +29,9 @@ const ApexChart: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchData(
-      { url: `http://localhost:3000/recruitments/chart` },
-      (data: SalaryData[]) => {
-        setData(data);
-      }
-    );
+    fetchData({ endpoint: `recruitments/chart` }, (data: SalaryData[]) => {
+      setData(data);
+    });
   }, []);
 
   useEffect(() => {
@@ -42,8 +39,8 @@ const ApexChart: React.FC = () => {
       setChartState({
         series: [
           {
-            name: "Bonus",
-            data: data.map((bonus) => bonus.value),
+            name: "Applicants",
+            data: data.map((applicants) => applicants.value),
           },
         ],
         options: {
@@ -59,7 +56,9 @@ const ApexChart: React.FC = () => {
             row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 },
           },
           xaxis: {
-            categories: data.map((month) => getMonthName(month.label)),
+            categories: data.map((month) =>
+              getMonthName(parseInt(month.label) ?? 1)
+            ),
           },
         },
       });
@@ -73,7 +72,7 @@ const ApexChart: React.FC = () => {
           options={chartState.options}
           series={chartState.series}
           type="line"
-          height={300}
+          style={{ display: "flex", padding: "0px 20px" }}
         />
       </div>
       <div id="html-dist"></div>

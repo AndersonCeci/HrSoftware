@@ -1,21 +1,21 @@
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Paths } from "../../utils/paths";
 import NavigationLink from "../Shared/NavigationLink";
-import { Avatar, Badge, Popover } from "antd";
+import { Badge, Popover } from "antd";
 import "../Notifications/NotificationStyle.css";
 import NotificationContent from "../Notifications/NotificationContent";
 import { BellOutlined } from "@ant-design/icons";
-
-const logout = () => {
-  localStorage.removeItem("userData");
-};
+import { NotificationContext, NotificationProvider } from "../Notifications/context/useNotificationContext";
 
 const HeaderIcons: React.FC = () => {
+  const { data } = useContext(NotificationContext)!;
   const [open, setOpen] = useState<boolean>(false);
 
   const handleOpenChange = () => {
     setOpen(!open);
-  }
+  };
+
+  const unreadCount = data.filter((item) => !item.isRead).length;
 
   const navigationLinkList = [
     {
@@ -30,14 +30,19 @@ const HeaderIcons: React.FC = () => {
     {
       icon: (
         <Popover
-          // className="ant-popover-inner"
-          content={<NotificationContent />}
+          content={
+            <NotificationProvider>
+              <NotificationContent />
+            </NotificationProvider>
+          }
           title="Notifications"
           trigger="click"
           open={open}
           onOpenChange={handleOpenChange}
         >
-          <Badge count={10} size="small">
+          <Badge count={unreadCount} size="small">
+            {" "}
+            {/* Use unread count */}
             <BellOutlined
               style={{ color: "white" }}
               className="nav-menu-icon white-icon"

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 export enum Status {
   Cancelled = "cancelled",
@@ -24,13 +25,10 @@ interface User {
 }
 const fetchEventsByCriteria = async (endpoint: string, userId: string) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/events/${endpoint}/${userId}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    const response = await fetch(`${main_api}/events/${endpoint}/${userId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.message || `Failed to fetch ${endpoint} events`);
@@ -80,7 +78,7 @@ const useEvents = () => {
       const userId = JSON.parse(
         localStorage.getItem("userData") || "{}"
       ).employID;
-      const response = await fetch(`http://localhost:3000/events`, {
+      const response = await fetch(`${main_api}/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -107,7 +105,7 @@ const useEvents = () => {
 
   const handleDeleteEvent = async (eventId: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+      const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -123,7 +121,7 @@ const useEvents = () => {
 
   const handleCancelEvent = async (eventId: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+      const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: Status.Cancelled }),
@@ -133,7 +131,7 @@ const useEvents = () => {
         throw new Error(data.message || "Failed to cancel event");
       }
       const updatedEvents = allEvents.map((event) =>
-        event._id === eventId ? { ...event, status: Status.Cancelled } : event,
+        event._id === eventId ? { ...event, status: Status.Cancelled } : event
       );
       setAllEvents(updatedEvents);
     } catch (error) {
@@ -143,7 +141,7 @@ const useEvents = () => {
 
   const handleEditEvent = async (eventId: string, updatedEvent: any) => {
     try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+      const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedEvent),
@@ -153,7 +151,7 @@ const useEvents = () => {
         throw new Error(data.message || "Failed to update event");
       }
       const updatedEvents = allEvents.map((event) =>
-        event._id === eventId ? { ...event, ...data } : event,
+        event._id === eventId ? { ...event, ...data } : event
       );
       setAllEvents(updatedEvents);
     } catch (error) {

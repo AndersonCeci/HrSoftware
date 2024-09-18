@@ -2,7 +2,7 @@ export type EmployeeDataType = {
 	_id: string;
 	name: string;
 	surname: string;
-	username: string;
+	fullName: string;
 	email: string;
 	phoneNumber: number;
 	profilePhoto: string;
@@ -12,7 +12,7 @@ export type EmployeeDataType = {
 	position: string;
 	nID: string;
 	status: string;
-	gender:string;
+	gender: string;
 	birthDay: Date;
 	// status: "Working" | "Remote" | "On Leave";
 	contract: string;

@@ -8,7 +8,7 @@ import { Notifications, NotificationStatus } from './notification.schema';
 export class NotificationsService {
   constructor(
     @InjectModel(Notifications.name)
-    private readonly notificationModel: Model<Notifications>,
+    private  notificationModel: Model<Notifications>,
   ) {}
 
   async getNotifications(): Promise<Notifications[]> {
@@ -32,7 +32,7 @@ export class NotificationsService {
       filter.status = status;
     }
 
-    return this.notificationModel.find(filter).exec();
+    return this.notificationModel.find(filter).sort({ createdAt: -1 });
   }
 
   async createNotification(createNotificationDto: CreateNotificationDto) {

@@ -37,7 +37,7 @@ function prepareInitialValues(selectedEmployee: EmployeeDataType) {
   return {
     ...selectedEmployee,
     birthDay: dayjs(selectedEmployee.birthDay),
-    startingDate: dayjs(selectedEmployee["startingDate"], "DD/MM/YYYY"),
+    startingDate: dayjs(selectedEmployee.startingDate),
   };
 }
 
@@ -56,7 +56,11 @@ export function getDevRoles() {
   ];
 }
 
-export function getFormValues(form: any) {
+export function getFormValues ( form: any )
+{
+  
+  const contract = form.getFieldValue("contract");
+
   return {
     name: form.getFieldValue("name"),
     surname: form.getFieldValue("surname"),
@@ -67,12 +71,10 @@ export function getFormValues(form: any) {
     status: form.getFieldValue("status"),
     profilePhoto: form.getFieldValue("profilePhoto"),
     teamLeaders: form.getFieldValue("teamLeaders") || [],
-    startingDate: form.getFieldValue("startingDate").format("DD/MM/YYYY"),
-    contract: form.getFieldValue("contract"),
+    startingDate: form.getFieldValue("startingDate"),
+    contract: contract[0] || " ",
     nID: form.getFieldValue("nID"),
     birthDay: form.getFieldValue("birthDay"),
-    // username: "ESHTE STRING",
-    // password: "codevider",
     gender: form.getFieldValue("gender"),
   };
 }

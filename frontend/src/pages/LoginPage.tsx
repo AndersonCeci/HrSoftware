@@ -21,10 +21,7 @@ const LoginPage: React.FC = () => {
     };
 
     sendRequest(
-      useHttp.postRequestHelper(
-        "http://localhost:3000/login",
-        form.getFieldsValue()
-      ),
+      useHttp.postRequestHelper("login", form.getFieldsValue()),
       (responseData: any) => {
         const { accessToken, ...rest } = responseData;
         console.log("responseData", responseData);
@@ -92,33 +89,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-// const handleSubmit = async (e: React.FormEvent) => {
-// 	e.preventDefault();
-// 	try {
-// 		const response = await fetch("http://localhost:3000/login", {
-// 			method: "POST",
-// 			headers: { "Content-Type": "application/json" },
-// 			body: JSON.stringify({ username, password }),
-// 		});
-// 		const data = await response.json();
-
-// 		if (!response.ok) {
-// 			throw new Error(data.message || "Authentication failed");
-// 		}
-
-// 		const userData = {
-// 			token: data.accessToken,
-// 			username: data.username,
-// 			userId: data._id,
-// 			role: data.role,
-// 			loginRole: data.loginRole,
-// 		};
-
-// 		localStorage.setItem("userData", JSON.stringify(userData));
-
-// 		console.log("Logged in successfully");
-// 		navigate("/dashboard");
-// 	} catch (error) {
-// 		console.error("Login error:", error);
-// 	}
-// };

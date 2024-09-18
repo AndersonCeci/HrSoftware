@@ -13,9 +13,9 @@
 	justify-content: space-between;
 	align-items: center;
 	min-width: 300px;
-	width: 90vw; /* Make the width more flexible */
+	width: 90vw;
 	max-width: 700px;
-	height: auto; /* Adjust height automatically */
+	height: auto;
 	background-color: white;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	overflow: hidden;
@@ -36,6 +36,7 @@
 	display: flex;
 	margin: auto;
 }
+
 /* .login-form {
 	width: 375px;
 	background-color: white;
@@ -60,6 +61,7 @@
 	.image-container {
 		display: none;
 	}
+
 	.login-form-image-container {
 		width: 100%;
 	}

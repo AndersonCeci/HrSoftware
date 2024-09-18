@@ -18,8 +18,12 @@ h1.ant-typography.hr-card-title.css-dev-only-do-not-override-1pg9a38 {
 	margin: 0;
 }
 
-.active-dashboard-wrapp {
+.active-dashboard {
 	width: 100%;
+	min-width: 275px;
+}
+.welcome-grid{
+	margin-right: 20px;
 }
 
 h1.ant-typography.title-piechart.css-dev-only-do-not-override-1pg9a38 {

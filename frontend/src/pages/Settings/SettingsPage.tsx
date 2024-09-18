@@ -20,7 +20,7 @@ const SettingsPage: React.FC = () => {
           </div>
           <MdOutlineEmail className="icon-contact" />
           <div className="inside-contact-card">
-            <p>Main Email : info@codevider.com</p>
+            <p>Main Email: info@codevider.com</p>
             <p>hr@codevider.com</p>
           </div>
         </div>

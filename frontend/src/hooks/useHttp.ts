@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { sendRequestType } from "../types/UseHttpTypes";
-import.meta.env.REACT_APP;
+import { getFromLocalStorage } from "../utils/utils";
+const API = import.meta.env.REACT_APP_MAIN;
 
-function POSTHelper(endoint: string, body: any, headers?: any) {
+function POSTHelper(endpoint: string, body: any, headers?: any) {
   return {
-    url: endoint,
+    endpoint: endpoint,
     headers: {
       "Content-Type": "application/json",
       ...headers,
@@ -14,9 +15,9 @@ function POSTHelper(endoint: string, body: any, headers?: any) {
   };
 }
 
-function DELETEHelper(url: string, headers?: any) {
+function DELETEHelper(endpoint: string, headers?: any) {
   return {
-    url: url,
+    endpoint: endpoint,
     headers: {
       ...headers,
     },
@@ -24,9 +25,9 @@ function DELETEHelper(url: string, headers?: any) {
   };
 }
 
-function PATCHHelper(url: string, body?: any, headers?: any) {
+function PATCHHelper(endpoint: string, body?: any, headers?: any) {
   return {
-    url: url,
+    endpoint: endpoint,
     headers: {
       "Content-Type": "application/json",
       ...headers,
@@ -35,10 +36,22 @@ function PATCHHelper(url: string, body?: any, headers?: any) {
     body: body,
   };
 }
+function PUTHelper(endpoint: string, body?: any, headers?: any) {
+  return {
+    endpoint: endpoint,
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    method: "PUT",
+    body: body,
+  };
+}
 
 export default function useHttp() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const userData = getFromLocalStorage();
 
   const sendRequest: sendRequestType = (requestConfig, applyData) => {
     setIsLoading(true);
@@ -46,9 +59,13 @@ export default function useHttp() {
 
     async function fetchData() {
       try {
-        const response = await fetch(requestConfig.url, {
+        const response = await fetch(`${API}/${requestConfig.endpoint}`, {
           method: requestConfig.method ? requestConfig.method : "GET",
-          headers: requestConfig.headers ? requestConfig.headers : {},
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${userData.token}`,
+            ...requestConfig.headers,
+          },
           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
         });
 
@@ -73,3 +90,4 @@ export default function useHttp() {
 useHttp.postRequestHelper = POSTHelper;
 useHttp.deleteRequestHelper = DELETEHelper;
 useHttp.patchRequestHelper = PATCHHelper;
+useHttp.putRequestHelper = PUTHelper;

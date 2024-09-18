@@ -14,7 +14,7 @@
 }
 
 .content-outlet-container {
-	padding: 0 25px;
+	padding: 0 5px;
 	overflow-x: scroll;
 }
 

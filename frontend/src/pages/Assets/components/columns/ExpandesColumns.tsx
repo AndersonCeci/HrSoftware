@@ -8,6 +8,7 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import { BsFillPersonDashFill } from "react-icons/bs";
 import { t } from "i18next";
+import { isCEO } from "../../../../utils/utils";
 
 export function expandedColumns(
 	inventaryData: InventaryDataType[],
@@ -15,7 +16,9 @@ export function expandedColumns(
 	onAddAsset: (record: InventaryDataType) => void,
 	handleUnassign: (record: InventaryDataType) => void,
 	onDeleteAsset: (id: InventaryDataType) => void,
+	onCeoAssign: (recordID: string) => void,
 ) {
+	const isCeo = isCEO();
 	return [
 		createTableColumns({
 			title: t("code"),
@@ -105,35 +108,41 @@ export function expandedColumns(
 													icon={isAvailable ? <BsFillPersonCheckFill /> : <BsFillPersonDashFill />}
 													iconPosition="end"
 													onClick={
-														isAvailable ? () => onAddAsset(record) : () => handleUnassign(record)
+														isAvailable
+															? isCeo
+																? () => onCeoAssign(record._id)
+																: () => onAddAsset(record)
+															: () => handleUnassign(record)
 													}
 												>
-													{isAvailable ? t("assign") : t("unassign")}
+													{isAvailable ? (isCeo ? t('get') : t("assign")) : t("unassign")}
 												</Button>
 											),
 									  }
 									: null,
-								{
-									key: "Repair",
-									label: (
-										<Button
-											type="text"
-											size="large"
-											icon={isOnRepair ? <FaRegCheckCircle /> : <ToolOutlined />}
-											style={{ color: isOnRepair ? "green" : "orange" }}
-											block
-											onClick={() =>
-												onChangeStatus(
-													isOnRepair ? AssetStatus.Available : AssetStatus.OnRepair,
-													record,
-												)
-											}
-											iconPosition="end"
-										>
-											{!isOnRepair ? t("repair") : t("repaired")}
-										</Button>
-									),
-								},
+								isCeo
+									? null
+									: {
+											key: "Repair",
+											label: (
+												<Button
+													type="text"
+													size="large"
+													icon={isOnRepair ? <FaRegCheckCircle /> : <ToolOutlined />}
+													style={{ color: isOnRepair ? "green" : "orange" }}
+													block
+													onClick={() =>
+														onChangeStatus(
+															isOnRepair ? AssetStatus.Available : AssetStatus.OnRepair,
+															record,
+														)
+													}
+													iconPosition="end"
+												>
+													{!isOnRepair ? t("repair") : t("repaired")}
+												</Button>
+											),
+									  },
 								{
 									key: "Delete",
 									label: (

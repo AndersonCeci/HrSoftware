@@ -89,7 +89,7 @@ export class EmployeeController {
   async softDeleteEmployById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid ID', 404);
-    const result = await this.employeeService.softDeleteEmployeeById(id);
+    const result = await this.employeeService.delete(id);
     if (!result) {
       throw new HttpException('No employe found for the given ID', 404);
     }

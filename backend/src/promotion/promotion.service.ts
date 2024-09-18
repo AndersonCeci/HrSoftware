@@ -46,10 +46,11 @@ export class PromotionService {
     const createNotificationDto: CreateNotificationDto = {
       message: 'Congrats you got a promotion',
       isRead: false,
-      userId: new Types.ObjectId( employeeId ),
+      userId: new Types.ObjectId(employeeId),
       status: NotificationStatus.NOTIFICATION,
       path: `/managment/promotions`,
     };
+
     await this.notificationService.createNotification(createNotificationDto);
 
     await promotion.save();

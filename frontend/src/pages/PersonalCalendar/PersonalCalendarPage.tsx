@@ -225,6 +225,7 @@ const PersonalCalendarPage: React.FC = () => {
         </Drawer>
         <Modal
           open={isModalOpen}
+          width={600}
           onCancel={() => {
             setIsModalOpen(false);
             setEditEventId(null);

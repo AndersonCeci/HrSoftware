@@ -24,7 +24,7 @@ registerLicense(
 
 const Scheduler = ({
   dataSource,
-  currentView = "TimelineMonth",
+  currentView = "Month",
   allowDragAndDrop = false,
   allowResizing = false,
 }: SchedulerProps) => {

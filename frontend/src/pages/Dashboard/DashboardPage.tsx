@@ -15,24 +15,25 @@ export interface Data {
 }
 
 type EmployeStatus = {
-count: number;
-status: string;
-}
+  count: number;
+  status: string;
+};
 const DISSMISED = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
 
 const DashboardPage: React.FC = () => {
-
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const [employeeTableData, setEmployeeTableData] = useState<EmployeStatus[]>([]);
+  const [employeeTableData, setEmployeeTableData] = useState<EmployeStatus[]>(
+    []
+  );
   const [dismissedTableData, setDismissedTableData] = useState<LeftDataType[]>(
     []
   );
-  const [,, sendRequest] = useHttp();
+  const [, , sendRequest] = useHttp();
 
   useEffect(() => {
     sendRequest(
       {
-        url: "http://localhost:3000/employees/status-length",
+        endpoint: "employees/status-length",
       },
       (responseData: EmployeStatus[]) => {
         setEmployeeTableData(responseData);
@@ -43,7 +44,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     sendRequest(
       {
-        url: DISSMISED,
+        endpoint: DISSMISED,
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,9 +58,9 @@ const DashboardPage: React.FC = () => {
   let onSite = 0;
 
   employeeTableData.forEach((item: EmployeStatus) => {
-    if (item.status === 'Remote') {
-      remote = item.count
-    } else if (item.status === 'On Site') {
+    if (item.status === "Remote") {
+      remote = item.count;
+    } else if (item.status === "On Site") {
       onSite = item.count;
     }
   });
@@ -91,7 +92,6 @@ const DashboardPage: React.FC = () => {
     <Content
       className="site-layout-background"
       style={{
-        margin: "24px 16px",
         padding: 10,
         minHeight: "750px",
         color: "grey",

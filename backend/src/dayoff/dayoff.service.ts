@@ -13,6 +13,8 @@ import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotifi
 import { UserService } from 'src/users/users.service';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
 import { Role, User } from 'src/users/schemas/user.schema';
+import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
+import { userInfo } from 'os';
 
 @Injectable()
 export class DayoffService {
@@ -50,23 +52,33 @@ export class DayoffService {
       );
     }
 
+    let isApproved = false;
+    let approvedDate: Date | null = null;
+
+    console.log('Employee role:', employee.role);
+    if (employee.role.toLowerCase() === Role.CEO) {
+      isApproved = true;
+      approvedDate = new Date();
+    }
+
     const createdDayoff = new this.dayoffModel({
       ...createDayOff,
       EmployeeName: employeeName,
-
       totalDays,
+      isApproved,
+      approvedDate,
     });
 
     const hrUsers = await this.userModel.find({ role: Role.HR }).exec();
-    console.log(hrUsers, 'hrUsers');
 
     hrUsers.forEach(async (hrUser) => {
       const createNotification: CreateNotificationDto = {
         message: `A new day off request has been created by ${employeeName}.`,
         isRead: false,
-        userId: hrUser._id,
+        userId: hrUser.employID,
         path: '/dayoff/requestedLeave',
       };
+      console.log(createNotification, 'createdNotification');
       await this.notificationService.createNotification(createNotification);
     });
 
@@ -81,12 +93,12 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR || user.role === Role.CEO) {
+    if (user.role === Role.HR) {
       const approvedDayOffs = await this.dayoffModel
         .find({ isApproved: true })
         .exec();
       return approvedDayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const approvedDayOffs = await this.dayoffModel
         .find({
           isApproved: true,
@@ -109,14 +121,14 @@ export class DayoffService {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === Role.HR || user.role === Role.CEO) {
+    if (user.role === Role.HR) {
       const dayOffs = await this.dayoffModel
         .find({ isDeleted: false })
         .sort({ createdAt: -1 })
         .populate('EmployeeName', 'name')
         .exec();
       return dayOffs;
-    } else if (user.role === Role.Employee) {
+    } else if (user.role === Role.Employee || user.role === Role.CEO) {
       const dayOffs = await this.dayoffModel
         .find({
           isDeleted: false,
@@ -156,16 +168,44 @@ export class DayoffService {
   }
 
   async approved(id: string): Promise<DayOff> {
+    console.log('Approved function called with ID:', id);
+
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
-    return this.dayoffModel
+    const dayOffRequest = await this.dayoffModel.findById(id).exec();
+
+    if (!dayOffRequest) {
+      console.log('Day off request not found');
+      throw new Error('Day off request not found');
+    }
+
+    if (dayOffRequest.isApproved) {
+      console.log('Day off request is already approved');
+      throw new Error('Day off request is already approved');
+    }
+
+    const isApproved = await this.dayoffModel
       .findByIdAndUpdate(
         id,
         { isApproved: true, approvedDate: currentDate },
         { new: true },
       )
       .exec();
+
+    console.log('Day off request approved:', dayOffRequest.employeeId);
+
+    const createNotification: CreateNotificationDto = {
+      message: `Your Day Off request has been approved`,
+      isRead: false,
+      userId: dayOffRequest.employeeId as unknown as Types.ObjectId,
+      path: '/dayoff/requestedLeave',
+      status: NotificationStatus.NOTIFICATION,
+    };
+
+    await this.notificationService.createNotification(createNotification);
+
+    return isApproved;
   }
 
   async updateDayOff(

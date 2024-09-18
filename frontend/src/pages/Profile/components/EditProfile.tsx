@@ -8,15 +8,13 @@ import { UploadOutlined } from "@ant-design/icons";
 import useHttp from "../../../hooks/useHttp";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
-
+const main_api = import.meta.env.REACT_APP_MAIN;
 const EditProfile = ({
   visible,
-  selectedEmployee,
   handleCancel,
   currentData,
-  onImageUpload,
-  setTableData,
   setIsModal,
+  setTablaData,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
@@ -43,13 +41,7 @@ const EditProfile = ({
     }
   }, [currentData, form]);
 
-  // const onFinish = (values: any) => {
-  //   handleOk(values);
-  // };
-
   const handleFinish = (value: EmployeeDataType) => {
-    console.log(value, "sasasasas");
-
     fetchData(
       useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
         profilePhoto: value.profilePhoto[0],
@@ -65,9 +57,8 @@ const EditProfile = ({
     files.forEach((file) => {
       formData.append("files", file as File);
     });
-
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
         body: formData,
       });
@@ -81,14 +72,11 @@ const EditProfile = ({
   };
 
   const handleFileChange = (info: any) => {
-    console.log(info, "infooo");
     const files = info.fileList.map(
       (file: any) => file.originFileObj as RcFile
     );
-    console.log(files, "files");
     if (files.length > 0) {
       handleUpload(files);
-      console.log("hyriiiii");
     }
   };
 
@@ -97,7 +85,9 @@ const EditProfile = ({
       <Modal
         title={t("editProfile")}
         open={visible}
-        onOk={() => formRef.current.submit()}
+        onOk={() => {
+          formRef.current.submit();
+        }}
         onCancel={handleCancel}
       >
         <Form
@@ -107,7 +97,7 @@ const EditProfile = ({
           onFinish={handleFinish}
         >
           <Form.Item
-            name="profilePhoto"
+            name="contract"
             style={{ display: "flex", justifyContent: "center" }}
           >
             <Upload
