@@ -14,23 +14,20 @@ import {
   Col,
   Row,
 } from "antd";
-import {
-  EnvironmentOutlined,
-  UserOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, CloseOutlined } from "@ant-design/icons";
 import { Dayjs } from "dayjs";
 import MapInput from "../../Events/components/Map/MapInput";
 import useMap from "../../Events/hook/useMap";
+import { EmployeeDataType } from "../../Employment/types/Employee";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
-interface User {
-  _id: string;
-  username: string;
-  employID: string;
-}
+// interface User {
+//   _id: string;
+//   username: string;
+//   employID: string;
+// }
 
 interface NewEvent {
   title: string;
@@ -50,8 +47,8 @@ const EditNewEventForm = ({
   newEvent: NewEvent;
   onChanges: (value: any, field: string) => void;
 }) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<EmployeeDataType[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<EmployeeDataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
@@ -61,19 +58,19 @@ const EditNewEventForm = ({
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    setLoggedInUserId(userData.userId || null);
+    setLoggedInUserId(userData.employID || null);
 
     const fetchAllUsers = async () => {
       try {
-        const response = await fetch(`${main_api}/users`);
-        if (!response.ok) {
-          setError("Failed to fetch users");
-          return;
-        }
+        const response = await fetch(`${main_api}/employees`);
+        // if (!response.ok) {
+        //   setError("Failed to fetch employees");
+        //   return;
+        // }
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        setError("Failed to fetch users");
+        setError("Failed to fetch employees");
       } finally {
         setLoading(false);
       }
@@ -87,14 +84,14 @@ const EditNewEventForm = ({
     const user = users.find((user) => user._id === userId);
     if (user) {
       setSelectedUsers((prevSelectedUsers) => {
-        if (prevSelectedUsers.some((u) => u.employID === user.employID)) {
-          message.info(`User ${user.username} is already selected`);
+        if (prevSelectedUsers.some((u) => u._id === user._id)) {
+          message.info(`User ${user.name} is already selected`);
           return prevSelectedUsers;
         }
-        message.info(`Selected user: ${user.username}`);
+        message.info(`Selected user: ${user.name}`);
         const newSelectedUsers = [...prevSelectedUsers, user];
         onChanges(
-          newSelectedUsers.map((u) => u.employID),
+          newSelectedUsers.map((u) => u._id),
           "invitee"
         );
         return newSelectedUsers;
@@ -124,11 +121,11 @@ const EditNewEventForm = ({
       onChanges([], "invitee");
     } else {
       const allUsersExceptLoggedIn = users.filter(
-        (user) => user.employID !== loggedInUserId
+        (user) => user._id !== loggedInUserId
       );
       setSelectedUsers(allUsersExceptLoggedIn);
       onChanges(
-        allUsersExceptLoggedIn.map((u) => u.employID),
+        allUsersExceptLoggedIn.map((u) => u._id),
         "invitee"
       );
     }
@@ -136,9 +133,9 @@ const EditNewEventForm = ({
   };
 
   const menuItems = users
-    .filter((user) => user.employID !== loggedInUserId)
+    .filter((user) => user._id !== loggedInUserId)
     .map((user) => ({
-      label: user.username,
+      label: user.name,
       key: user._id,
       icon: <UserOutlined />,
     }));
@@ -226,28 +223,32 @@ const EditNewEventForm = ({
             <UserOutlined />
           </Dropdown.Button>
 
-          {selectedUsers.length > 0 && (
-            <div style={{ marginTop: 10 }}>
-              <strong>Selected Users:</strong>
-              <List
-                bordered
-                dataSource={selectedUsers}
-                renderItem={(item) => (
-                  <List.Item
-                    actions={[
-                      <Button
-                        type="text"
-                        icon={<CloseOutlined />}
-                        onClick={() => handleRemoveUser(item._id)}
-                      />,
-                    ]}
-                  >
-                    {item.username}
-                  </List.Item>
-                )}
-              />
+          <Col>
+            <strong>Selected Users:</strong>
+            <div style={{ overflow: "scroll", maxHeight: "200px" }}>
+              {selectedUsers.length > 0 && (
+                <div style={{ marginTop: 10 }}>
+                  <List
+                    bordered
+                    dataSource={selectedUsers}
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            type="text"
+                            icon={<CloseOutlined />}
+                            onClick={() => handleRemoveUser(item._id)}
+                          />,
+                        ]}
+                      >
+                        {item.name}
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </Col>
         </Space>
       </Form>
     </>

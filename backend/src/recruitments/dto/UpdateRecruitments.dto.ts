@@ -69,8 +69,8 @@ export class UpdateRecruitmentDto {
   readonly submittedDate: Date;
 
   @IsOptional()
-  @IsBoolean()
-  readonly rejected: boolean;
+  @IsString()
+  readonly rejectReason: string;
 
   @IsOptional()
   @IsMongoId({ message: 'Invalid MongoDB ObjectId format' })

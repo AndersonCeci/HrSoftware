@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use('/public', express.static(join(__dirname, '..', 'public')));
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);

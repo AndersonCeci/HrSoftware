@@ -16,6 +16,8 @@ export interface ApplicantProps {
   stage: RecruitmentStage;
   dateSubmitted: string;
   reference: string;
+  rejectReason?: string;
+  phoneNumber: string;
 }
 
 export interface OfferMade {

@@ -4,6 +4,7 @@ import { Calendar, Badge, theme, ConfigProvider } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { getFromLocalStorage } from "../../../utils/utils";
 // import "../../../styles/Dashboard/CalendarGrid.css";
 const main_api = import.meta.env.REACT_APP_MAIN;
 
@@ -40,12 +41,10 @@ const CalendarGrid: React.FC = () => {
 
   useEffect(() => {
     const fetchAllEvents = async () => {
-      const userId = JSON.parse(
-        localStorage.getItem("userData") || "{}"
-      ).userId;
+      const { employID } = getFromLocalStorage();
       const [creatorEvents, inviteeEvents] = await Promise.all([
-        fetchEventsByCriteria("byCreator", userId),
-        fetchEventsByCriteria("invitee", userId),
+        fetchEventsByCriteria("byCreator", employID),
+        fetchEventsByCriteria("invitee", employID),
       ]);
       setAllEvents([...creatorEvents, ...inviteeEvents]);
     };

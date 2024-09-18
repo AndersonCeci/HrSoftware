@@ -9,6 +9,8 @@ import {
   BadRequestException,
   Patch,
   NotFoundException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { SalaryService } from './services/salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
@@ -128,6 +130,21 @@ export class SalaryController {
         throw new BadRequestException('Invalid ID format');
       }
       throw new NotFoundException('Data not found or an error occurred');
+    }
+  }
+
+  @Post('compensate')
+  async compensateEmployees() {
+    try {
+      await this.salaryService.compensateEmployees();
+      return {
+        message: 'Employees compensated successfully for the current month.',
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Failed to compensate employees',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

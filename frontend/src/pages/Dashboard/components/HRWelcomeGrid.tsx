@@ -96,7 +96,14 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
               </Card>
             </Col>
             <Col className="bonus-graph">
-              <HrLineGraph />
+              <Card
+                style={{
+                  boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)",
+                  height: "330px",
+                }}
+              >
+                <HrLineGraph />
+              </Card>
             </Col>
           </Row>
           <TaskGrid />

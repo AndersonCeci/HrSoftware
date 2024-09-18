@@ -210,5 +210,6 @@ export const useSalaryHook = () => {
     setFilters,
     filters,
     createSalary,
+    updateSalary,
   };
 };
