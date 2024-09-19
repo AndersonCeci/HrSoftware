@@ -27,7 +27,6 @@ export class SalaryService {
         ...createSalaryDto,
         employeeID: new Types.ObjectId(createSalaryDto.employeeID),
       });
-      console.log(createdSalary);
       return await createdSalary.save();
     } catch (error) {
       if (error.code === 11000) {
@@ -183,6 +182,28 @@ export class SalaryService {
     const itemCount = await this.salaryModel.countDocuments(matchStage);
 
     return new PaginatedDTO<ExportSalaryDTO[]>(data, page, limit, itemCount);
+  }
+
+  async compensateEmployees(): Promise<void> {
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      await this.salaryModel.updateMany(
+        {
+          dateTaken: {
+            $gte: startOfMonth,
+            $lt: endOfMonth,
+          },
+        },
+        {
+          $set: { paid: true },
+        },
+      );
+    } catch (error) {
+      console.log('error:', error);
+      throw new Error('Failed to compensate employees.');
+    }
   }
 
   async createSalariesPerMonth(): Promise<void> {

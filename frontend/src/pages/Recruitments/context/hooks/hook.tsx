@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ApplicantProps } from "../../../../types/ApplicantProps";
 import useHttp from "../../../../hooks/useHttp";
 import axios, { AxiosError } from "axios";
@@ -7,6 +7,7 @@ import { RecruitmentStage } from "../../columns/constants";
 import { Filters } from "./filter.hook";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 export const useRecruitment = () => {
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
@@ -15,7 +16,6 @@ export const useRecruitment = () => {
   );
   const [drawerState, setDrawerState] = useState<boolean>(false);
   const [isLoading, , sendRequest] = useHttp();
-  const formRef = useRef<any>();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [file, setFile] = useState<File | null>(null);
@@ -91,7 +91,7 @@ export const useRecruitment = () => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
         body: formData,
       });
@@ -182,7 +182,6 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      console.log(file, "fileeee");
       // handleUpload(file);
     } else {
       message.error("No file chose");
@@ -197,7 +196,6 @@ export const useRecruitment = () => {
     drawerState,
     setDrawerState,
     isLoading,
-    formRef,
     isEditModalVisible,
     handleDelete,
     handleAddNew,
@@ -210,5 +208,6 @@ export const useRecruitment = () => {
     setFile,
     handleUpload,
     updateApplicant,
+    setTableData,
   };
 };

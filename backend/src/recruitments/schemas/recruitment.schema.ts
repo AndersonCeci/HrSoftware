@@ -7,6 +7,7 @@ export enum RecruitmentStage {
   SecondInterview = '2nd Interview',
   OfferMade = 'Offer Made',
   Hired = 'Hired',
+  Rejected = 'Rejected',
 }
 export enum ContractTypes {
   FullTime = 'Full Time',
@@ -80,7 +81,7 @@ export class Recruitment extends Document {
   deleteDate: Date;
 
   @Prop({ default: false })
-  rejected?: boolean;
+  rejectReason?: string;
 
   @Prop({ required: false, ref: 'Events' })
   eventID?: Types.ObjectId;

@@ -7,6 +7,7 @@ import { references, selectOption } from "../columns/constants";
 import dayjs from "dayjs";
 import useHttp from "../../../hooks/useHttp";
 import { ApplicantProps } from "../../../types/ApplicantProps";
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 const options = selectOption.map((option) => ({
   value: option.label,
@@ -46,13 +47,10 @@ const TableModal = forwardRef(
       const formData = new FormData();
       formData.append("file", file);
       try {
-        const uploadResponse = await fetch(
-          "http://localhost:3000/files/upload",
-          {
-            method: "POST",
-            body: formData,
-          },
-        );
+        const uploadResponse = await fetch(`${main_api}/files/upload`, {
+          method: "POST",
+          body: formData,
+        });
 
         if (!uploadResponse.ok) {
           throw new Error("File upload failed");
@@ -90,11 +88,11 @@ const TableModal = forwardRef(
       sendRequest(
         useHttp[selectedRecord ? "patchRequestHelper" : "postRequestHelper"](
           path,
-          valuesToSend,
+          valuesToSend
         ),
         (responseData: any) => {
           selectedRecord ? onEdit(responseData) : onAdd(responseData);
-        },
+        }
       );
     }
 
@@ -159,7 +157,7 @@ const TableModal = forwardRef(
         )}
       </Form>
     );
-  },
+  }
 );
 
 export default TableModal;

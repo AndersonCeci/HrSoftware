@@ -8,7 +8,7 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Align items at the bottom */
+  justify-content: flex-end; 
   padding: 20px;
 }
 .ant-layout-content {
@@ -44,6 +44,7 @@ h2.ant-typography.about-us-title.css-dev-only-do-not-override-1pg9a38{
 .about-us-para{
   font-size: 17px;
   font-weight: lighter;
+  color: white;
 }
 
 h2.ant-typography.mission-title.css-dev-only-do-not-override-1pg9a38{

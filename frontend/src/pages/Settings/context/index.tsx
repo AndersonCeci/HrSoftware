@@ -8,12 +8,14 @@ interface PasswordContextProps {
 }
 
 const PasswordContext = createContext<PasswordContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const main_api = import.meta.env.REACT_APP_MAIN;
+
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const token = userData.token;
@@ -28,7 +30,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
   const changePassword = async (oldPassword: string, newPassword: string) => {
     try {
       await axios.put(
-        "http://localhost:3000/users/change-password",
+        `${main_api}/users/change-password`,
         {
           oldPassword,
           newPassword,
@@ -37,7 +39,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       message.success("Password changed successfully!");
     } catch (error) {
@@ -45,7 +47,7 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
         message.error(
           `Failed to change password: ${
             error.response?.data.message || error.message
-          }`,
+          }`
         );
       }
     }

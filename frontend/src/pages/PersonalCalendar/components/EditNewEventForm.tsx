@@ -10,22 +10,24 @@ import {
   Button,
   message,
   Checkbox,
+  Form,
+  Col,
+  Row,
 } from "antd";
-import {
-  EnvironmentOutlined,
-  UserOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, CloseOutlined } from "@ant-design/icons";
 import { Dayjs } from "dayjs";
+import MapInput from "../../Events/components/Map/MapInput";
+import useMap from "../../Events/hook/useMap";
+import { EmployeeDataType } from "../../Employment/types/Employee";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
-interface User {
-  _id: string;
-  username: string;
-  employID: string;
-}
+// interface User {
+//   _id: string;
+//   username: string;
+//   employID: string;
+// }
 
 interface NewEvent {
   title: string;
@@ -45,28 +47,30 @@ const EditNewEventForm = ({
   newEvent: NewEvent;
   onChanges: (value: any, field: string) => void;
 }) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<EmployeeDataType[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<EmployeeDataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [selectAll, setSelectAll] = useState<boolean>(false);
+  const main_api = import.meta.env.REACT_APP_MAIN;
+  const map = useMap();
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    setLoggedInUserId(userData.userId || null);
+    setLoggedInUserId(userData.employID || null);
 
     const fetchAllUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
-        if (!response.ok) {
-          setError("Failed to fetch users");
-          return;
-        }
+        const response = await fetch(`${main_api}/employees`);
+        // if (!response.ok) {
+        //   setError("Failed to fetch employees");
+        //   return;
+        // }
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        setError("Failed to fetch users");
+        setError("Failed to fetch employees");
       } finally {
         setLoading(false);
       }
@@ -80,14 +84,14 @@ const EditNewEventForm = ({
     const user = users.find((user) => user._id === userId);
     if (user) {
       setSelectedUsers((prevSelectedUsers) => {
-        if (prevSelectedUsers.some((u) => u.employID === user.employID)) {
-          message.info(`User ${user.username} is already selected`);
+        if (prevSelectedUsers.some((u) => u._id === user._id)) {
+          message.info(`User ${user.name} is already selected`);
           return prevSelectedUsers;
         }
-        message.info(`Selected user: ${user.username}`);
+        message.info(`Selected user: ${user.name}`);
         const newSelectedUsers = [...prevSelectedUsers, user];
         onChanges(
-          newSelectedUsers.map((u) => u.employID),
+          newSelectedUsers.map((u) => u._id),
           "invitee"
         );
         return newSelectedUsers;
@@ -100,11 +104,11 @@ const EditNewEventForm = ({
   const handleRemoveUser = (userId: string) => {
     setSelectedUsers((prevSelectedUsers) => {
       const newSelectedUsers = prevSelectedUsers.filter(
-        (user) => user._id !== userId,
+        (user) => user._id !== userId
       );
       onChanges(
         newSelectedUsers.map((u) => u._id),
-        "invitee",
+        "invitee"
       );
       return newSelectedUsers;
     });
@@ -117,11 +121,11 @@ const EditNewEventForm = ({
       onChanges([], "invitee");
     } else {
       const allUsersExceptLoggedIn = users.filter(
-        (user) => user.employID !== loggedInUserId
+        (user) => user._id !== loggedInUserId
       );
       setSelectedUsers(allUsersExceptLoggedIn);
       onChanges(
-        allUsersExceptLoggedIn.map((u) => u.employID),
+        allUsersExceptLoggedIn.map((u) => u._id),
         "invitee"
       );
     }
@@ -129,9 +133,9 @@ const EditNewEventForm = ({
   };
 
   const menuItems = users
-    .filter((user) => user.employID !== loggedInUserId)
+    .filter((user) => user._id !== loggedInUserId)
     .map((user) => ({
-      label: user.username,
+      label: user.name,
       key: user._id,
       icon: <UserOutlined />,
     }));
@@ -146,86 +150,107 @@ const EditNewEventForm = ({
 
   return (
     <>
-      <Title level={5}>Title*</Title>
-      <Input
-        placeholder="Title"
-        name="title"
-        value={newEvent.title}
-        onChange={(e) => onChanges(e.target.value, "title")}
-      />
-      <div style={{ margin: "24px 0" }} />
-      <Title level={5}>Description</Title>
-      <TextArea
-        placeholder="Description"
-        autoSize={{ minRows: 3, maxRows: 5 }}
-        name="description"
-        value={newEvent.description}
-        onChange={(e) => onChanges(e.target.value, "description")}
-      />
-      <Title level={5}>Start Date*</Title>
-      <DatePicker
-        onChange={(value) => onChanges(value, "startDate")}
-        className="modal-date-picker"
-        value={newEvent.startDate}
-      />
-      <Title level={5}>End Date</Title>
-      <DatePicker
-        onChange={(value) => onChanges(value, "endDate")}
-        className="modal-date-picker-end"
-        value={newEvent.endDate}
-      />
-      <Title level={5}>Start Time</Title>
-      <TimePicker
-        onChange={(value) => onChanges(value, "startTime")}
-        value={newEvent.startTime}
-      />
-      <Title level={5}>End Time</Title>
-      <TimePicker
-        onChange={(value) => onChanges(value, "endTime")}
-        value={newEvent.endTime}
-      />
-      <Title level={5}>Location</Title>
-      <Input
-        placeholder="Location"
-        prefix={<EnvironmentOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
-        name="location"
-        value={newEvent.location}
-        onChange={(e) => onChanges(e.target.value, "location")}
-      />
+      <Form layout="vertical">
+        <Form.Item name="title" label="Title:" required>
+          <Input
+            placeholder="Title"
+            name="title"
+            size="large"
+            value={newEvent.title}
+            onChange={(e) => onChanges(e.target.value, "title")}
+            required
+          />
+        </Form.Item>
+        <Form.Item name="description" label="Description:">
+          <TextArea
+            placeholder="Description"
+            autoSize={{ minRows: 3, maxRows: 5 }}
+            name="description"
+            value={newEvent.description}
+            onChange={(e) => onChanges(e.target.value, "description")}
+          />
+        </Form.Item>
+        <Row gutter={10} justify="space-between">
+          <Col>
+            <Form.Item name="StartDate" label="Start Date:" required>
+              <DatePicker
+                onChange={(value) => onChanges(value, "startDate")}
+                className="modal-date-picker"
+                value={newEvent.startDate}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item name="endDate" label="End Date:">
+              <DatePicker
+                onChange={(value) => onChanges(value, "endDate")}
+                className="modal-date-picker-end"
+                value={newEvent.endDate}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row justify="space-between">
+          <Col>
+            <Form.Item name="startTime" label="Start Time:">
+              <TimePicker
+                onChange={(value) => onChanges(value, "startTime")}
+                value={newEvent.startTime}
+                className="modal-time-picker"
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item name="endTime" label="End Time:">
+              <TimePicker
+                onChange={(value) => onChanges(value, "endTime")}
+                value={newEvent.endTime}
+                className="modal-time-picker-end"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item name="location">
+          <MapInput map={map} />
+        </Form.Item>
+        <Title level={5}>Invite Users</Title>
+        <Space wrap>
+          <Checkbox checked={selectAll} onChange={handleSelectAll}>
+            Invite All Users
+          </Checkbox>
+          <Dropdown.Button menu={menuProps} placement="bottom">
+            Invite
+            <UserOutlined />
+          </Dropdown.Button>
 
-      <Title level={5}>Invite Users</Title>
-      <Space wrap>
-        <Checkbox checked={selectAll} onChange={handleSelectAll}>
-          Invite All Users
-        </Checkbox>
-        <Dropdown.Button menu={menuProps} placement="bottom">
-          Invite
-          <UserOutlined />
-        </Dropdown.Button>
-
-        {selectedUsers.length > 0 && (
-          <div style={{ marginTop: 10 }}>
+          <Col>
             <strong>Selected Users:</strong>
-            <List
-              bordered
-              dataSource={selectedUsers}
-              renderItem={(item) => (
-                <List.Item
-                  actions={[
-                    <Button
-                      type="text"
-                      icon={<CloseOutlined />}
-                      onClick={() => handleRemoveUser(item._id)}
-                    />,
-                  ]}
-                >
-                  {item.username}
-                </List.Item>
+            <div style={{ overflow: "scroll", maxHeight: "200px" }}>
+              {selectedUsers.length > 0 && (
+                <div style={{ marginTop: 10 }}>
+                  <List
+                    bordered
+                    dataSource={selectedUsers}
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            type="text"
+                            icon={<CloseOutlined />}
+                            onClick={() => handleRemoveUser(item._id)}
+                          />,
+                        ]}
+                      >
+                        {item.name}
+                      </List.Item>
+                    )}
+                  />
+                </div>
               )}
-            />
-          </div>
-        )}
-      </Space>
+            </div>
+          </Col>
+        </Space>
+      </Form>
     </>
   );
 };

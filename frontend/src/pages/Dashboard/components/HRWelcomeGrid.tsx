@@ -24,12 +24,12 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   const options = {};
   const { t } = useTranslation();
   const [tableData, setTableData] = useState<LeftDataType[]>([]);
-  const [isLoading, error, sendRequest] = useHttp();
+  const [, , sendRequest] = useHttp();
 
   useEffect(() => {
     sendRequest(
       {
-        url: `http://localhost:3000/left`,
+        endpoint: `left`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -41,7 +41,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   }, []);
 
   const data = {
-    labels: ["Off", "on"],
+    labels: ["Off", "On"],
     datasets: [
       {
         label: "Days",
@@ -53,7 +53,7 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
 
   return (
     <>
-      <Flex className="welcome-grid" justify="space-around">
+      <Flex className="welcome-grid" justify="space-around" gap={20}>
         <div>
           <Flex justify="space-between">
             {initialData.map((data) => {
@@ -79,7 +79,12 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
             style={{ justifyContent: "space-between" }}
           >
             <Col>
-              <Card className="pie-chart" style={{boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)"}}>
+              <Card
+                className="pie-chart"
+                style={{
+                  boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)",
+                }}
+              >
                 <Title className="title-piechart">
                   {t(`attendanceOverview`)}
                 </Title>
@@ -91,7 +96,14 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
               </Card>
             </Col>
             <Col className="bonus-graph">
-              <HrLineGraph />
+              <Card
+                style={{
+                  boxShadow: "3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407)",
+                  height: "330px",
+                }}
+              >
+                <HrLineGraph />
+              </Card>
             </Col>
           </Row>
           <TaskGrid />

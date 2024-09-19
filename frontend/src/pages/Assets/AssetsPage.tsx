@@ -35,7 +35,7 @@ const AssetsPage: React.FC = () => {
 	function getNewData() {
 		sendRequest(
 			{
-				url: `${API}/user/${loggedUser._id}`,
+				endpoint: `${API}/user/${loggedUser._id}`,
 			},
 			(data) => {
 				setTableData(data);

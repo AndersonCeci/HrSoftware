@@ -25,3 +25,21 @@ export const fetchEmployeeByID = async (id: string) => {
     return null;
   }
 };
+
+export const fetchEmployees = async (ids: string[]) => {
+  try {
+    console.log("Fetching employees", ids);
+    const stringIds = ids.join(",");
+    const res = await axios.post(`${FETCH_EMPLOYEE_API}/employees`, stringIds);
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      message.error(
+        error.response?.data?.message || "Failed to fetch employees"
+      );
+    } else {
+      message.error("An unexpected error occurred");
+    }
+    return null;
+  }
+};

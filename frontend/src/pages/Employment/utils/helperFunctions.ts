@@ -75,8 +75,6 @@ export function getFormValues ( form: any )
     contract: contract[0] || " ",
     nID: form.getFieldValue("nID"),
     birthDay: form.getFieldValue("birthDay"),
-    // username: "ESHTE STRING",
-    // password: "codevider",
     gender: form.getFieldValue("gender"),
   };
 }

@@ -14,7 +14,7 @@ export default function SelectionDemo() {
   useEffect(() => {
     sendRequest(
       {
-        url: "http://localhost:3000/employees/organizational-tree",
+        endpoint: "employees/organizational-tree",
         headers: {
           "Content-Type": "application/json",
         },

@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsDate,
   IsMongoId,
+  IsBoolean,
 } from 'class-validator';
 import { RecruitmentStage } from '../schemas/recruitment.schema';
 import { InterviewDTO } from '../interviewDTO/interview.dto';
@@ -66,7 +67,12 @@ export class CreateRecruitmentDto {
   readonly submittedDate?: Date;
 
   @IsOptional()
+  @IsBoolean()
   readonly isDeleted?: boolean;
+
+  @IsOptional()
+  @IsString()
+  readonly rejectReason?: string;
 
   @IsDate()
   @IsOptional()

@@ -6,7 +6,7 @@ import {
   RecruitmentStage,
 } from './schemas/recruitment.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, PipelineStage, Types } from 'mongoose';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import { PaginatedDTO } from 'src/paginationDTO/paginated.dto';
 import { EventsService } from 'src/modules/events/events.service';
@@ -81,11 +81,13 @@ export class RecruitmentService {
     filters: any,
   ) {
     const skip = (page - 1) * limit;
+
+    filters = { ...filters, isDeleted: { $ne: true } };
+
     const itemCount = await this.recruitmentModel.countDocuments(filters);
-    const dataPipeline = [
-      {
-        $match: filters,
-      },
+
+    const dataPipeline: PipelineStage[] = [
+      { $match: filters },
       this.createLookupPipeline('firstInterview'),
       this.createLookupPipeline('secondInterview'),
       this.createAddFields('firstInterview'),
@@ -106,12 +108,14 @@ export class RecruitmentService {
           firstInterview: 1,
           secondInterview: 1,
           offerMade: 1,
-          rejected: 1,
+          rejectReason: 1,
         },
       },
+      { $sort: { submittedDate: -1 } },
       { $skip: skip },
       { $limit: limit },
     ];
+
     const data = await this.recruitmentModel.aggregate(dataPipeline);
     return new PaginatedDTO<any>(data, page, limit, itemCount);
   }
@@ -160,7 +164,11 @@ export class RecruitmentService {
           isDeleted: false,
         });
 
-        console.log(event);
+        await this.recruitmentModel.findByIdAndUpdate(
+          id,
+          { eventID: event._id },
+          { new: true },
+        );
       }
 
       return updatedRecruitment;

@@ -17,7 +17,6 @@ export class SchedulerController {
       if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
         throw new Error('Invalid date format.');
       }
-
       if (startDate >= endDate) {
         throw new Error('Start date must be before end date.');
       }
@@ -56,7 +55,7 @@ export class SchedulerController {
 
   @Get('jobs')
   getAllJobs() {
-    return this.schedulerService.getAllJobs();
+    return this.schedulerService.getCrons();
   }
 
   @Get('job/:jobName')
