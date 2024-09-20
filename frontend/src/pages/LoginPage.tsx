@@ -1,4 +1,4 @@
-import { Form, Typography } from "antd";
+import { Form, message, Typography } from "antd";
 import Button from "../components/Shared/Button";
 import "../styles/LoginPage.css";
 import FormInputs from "../components/Shared/InputTypes/FormInputs";
@@ -8,11 +8,36 @@ import useHttp from "../hooks/useHttp";
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
 import { setToLocalStorage } from "../utils/utils";
+import { AxiosError } from "axios";
+import Axios from "../helpers/axios";
 
 const LoginPage: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
+  const API = import.meta.env.REACT_APP_MAIN;
+
+  async function handleAuth(email: string) {
+    try {
+      const res = await Axios.get(`${API}/auth/check-refresh-token`, {
+        params: {
+          email: email,
+        },
+      });
+
+      const { url, message: authMessage } = res.data;
+      console.log("URL", url);
+      message.info(authMessage);
+      return url;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      }
+      return null;
+    }
+  }
 
   function handleSubmit() {
     const dataToSubmit = {
@@ -21,19 +46,31 @@ const LoginPage: React.FC = () => {
     };
 
     sendRequest(
-      useHttp.postRequestHelper(
-        "http://localhost:3000/login",
-        form.getFieldsValue()
-      ),
-      (responseData: any) => {
+      useHttp.postRequestHelper("login", dataToSubmit),
+      async (responseData: any) => {
         const { accessToken, ...rest } = responseData;
-        console.log("responseData", responseData);
         const userData = {
           ...rest,
           token: accessToken,
         };
         setToLocalStorage("userData", userData);
         navigate("/dashboard");
+        // if (responseData.role !== Roles.HR) {
+        //   // const authUrl = await handleAuth(responseData.email);
+        //   // console.log("responseData", responseData);
+        //   // const userData = {
+        //   //   ...rest,
+        //   //   token: accessToken,
+        //   // };
+        //   // setToLocalStorage("userData", userData);
+        //   // if (authUrl) {
+        //   //   window.location.href = authUrl;
+        //   // } else {
+        //   //   navigate("/dashboard");
+        //   // }
+        // } else {
+
+        // }
       }
     );
   }
@@ -92,33 +129,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-// const handleSubmit = async (e: React.FormEvent) => {
-// 	e.preventDefault();
-// 	try {
-// 		const response = await fetch("http://localhost:3000/login", {
-// 			method: "POST",
-// 			headers: { "Content-Type": "application/json" },
-// 			body: JSON.stringify({ username, password }),
-// 		});
-// 		const data = await response.json();
-
-// 		if (!response.ok) {
-// 			throw new Error(data.message || "Authentication failed");
-// 		}
-
-// 		const userData = {
-// 			token: data.accessToken,
-// 			username: data.username,
-// 			userId: data._id,
-// 			role: data.role,
-// 			loginRole: data.loginRole,
-// 		};
-
-// 		localStorage.setItem("userData", JSON.stringify(userData));
-
-// 		console.log("Logged in successfully");
-// 		navigate("/dashboard");
-// 	} catch (error) {
-// 		console.error("Login error:", error);
-// 	}
-// };

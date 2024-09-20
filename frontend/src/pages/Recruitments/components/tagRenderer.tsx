@@ -6,11 +6,13 @@ import { capitalizeFirstLetter } from "../../../utils/utils";
 type CustomTagProps = SelectProps<EmployeeDetails>["tagRender"];
 
 const tagRender: CustomTagProps = (props) => {
-  const { label, closable, onClose } = props;
+  const { label, value, closable, onClose } = props;
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
     event.stopPropagation();
   };
+  console.log("label", label);
+  console.log("value", value);
 
   return (
     <Tag
@@ -25,7 +27,7 @@ const tagRender: CustomTagProps = (props) => {
       }}
       closeIcon={<CloseOutlined />}
     >
-      {capitalizeFirstLetter(label!.toString())}
+      {capitalizeFirstLetter(label?.toString() || "")}
     </Tag>
   );
 };

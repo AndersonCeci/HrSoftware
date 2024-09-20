@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import FormInputs from "../../components/Shared/InputTypes/FormInputs";
 import { Form } from "antd";
 import { useNavigate } from "react-router-dom";
-import { isHR } from "../../utils/utils";
+import { isEmployee, isCEO, getFromLocalStorage } from "../../utils/utils";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
@@ -34,18 +34,20 @@ const EmploymentPage: React.FC = () => {
   >(undefined);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isHr = isHR();
+  const isEmp = isEmployee();
+  const isCeo = isCEO();
 
   useEffect(() => {
-    if (!isHr) {
+    if (isEmp) {
       navigate("/error");
     }
-  }, [isHr]);
+  }, [isEmp]);
 
   useEffect(() => {
+    console.log("tetetettete", getFromLocalStorage());
     sendRequest(
       {
-        url: API,
+        endpoint: API,
         headers: {
           "Content-Type": "application/json",
         },
@@ -88,7 +90,7 @@ const EmploymentPage: React.FC = () => {
     const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
     sendRequest(
       {
-        url: `${API_DELETE_EMPLOYEE}/copy/${editedData?._id}`,
+        endpoint: `${API_DELETE_EMPLOYEE}/copy/${editedData?._id}`,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +117,7 @@ const EmploymentPage: React.FC = () => {
   function handlePromotionSubmit(value: any) {
     sendRequest(
       {
-        url: `http://localhost:3000/promotions/${promotedData?._id}/promote`,
+        endpoint: `promotions/${promotedData?._id}/promote`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -184,7 +186,11 @@ const EmploymentPage: React.FC = () => {
           onEdit={handlePromotionSubmit}
         />
       </Modal>
-      <TableHeader title={t("employment")} onClick={() => setOpen(true)} />
+      <TableHeader
+        title={t("employment")}
+        onClick={() => setOpen(true)}
+        hideButton={isCeo}
+      />
       <section className="test">
         {isLoading && !isDeleting ? (
           <Loader />

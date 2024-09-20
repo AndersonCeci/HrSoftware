@@ -6,17 +6,16 @@ import { useTranslation } from "react-i18next";
 import { RcFile } from "antd/lib/upload/interface";
 import { UploadOutlined } from "@ant-design/icons";
 import useHttp from "../../../hooks/useHttp";
+import { getAuthToken } from "../../../utils/utils";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
-
+const main_api = import.meta.env.REACT_APP_MAIN;
 const EditProfile = ({
   visible,
-  selectedEmployee,
   handleCancel,
   currentData,
-  onImageUpload,
-  setTableData,
   setIsModal,
+  setTablaData,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
@@ -43,12 +42,7 @@ const EditProfile = ({
     }
   }, [currentData, form]);
 
-  // const onFinish = (values: any) => {
-  //   handleOk(values);
-  // };
-
   const handleFinish = (value: EmployeeDataType) => {
-
     fetchData(
       useHttp.patchRequestHelper(`${API}/${EmployeData}`, {
         profilePhoto: value.profilePhoto[0],
@@ -64,10 +58,12 @@ const EditProfile = ({
     files.forEach((file) => {
       formData.append("files", file as File);
     });
-
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: formData,
       });
       const uploadData = await uploadResponse.json();
@@ -93,7 +89,9 @@ const EditProfile = ({
       <Modal
         title={t("editProfile")}
         open={visible}
-        onOk={() => formRef.current.submit()}
+        onOk={() => {
+          formRef.current.submit();
+        }}
         onCancel={handleCancel}
       >
         <Form

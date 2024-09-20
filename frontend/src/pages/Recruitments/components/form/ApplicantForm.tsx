@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Col, Row, Upload, UploadProps, message } from "antd";
 import { useRecruitmentContext } from "../../context";
 import { getDevRoles } from "../../../Employment/utils/helperFunctions";
 import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
 import { UploadOutlined } from "@ant-design/icons";
 import { references } from "../../columns/constants";
+import moment from "moment";
 
 const ApplicantForm: React.FC = () => {
-  const { handleFileChange, setFile } = useRecruitmentContext();
+  const { handleFileChange, setFile, form, editingRecord } =
+    useRecruitmentContext();
   const positions = getDevRoles().map((role) => ({ value: role, label: role }));
+  useEffect(() => {
+    if (editingRecord) {
+      form.setFieldsValue({
+        name: editingRecord.name,
+        surname: editingRecord.surname,
+        email: editingRecord.email,
+        phoneNumber: editingRecord.phoneNumber,
+        position: editingRecord.position,
+        reference: editingRecord.reference,
+        submittedDate: editingRecord.submittedDate
+          ? moment(editingRecord.submittedDate)
+          : undefined,
+        rejectReason: editingRecord.rejectReason,
+      });
+    }
+  }, [editingRecord, form]);
 
   const allowedFileTypes = ["application/pdf", "application/msword"];
 
@@ -26,8 +44,6 @@ const ApplicantForm: React.FC = () => {
         console.log(info.file.originFileObj);
         setFile(info.file.originFileObj);
         handleFileChange();
-      } else {
-        console.log("be humble");
       }
     },
     progress: {
@@ -62,21 +78,22 @@ const ApplicantForm: React.FC = () => {
     <>
       <Row gutter={16}>
         <Col span={12}>
-          <FormInputs.Input label="Name" name="name" />
+          <FormInputs.Input label="Name" name="name" required />
         </Col>
         <Col span={12}>
-          <FormInputs.Input label="Surname" name="surname" />
+          <FormInputs.Input label="Surname" name="surname" required />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <FormInputs.Input label="Email" name="email" />
+          <FormInputs.Input label="Email" name="email" required />
         </Col>
         <Col span={12}>
           <FormInputs.Select
             name="position"
             label="Position"
             options={positions}
+            required
           />
         </Col>
       </Row>
@@ -86,8 +103,22 @@ const ApplicantForm: React.FC = () => {
             name="reference"
             label="Reference"
             options={references}
+            required
           />
         </Col>
+        <Col span={12}>
+          <FormInputs.Input label="Phone Number" name="phoneNumber" />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <FormInputs.DatePicker
+            label="Submitted Date"
+            name="submittedDate"
+            required
+          />
+        </Col>
+
         <Col span={12}>
           <Form.Item label="Resume" name="cv" valuePropName="cv">
             <Upload {...props}>
@@ -104,11 +135,16 @@ const ApplicantForm: React.FC = () => {
           </Form.Item>
         </Col>
       </Row>
-      <Row>
-        <Col span={12}>
-          <FormInputs.DatePicker label="Submitted Date" name="submittedDate" />
-        </Col>
-      </Row>
+      {editingRecord?.rejectReason && (
+        <Row>
+          <FormInputs.Input
+            label="Reject reason"
+            name="rejectReason"
+            type="textarea"
+            required
+          />
+        </Row>
+      )}
     </>
   );
 };

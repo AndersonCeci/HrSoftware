@@ -2,21 +2,28 @@
     font-weight: lighter;
     margin: 0;
     color: white;
+    font-size: 20px;
 }
 
-h1.ant-typography.card-text.css-dev-only-do-not-override-1pg9a38 {
+/* h1.ant-typography.card-text.css-dev-only-do-not-override-1pg9a38 {
     margin-bottom: 0;
     margin-top: 0;
-    color: white;
-}
+    color: rgba(156, 6, 6, 0.521);
+    
+} */
 
 .card-employee {
     height: 125px;
     width: 250px;
+
 }
 
 .employee-card {
     margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-overflow:hidden ;
 }
 
 @media (max-width: 1024px) {

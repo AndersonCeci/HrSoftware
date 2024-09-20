@@ -6,8 +6,10 @@ import { getDevRoles } from "../utils/helperFunctions";
 import { UploadOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { getAuthToken } from "../../../utils/utils";
 
 const TEAM_LEADERS = import.meta.env.REACT_APP_TEAM_LEADERS_SEARCH_API;
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 //!THIS MIGHT NEED ATTENTION
 
@@ -22,7 +24,11 @@ const SecondStep = ({ form }: any) => {
   useEffect(() => {
     const fetchTeamLeaders = async () => {
       try {
-        const response = await fetch(TEAM_LEADERS);
+        const response = await fetch(`${main_api}/${TEAM_LEADERS}`, {
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        });
         if (!response.ok) {
           throw new Error(
             `Failed to fetch team leaders: ${response.statusText}`
@@ -52,8 +58,11 @@ const SecondStep = ({ form }: any) => {
     });
 
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: formData,
       });
       const uploadData = await uploadResponse.json();

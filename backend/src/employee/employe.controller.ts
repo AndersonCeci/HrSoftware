@@ -13,17 +13,21 @@ import {
   Patch,
   Query,
   NotFoundException,
+  BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { EmployeeService } from './employe.service';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Controller('employees')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
+  private readonly logger = new Logger(EmployeeController.name);
 
   @Post()
-  @UsePipes(new ValidationPipe())
   create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeeService.create(createEmployeeDto);
   }
@@ -92,5 +96,17 @@ export class EmployeeController {
     }
 
     return result;
+  }
+
+  @Post('interviewers')
+  findByIds(@Body('ids') ids: string[]) {
+    console.log('Raw query parameter ids:');
+    this.logger.log('Entering findByIds method');
+    if (!ids) {
+      throw new BadRequestException('No IDs provided');
+    }
+    const idList = ids.filter((id) => mongoose.Types.ObjectId.isValid(id));
+    console.log('Processed idList:', idList);
+    return this.employeeService.findByIds(idList);
   }
 }

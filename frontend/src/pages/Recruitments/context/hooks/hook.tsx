@@ -1,12 +1,15 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ApplicantProps } from "../../../../types/ApplicantProps";
 import useHttp from "../../../../hooks/useHttp";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Form, message } from "antd";
 import { RecruitmentStage } from "../../columns/constants";
 import { Filters } from "./filter.hook";
+import Axios from "../../../../helpers/axios";
+import { getAuthToken } from "../../../../utils/utils";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
+const main_api = import.meta.env.REACT_APP_MAIN;
 
 export const useRecruitment = () => {
   const [tableData, setTableData] = useState<ApplicantProps[]>([]);
@@ -15,7 +18,6 @@ export const useRecruitment = () => {
   );
   const [drawerState, setDrawerState] = useState<boolean>(false);
   const [isLoading, , sendRequest] = useHttp();
-  const formRef = useRef<any>();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [file, setFile] = useState<File | null>(null);
@@ -26,10 +28,10 @@ export const useRecruitment = () => {
     filters: Filters
   ) => {
     try {
-      const response = await axios.get(API, {
+      const response = await Axios.get(API, {
         params: { page, limit, filters },
       });
-      const { data, meta } = response.data;
+      const { data, meta } = response;
       setTableData(data);
       return meta.itemCount;
     } catch (error) {
@@ -45,7 +47,7 @@ export const useRecruitment = () => {
     try {
       console.log("submitedDate", newData.dateSubmitted);
       const updatedData = { ...newData, stage: RecruitmentStage.Applied };
-      const res = await axios.post(API, updatedData);
+      const res = await Axios.post(API, updatedData);
       handleAddNew(res.data);
       return res;
     } catch (error) {
@@ -91,8 +93,11 @@ export const useRecruitment = () => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const uploadResponse = await fetch("http://localhost:3000/files/upload", {
+      const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: formData,
       });
 
@@ -161,7 +166,7 @@ export const useRecruitment = () => {
     }
 
     try {
-      const res = await axios.patch(`${API}/${_id}`, updatedValues);
+      const res = await Axios.patch(`${API}/${_id}`, updatedValues);
       handleEdit(res.data);
       message.success("Applicant updated successfully!");
       return res;
@@ -182,7 +187,6 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      console.log(file, "fileeee");
       // handleUpload(file);
     } else {
       message.error("No file chose");
@@ -197,7 +201,6 @@ export const useRecruitment = () => {
     drawerState,
     setDrawerState,
     isLoading,
-    formRef,
     isEditModalVisible,
     handleDelete,
     handleAddNew,
@@ -210,5 +213,6 @@ export const useRecruitment = () => {
     setFile,
     handleUpload,
     updateApplicant,
+    setTableData,
   };
 };

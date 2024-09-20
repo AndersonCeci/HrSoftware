@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Row, Form, Drawer } from "antd";
-import { useForm } from "antd/es/form/Form";
 import Steps from "../../../components/Shared/Steps";
 import { findStepIndex, RecruitmentStage } from "../columns/constants";
 import { useRecruitmentContext } from "../context";
@@ -18,50 +17,28 @@ import InterviewForm from "./form/InterviewForm";
 import OfferMadeForm from "./form/OfferMadeForm";
 import EmailContent from "./EmailContent";
 import AddEmployeeForm from "../../Employment/components/AddEmployeeForm";
+import RejectDrawer from "./RejectDrawer";
+
 const { Title } = Typography;
 
-const Stepper = () => {
-  const [form] = useForm();
-
-  const { editingRecord, updateApplicant, createApplicant } =
+const Stepper: React.FC = () => {
+  const { editingRecord, updateApplicant, createApplicant, form } =
     useRecruitmentContext();
-  const [current, setCurrent] = useState(findStepIndex(editingRecord.stage));
+  const [current, setCurrent] = useState(
+    findStepIndex(editingRecord?.stage ?? RecruitmentStage.Applied)
+  );
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [employmentDrawer, setEmploymentDrawer] = useState(false);
-
-  const showChildrenDrawer = () => {
-    setChildrenDrawer(true);
-  };
-
-  const onChildrenDrawerClose = () => {
-    setChildrenDrawer(false);
-  };
-
-  const stage =
-    current === 1
-      ? editingRecord.firstInterview
-      : current === 2
-      ? editingRecord.secondInterview
-      : null;
-
-  const onChange = (value: number) => {
-    setCurrent(value);
-  };
   const [interviewers, setInterviewers] = useState<string[]>([]);
 
   useEffect(() => {
     if (editingRecord) {
-      form.setFieldsValue({
-        name: editingRecord.name,
-        surname: editingRecord.surname,
-        email: editingRecord.email,
-        position: editingRecord.position,
-        reference: editingRecord.reference,
-        submittedDate: editingRecord.submittedDate
-          ? moment(editingRecord.submittedDate)
-          : undefined,
-      });
-
+      const stage =
+        current === 1
+          ? editingRecord.firstInterview
+          : current === 2
+          ? editingRecord.secondInterview
+          : null;
       if (stage) {
         form.setFieldsValue({
           ...stage,
@@ -69,16 +46,33 @@ const Stepper = () => {
           date: stage.date ? moment(stage.date) : null,
         });
       }
-      if (editingRecord.offerMade) {
-        form.setFieldsValue({
-          offeredSalary: editingRecord.offerMade.offeredSalary,
-          contractType: editingRecord.offerMade.contractType,
-          startDate: moment(editingRecord.offerMade.startDate),
-        });
-      }
     }
-  }, [current, editingRecord, form]);
-  const isHired = editingRecord?.stage === RecruitmentStage.Hired;
+  }, [editingRecord, current, form]);
+
+  const handleInterviewersChange = (newInterviewers: string[]) => {
+    setInterviewers(newInterviewers);
+  };
+
+  const handleSave = async () => {
+    try {
+      await form.validateFields();
+      const formData = form.getFieldsValue();
+
+      const submissionData = {
+        ...formData,
+        interviewers: interviewers,
+      };
+
+      if (editingRecord) {
+        updateApplicant(editingRecord._id, submissionData, current);
+      } else {
+        createApplicant(submissionData);
+      }
+    } catch (error) {
+      console.error("Validation failed:", error);
+    }
+  };
+
   const items = [
     {
       title: RecruitmentStage.Applied,
@@ -91,7 +85,7 @@ const Stepper = () => {
       content: (
         <InterviewForm
           step={RecruitmentStage.FirstInterview}
-          onInterviewersChange={setInterviewers}
+          onInterviewersChange={handleInterviewersChange}
         />
       ),
     },
@@ -101,7 +95,7 @@ const Stepper = () => {
       content: (
         <InterviewForm
           step={RecruitmentStage.SecondInterview}
-          onInterviewersChange={setInterviewers}
+          onInterviewersChange={handleInterviewersChange}
         />
       ),
     },
@@ -111,67 +105,49 @@ const Stepper = () => {
       content: <OfferMadeForm />,
     },
   ];
+
+  const disabledForm = [
+    RecruitmentStage.Hired,
+    RecruitmentStage.Rejected,
+  ].includes(editingRecord?.stage);
+
   return (
     <>
       {editingRecord && (
         <>
           <ProfileCard />
           <div style={{ padding: "16px 1px" }}>
-            <Steps
-              onChange={onChange}
-              current={current}
-              direction="horizontal"
-              responsive
-              items={items.map(({ title, icon }) => ({
-                title,
-                icon,
-              }))}
-            />
+            {editingRecord.stage !== RecruitmentStage.Rejected && (
+              <Steps
+                onChange={setCurrent}
+                current={current}
+                direction="horizontal"
+                responsive
+                items={items.map(({ title, icon }) => ({ title, icon }))}
+              />
+            )}
           </div>
         </>
       )}
       <div>
-        <Form form={form} layout="vertical" disabled={isHired}>
+        <Form form={form} layout="vertical" disabled={disabledForm}>
           {editingRecord && (
             <div style={{ justifyItems: "inherit" }}>
               {items[current].content}
             </div>
           )}
 
-          <Form.Item>
-            {!editingRecord && (
-              <>
-                <Title level={4}>Add Applicant</Title>
-                <ApplicantForm />
-              </>
-            )}
-            <Row
-              justify="end"
-              style={{
-                alignItems: "end",
-                maxWidth: "100%",
-                gap: "10",
-              }}
-            ></Row>
-          </Form.Item>
+          {!editingRecord && (
+            <Form.Item>
+              <Title level={4}>Add Applicant</Title>
+              <ApplicantForm />
+            </Form.Item>
+          )}
 
           <Row gutter={6} style={{ marginTop: 16 }}>
             <Col>
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => {
-                    form.setFieldValue("interviewers", interviewers);
-                    editingRecord
-                      ? updateApplicant(
-                          editingRecord._id,
-                          form.getFieldsValue(),
-                          current
-                        )
-                      : createApplicant(form.getFieldsValue());
-                  }}
-                >
+                <Button type="primary" htmlType="submit" onClick={handleSave}>
                   Save
                 </Button>
               </Form.Item>
@@ -180,7 +156,10 @@ const Stepper = () => {
               <>
                 <Col>
                   <Form.Item>
-                    <Button type="default" onClick={showChildrenDrawer}>
+                    <Button
+                      type="default"
+                      onClick={() => setChildrenDrawer(true)}
+                    >
                       Notify
                     </Button>
                   </Form.Item>
@@ -188,28 +167,19 @@ const Stepper = () => {
                     title={`Notify ${editingRecord.name} ${editingRecord.surname}`}
                     width={"30%"}
                     closable={true}
-                    onClose={onChildrenDrawerClose}
+                    onClose={() => setChildrenDrawer(false)}
                     open={childrenDrawer}
                   >
-                    <EmailContent onCancel={onChildrenDrawerClose} />
+                    <EmailContent
+                      onCancel={() => setChildrenDrawer(false)}
+                      isForRejection={false}
+                    />
                   </Drawer>
                 </Col>
                 <Col flex="auto">
                   <Row justify="end" style={{ width: "100%" }} gutter={8}>
                     <Col>
-                      <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                          updateApplicant(
-                            editingRecord._id,
-                            { rejected: true },
-                            0
-                          );
-                        }}
-                      >
-                        Reject
-                      </Button>
+                      <RejectDrawer />
                     </Col>
                     {current === 3 && (
                       <Col>

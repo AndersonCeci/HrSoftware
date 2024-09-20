@@ -15,7 +15,6 @@ import { PromoteType } from "../../Promotion/types/PromoteType";
 
 interface Item {
   title: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any;
   color: string;
   status: string;
@@ -23,7 +22,6 @@ interface Item {
 
 interface Data {
   paragraph: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   days?: any;
 }
 
@@ -34,7 +32,6 @@ const EmployeeWelcomeGrid: React.FC = () => {
   const EmployeData = JSON.parse(
     localStorage.getItem("userData") || "{}"
   ).employID;
-
 
   const initialItem: Item[] = [
     {
@@ -75,7 +72,7 @@ const EmployeeWelcomeGrid: React.FC = () => {
   useEffect(() => {
     sendRequest(
       {
-        url: `http://localhost:3000/employees/${EmployeData}`,
+        endpoint: `employees/${EmployeData}`,
       },
       (data: EmployeeDataType) => {
         setTableData(data);
@@ -93,12 +90,12 @@ const EmployeeWelcomeGrid: React.FC = () => {
 
   return (
     <>
-      <Flex className="flex-main" justify="space-between">
+      <Flex className="flex-main" justify="space-around" gap={20}>
         <div>
           <Flex justify="space-between">
-            {initialItem.map((item) => {
+            {initialItem.map((item, index) => {
               return (
-                <Col className="employee-card">
+                <Col key={index} className="employee-card">
                   <Card
                     className="card-employee"
                     style={{ backgroundColor: item.color }}
@@ -106,25 +103,32 @@ const EmployeeWelcomeGrid: React.FC = () => {
                     <h2 className="card-title">{item.title}</h2>
                     {item.status === "holiday" ? (
                       <Flex className="holiday-card">
-                        {holidayData.map((data) => {
+                        {holidayData.map((data, index) => {
                           return (
-                            <>
-                              <p>{data.paragraph}</p>
+                            <div key={index}>
+                              <p style={{ color: "white" }}>{data.paragraph}</p>
                               <br />
-                              <p>{data.days}</p>
-                            </>
+                              <p style={{ color: "white" }}>{data.days}</p>
+                            </div>
                           );
                         })}
                       </Flex>
                     ) : (
-                      <Title className="card-text">{item.content}</Title>
+                      <h1
+                        style={{
+                          color: "white",
+                        }}
+                        className="card-text"
+                      >
+                        {item.content}
+                      </h1>
                     )}
                   </Card>
                 </Col>
               );
             })}
           </Flex>
-          <Row style={{ justifyContent: "space-between" }}>
+          <Row style={{ justifyContent: "space-between", marginTop: "20px" }}>
             <Col>
               <Card className="card-promotions">
                 <h2 className="promo-title">{t("promotions")}</h2>

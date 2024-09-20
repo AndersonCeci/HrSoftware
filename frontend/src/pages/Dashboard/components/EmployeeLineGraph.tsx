@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import useHttp from "../../../hooks/useHttp";
 import { getFromLocalStorage } from "../../../utils/utils";
-import { ApexChartState, getMonthName, SalaryData } from "../types/DashboardTypes";
-
+import {
+  ApexChartState,
+  getMonthName,
+  SalaryData,
+} from "../types/DashboardTypes";
 
 const ApexChart: React.FC = () => {
   const [, , fetchData] = useHttp();
@@ -29,13 +32,12 @@ const ApexChart: React.FC = () => {
   const { employID } = getFromLocalStorage("userData");
 
   useEffect(() => {
-
-      fetchData(
-        { url: `http://localhost:3000/salary/chart?id=${employID}` },
-        (data: SalaryData[]) => {
-          setData(data);
-        }
-      );
+    fetchData(
+      { endpoint: `salary/chart?id=${employID}` },
+      (data: SalaryData[]) => {
+        setData(data);
+      }
+    );
   }, []);
 
   useEffect(() => {

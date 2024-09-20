@@ -6,7 +6,7 @@ import { Tabs } from "antd";
 import { useEffect, useState } from "react";
 import { t } from "i18next";
 import useHttp from "../../hooks/useHttp";
-import { isHR, getFromLocalStorage } from "../../utils/utils";
+import { getFromLocalStorage } from "../../utils/utils";
 
 const INVENTARY_TAB = "inventary";
 const ASSETS_TAB = "assets";
@@ -18,6 +18,7 @@ const AssetsPage: React.FC = () => {
 	const [, , sendRequest] = useHttp();
 	const [tableData, setTableData] = useState([]);
 	const loggedUser = getFromLocalStorage();
+	const isEmp = loggedUser.role === "employee";
 	const isHr = loggedUser.role === "hr";
 
 	function handleTabChange(key: string) {
@@ -34,8 +35,7 @@ const AssetsPage: React.FC = () => {
 	function getNewData() {
 		sendRequest(
 			{
-				url: `${API}/user/${loggedUser._id}`,
-				// url: `${API}/employee`, THIS IS HOW IT WAS BEFORE
+				endpoint: `${API}/user/${loggedUser._id}`,
 			},
 			(data) => {
 				setTableData(data);
@@ -57,11 +57,11 @@ const AssetsPage: React.FC = () => {
 
 			<Tabs
 				onChange={(key) => handleTabChange(key)}
-				activeKey={isHr ? activeTab : ASSETS_TAB}
+				activeKey={!isEmp ? activeTab : ASSETS_TAB}
 				size="large"
 				type="line"
 			>
-				{isHr && (
+				{!isEmp && (
 					<Tabs.TabPane tab={t("inventory")} key={INVENTARY_TAB}>
 						<AssetInventaryContextProvider>
 							<InventaryContent isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />

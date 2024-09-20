@@ -12,6 +12,7 @@ import { RecruitmentStage } from "../../Recruitments/columns/constants";
 import axios from "axios";
 import { useRecruitmentContext } from "../../Recruitments/context";
 import { ApplicantProps } from "../../../types/ApplicantProps";
+import Axios from "../../../helpers/axios";
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const Applicant_Api = import.meta.env.REACT_APP_RECRUITMENT_API;
 
@@ -84,7 +85,7 @@ const AddEmployeeForm = ({
         .then((postResponse: { data: any }) => {
           console.log("POST response:", postResponse.data);
 
-          return axios.patch(`${Applicant_Api}/${selectedEmployee?._id}`, {
+          return Axios.patch(`${Applicant_Api}/${selectedEmployee?._id}`, {
             stage: RecruitmentStage.Hired,
           });
         })
@@ -93,7 +94,7 @@ const AddEmployeeForm = ({
           setTableData((prev: ApplicantProps[]) =>
             prev.map((item) => {
               if (item._id === editingRecord._id) {
-                return editingRecord;
+                item.stage = RecruitmentStage.Hired;
               }
               return item;
             })

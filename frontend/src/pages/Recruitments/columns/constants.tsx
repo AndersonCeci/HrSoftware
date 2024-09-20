@@ -45,6 +45,7 @@ enum RecruitmentStage {
   SecondInterview = "2nd Interview",
   OfferMade = "Offer Made",
   Hired = "Hired",
+  Rejected = "Rejected",
 }
 export const customIcons: Record<number, React.ReactNode> = {
   1: <FrownOutlined />,
@@ -103,6 +104,11 @@ const menuItems = [
     label: RecruitmentStage.Hired,
     index: 4,
   },
+  {
+    key: RecruitmentStage.Rejected,
+    label: RecruitmentStage.Rejected,
+    index: 5,
+  },
 ];
 const referenceItems = [
   {
@@ -147,5 +153,5 @@ export {
   referenceItems,
   interviewTypes,
   positions,
-  findStepIndex
+  findStepIndex,
 };

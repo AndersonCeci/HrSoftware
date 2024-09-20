@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { EmployeeDataType } from "../types/Employee";
-import { initialValuesType } from "../types/InitialValuesType";
 
 const exporter = {
   getInitialFormValues,
@@ -38,6 +37,7 @@ function prepareInitialValues(selectedEmployee: EmployeeDataType) {
     ...selectedEmployee,
     birthDay: dayjs(selectedEmployee.birthDay),
     startingDate: dayjs(selectedEmployee.startingDate),
+    contract : [selectedEmployee.contract],
   };
 }
 
@@ -56,9 +56,7 @@ export function getDevRoles() {
   ];
 }
 
-export function getFormValues ( form: any )
-{
-  
+export function getFormValues(form: any) {
   const contract = form.getFieldValue("contract");
 
   return {
@@ -67,16 +65,14 @@ export function getFormValues ( form: any )
     email: form.getFieldValue("email").split("@")[0] + "@codevider.com",
     phoneNumber: form.getFieldValue("phoneNumber"),
     position: form.getFieldValue("position"),
-    salary: form.getFieldValue("salary"),
+    salary: parseInt(form.getFieldValue("salary")),
     status: form.getFieldValue("status"),
     profilePhoto: form.getFieldValue("profilePhoto"),
     teamLeaders: form.getFieldValue("teamLeaders") || [],
     startingDate: form.getFieldValue("startingDate"),
-    contract: contract[0] || " ",
+    contract: contract[0] || "",
     nID: form.getFieldValue("nID"),
     birthDay: form.getFieldValue("birthDay"),
-    // username: "ESHTE STRING",
-    // password: "codevider",
     gender: form.getFieldValue("gender"),
   };
 }

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { t } from "i18next";
 
-export function getMenuItemsByRole(element: any, subelement: any, isHr: boolean) {
+export function getMenuItemsByRole(element: any, subelement: any, isEmp: boolean) {
 	const pathObject = {
 		key: `${subelement.path}`,
 		label: <NavLink to={`${element.path}/${subelement.path}`}>{t(subelement.path)}</NavLink>,
@@ -10,19 +10,19 @@ export function getMenuItemsByRole(element: any, subelement: any, isHr: boolean)
 
 	const isPathHrOnly = subelement.isHrOnly;
 
-	if (!isPathHrOnly || (isPathHrOnly && isHr)) {
+	if (!isPathHrOnly || (isPathHrOnly && !isEmp)) {
 		return pathObject;
 	}
 }
 
-export function getMenuItemType(element: any, isHr: boolean) {
+export function getMenuItemType(element: any, isEmp: boolean) {
 	const subelements = element.children;
 
 	const subelementsForAll = subelements.filter((subelement: any) => {
 		return !subelement.isHrOnly;
 	});
 
-	const itemsToShow = isHr ? subelements : subelementsForAll;
+	const itemsToShow = !isEmp ? subelements : subelementsForAll;
 
     return itemsToShow.length === 1 ? "group" : "";
 }

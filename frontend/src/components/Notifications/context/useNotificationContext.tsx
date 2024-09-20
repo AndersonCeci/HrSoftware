@@ -35,7 +35,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   const markAsRead = (notificationId: string) => {
     fetchData(
       {
-        url: `${API}/${notificationId}/read`,
+        endpoint: `${API}/${notificationId}/read`,
         method: "PATCH",
       },
       () => {
@@ -53,11 +53,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   ).employID;
 
   const appendData = () => {
-    fetch(`${API}/?userId=${employID}`)
-      .then((res) => res.json())
-      .then((body) => {
-        setData(body);
-      });
+    fetchData(
+      {
+        endpoint: `${API}/?userId=${employID}`,
+      },
+      setData
+    );
   };
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import usePagination from "../../hooks/usePagination";
 import { useSalaryHook } from "./context/hook";
 import { Salary } from "../../types/SalaryProps";
 import { useTranslation } from "react-i18next";
+import { isHR } from "../../utils/utils";
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -19,7 +20,7 @@ const SalaryContent: React.FC = () => {
 
   const addBonusRef = useRef<Salary>(null);
   const editFormRef = useRef<Salary>(null);
-
+  const isHr = isHR();
   const startOfMonth = dayjs().startOf("month");
   const endOfMonth = dayjs().endOf("month");
 
@@ -39,6 +40,7 @@ const SalaryContent: React.FC = () => {
     setFilters,
     filters,
     createSalary,
+    updateSalary,
   } = useSalaryHook();
   const { page, limit, handlePageChange, handleLimitChange } = usePagination();
 
@@ -78,7 +80,7 @@ const SalaryContent: React.FC = () => {
 
   return (
     <div style={{ margin: 20 }}>
-      <TableHeader title={t("salaries")} onClick={handleModal} />
+      <TableHeader title={t("salaries")} onClick={handleModal} hideButton={!isHr} />
       <Row gutter={10} title="Filters">
         <Col>
           <Space direction="vertical" size={12}>
@@ -107,6 +109,11 @@ const SalaryContent: React.FC = () => {
             {t("resetFilters")}
           </Button>
         </Col>
+        <Col flex="auto" style={{ textAlign: "left" }}>
+          <Button type="primary" onClick={handleResetFilters}>
+            {"Compensate All"}
+          </Button>
+        </Col>
       </Row>
       <Table
         data={tableData}
@@ -114,6 +121,7 @@ const SalaryContent: React.FC = () => {
           handleAddBonus,
           handleModal,
           tableData,
+          updateSalary,
         })}
         fixed
         pagination={{

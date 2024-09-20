@@ -1,17 +1,17 @@
 import DismissedTable from "./Dismissed/components/DismissedTable";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { isHR } from "../utils/utils";
+import { isEmployee } from "../utils/utils";
 
 const DismissedPage: React.FC = () => {
 	const navigate = useNavigate();
-	const isHr = isHR();
+	const isEmp = isEmployee();
 
 	useEffect(() => {
-		if (!isHr) {
+		if (isEmp) {
 			navigate("/error");
 		}
-	}, [isHr]);
+	}, [isEmp]);
 	return (
 		<div>
 			<DismissedTable />

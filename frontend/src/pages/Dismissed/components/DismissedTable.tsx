@@ -22,7 +22,7 @@ const DismissedPage: React.FC = () => {
   const fetchData = (page: number, pageSize: number) => {
     sendRequest(
       {
-        url: `http://localhost:3000/left?page=${page}&limit=${pageSize}`,
+        endpoint: `left?page=${page}&limit=${pageSize}`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -35,7 +35,7 @@ const DismissedPage: React.FC = () => {
           pageSize: response.limit,
           total: response.total,
         }));
-      },
+      }
     );
   };
 
