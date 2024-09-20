@@ -31,7 +31,7 @@ export const useRecruitment = () => {
       const response = await Axios.get(API, {
         params: { page, limit, filters },
       });
-      const { data, meta } = response;
+      const { data, meta } = response.data;
       setTableData(data);
       return meta.itemCount;
     } catch (error) {
@@ -187,7 +187,7 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      // handleUpload(file);
+      handleUpload(file);
     } else {
       message.error("No file chose");
     }

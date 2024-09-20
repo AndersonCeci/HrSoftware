@@ -29,6 +29,8 @@ import { SchedulerModule } from './schedule/scheduler.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -71,6 +73,7 @@ import { AuthenticationGuard } from './guards/authentication.guard';
       useClass: AuthenticationGuard,
     },
     AppService,
+    JwtService,
     UploadService,
   ],
 })

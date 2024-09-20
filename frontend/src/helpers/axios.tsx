@@ -1,10 +1,9 @@
 import axios from "axios";
-import { getFromLocalStorage } from "../utils/utils";
-
-const API_URL = import.meta.env.MAIN_API;
+import { getAuthToken } from "../utils/utils";
+const API_URL = import.meta.env.REACT_APP_MAIN;
 
 const Axios = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,7 +11,7 @@ const Axios = axios.create({
 
 Axios.interceptors.request.use(
   (config) => {
-    const token = getFromLocalStorage().token;
+    const token = getAuthToken();
     if (token) {
       console.log(token);
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -24,7 +23,7 @@ Axios.interceptors.request.use(
 
 Axios.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error) => {
     const errorMessage =

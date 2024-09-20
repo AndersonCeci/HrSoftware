@@ -9,7 +9,6 @@ import { AddEmployeeFormProps } from "../types/EmployeeFormTypes";
 import { EmployeeDataType } from "../types/Employee";
 import "../styles/steps.css";
 import { RecruitmentStage } from "../../Recruitments/columns/constants";
-import axios from "axios";
 import { useRecruitmentContext } from "../../Recruitments/context";
 import { ApplicantProps } from "../../../types/ApplicantProps";
 import Axios from "../../../helpers/axios";
@@ -80,8 +79,7 @@ const AddEmployeeForm = ({
       setCurrent((prev) => prev + 1);
       form.submit();
 
-      axios
-        .post(`${API}`, submitData)
+      Axios.post(`${API}`, submitData)
         .then((postResponse: { data: any }) => {
           console.log("POST response:", postResponse.data);
 

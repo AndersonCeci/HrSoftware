@@ -26,7 +26,7 @@ export class UsersController {
   }
 
   @Get('one')
-  async getOneUser(@Param('userId') userId:string) {
+  async getOneUser(@Param('userId') userId: string) {
     return await this.userService.findOne(userId);
   }
 
@@ -40,7 +40,6 @@ export class UsersController {
     return await this.userService.getUserByEmail(email);
   }
 
-  @UseGuards(AuthGuard)
   @Put('change-password')
   async updatePassword(
     @Req() req: any,

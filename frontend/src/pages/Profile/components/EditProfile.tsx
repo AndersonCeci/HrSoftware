@@ -15,7 +15,6 @@ const EditProfile = ({
   handleCancel,
   currentData,
   setIsModal,
-  setTablaData,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;

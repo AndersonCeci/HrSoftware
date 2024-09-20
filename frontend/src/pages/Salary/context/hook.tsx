@@ -50,15 +50,13 @@ export const useSalaryHook = () => {
   ) => {
     setLoading(true);
     try {
-      console.log(API);
       const response = await Axios.get(API, {
         params: { page, limit, ...filters },
       });
-      console.log(response.data);
-      setTableData(response.data);
-      setItemCount(response.meta.itemCount);
+      const { data, meta } = response.data;
+      setTableData(data);
+      setItemCount(meta.itemCount);
     } catch (error) {
-      console.error("No data found", error);
       message.error("Failed to fetch salaries.");
     } finally {
       setLoading(false);
