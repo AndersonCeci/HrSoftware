@@ -15,11 +15,10 @@ const LoginPage: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
-  const API = import.meta.env.REACT_APP_MAIN;
 
   async function handleAuth(email: string) {
     try {
-      const res = await Axios.get(`${API}/auth/check-refresh-token`, {
+      const res = await Axios.get(`/auth/check-refresh-token`, {
         params: {
           email: email,
         },
