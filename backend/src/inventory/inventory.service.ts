@@ -24,6 +24,8 @@ export class InventoryService {
   async createInventory(
     createInventoryDto: CreateInventoryDto,
   ): Promise<Inventory[]> {
+ 
+
     const foundAsset = await this.assetsService.findName(
       createInventoryDto.assetName,
     );
@@ -49,13 +51,7 @@ export class InventoryService {
       deleteDate,
     }));
 
-    // const createdInventories =
-    //   await this.inventoryModel.create(inventoryEntries);
     return await this.inventoryModel.create(inventoryEntries);
-    // return this.inventoryModel
-    //   .find({ _id: { $in: createdInventories.map((item) => item._id) } })
-    //   .populate('assetID')
-    //   .exec();
   }
   async findAssetByEmployeeName(employeeDetails: string): Promise<Inventory[]> {
     return this.inventoryModel.find({ employeeDetails: employeeDetails });
@@ -77,7 +73,7 @@ export class InventoryService {
     assignDate: string,
     status: InventoryStatus,
   ): Promise<Inventory> {
-    const foundEmployee = await this.employeeModel.findById( employeeDetails );
+    const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
     if (!foundEmployee) {
       throw new NotFoundException(

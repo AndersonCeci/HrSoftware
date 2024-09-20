@@ -8,10 +8,15 @@ import {
   IsDateString,
   IsArray,
   IsOptional,
+  IsDate,
+  isNumber,
+  IsNumber,
+  IsBoolean,
 } from 'class-validator';
 import { Role } from 'src/users/schemas/user.schema';
 import { EmploymentStatus, Position } from '../schema/employe.schema';
 import { Types } from 'mongoose';
+import { Type } from 'class-transformer';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -37,9 +42,15 @@ export class CreateEmployeeDto {
   @IsEnum(EmploymentStatus)
   status: EmploymentStatus;
 
+  @Type(() => Date)
+  @IsDate()
   startingDate?: Date;
 
+  @IsString()
   phoneNumber: string;
+
+  @IsNumber()
+  salary: number;
 
   @IsOptional()
   @IsString()
@@ -63,5 +74,7 @@ export class CreateEmployeeDto {
   @IsString()
   contract?: string;
 
+  @IsOptional()
+  @IsBoolean()
   isDeleted: boolean;
 }

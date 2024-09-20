@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { RcFile } from "antd/lib/upload/interface";
 import { UploadOutlined } from "@ant-design/icons";
 import useHttp from "../../../hooks/useHttp";
+import { getAuthToken } from "../../../utils/utils";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const main_api = import.meta.env.REACT_APP_MAIN;
@@ -60,6 +61,9 @@ const EditProfile = ({
     try {
       const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: formData,
       });
       const uploadData = await uploadResponse.json();

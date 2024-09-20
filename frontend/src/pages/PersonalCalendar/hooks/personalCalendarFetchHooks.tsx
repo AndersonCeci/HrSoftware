@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { getAuthToken } from "../../../utils/utils";
 const main_api = import.meta.env.REACT_APP_MAIN;
 
 export enum Status {
@@ -19,15 +20,15 @@ export interface NewEvent {
   location: string;
   invitee?: string[];
 }
-interface User {
-  _id: string;
-  username: string;
-}
+
 const fetchEventsByCriteria = async (endpoint: string, userId: string) => {
   try {
     const response = await fetch(`${main_api}/events/${endpoint}/${userId}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
     });
     const data = await response.json();
     if (!response.ok) {
@@ -80,7 +81,11 @@ const useEvents = () => {
       ).employID;
       const response = await fetch(`${main_api}/events`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: JSON.stringify({
           ...newEvent,
           startDate: newEvent.startDate?.format("YYYY-MM-DD"),
@@ -107,7 +112,11 @@ const useEvents = () => {
     try {
       const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
       });
       const data = await response.json();
       if (!response.ok) {
@@ -123,7 +132,11 @@ const useEvents = () => {
     try {
       const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: JSON.stringify({ status: Status.Cancelled }),
       });
       const data = await response.json();
@@ -143,7 +156,10 @@ const useEvents = () => {
     try {
       const response = await fetch(`${main_api}/events/${eventId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: JSON.stringify(updatedEvent),
       });
       const data = await response.json();

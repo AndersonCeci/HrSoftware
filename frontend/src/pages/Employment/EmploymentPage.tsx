@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import FormInputs from "../../components/Shared/InputTypes/FormInputs";
 import { Form } from "antd";
 import { useNavigate } from "react-router-dom";
-import { isEmployee, isCEO } from "../../utils/utils";
+import { isEmployee, isCEO, getFromLocalStorage } from "../../utils/utils";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 const API_DELETE_EMPLOYEE = import.meta.env.REACT_APP_DELETE_EMPLOYEE_API;
@@ -44,6 +44,7 @@ const EmploymentPage: React.FC = () => {
   }, [isEmp]);
 
   useEffect(() => {
+    console.log("tetetettete", getFromLocalStorage());
     sendRequest(
       {
         endpoint: API,

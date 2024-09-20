@@ -53,11 +53,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   ).employID;
 
   const appendData = () => {
-    fetch(`${API}/?userId=${employID}`)
-      .then((res) => res.json())
-      .then((body) => {
-        setData(body);
-      });
+    fetchData(
+      {
+        endpoint: `${API}/?userId=${employID}`,
+      },
+      setData
+    );
   };
 
   useEffect(() => {

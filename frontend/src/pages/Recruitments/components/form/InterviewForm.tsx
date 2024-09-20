@@ -6,20 +6,19 @@ import {
   RecruitmentStage,
 } from "../../columns/constants";
 import { EmployeeDetails } from "../../../../types/EmployeeDetailsProps";
-import {
-  fetchEmployee,
-  fetchEmployeeByID,
-} from "../../../../helpers/employee.helper";
+
 import { useState, useCallback, useEffect } from "react";
 import tagRender from "../tagRenderer";
 import { debounce } from "../../../../helpers/debounce.helper";
 import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
 import { getFromLocalStorage } from "../../../../utils/utils";
+import { useEmployeeAPI } from "../../../../helpers/employee.helper";
 
 const InterviewForm: React.FC<{
   step: string;
   onInterviewersChange: (interviewers: string[]) => void;
 }> = ({ step, onInterviewersChange }) => {
+  const { fetchEmployee, fetchEmployeeByID } = useEmployeeAPI();
   const { editingRecord } = useRecruitmentContext();
   const stage =
     step === RecruitmentStage.FirstInterview

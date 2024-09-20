@@ -19,7 +19,7 @@ import { SchedulerProps } from "../types/ScheduleProps";
 import { fieldsData, onDragStart, applyCategoryColor } from "../utils/util";
 
 registerLicense(
-  "Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVJ+WmFZfVpgcl9DYlZRQWYuP1ZhSXxXdkxiWH9YdXZVQ2lZWEY="
+  "Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCd0x0Qnxbf1x0ZFBMYFpbRHRPMyBoS35RckVqW39edXRTRmJeU0Ry"
 );
 
 const Scheduler = ({

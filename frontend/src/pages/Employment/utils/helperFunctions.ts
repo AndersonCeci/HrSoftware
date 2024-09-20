@@ -56,9 +56,7 @@ export function getDevRoles() {
   ];
 }
 
-export function getFormValues ( form: any )
-{
-  
+export function getFormValues(form: any) {
   const contract = form.getFieldValue("contract");
 
   return {
@@ -67,7 +65,7 @@ export function getFormValues ( form: any )
     email: form.getFieldValue("email").split("@")[0] + "@codevider.com",
     phoneNumber: form.getFieldValue("phoneNumber"),
     position: form.getFieldValue("position"),
-    salary: form.getFieldValue("salary"),
+    salary: parseInt(form.getFieldValue("salary")),
     status: form.getFieldValue("status"),
     profilePhoto: form.getFieldValue("profilePhoto"),
     teamLeaders: form.getFieldValue("teamLeaders") || [],

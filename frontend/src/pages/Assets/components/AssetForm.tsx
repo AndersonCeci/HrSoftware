@@ -15,7 +15,7 @@ import { getFullName } from "../../../utils/utils";
 import { t } from "i18next";
 
 const EMPLOYEE = import.meta.env.REACT_APP_EMPLOYEE_API;
-const SEARCH_API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API;
+const SEARCH_API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API2;
 
 const AssetForm = forwardRef(({ onAdd }: AssetFormProps, ref) => {
   const formRef = useRef<any>();
