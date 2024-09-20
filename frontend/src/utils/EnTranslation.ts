@@ -62,7 +62,7 @@ export const EnTranslation = {
   recruitment: "Recruitment",
   recruitmentTitle: "Recruitment",
   remoteEmployees: "Remote Employees",
-  remove: "Remove",
+  remove: "Dismiss",
   resetFilters: "Reset Filters",
   requestedLeave: "Requested Leave",
   salariesTitle: "Salaries",
@@ -101,7 +101,6 @@ export const EnTranslation = {
   finish: "Finish",
   sucessSubmit: "Your form has been submitted",
   noContrat: "No Contract Uploaded",
-  yesContrat: "View Contract",
   inventory: "Inventory",
   inventaryPage: "Inventary Page",
   assetPage: "Asset Page",
@@ -173,4 +172,5 @@ export const EnTranslation = {
   reason: "Reason",
   get: "Get",
   you: "You",
+  yesContract: "View Contract",
 };

@@ -61,7 +61,7 @@ export const SqTranslation = {
 	recruitment: "Rekrutimet",
 	recruitmentTitle: "Rekrutimet",
 	remoteEmployees: "Punonjës Remote",
-	remove: "Hiq",
+	remove: "Largo",
 	resetFilters: "Rivendosni Filtrat",
 	requestedLeave: "Kërkesa Për Leje",
 	salary: "Paga",
