@@ -56,9 +56,9 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
       <Flex className="welcome-grid" justify="space-around" gap={20}>
         <div>
           <Flex justify="space-between">
-            {initialData.map((data) => {
+            {initialData.map((data, index) => {
               return (
-                <Col className="hr-buttons">
+                <Col key={index} className="hr-buttons">
                   <NavLink to={data.path}>
                     <Button
                       className="active-dashboard"

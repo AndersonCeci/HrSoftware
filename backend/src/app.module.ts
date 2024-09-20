@@ -25,9 +25,10 @@ import { GmailApiModule } from './modules/gmail-api/gmail-api.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { NotificationsGatewayModule } from './notificationsGateway/notificationgateAway.module';
 import { NotificationsModule } from './notificationsGateway/notification.module';
-
 import { SchedulerModule } from './schedule/scheduler.module';
-import { FileModule } from './upload/file.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthorizationGuard } from './guards/authorization.guard';
+import { AuthenticationGuard } from './guards/authentication.guard';
 
 @Module({
   imports: [
@@ -60,7 +61,18 @@ import { FileModule } from './upload/file.module';
     SchedulerModule,
   ],
   controllers: [],
-  providers: [AppService, UploadService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthorizationGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
+    },
+    AppService,
+    UploadService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

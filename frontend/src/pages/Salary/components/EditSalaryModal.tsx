@@ -14,13 +14,14 @@ import {
 } from "antd";
 import { ModalContext, SalaryContext } from "../context";
 import moment from "moment";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import { Bonus } from "../../../types/BonusProps";
 import { Payroll } from "../../../types/Payroll";
-import { fetchEmployee } from "../../../helpers/employee.helper";
 import { debounce } from "../../../helpers/debounce.helper";
 import Title from "../../../components/Shared/Title";
+import { useEmployeeAPI } from "../../../helpers/employee.helper";
+import Axios from "../../../helpers/axios";
 
 const SALARY_API = import.meta.env.REACT_APP_SALARY;
 const { Option } = Select;
@@ -36,7 +37,7 @@ const getPayroll = async (
   workDays: number
 ): Promise<Payroll | null> => {
   try {
-    const res = await axios.get(`${SALARY_API}/net-salary`, {
+    const res = await Axios.get(`${SALARY_API}/net-salary`, {
       params: { grossSalary, workDays },
     });
     console.log(res.data);
@@ -60,6 +61,7 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
     EmployeeDataType[] | null
   >(null);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const { fetchEmployee } = useEmployeeAPI();
 
   const { selectedSalary } = useContext(SalaryContext)!;
   const { isEditModalOpen, setIsEditModalOpen } = useContext(ModalContext)!;
@@ -72,9 +74,9 @@ const EditSalaryModal: React.FC<EditSalaryProps> = ({
     debounce(async (value: string) => {
       setLoading(true);
       const [name, surname] = value.split(" ");
-      const data = await fetchEmployee(name, surname);
-      if (data) {
-        setEmployeeDet(data);
+      const response = await fetchEmployee(name, surname);
+      if (response) {
+        setEmployeeDet(response);
       }
       setLoading(false);
     }, 300),

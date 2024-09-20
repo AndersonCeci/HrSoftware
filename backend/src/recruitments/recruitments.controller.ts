@@ -11,6 +11,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import mongoose, { Types } from 'mongoose';
@@ -47,6 +48,7 @@ export class RecruitmentsController {
       );
     }
   }
+
   @Get()
   async getRecruitments(
     @Query('page') page: number = 1,

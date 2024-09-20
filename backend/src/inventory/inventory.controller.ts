@@ -14,7 +14,7 @@ import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import mongoose from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
-import { Inventory, InventoryStatus } from './schemas/Inventory.schema';
+import { Inventory } from './schemas/Inventory.schema';
 import { EmployeeService } from 'src/employee/employe.service';
 
 @Controller('inventory')
@@ -26,6 +26,7 @@ export class InventoryController {
 
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
+    console.log('hellom from tyhen othrer sid', createInventoryDto);
     return this.inventoryService.createInventory(createInventoryDto);
   }
 

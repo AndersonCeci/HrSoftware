@@ -1,4 +1,4 @@
-import { Form, Typography } from "antd";
+import { Form, message, Typography } from "antd";
 import Button from "../components/Shared/Button";
 import "../styles/LoginPage.css";
 import FormInputs from "../components/Shared/InputTypes/FormInputs";
@@ -8,11 +8,36 @@ import useHttp from "../hooks/useHttp";
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
 import { setToLocalStorage } from "../utils/utils";
+import { AxiosError } from "axios";
+import Axios from "../helpers/axios";
 
 const LoginPage: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
+  const API = import.meta.env.REACT_APP_MAIN;
+
+  async function handleAuth(email: string) {
+    try {
+      const res = await Axios.get(`${API}/auth/check-refresh-token`, {
+        params: {
+          email: email,
+        },
+      });
+
+      const { url, message: authMessage } = res.data;
+      console.log("URL", url);
+      message.info(authMessage);
+      return url;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      }
+      return null;
+    }
+  }
 
   function handleSubmit() {
     const dataToSubmit = {
@@ -21,16 +46,31 @@ const LoginPage: React.FC = () => {
     };
 
     sendRequest(
-      useHttp.postRequestHelper("login", form.getFieldsValue()),
-      (responseData: any) => {
+      useHttp.postRequestHelper("login", dataToSubmit),
+      async (responseData: any) => {
         const { accessToken, ...rest } = responseData;
-        console.log("responseData", responseData);
         const userData = {
           ...rest,
           token: accessToken,
         };
         setToLocalStorage("userData", userData);
         navigate("/dashboard");
+        // if (responseData.role !== Roles.HR) {
+        //   // const authUrl = await handleAuth(responseData.email);
+        //   // console.log("responseData", responseData);
+        //   // const userData = {
+        //   //   ...rest,
+        //   //   token: accessToken,
+        //   // };
+        //   // setToLocalStorage("userData", userData);
+        //   // if (authUrl) {
+        //   //   window.location.href = authUrl;
+        //   // } else {
+        //   //   navigate("/dashboard");
+        //   // }
+        // } else {
+
+        // }
       }
     );
   }

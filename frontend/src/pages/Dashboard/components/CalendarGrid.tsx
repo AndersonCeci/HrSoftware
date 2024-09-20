@@ -4,7 +4,7 @@ import { Calendar, Badge, theme, ConfigProvider } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { getFromLocalStorage } from "../../../utils/utils";
+import { getAuthToken, getFromLocalStorage } from "../../../utils/utils";
 // import "../../../styles/Dashboard/CalendarGrid.css";
 const main_api = import.meta.env.REACT_APP_MAIN;
 
@@ -26,7 +26,10 @@ const CalendarGrid: React.FC = () => {
     try {
       const response = await fetch(`${main_api}/events/${endpoint}/${userId}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
       });
       const data = await response.json();
       if (!response.ok) {

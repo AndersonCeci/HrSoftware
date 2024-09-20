@@ -5,6 +5,7 @@ import { RecruitmentsController } from './recruitments.controller';
 import { Recruitment, RecruitmentSchema } from './schemas/recruitment.schema';
 import { UploadModule } from 'src/upload/upload.module';
 import { EventsModule } from 'src/modules/events/events.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EventsModule } from 'src/modules/events/events.module';
     ]),
     UploadModule,
     EventsModule,
+    UsersModule,
   ],
   providers: [RecruitmentService],
   controllers: [RecruitmentsController],

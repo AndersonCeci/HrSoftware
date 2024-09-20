@@ -102,33 +102,3 @@ const RootLayout: React.FC = () => {
 };
 
 export default RootLayout;
-
-// useEffect(() => {
-// 	const verifyToken = async (token: string) => {
-// 	  try {
-// 		const response = await fetch('http://localhost:3000/verify', {
-// 		  method: 'GET',
-// 		  headers: {
-// 			'Authorization': `Bearer ${token}`,
-// 		  },
-// 		});
-
-// 		if (!response.ok) {
-// 		  throw new Error('Token is invalid or expired');
-// 		}
-
-// 		const data = await response.json();
-// 		return data;
-// 	  } catch (error) {
-// 		console.error(error);
-// 		navigate('/');
-// 	  }
-// 	};
-
-// 	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-// 	if (!userData.token) {
-// 	  navigate("/");
-// 	} else {
-// 	  verifyToken(userData.token);
-// 	}
-//   }, []);

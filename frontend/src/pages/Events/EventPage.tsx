@@ -64,6 +64,8 @@ const EventPage: React.FC = () => {
 
   function handleUserJoinEvent(eventId: string) {
     setIsSubmitting(true);
+    console.log("emp id", user.employID);
+    console.log("event", eventId);
     sendRequest(
       useHttp.patchRequestHelper(`${EVENT_API}/assign/${eventId}`, {
         joinEmployee: user.employID,
