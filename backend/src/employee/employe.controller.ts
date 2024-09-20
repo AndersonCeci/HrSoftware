@@ -19,6 +19,8 @@ import {
 import { EmployeeService } from './employe.service';
 import { CreateEmployeeDto } from './dto/CreateEmployee.dto';
 import mongoose from 'mongoose';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Controller('employees')
 export class EmployeeController {
@@ -26,7 +28,6 @@ export class EmployeeController {
   private readonly logger = new Logger(EmployeeController.name);
 
   @Post()
-  // @UsePipes(new ValidationPipe())
   create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeeService.create(createEmployeeDto);
   }

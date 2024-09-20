@@ -1,7 +1,8 @@
 import { message } from "antd";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import React, { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "../../../helpers/axios";
 
 interface PasswordContextProps {
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
@@ -29,18 +30,10 @@ export const PasswordProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const changePassword = async (oldPassword: string, newPassword: string) => {
     try {
-      await axios.put(
-        `${main_api}/users/change-password`,
-        {
-          oldPassword,
-          newPassword,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await Axios.put(`${main_api}/users/change-password`, {
+        oldPassword,
+        newPassword,
+      });
       message.success("Password changed successfully!");
     } catch (error) {
       if (error instanceof AxiosError) {

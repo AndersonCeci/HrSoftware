@@ -7,6 +7,7 @@ import { references, selectOption } from "../columns/constants";
 import dayjs from "dayjs";
 import useHttp from "../../../hooks/useHttp";
 import { ApplicantProps } from "../../../types/ApplicantProps";
+import { getAuthToken } from "../../../utils/utils";
 const main_api = import.meta.env.REACT_APP_MAIN;
 
 const options = selectOption.map((option) => ({
@@ -49,6 +50,9 @@ const TableModal = forwardRef(
       try {
         const uploadResponse = await fetch(`${main_api}/files/upload`, {
           method: "POST",
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
           body: formData,
         });
 

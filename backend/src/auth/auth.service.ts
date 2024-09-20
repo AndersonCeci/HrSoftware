@@ -39,8 +39,8 @@ export class AuthService {
     return this.signIn(user);
   }
 
-  async validateUser(input: AuthInput): Promise<SignInData | null> {
-    const user = await this.usersService.getUserByEmail(input.email);
+  async validateUser(input: any): Promise<SignInData | null> {
+    const user = await this.usersService.getUserByEmail(input.username);
     if (
       user &&
       (await this.usersService.validatePassword(user.password, input.password))
@@ -58,24 +58,36 @@ export class AuthService {
   }
 
   async signIn(user: SignInData): Promise<AuthResult> {
-    const tokenPayload = {
-      sub: user._id,
-      username: user.username,
-      role: user.role,
-      loginRole: user.loginRole,
-    };
+    console.log('Signing in user:', user);
+    try {
+      if (!user.role || !user.loginRole) {
+        throw new UnauthorizedException('User roles are not defined.');
+      }
 
-    const accessToken = await this.jwtService.sign(tokenPayload);
+      const tokenPayload = {
+        sub: user._id,
+        username: user.username,
+        role: user.role,
+        loginRole: user.loginRole,
+      };
 
-    return {
-      accessToken,
-      _id: user._id.toString(),
-      username: user.username,
-      role: user.role,
-      loginRole: user.loginRole,
-      employID: user.employID,
-      email: user.email,
-    };
+      const accessToken = this.jwtService.sign(tokenPayload, {});
+
+      return {
+        accessToken,
+        _id: user._id,
+        username: user.username,
+        role: user.role,
+        loginRole: user.loginRole,
+        employID: user.employID,
+        email: user.email,
+      };
+    } catch (error) {
+      console.error('Error during sign-in:', error);
+      throw new UnauthorizedException(
+        'Could not sign in. Please try again later.',
+      );
+    }
   }
 
   async verifyToken(token: string): Promise<SignInData | null> {

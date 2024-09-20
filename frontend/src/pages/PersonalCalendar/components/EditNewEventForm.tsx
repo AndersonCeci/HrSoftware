@@ -19,15 +19,10 @@ import { Dayjs } from "dayjs";
 import MapInput from "../../Events/components/Map/MapInput";
 import useMap from "../../Events/hook/useMap";
 import { EmployeeDataType } from "../../Employment/types/Employee";
+import { getFromLocalStorage } from "../../../utils/utils";
 
 const { TextArea } = Input;
 const { Title } = Typography;
-
-// interface User {
-//   _id: string;
-//   username: string;
-//   employID: string;
-// }
 
 interface NewEvent {
   title: string;
@@ -57,16 +52,17 @@ const EditNewEventForm = ({
   const map = useMap();
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    const userData = getFromLocalStorage();
     setLoggedInUserId(userData.employID || null);
 
-    const fetchAllUsers = async () => {
+    const fetchAllEmployees = async () => {
       try {
-        const response = await fetch(`${main_api}/employees`);
-        // if (!response.ok) {
-        //   setError("Failed to fetch employees");
-        //   return;
-        // }
+        const response = await fetch(`${main_api}/employees`, {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        });
+
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -76,7 +72,7 @@ const EditNewEventForm = ({
       }
     };
 
-    fetchAllUsers();
+    fetchAllEmployees();
   }, []);
 
   const handleMenuClick = (e: any) => {

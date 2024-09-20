@@ -1,9 +1,9 @@
 import { Form, message, Modal, Select } from "antd";
 import { EmployeeDataType } from "../Employment/types/Employee";
-import axios from "axios";
 import React from "react";
+import Axios from "../../helpers/axios";
 
-const API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API;
+const API = import.meta.env.REACT_APP_EMPLOYEE_SEARCH_API2;
 const { Option } = Select;
 
 interface AddNodeProps {
@@ -29,7 +29,7 @@ const AddNode: React.FC<AddNodeProps> = ({ visible, onCancel }) => {
 
   const fetchEmployee = async (name: string, surname: string) => {
     try {
-      const res = await axios.get(API, {
+      const res = await Axios.get(API, {
         params: { name, surname },
       });
       return res.data;
@@ -40,13 +40,13 @@ const AddNode: React.FC<AddNodeProps> = ({ visible, onCancel }) => {
   };
 
   const options = [
-    { value: 'itdepartment', label: 'IT Department' },
-    { value: "hrdepartment", label: "HR Department"}
-  ]
+    { value: "itdepartment", label: "IT Department" },
+    { value: "hrdepartment", label: "HR Department" },
+  ];
 
   return (
     <>
-      <Modal open={visible} onCancel={onCancel} >
+      <Modal open={visible} onCancel={onCancel}>
         <Form layout="vertical">
           <Form.Item label="Employee:" name="employee" required>
             <Select
@@ -71,7 +71,7 @@ const AddNode: React.FC<AddNodeProps> = ({ visible, onCancel }) => {
             </Select>
           </Form.Item>
           <Form.Item label="Department:" name="department" required>
-            <Select placeholder="Choose a department" options={options}/>
+            <Select placeholder="Choose a department" options={options} />
           </Form.Item>
         </Form>
       </Modal>

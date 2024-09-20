@@ -73,8 +73,10 @@ export default function AssetInventaryContextProvider({
   }
 
   function addQuantityHandler(newAssets: string[], assetType: string) {
+    console.log(assetType, "assets Type");
+    console.log(newAssets, "CODES");
     fetchData(
-      useHttp.postRequestHelper(INVENTARY_API, {
+      useHttp.postRequestHelper("inventory", {
         assetName: assetType,
         assetCodes: newAssets,
       }),

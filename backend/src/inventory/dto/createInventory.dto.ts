@@ -10,6 +10,7 @@ import {
 import { InventoryStatus } from '../schemas/Inventory.schema';
 
 export class CreateInventoryDto {
+  @IsString()
   assetName: string;
 
   @IsArray()

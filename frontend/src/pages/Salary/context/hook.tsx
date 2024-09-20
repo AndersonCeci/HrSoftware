@@ -1,10 +1,11 @@
 import { useEffect, useContext, useState } from "react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Salary } from "../../../types/SalaryProps";
 import { ModalContext, SalaryContext, TableContext } from ".";
 import { Bonus } from "../../../types/BonusProps";
 import { message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+import Axios from "../../../helpers/axios";
 const API = import.meta.env.REACT_APP_SALARY;
 
 interface Filter {
@@ -49,12 +50,13 @@ export const useSalaryHook = () => {
   ) => {
     setLoading(true);
     try {
-      const response = await axios.get(API, {
+      console.log(API);
+      const response = await Axios.get(API, {
         params: { page, limit, ...filters },
       });
-      const { data, meta } = response.data;
-      setTableData(data);
-      setItemCount(meta.itemCount);
+      console.log(response.data);
+      setTableData(response.data);
+      setItemCount(response.meta.itemCount);
     } catch (error) {
       console.error("No data found", error);
       message.error("Failed to fetch salaries.");
@@ -78,7 +80,7 @@ export const useSalaryHook = () => {
       dateTaken: new Date(newSalary.dateTaken),
     };
     try {
-      const res = await axios.patch(`${API}/${salaryID}`, sentSalary);
+      const res = await Axios.patch(`${API}/${salaryID}`, sentSalary);
       setTableData((prevData) =>
         prevData.map((salary) =>
           salary._id === salaryID
@@ -179,7 +181,7 @@ export const useSalaryHook = () => {
         paid: false,
       };
       console.log("POST", salary);
-      await axios.post(API, salary);
+      await Axios.post(API, salary);
       message.success("Salary inserted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {

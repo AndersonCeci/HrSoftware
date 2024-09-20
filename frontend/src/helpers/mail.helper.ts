@@ -1,5 +1,5 @@
 import { message } from "antd";
-import axios from "axios";
+import Axios from "./axios";
 
 const API = import.meta.env.REACT_APP_MAIL_API;
 
@@ -18,7 +18,7 @@ interface EmailData {
 
 export const sendMailHelper = async (emailData: EmailData) => {
   try {
-    const res = await axios.post(API, emailData);
+    const res = await Axios.post(API, emailData);
     return res.data;
   } catch (error) {
     message.error("Failed to send mail");

@@ -4,6 +4,7 @@ import Button from "../Button";
 import { UploadOutlined } from "@ant-design/icons";
 
 import { useCallback, useState } from "react";
+import { getFromLocalStorage } from "../../../utils/utils";
 const main_api = import.meta.env.REACT_APP_MAIN;
 
 export default function Upload({
@@ -15,7 +16,7 @@ export default function Upload({
   required,
 }: any) {
   const [isUploading, setIsUploading] = useState(false);
-
+  const token = getFromLocalStorage().token;
   const handleUpload = useCallback(async (files: (RcFile | undefined)[]) => {
     setIsUploading(true);
     const formData = new FormData();
@@ -30,6 +31,9 @@ export default function Upload({
     try {
       const uploadResponse = await fetch(`${main_api}/files/upload`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
       const uploadData = await uploadResponse.json();
