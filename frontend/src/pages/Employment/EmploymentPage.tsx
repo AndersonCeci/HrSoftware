@@ -85,6 +85,7 @@ const EmploymentPage: React.FC = () => {
     setTableData((prev) => [...prev, newEmployee]);
   }
 
+
   function handleDeleteModalOk() {
     const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");
     sendRequest(

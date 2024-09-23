@@ -8,13 +8,12 @@ import EditProfile from "./components/EditProfile";
 import { FaRegUser } from "react-icons/fa";
 import { MdLocalPhone, MdOutlineBadge, MdOutlineEmail } from "react-icons/md";
 import { RiMoneyEuroCircleLine } from "react-icons/ri";
-import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
+import { CalendarOutlined } from "@ant-design/icons";
 import useHttp from "../../hooks/useHttp";
 import { EmployeeDataType } from "../Employment/types/Employee";
 import SettingsPage from "../Settings/SettingsPage";
 import Loader from "../../components/Shared/Loader";
 import { useTranslation } from "react-i18next";
-import Title from "antd/es/typography/Title";
 
 const API = import.meta.env.REACT_APP_EMPLOYEE_API;
 
@@ -49,10 +48,6 @@ const ProfilePage: React.FC = () => {
 		setIsModalVisible(true);
 	};
 
-	const handleImageUpload = (image: string) => {
-		setAvatarUrl(image);
-	};
-
 	const handleOk = () => {
 		setIsModalVisible(false);
 	};
@@ -64,6 +59,9 @@ const ProfilePage: React.FC = () => {
 	if (isLoading) {
 		return <Loader />;
 	}
+	const handleImageUpload = (url: string) => {
+		setAvatarUrl(url);
+	};
 
 	const initialData: Data[] = [
 		{
