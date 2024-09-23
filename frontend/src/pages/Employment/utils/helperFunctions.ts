@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { EmployeeDataType } from "../types/Employee";
-import { initialValuesType } from "../types/InitialValuesType";
 
 const exporter = {
   getInitialFormValues,
@@ -38,6 +37,7 @@ function prepareInitialValues(selectedEmployee: EmployeeDataType) {
     ...selectedEmployee,
     birthDay: dayjs(selectedEmployee.birthDay),
     startingDate: dayjs(selectedEmployee.startingDate),
+    contract : [selectedEmployee.contract],
   };
 }
 
@@ -70,7 +70,7 @@ export function getFormValues(form: any) {
     profilePhoto: form.getFieldValue("profilePhoto"),
     teamLeaders: form.getFieldValue("teamLeaders") || [],
     startingDate: form.getFieldValue("startingDate"),
-    contract: contract[0] || " ",
+    contract: contract[0] || "",
     nID: form.getFieldValue("nID"),
     birthDay: form.getFieldValue("birthDay"),
     gender: form.getFieldValue("gender"),
