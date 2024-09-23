@@ -10,13 +10,14 @@ import TaskGrid from "./TaskGrid";
 import QouteCard from "./QouteCard";
 import CalendarGrid from "./CalendarGrid";
 import HrLineGraph from "./HrLineGraph";
-import { LeftDataType } from "../../Dismissed/types/Left";
+import { LeftDataType, RemainingDays } from "../../Dismissed/types/Left";
 import { useEffect, useState } from "react";
 import useHttp from "../../../hooks/useHttp";
 import { EmployeeDataType } from "../../Employment/types/Employee";
 import Loader from "../../../components/Shared/Loader";
 import EmployeeLineGraph from "./EmployeeLineGraph";
 import { EvenType } from "../../Events/types/EventTypes";
+import { getFromLocalStorage } from "../../../utils/utils";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -85,6 +86,10 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
       days: "",
     },
   ];
+  const RemainingDays = import.meta.env.REACT_APP_REMAINING_DAYS_OFF;
+
+  const [remainingDays, setRemainingDays] = useState<RemainingDays>();
+  const { employID } = getFromLocalStorage("userData");
 
   useEffect(() => {
     sendRequest(
@@ -111,6 +116,19 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
     );
   }, []);
 
+  useEffect(() => {
+    sendRequest(
+      {
+        endpoint: `${RemainingDays}/${employID}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+
+      setRemainingDays
+    );
+  }, []);
+
 //   useEffect(() => {
 //     sendRequest(
 //       {
@@ -130,15 +148,19 @@ export const WelcomeGrid: React.FC<WelcomeGridProps> = ({ initialData }) => {
   }
 
   if (error) {
-    return <div>Something went wrong!!</div>;
+    return <div>Something went wrong!!</div>
+
   }
+ 
+
+  const onDays = remainingDays?.remainingDays;
 
   const data = {
     labels: ["Off", "On"],
     datasets: [
       {
         label: "Days",
-        data: [10, 15],
+        data: [25 - onDays, onDays],
         backgroundColor: ["#FFBC42", "#73D2DE"],
       },
     ],

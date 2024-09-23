@@ -7,6 +7,7 @@ import {
   Delete,
   HttpException,
   Patch,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { DayoffService } from './dayoff.service';
 import { CreateDayOffDto } from './dto/CreateDayOff.dto';
@@ -31,6 +32,18 @@ export class DayoffController {
   @Get('/:employeeId')
   findAll(@Param('employeeId') employeeId: string): Promise<DayOff[]> {
     return this.dayoffService.findAll(employeeId);
+  }
+
+  @Get('remainingDays/:employeeId')
+  async getRemainingDays(@Param('employeeId') employeeId: string) {
+
+    if (!employeeId) {
+      throw new UnauthorizedException('Employee not found');
+    }
+      const remainingDays =
+        await this.dayoffService.getRemainingDays(employeeId);
+      return { employeeId, remainingDays };
+  
   }
 
   @Delete(':id/soft-delete')

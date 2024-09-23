@@ -1,4 +1,4 @@
-import { TimePicker as ToiletPaper, Form } from "antd";
+import { TimePicker as TP, Form } from "antd";
 import { t } from "i18next";
 
 type TimePickerProps = {
@@ -46,7 +46,7 @@ const TimePicker = ({ label, name, required, dependsOn, format = "h:mm" }: TimeP
 			rules={rulesList}
 			validateDebounce={1000}
 		>
-			<ToiletPaper style={{ width: "100%" }} size="large" format={format} minuteStep={5} />
+			<TP style={{ width: "100%" }} size="large" format={format} minuteStep={5} />
 		</Form.Item>
 	);
 };
