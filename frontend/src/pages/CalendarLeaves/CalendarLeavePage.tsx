@@ -27,7 +27,7 @@ const CalendarLeavePage: React.FC = () => {
 
   return (
     <section className="scheduler-container">
-      <Scheduler dataSource={dataSource} allowDragAndDrop allowResizing />
+      <Scheduler dataSource={dataSource}  />
     </section>
   );
 };
