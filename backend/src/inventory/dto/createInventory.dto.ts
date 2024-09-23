@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsNotEmpty,
   IsEnum,
   IsBoolean,
   IsOptional,
@@ -21,11 +20,6 @@ export class CreateInventoryDto {
   @IsEnum(InventoryStatus)
   @IsOptional()
   status?: InventoryStatus;
-
-  //employeeName:string
-
-  //  @IsOptional()
-  //  quantity?: number;
 
   @IsBoolean()
   @IsOptional()

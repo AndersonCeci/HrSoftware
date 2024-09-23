@@ -41,12 +41,6 @@ export class InventoryController {
     return this.inventoryService.delete(id);
   }
 
-  // @Delete(':id')
-  // async deleteByName(@Param('id') id: string) {
-  //   const result = await this.inventoryService.softDeleteAssetById(id);
-  //   return result;
-  // }
-
   @Patch('assign/:id')
   async assignToEmployee(
     @Param('id') id: string,

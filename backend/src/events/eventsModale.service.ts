@@ -3,10 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateEventDto } from './dto/createEvent.dto';
 import { Event } from './schema/events.schema';
-import { NotificationsGateway } from 'src/notificationsGateway/notifications.gateway';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';
-import { Employee } from 'src/employee/schema/employe.schema';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 
 @Injectable()
@@ -122,17 +120,6 @@ export class EventsService {
           __v: 1,
         },
       },
-      // {
-
-      //   $sort: { eventDate: 1 },
-      // },
-      // {
-
-      //   $skip: 0,
-      // },
-      // {
-      //   $limit: 1,
-      // },
     ]);
 
     return events[0];
@@ -165,25 +152,6 @@ export class EventsService {
       )
       .exec();
   }
-
-  // async getEvent(query: Query): Promise<Event[]> {
-  //   const resPerPage = 10;
-  //   const currentPage = Number(query.page) || 1;
-  //   const skip = resPerPage * (currentPage - 1);
-  //   const currentDate = new Date();
-  //   currentDate.setHours(0, 0, 0, 0);
-
-  //   const events = await this.eventModel
-  //     .find({
-  //       eventDate: { $gte: currentDate },
-  //       isDeleted: false,
-  //     })
-  //     .limit(resPerPage)
-  //     .skip(skip)
-  //     .exec();
-
-  //   return events;
-  // }
 
   async findAll(): Promise<Event[]> {
     const currentDate = new Date();
@@ -265,12 +233,6 @@ export class EventsService {
           __v: 1,
         },
       },
-      // {
-      //   $sort: { eventDate: 1 },
-      // },
-
-      // { $skip: 10 },
-      // { $limit: 10 },
     ]);
 
     return events;

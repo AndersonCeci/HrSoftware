@@ -22,7 +22,7 @@ export class AssetsService {
       isDeleted,
       deleteDate,
     }));
-    Logger.log('create');
+    
 
     return await this.assetModel.create(inventoryEntries);
   }
@@ -226,9 +226,3 @@ export class AssetsService {
       .exec();
   }
 }
-// {
-//   $skip: resPerPage * page,
-// },
-// {
-//   $limit: resPerPage,
-// },

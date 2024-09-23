@@ -1,13 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Inventory, InventoryStatus } from './schemas/Inventory.schema';
-import mongoose, { Model, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateInventoryDto } from './dto/createInventory.dto';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import { AssetsService } from 'src/assets/assets.service';
-
 import { Employee } from 'src/employee/schema/employe.schema';
-import { Asset } from 'src/assets/schemas/Asset.schema';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 import { NotificationsService } from 'src/notificationsGateway/notifications.service';

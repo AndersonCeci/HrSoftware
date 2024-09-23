@@ -23,11 +23,6 @@ export class EventsController {
     return this.eventsService.createEvent(createEventDto);
   }
 
-  //  @Get()
-  //  async getEvent(query:Query) {
-  //    return this.eventsService.getEvent(query);
-  //  }
-
   @Get()
   async getEvent() {
     return this.eventsService.findAll();
