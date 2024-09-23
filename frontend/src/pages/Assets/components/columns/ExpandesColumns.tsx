@@ -115,7 +115,7 @@ export function expandedColumns(
 															: () => handleUnassign(record)
 													}
 												>
-													{isAvailable ? (isCeo ? t('get') : t("assign")) : t("unassign")}
+													{isAvailable ? (isCeo ? t("get") : t("assign")) : t("unassign")}
 												</Button>
 											),
 									  }
