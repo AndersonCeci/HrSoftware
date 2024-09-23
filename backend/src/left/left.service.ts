@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { EmployeeService } from 'src/employee/employe.service';
 import { Employee } from 'src/employee/schema/employe.schema';
 import { Left } from './schema/left.schema';
