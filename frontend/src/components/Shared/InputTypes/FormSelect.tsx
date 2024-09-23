@@ -1,6 +1,7 @@
 import Select from "../Select";
 import { t } from "i18next";
 import { Form } from "antd";
+import FormItemLabel from "./FormItemLabel";
 
 type FormSelectProps = {
 	name: string;
@@ -27,7 +28,7 @@ const FormSelect = ({
 	return (
 		<Form.Item
 			name={name}
-			label={label}
+			label={<FormItemLabel>{label}</FormItemLabel>}
 			rules={[
 				{
 					required: required,

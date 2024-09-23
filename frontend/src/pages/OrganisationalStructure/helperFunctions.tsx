@@ -57,6 +57,7 @@ export const formatData = async (
       ?.filter((emp: HrAndCeo) => emp.role === "hr")
       ?.map((emp: HrAndCeo) => ({
         key: emp._id,
+        expanded: true,
         className: "card hr-card",
         data: {
           image: emp.profilePhoto || "default_hr_image_url",
@@ -73,6 +74,7 @@ export const formatData = async (
     {
       key: ceoNode?._id,
       className: "card ceo-card",
+      expanded: true,
       data: {
         image: ceoNode?.profilePhoto || "default_ceo_image_url",
         name: ceoNode?.name,
@@ -82,6 +84,7 @@ export const formatData = async (
         {
           key: "label",
           className: "label hr-department",
+          expanded: true,
           data: {
             name: "HR Department",
           },
@@ -90,11 +93,13 @@ export const formatData = async (
         {
           key: "label",
           className: "label it-department",
+          expanded: true,
           data: {
             name: "IT Department",
           },
           children: teamLeaders?.map((leader: TeamLeader) => ({
             key: leader._id,
+            expanded: true,
             className: "card prj-card",
             data: {
               image: leader.teamLeaderProfilePhoto,
@@ -102,6 +107,7 @@ export const formatData = async (
             },
             children: leader.employees?.map((emp: EmployData) => ({
               key: emp.id,
+              expanded: true,
               className: "card w-card",
               data: {
                 image: emp.profilePhoto || "default_employee_image_url",

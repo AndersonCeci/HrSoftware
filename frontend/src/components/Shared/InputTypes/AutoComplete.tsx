@@ -1,4 +1,5 @@
 import { AutoComplete as AC, Form } from "antd";
+import FormItemLabel from "./FormItemLabel";
 
 type AutoCompleteProps = {
 	name: string;
@@ -37,7 +38,7 @@ const AutoComplete = ({
 	return (
 		<Form.Item
 			name={name}
-			label={label}
+			label={<FormItemLabel>{label}</FormItemLabel>}
 			rules={rulesList}
 			validateDebounce={1000}
 			style={{ width: "100%" }}

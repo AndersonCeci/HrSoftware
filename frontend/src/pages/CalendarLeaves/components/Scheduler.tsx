@@ -18,9 +18,9 @@ import { useRef } from "react";
 import { SchedulerProps } from "../types/ScheduleProps";
 import { fieldsData, onDragStart, applyCategoryColor } from "../utils/util";
 
-registerLicense(
-	"Ngo9BigBOggjHTQxAR8/V1NCaF1cXGdCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXZccHVVQ2ddU0RxXUU=",
-);
+const KEY = import.meta.env.REACT_APP_SYNCHFUSION_KEY;
+
+registerLicense(KEY);
 
 const Scheduler = ({
 	dataSource,
