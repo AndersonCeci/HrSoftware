@@ -16,6 +16,7 @@ const EditProfile = ({
   currentData,
   setIsModal,
   setTablaData,
+  onImageUpload,
 }: {
   visible: boolean;
   handleOk: (values: EmployeeDataType) => void;
@@ -68,7 +69,7 @@ const EditProfile = ({
       });
       const uploadData = await uploadResponse.json();
       const fileUrls = uploadData.fileUrls;
-
+      onImageUpload(fileUrls[0]);
       form.setFieldsValue({ profilePhoto: fileUrls });
     } catch (error) {
       console.error("File upload error:", error);

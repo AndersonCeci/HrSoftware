@@ -81,7 +81,9 @@ const EmploymentPage: React.FC = () => {
     setTableData((prev) => [...prev, newEmployee]);
   }
 
-  function handleDeleteButtonClick(record: EmployeeDataType) {
+  function handleDeleteButtonClick ( record: EmployeeDataType )
+  {
+    console.log(record, "recordddd");
     setIsDeleting(true);
     setEditedData(record);
   }
