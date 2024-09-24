@@ -69,7 +69,7 @@ export class InventoryService {
     inventoryID: string,
     employeeDetails: string,
     assignDate: string,
-    status: InventoryStatus,
+    //status: InventoryStatus,
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
@@ -89,7 +89,7 @@ export class InventoryService {
       .findById(inventoryID)
       .populate('employeeDetails');
 
-    console.log(assignedInventory, 'inventoryy');
+  
 
     const createNotificationDto: CreateNotificationDto = {
       message: `You have been assigned an asset: ${assignedInventory.assetName}`,
@@ -153,9 +153,11 @@ export class InventoryService {
     return response as unknown as Inventory;
   }
 
-  async findAll(): Promise<Inventory[]> {
-    console.log('find all inventories');
-    return this.inventoryModel.find().exec();
+  async prove(inventoryID: string): Promise<Inventory> {
+    const ok = await this.unassignFromEmployee(inventoryID)
+    ok.status = InventoryStatus.OnRepair;
+
+    return ok
   }
 
   async delete(id: string): Promise<Inventory> {

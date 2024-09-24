@@ -193,7 +193,6 @@ export class DayoffService {
       )
       .exec();
 
-    console.log('Day off request approved:', dayOffRequest.employeeId);
 
     const createNotification: CreateNotificationDto = {
       message: `Your Day Off request has been approved`,

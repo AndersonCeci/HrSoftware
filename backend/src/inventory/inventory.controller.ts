@@ -26,14 +26,7 @@ export class InventoryController {
 
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
-    console.log('hellom from tyhen othrer sid', createInventoryDto);
     return this.inventoryService.createInventory(createInventoryDto);
-  }
-
-  @Get()
-  async findAll(): Promise<Inventory[]> {
-    console.log('findAll route triggered');
-    return this.inventoryService.findAll();
   }
 
   @Delete(':id')
@@ -58,7 +51,15 @@ export class InventoryController {
       id,
       assignEmployeeDto.employeeDetails,
       assignEmployeeDto.assignDate,
-      assignEmployeeDto.status,
+    );
+  }
+
+  @Patch('prove/assign/:id')
+  async prove(
+    @Param('id') id: string,
+  ) {
+    return this.inventoryService.prove(
+      id
     );
   }
 
