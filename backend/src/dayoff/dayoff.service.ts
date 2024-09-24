@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, Types, ObjectId } from 'mongoose';
 import { CreateDayOffDto } from './dto/CreateDayOff.dto';
 import { DayOff } from './schema/dayoff.schema';
 import { EmployeeService } from 'src/employee/employe.service';
@@ -214,5 +214,24 @@ export class DayoffService {
     return this.dayoffModel
       .findByIdAndUpdate(id, updateDayOffDto, { new: true })
       .exec();
+  }
+
+  async getRemainingDays(employeeId: string): Promise<number> {
+    const approvedDayOffs = await this.dayoffModel
+      .find({
+        employeeId: employeeId,
+        isApproved: true,
+      })
+      .exec();
+
+    const totalApprovedDays = approvedDayOffs.reduce((acc, dayOff) => {
+      return acc + dayOff.totalDays;
+    }, 0);
+
+    const totalAvailableDays = 25;
+
+    const remainingDays = totalAvailableDays - totalApprovedDays;
+
+    return remainingDays >= 0 ? remainingDays : 0;
   }
 }

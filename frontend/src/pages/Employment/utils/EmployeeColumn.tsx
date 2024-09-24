@@ -1,10 +1,9 @@
 import { createTableColumns, getAllUniqueValues } from "../../../components/Table/Table";
-import { DeleteOutlined, EditOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { EditOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import Button from "../../../components/Shared/Button";
 import { ButtonType } from "../../../enums/Button";
 import { TableProps, Dropdown, Tag, Typography } from "antd";
 import { EmployeeDataType } from "../types/Employee";
-import { capitalizeFirstLetter } from "../../../utils/utils";
 import { PiChartLineUpBold } from "react-icons/pi";
 import { TbUserCancel } from "react-icons/tb";
 import { t } from "i18next";
@@ -35,10 +34,9 @@ export function getColumns(
 			displayAs: (_, record) => {
 				const value = record.name + " " + record.surname;
 
-				return <span>{capitalizeFirstLetter(value)}</span>;
+				return <span>{value}</span>;
 			},
 		}),
-
 		createTableColumns({
 			title: "Email",
 			dataIndex: "email",

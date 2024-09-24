@@ -15,7 +15,7 @@ export enum Role {
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop()
+  @Prop({ type: Types.ObjectId, ref: 'Employee' })
   employID: Types.ObjectId;
 
   @Prop({ required: true, unique: true })

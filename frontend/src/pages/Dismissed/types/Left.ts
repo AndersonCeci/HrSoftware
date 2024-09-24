@@ -14,3 +14,8 @@ export type LeftDataType = {
   contract: string;
   deletedAt: string;
 };
+
+export type RemainingDays = {
+  employeeId: string,
+  remainingDays: number
+}

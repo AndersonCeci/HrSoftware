@@ -10,19 +10,19 @@ export default function Map({
 	onDblClick,
 	onClick,
 	isLoaded,
-	defaultCenter = { lat: -41.331672, lng: -19.8203257 },
+	defaultCenter = { lat: 41.331672, lng: 19.8203257 },
 	isUserLocation = false,
 }: MapProps) {
-	function getUserCurrentLocation(map: google.maps.Map) {
-		navigator.geolocation.getCurrentPosition((position) => {
-			const currentLocation = {
-				lat: position.coords.latitude,
-				lng: position.coords.longitude,
-			};
+	// function getUserCurrentLocation(map: google.maps.Map) {
+	// 	navigator.geolocation.getCurrentPosition((position) => {
+	// 		const currentLocation = {
+	// 			lat: position.coords.latitude,
+	// 			lng: position.coords.longitude,
+	// 		};
 
-			map.setCenter(currentLocation);
-		});
-	}
+	// 		map.setCenter(currentLocation);
+	// 	});
+	// }
 
 	if (!isLoaded) {
 		return (
@@ -48,11 +48,8 @@ export default function Map({
 				options={mapOptions}
 				onLoad={(map) => {
 					onLoad(map);
-					if (isUserLocation) {
-						getUserCurrentLocation(map);
-					} else {
-						map.setCenter(new google.maps.LatLng(defaultCenter.lat, defaultCenter.lng));
-					}
+					
+					map.setCenter(new google.maps.LatLng(defaultCenter.lat, defaultCenter.lng));
 				}}
 				onDblClick={onDblClick}
 				onClick={(event) => {
