@@ -10,64 +10,87 @@ import { useTranslation } from "react-i18next";
 import React from "react";
 import Filters from "./components/Filters";
 import { isCEO } from "../../utils/utils";
+import { GooglePlusOutlined } from "@ant-design/icons";
+import FetchApplicantsModal from "./components/FetchApplicantsModal";
 
 export const RecruitmentContent: React.FC = () => {
-	const { t } = useTranslation();
-	const isCeo = isCEO();
-	const { tableData, drawerState, setDrawerState, setEditingRecord, fetchApplicants, filters } =
-		useRecruitmentContext();
-	const { page, limit, handlePageChange, handleLimitChange, setItemCount, itemCount } =
-		usePagination();
+  const { t } = useTranslation();
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await fetchApplicants(page, limit, filters);
-			if (response) {
-				setItemCount(response);
-			}
-		};
-		fetchData();
-	}, [page, limit, filters]);
+  const isCeo = isCEO();
+  const {
+    tableData,
+    drawerState,
+    setDrawerState,
+    setEditingRecord,
+    fetchApplicants,
+    filters,
+    setIsModalVisible,
+  } = useRecruitmentContext();
+  const {
+    page,
+    limit,
+    handlePageChange,
+    handleLimitChange,
+    setItemCount,
+    itemCount,
+  } = usePagination();
 
-	const columns = generateColumns({
-		tableData,
-		setDrawerState,
-		setEditingRecord,
-	});
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchApplicants(page, limit, filters);
+      if (response) {
+        setItemCount(response);
+      }
+    };
+    fetchData();
+  }, [page, limit, filters]);
 
-	return (
-		<section className="test">
-			<Drawer
-				placement="right"
-				width={700}
-				isOpen={drawerState}
-				onClose={() => setDrawerState(false)}
-				closeIcon={null}
-			>
-				<Stepper />
-			</Drawer>
-			<TableHeader
-				title={t("recruitmentTitle")}
-				onClick={() => {
-					setEditingRecord(null);
-					setDrawerState(true);
-				}}
+  const columns = generateColumns({
+    tableData,
+    setDrawerState,
+    setEditingRecord,
+  });
+
+  return (
+    <section className="test">
+      <Drawer
+        placement="right"
+        width={700}
+        isOpen={drawerState}
+        onClose={() => setDrawerState(false)}
+        closeIcon={null}
+      >
+        <Stepper />
+      </Drawer>
+      <TableHeader
+        title={t("recruitmentTitle")}
+        onClick={() => {
+          setEditingRecord(null);
+          setDrawerState(true);
+        }}
         hideButton={isCeo}
-			/>
-			<Filters />
-			<Table
-				columns={columns}
-				data={tableData}
-				pagination={{
-					position: ["bottomRight"],
-					current: page,
-					pageSize: limit,
-					total: itemCount,
-					onChange: handlePageChange,
-					onShowSizeChange: handleLimitChange,
-				}}
-				fixed
-			/>
-		</section>
-	);
+        secondaryButton={{
+          text: "",
+          onClick: () => setIsModalVisible(true),
+          icon: <GooglePlusOutlined />,
+        }}
+      />
+      <FetchApplicantsModal />
+
+      <Filters />
+      <Table
+        columns={columns}
+        data={tableData}
+        pagination={{
+          position: ["bottomRight"],
+          current: page,
+          pageSize: limit,
+          total: itemCount,
+          onChange: handlePageChange,
+          onShowSizeChange: handleLimitChange,
+        }}
+        fixed
+      />
+    </section>
+  );
 };

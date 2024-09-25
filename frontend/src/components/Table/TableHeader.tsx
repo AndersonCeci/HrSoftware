@@ -4,18 +4,26 @@ import Button from "../Shared/Button";
 import { ButtonSize, ButtonType } from "../../enums/Button";
 import { useTranslation } from "react-i18next";
 
+type TableHeaderProps = {
+  title: string;
+  onClick?: () => void;
+  items?: any[];
+  hideButton?: boolean;
+  secondaryButton?: {
+    text: string;
+    onClick: () => void;
+    icon?: React.ReactNode;
+  };
+};
+
 const TableHeader = ({
   title,
   onClick,
-  items = [],
   hideButton,
-}: {
-  title: string;
-  onClick?: () => void | undefined;
-  items?: any[];
-  hideButton?: boolean;
-}) => {
+  secondaryButton,
+}: TableHeaderProps) => {
   const { t } = useTranslation();
+
   return (
     <Flex
       justify="space-between"
@@ -33,16 +41,32 @@ const TableHeader = ({
       >
         {title}
       </Typography.Title>
-      {!hideButton && (
-        <Button
-          icon={<PlusCircleOutlined />}
-          size={ButtonSize.LARGE}
-          type={ButtonType.PRIMARY}
-          onClick={onClick}
-        >
-          {t("AddNew")}
-        </Button>
-      )}
+      <Flex style={{ marginLeft: "auto" }}>
+        {!hideButton && (
+          <>
+            <Button
+              icon={<PlusCircleOutlined />}
+              size={ButtonSize.LARGE}
+              type={ButtonType.PRIMARY}
+              onClick={onClick}
+              // style={{ marginRight: "1rem" }}
+            >
+              {t("AddNew")}
+            </Button>
+            {secondaryButton && (
+              <Button
+                icon={secondaryButton.icon}
+                size={ButtonSize.LARGE}
+                type={ButtonType.PRIMARY}
+                onClick={secondaryButton.onClick}
+                style={{ marginLeft: "1rem", paddingInline: "2rem" }}
+              >
+                {secondaryButton.text}
+              </Button>
+            )}
+          </>
+        )}
+      </Flex>
     </Flex>
   );
 };

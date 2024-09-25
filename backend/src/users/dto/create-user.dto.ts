@@ -1,4 +1,10 @@
-import { IsString, IsEnum, IsNotEmpty, Matches } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNotEmpty,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 import { Role } from '../schemas/user.schema';
 import { ObjectId, Types } from 'mongoose';
 
@@ -26,4 +32,8 @@ export class CreateUserDto {
   isDeleted: boolean;
 
   deleteDate?: Date;
+
+  @IsOptional()
+  @IsString()
+  refreshToken?: string;
 }

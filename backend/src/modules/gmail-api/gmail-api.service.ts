@@ -1,14 +1,13 @@
 import { google } from 'googleapis';
 import { RecruitmentService } from 'src/recruitments/recruitments.service';
-import {
-  CreateRecruitmentDto,
-  RecruitmentWithFileDto,
-} from 'src/recruitments/dto/Recruitments.dto';
+import { CreateRecruitmentDto } from 'src/recruitments/dto/Recruitments.dto';
 import { RecruitmentStage } from 'src/recruitments/schemas/recruitment.schema';
 import { Injectable } from '@nestjs/common';
 import { UploadService } from 'src/upload/upload.service';
 import * as mime from 'mime-types';
 import * as path from 'path';
+import { Types } from 'mongoose';
+import { UpdateRecruitmentDto } from 'src/recruitments/dto/UpdateRecruitments.dto';
 
 @Injectable()
 export class GmailApiService {
@@ -21,17 +20,17 @@ export class GmailApiService {
   constructor(
     private recruitmentService: RecruitmentService,
     private uploadService: UploadService,
-  ) {
-    this.oauth2Client.setCredentials({
-      refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
-    });
-  }
+  ) {}
 
-  private async getGmailService() {
+  private async getGmailService(refresh_token: string) {
+    this.oauth2Client.setCredentials({
+      refresh_token: refresh_token,
+    });
     const { token } = await this.oauth2Client.getAccessToken();
+    console.log(refresh_token);
     this.oauth2Client.setCredentials({
       access_token: token,
-      refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+      refresh_token: refresh_token,
       scope: process.env.GOOGLE_CLIENT_SCOPE,
       token_type: 'Bearer',
     });
@@ -70,15 +69,16 @@ export class GmailApiService {
   }
 
   public async fetchAndSaveEmails(
-    subjectFilter: string | null = null,
+    subject: string | null = null,
     startDate: string | null = null,
-  ): Promise<RecruitmentWithFileDto[]> {
+    refresh_token: string,
+  ): Promise<UpdateRecruitmentDto[]> {
     try {
-      const gmail = await this.getGmailService();
+      const gmail = await this.getGmailService(refresh_token);
 
       let query = '';
-      if (subjectFilter) {
-        query += `subject:${subjectFilter} `;
+      if (subject) {
+        query += `subject:${subject} `;
       }
       if (startDate) {
         query += `after:${startDate}`;
@@ -87,12 +87,11 @@ export class GmailApiService {
       const response = await gmail.users.messages.list({
         userId: 'me',
         q: query.trim(),
-        maxResults: 50,
         labelIds: ['INBOX'],
       });
 
       const messages = response.data.messages || [];
-      const recruitments: RecruitmentWithFileDto[] = [];
+      const recruitments: UpdateRecruitmentDto[] = [];
 
       for (const message of messages) {
         const msg = await gmail.users.messages.get({
@@ -109,23 +108,27 @@ export class GmailApiService {
           fromHeader?.match(/(.*) <(.*)>/)?.slice(1, 3) || [];
         const [surname, firstName] = name?.split(' ').reverse() || [];
 
+        const submittedDate = new Date(
+          emailData.payload?.headers?.find((h) => h.name === 'Date')?.value ||
+            new Date(),
+        );
+
         const createRecruitmentDto: CreateRecruitmentDto = {
           name: firstName,
           surname: surname,
           email: email,
           position: 'Unknown',
           stage: RecruitmentStage.Applied,
-          submittedDate: new Date(
-            emailData.payload?.headers?.find((h) => h.name === 'Date')?.value ||
-              new Date(),
-          ),
+          submittedDate: submittedDate,
           cv: '',
           phoneNumber: null,
           isDeleted: false,
           deleteDate: null,
         };
 
-        let recruitmentWithFile = { ...createRecruitmentDto };
+        const recruitmentWithFile = {
+          ...createRecruitmentDto,
+        };
 
         const applicant =
           await this.recruitmentService.createRecruitment(createRecruitmentDto);
@@ -155,17 +158,31 @@ export class GmailApiService {
                   mime.lookup(fileExtension) || 'application/octet-stream',
                 );
 
-                // if ( file )
-                // {
-                //   const fileList = []
-                //   const fileUrl =
-                //     await this.uploadService.uploadFiles(fileList);
-                //   recruitmentWithFile.cv = fileUrl;
-                //   await this.recruitmentService.updateRecruitment(
-                //     applicant._id as string,
-                //     recruitmentWithFile,
-                //   );
-                // }
+                if (file) {
+                  const fileList = [file];
+                  const fileUrl =
+                    await this.uploadService.uploadFiles(fileList);
+                  recruitmentWithFile.cv = fileUrl[0];
+                  const updateRecruitmentDto: UpdateRecruitmentDto = {
+                    name: firstName,
+                    surname: surname,
+                    email: email,
+                    position: 'Unknown',
+                    stage: RecruitmentStage.Applied,
+                    submittedDate: submittedDate,
+                    cv: recruitmentWithFile.cv || '',
+                    phoneNumber: null,
+                    isDeleted: false,
+                    deleteDate: null,
+                    rejectReason: '',
+                  };
+
+                  await this.recruitmentService.updateRecruitment(
+                    new Types.ObjectId(applicant._id.toString()),
+                    updateRecruitmentDto,
+                    '',
+                  );
+                }
 
                 break;
               }
@@ -173,7 +190,7 @@ export class GmailApiService {
           }
         }
 
-        recruitments.push(recruitmentWithFile);
+        recruitments.push(recruitmentWithFile as UpdateRecruitmentDto);
       }
       return recruitments;
     } catch (error) {

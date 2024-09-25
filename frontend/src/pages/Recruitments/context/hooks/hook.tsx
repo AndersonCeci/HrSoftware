@@ -6,7 +6,7 @@ import { Form, message } from "antd";
 import { RecruitmentStage } from "../../columns/constants";
 import { Filters } from "./filter.hook";
 import Axios from "../../../../helpers/axios";
-import { getAuthToken } from "../../../../utils/utils";
+import { getAuthToken, getFromLocalStorage } from "../../../../utils/utils";
 
 const API = import.meta.env.REACT_APP_RECRUITMENT_API;
 const main_api = import.meta.env.REACT_APP_MAIN;
@@ -31,7 +31,7 @@ export const useRecruitment = () => {
       const response = await Axios.get(API, {
         params: { page, limit, filters },
       });
-      const { data, meta } = response;
+      const { data, meta } = response.data;
       setTableData(data);
       return meta.itemCount;
     } catch (error) {
@@ -115,11 +115,7 @@ export const useRecruitment = () => {
     }
   };
 
-  const updateApplicant = async (
-    _id: string,
-    values: ApplicantProps,
-    step: number
-  ) => {
+  const updateApplicant = async (_id: string, values: any, step: number) => {
     let updatedValues = {};
     let stage: RecruitmentStage = RecruitmentStage.Applied;
 
@@ -137,7 +133,12 @@ export const useRecruitment = () => {
           name: editingRecord?.name,
           surname: editingRecord?.surname,
           stage,
-          firstInterview: { ...values },
+          firstInterview: {
+            ...values,
+            interviewers: values?.interviewers
+              .map((emp: any) => emp._id)
+              .filter((id: string): id is string => id !== undefined),
+          },
         };
         break;
       case 2:
@@ -148,7 +149,12 @@ export const useRecruitment = () => {
           name: editingRecord?.name,
           surname: editingRecord?.surname,
           stage,
-          secondInterview: { ...values },
+          secondInterview: {
+            ...values,
+            interviewers: values?.interviewers
+              .map((emp: any) => emp._id)
+              .filter((id: string): id is string => id !== undefined),
+          },
         };
         break;
       case 3:
@@ -164,9 +170,11 @@ export const useRecruitment = () => {
         message.error("Invalid step");
         return;
     }
-
     try {
-      const res = await Axios.patch(`${API}/${_id}`, updatedValues);
+      const res = await Axios.patch(`${API}/${_id}`, {
+        recruitment: updatedValues,
+        creatorID: getFromLocalStorage().employID,
+      });
       handleEdit(res.data);
       message.success("Applicant updated successfully!");
       return res;
@@ -187,9 +195,77 @@ export const useRecruitment = () => {
 
   const handleFileChange = async () => {
     if (file) {
-      // handleUpload(file);
+      handleUpload(file);
     } else {
       message.error("No file chose");
+    }
+  };
+
+  const handleGoogleAuth = async (
+    email: string,
+    startDate: Date,
+    subject: string
+  ) => {
+    try {
+      const res = await Axios.get(`/auth/check-refresh-token`, {
+        params: {
+          email: email,
+          startDate: startDate,
+          subject: subject,
+        },
+      });
+
+      const { url, message: authMessage } = res.data;
+      message.info(authMessage);
+      return url;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        message.error(
+          error.response?.data.errorDetails.message || error.message
+        );
+      }
+      return null;
+    }
+  };
+
+  // const fetchMails = async (startDate: Date, subject: string) => {
+  //   try {
+  //     const res = await Axios.get("/gmails", {
+  //       params: {
+  //         startDate: startDate,
+  //         subject: subject,
+  //       },
+  //     });
+  //     message.success("Applicants were retrieved successfully");
+  //     return res.data;
+  //   } catch (error) {
+  //     if (error instanceof AxiosError) {
+  //       message.error(
+  //         error.response?.data.errorDetails.message || error.message
+  //       );
+  //     }
+  //     return null;
+  //   }
+  // };
+
+  const handleModalOk = async (startDate: Date, subject: string) => {
+    if (!startDate || !subject) {
+      message.error("Please provide both a start date and a subject.");
+      return;
+    }
+
+    try {
+      const email = getFromLocalStorage().email;
+
+      const authUrl = await handleGoogleAuth(email, startDate, subject);
+
+      if (authUrl) {
+        window.location.href = authUrl;
+      }
+    } catch (error) {
+      message.error("Failed to fetch emails. Please try again.");
+    } finally {
+      // setIsModalVisible(false);
     }
   };
 
@@ -214,5 +290,6 @@ export const useRecruitment = () => {
     handleUpload,
     updateApplicant,
     setTableData,
+    handleModalOk,
   };
 };

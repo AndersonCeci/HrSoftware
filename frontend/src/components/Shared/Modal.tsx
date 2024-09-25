@@ -1,7 +1,9 @@
+import React from "react";
 import Button from "./Button";
 import { ButtonType } from "../../enums/Button";
 import { t } from "i18next";
-import { Modal as AntModal, Flex } from "antd";
+import { Modal as AntModal, Flex, Tooltip } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 type ModalProps = {
   children: React.ReactNode;
@@ -13,6 +15,7 @@ type ModalProps = {
   width?: number;
   okBtnText?: string;
   okBtnTextSubmitting?: string;
+  infoTooltipText?: string;
 };
 
 const Modal = ({
@@ -25,10 +28,25 @@ const Modal = ({
   width,
   okBtnText = t("submit"),
   okBtnTextSubmitting = t("submitting"),
+  infoTooltipText,
 }: ModalProps) => {
   return (
     <AntModal
-      title={title}
+      title={
+        <Flex align="center">
+          {infoTooltipText && (
+            <Tooltip title={infoTooltipText}>
+              <Button
+                type={ButtonType.TEXT}
+                icon={<InfoCircleOutlined />}
+                style={{ marginLeft: 8, color: "yellow" }}
+                shape="circle"
+              />
+            </Tooltip>
+          )}
+          {title}
+        </Flex>
+      }
       destroyOnClose
       open={isOpen}
       onCancel={onCancel}

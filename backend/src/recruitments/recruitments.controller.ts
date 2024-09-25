@@ -12,6 +12,7 @@ import {
   InternalServerErrorException,
   Patch,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import mongoose, { Types } from 'mongoose';
@@ -91,13 +92,16 @@ export class RecruitmentsController {
   @Patch(':id')
   async updateRecruitment(
     @Param('id') id: Types.ObjectId,
-    @Body() updateRecruitmentDto: UpdateRecruitmentDto,
+    @Body('recruitment') updateRecruitmentDto: UpdateRecruitmentDto,
+    @Body('creatorID') creatorID: string,
   ) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Id Invalid', 400);
+
     const updatedRecruitment = await this.recruitmentService.updateRecruitment(
       id,
       updateRecruitmentDto,
+      creatorID,
     );
     if (!updatedRecruitment)
       throw new HttpException('Recruitment not Found', 404);

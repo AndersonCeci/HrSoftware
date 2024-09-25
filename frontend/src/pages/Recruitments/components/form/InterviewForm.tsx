@@ -7,7 +7,7 @@ import {
 } from "../../columns/constants";
 import { EmployeeDetails } from "../../../../types/EmployeeDetailsProps";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import tagRender from "../tagRenderer";
 import { debounce } from "../../../../helpers/debounce.helper";
 import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
@@ -16,45 +16,51 @@ import { useEmployeeAPI } from "../../../../helpers/employee.helper";
 
 const InterviewForm: React.FC<{
   step: string;
-  onInterviewersChange: (interviewers: string[]) => void;
+  onInterviewersChange: (interviewers: EmployeeDetails[]) => void;
 }> = ({ step, onInterviewersChange }) => {
   const { fetchEmployee, fetchEmployeeByID } = useEmployeeAPI();
   const { editingRecord } = useRecruitmentContext();
   const stage =
     step === RecruitmentStage.FirstInterview
-      ? editingRecord.firstInterview
-      : editingRecord.secondInterview;
+      ? editingRecord?.firstInterview
+      : editingRecord?.secondInterview;
 
   const [employeeOptions, setEmployeeOptions] = useState<EmployeeDetails[]>([]);
   const [selectedInterviewers, setSelectedInterviewers] = useState<
     EmployeeDetails[]
-  >(stage.interviewers || []);
+  >(stage?.interviewers || []);
   const [current, setCurrent] = useState<number>(0);
+  const { employID } = getFromLocalStorage();
+  const hasLoadedCurrentUser = useRef(false);
+
+  const memoizedFetchEmployeeByID = useCallback(
+    async (id: string) => {
+      const existingEmployee = employeeOptions.find((emp) => emp._id === id);
+      if (existingEmployee) return existingEmployee;
+
+      const user = await fetchEmployeeByID(id);
+      if (user) {
+        setEmployeeOptions((prevOptions) => [...prevOptions, user]);
+      }
+      return user;
+    },
+    [employeeOptions, fetchEmployeeByID]
+  );
 
   useEffect(() => {
-    const { employID } = getFromLocalStorage();
-    if (employID) {
-      fetchEmployeeByID(employID).then((user) => {
-        if (user) {
-          setEmployeeOptions((prevOptions) => {
-            if (!prevOptions.some((emp) => emp._id === user._id)) {
-              return [...prevOptions, user];
-            }
-            return prevOptions;
-          });
-        }
-      });
+    if (employID && !hasLoadedCurrentUser.current) {
+      memoizedFetchEmployeeByID(employID);
+      hasLoadedCurrentUser.current = true;
     }
-    const interviewerIds: string[] = selectedInterviewers
-      .map((emp: any) => emp._id)
-      .filter((id): id is string => id !== undefined);
+  }, [employID, memoizedFetchEmployeeByID]);
 
-    onInterviewersChange(interviewerIds);
+  useEffect(() => {
+    onInterviewersChange(selectedInterviewers);
   }, [selectedInterviewers, onInterviewersChange]);
 
   useEffect(() => {
-    setSelectedInterviewers(stage.interviewers || []);
-    setCurrent(parseInt(stage.evaluation || "0", 10));
+    setSelectedInterviewers(stage?.interviewers || []);
+    setCurrent(parseInt(stage?.evaluation || "0", 0));
   }, [stage, step]);
 
   const handleSearch = useCallback(
@@ -63,7 +69,13 @@ const InterviewForm: React.FC<{
         const [name, surname] = value.split(" ");
         const data = await fetchEmployee(name, surname);
         if (data) {
-          setEmployeeOptions(data);
+          setEmployeeOptions((prevOptions) => {
+            const newOptions = data.filter(
+              (newEmp: EmployeeDetails) =>
+                !prevOptions.some((existing) => existing._id === newEmp._id)
+            );
+            return [...prevOptions, ...newOptions];
+          });
         }
       }
     }, 300),
@@ -77,13 +89,12 @@ const InterviewForm: React.FC<{
       );
       if (
         selected &&
-        !selectedInterviewers!.some((emp) => emp.email === selected.email)
+        !selectedInterviewers.some((emp) => emp._id === selected._id)
       ) {
-        setSelectedInterviewers([...selectedInterviewers!, selected]);
+        setSelectedInterviewers((prev) => [...prev, selected]);
       }
     }
   };
-
   return (
     <>
       <Row gutter={16}>
@@ -94,6 +105,7 @@ const InterviewForm: React.FC<{
             showTime
             format="YYYY-MM-DD HH:mm"
             placeholder="Select date and time"
+            required
           />
         </Col>
         <Col span={12}>
@@ -101,11 +113,21 @@ const InterviewForm: React.FC<{
             name="type"
             label="Interview Type"
             options={interviewTypes}
+            required
           />
         </Col>
       </Row>
 
-      <Form.Item label="Interviewers" name={"interviewers"}>
+      <Form.Item
+        label="Interviewers"
+        name={"interviewers"}
+        rules={[
+          {
+            required: true,
+            message: "Interviewers are required ",
+          },
+        ]}
+      >
         <Row style={{ paddingBottom: "5px", width: "100%" }}>
           <Select
             mode="multiple"

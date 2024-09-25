@@ -1,9 +1,11 @@
 import {
   BadRequestException,
   Controller,
-  Get,
+  Post,
+  Body,
   HttpException,
   HttpStatus,
+  Get,
   Query,
 } from '@nestjs/common';
 import { GmailApiService } from './gmail-api.service';
@@ -11,63 +13,99 @@ import { SchedulerDTO } from 'src/schedule/schedulerDTO/scheduler.dto';
 import { SchedulerService } from 'src/schedule/scheduler.service';
 import { GaxiosError } from 'gaxios';
 
-// @Roles(['hr', 'ceo'])
 @Controller('gmail-api')
 export class GmailApiController {
   constructor(
     private readonly gmailService: GmailApiService,
-    private readonly scheduler: SchedulerService,
+    private readonly schedulerService: SchedulerService,
   ) {}
 
-  @Get('messages')
-  async getMessages(
-    @Query('subjectFilter') subjectFilter: string | null,
-    @Query('startDate') startDate: string | null,
-    @Query('endDate') endDate: string | null,
-    @Query('step') step: string,
-  ) {
-    if (!startDate || !endDate) {
-      throw new BadRequestException('startDate and endDate are required.');
-    }
-
-    const startDateObj = new Date(startDate);
-    const endDateObj = new Date(endDate);
-
-    if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
-      throw new BadRequestException('Invalid date format.');
-    }
-
-    const task = async () =>
-      this.gmailService.fetchAndSaveEmails(subjectFilter, startDate);
-    const jobName = 'gmail-job';
-
-    const schedulerDTO: SchedulerDTO = {
-      startDate: startDateObj,
-      endDate: endDateObj,
-      step,
-      jobName,
-      task,
-    };
-
-    this.scheduler.scheduleJob(schedulerDTO);
-
-    return { message: `Scheduled job "${jobName}" with cron expression.` };
-  }
-
-  @Get('gmails')
-  async getGmails(
-    @Query('subjectFilter') subjectFilter: string | null,
-    @Query('startDate') startDate: string | null,
+  @Post('schedule-fetch')
+  async scheduleEmailFetch(
+    @Body() schedulerDTO: SchedulerDTO,
+    @Body('subjectFilter') subjectFilter: string | null,
   ) {
     try {
-      return this.gmailService.fetchAndSaveEmails(subjectFilter, startDate);
-    } catch (error) {
-      if (error instanceof GaxiosError) {
-        throw new HttpException(
-          `Gaxios Error: ${error.message}`,
-          HttpStatus.BAD_REQUEST,
+      if (
+        !schedulerDTO.startDate ||
+        !schedulerDTO.endDate ||
+        !schedulerDTO.step
+      ) {
+        throw new BadRequestException(
+          'startDate, endDate, and step are required.',
         );
       }
+
+      const startDateObj = new Date(schedulerDTO.startDate);
+      const endDateObj = new Date(schedulerDTO.endDate);
+
+      if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+        throw new BadRequestException('Invalid date format.');
+      }
+
+      const task = async () => {
+        console.log('test');
+      };
+      // this.gmailService.fetchAndSaveEmails(
+      //   subjectFilter,
+      //   startDateObj.toISOString(),
+      // );
+
+      const jobName = `gmail-fetch`;
+
+      await this.schedulerService.scheduleJob({
+        ...schedulerDTO,
+        startDate: startDateObj,
+        endDate: endDateObj,
+        jobName,
+        task,
+      });
+
+      return { message: `Scheduled job "${jobName}" successfully.` };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to schedule email fetch: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('stop-job')
+  async stopJob(@Body('jobName') jobName: string) {
+    try {
+      await this.schedulerService.stopJob(jobName);
+      return { message: `Job "${jobName}" stopped successfully.` };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to stop job: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('resume-job')
+  async resumeJob(@Body('jobName') jobName: string) {
+    try {
+      await this.schedulerService.resumeJob(jobName);
+      return { message: `Job "${jobName}" resumed successfully.` };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to resume job: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('delete-job')
+  async deleteJob(@Body('jobName') jobName: string) {
+    try {
+      await this.schedulerService.deleteJob(jobName);
+      return { message: `Job "${jobName}" deleted successfully.` };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to delete job: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

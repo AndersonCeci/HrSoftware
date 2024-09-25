@@ -132,11 +132,13 @@ export class RecruitmentService {
   async updateRecruitment(
     id: Types.ObjectId,
     updateRecruitmentDto: UpdateRecruitmentDto,
+    creatorID: string,
   ) {
     try {
       const { name, surname, ...others } = updateRecruitmentDto;
+
       const updatedRecruitment = await this.recruitmentModel.findByIdAndUpdate(
-        id,
+        new Types.ObjectId(id),
         updateRecruitmentDto,
         { new: true },
       );
@@ -151,33 +153,87 @@ export class RecruitmentService {
       }
 
       if (interviewData) {
-        const event = await this.eventsService.create({
-          title: `Interview scheduled for ${name} ${surname} `,
-          startDate: interviewData.date ?? new Date(),
-          endDate: interviewData.date ?? new Date(),
-          startTime: interviewData.date ?? new Date(),
-          endTime: interviewData.date ?? new Date(),
-          location: interviewData.location ?? '',
-          creatorId: interviewData.interviewers[0] ?? '',
-          invitees: interviewData.interviewers ?? '',
-          status: Status.Scheduled,
-          isDeleted: false,
-        });
-
-        await this.recruitmentModel.findByIdAndUpdate(
-          id,
-          { eventID: event._id },
-          { new: true },
+        let event;
+        const invitees = interviewData.interviewers.filter(
+          (interviewer) => interviewer.toString() !== creatorID,
         );
+        if (updatedRecruitment.eventID) {
+          event = await this.eventsService.update(
+            updatedRecruitment.eventID.toString(),
+            {
+              title: `Interview scheduled for ${name} ${surname}`,
+              startDate: interviewData.date ?? new Date(),
+              endDate: interviewData.date ?? new Date(),
+              startTime: interviewData.date ?? new Date(),
+              endTime: interviewData.date ?? new Date(),
+              location: interviewData.location ?? '',
+              invitees: invitees ?? [],
+              status: Status.Scheduled,
+              description: '',
+              progress: '',
+              createdAt: undefined,
+              updatedAt: undefined,
+              locationId: '',
+              creatorId: creatorID,
+            },
+          );
+        } else {
+          event = await this.eventsService.create({
+            title: `Interview scheduled for applicant: ${name} ${surname}`,
+            startDate: interviewData.date ?? new Date(),
+            endDate: interviewData.date ?? new Date(),
+            startTime: interviewData.date ?? new Date(),
+            endTime: interviewData.date ?? new Date(),
+            location: interviewData.location ?? '',
+            creatorId: creatorID,
+            invitees: invitees ?? [],
+            status: Status.Scheduled,
+            isDeleted: false,
+          });
+
+          await this.recruitmentModel.findByIdAndUpdate(
+            new Types.ObjectId(id),
+            { eventID: event._id },
+            { new: true },
+          );
+        }
       }
 
-      return updatedRecruitment;
+      const recruitmentWithDetails = await this.recruitmentModel.aggregate([
+        { $match: { _id: new Types.ObjectId(id) } },
+        this.createLookupPipeline('firstInterview'),
+        this.createLookupPipeline('secondInterview'),
+        this.createAddFields('firstInterview'),
+        this.createAddFields('secondInterview'),
+        {
+          $project: {
+            name: 1,
+            surname: 1,
+            email: 1,
+            phoneNumber: 1,
+            position: 1,
+            stage: 1,
+            reference: 1,
+            cv: 1,
+            submittedDate: 1,
+            isDeleted: 1,
+            deleteDate: 1,
+            firstInterview: 1,
+            secondInterview: 1,
+            offerMade: 1,
+            rejectReason: 1,
+            eventID: 1,
+          },
+        },
+      ]);
+
+      return recruitmentWithDetails[0] || null;
     } catch (error) {
       throw new Error('Failed to update recruitment: ' + error);
     }
   }
 
-  async softDeleteRecruitById(id: string): Promise<Event> {
+  async softDeleteRecruitById(id: string): Promise<Recruitment> {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     return this.recruitmentModel.findByIdAndUpdate(
