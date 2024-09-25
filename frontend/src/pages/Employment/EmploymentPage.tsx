@@ -44,7 +44,6 @@ const EmploymentPage: React.FC = () => {
   }, [isEmp]);
 
   useEffect(() => {
-    console.log("tetetettete", getFromLocalStorage());
     sendRequest(
       {
         endpoint: API,
@@ -66,6 +65,11 @@ const EmploymentPage: React.FC = () => {
     setIsPromoted(true);
   }
 
+  function handleDeleteButtonClick(record: EmployeeDataType) {
+    setIsDeleting(true);
+    setEditedData(record);
+  }
+
   function handleEditEmployee(editedEmployee: EmployeeDataType) {
     setTableData((prev) =>
       prev.map((item) => {
@@ -81,10 +85,6 @@ const EmploymentPage: React.FC = () => {
     setTableData((prev) => [...prev, newEmployee]);
   }
 
-  function handleDeleteButtonClick(record: EmployeeDataType) {
-    setIsDeleting(true);
-    setEditedData(record);
-  }
 
   function handleDeleteModalOk() {
     const date = form.getFieldValue("deletedAt").format("DD/MM/YYYY");

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { User, Role } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId, Types } from 'mongoose';
+import mongoose, { Model, ObjectId, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -104,8 +104,11 @@ export class UserService {
     );
   }
 
-  async deleteUserByEmployID(employID: Types.ObjectId): Promise<User | null> {
-    return this.userModel.findOneAndDelete(employID).exec();
+  async deleteUserByEmployID(id: string): Promise<User | null> {
+    const userWithEmployID = await this.userModel
+      .findOneAndDelete({ employID: new mongoose.Types.ObjectId(id) })
+      .exec();
+    return userWithEmployID;
   }
 
   async saveRefreshToken(email: string, refreshToken: string): Promise<User> {

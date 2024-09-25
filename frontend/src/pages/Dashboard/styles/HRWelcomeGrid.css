@@ -22,8 +22,12 @@ h1.ant-typography.hr-card-title.css-dev-only-do-not-override-1pg9a38 {
 	width: 100%;
 	min-width: 275px;
 }
-.welcome-grid{
-	margin-right: 20px;
+
+.welcome-grid {
+	/* margin-right: 20px;// */
+	/* margin-left: 20px;// */
+	/* padding-right: 30px/; */
+	max-width: 100%;
 }
 
 h1.ant-typography.title-piechart.css-dev-only-do-not-override-1pg9a38 {
@@ -53,6 +57,10 @@ h1.ant-typography.title-piechart.css-dev-only-do-not-override-1pg9a38 {
 	background-color: white;
 }
 
+.bonus-graph {
+	width: 100%;
+}
+
 .pie-chart {
 	background-color: white;
 	width: 250px;
@@ -60,13 +68,54 @@ h1.ant-typography.title-piechart.css-dev-only-do-not-override-1pg9a38 {
 	border-radius: 10px;
 }
 
+.qoute-row{
+	box-shadow: 3.9px 7.8px 7.8px hsla(0, 0%, 69%, 0.407);
+	margin-bottom: 10px;
+}
+
 .dashboard-main {
 	flex-direction: row;
 }
 
-@media (max-width: 1024px) {
+.holiday-card{
+	display: flex;
+	justify-content: center;
+}
+
+.pie-chart.ant-card-body {
+	margin-top: 20px;
+}
+
+@media (max-width: 1360px) {
 	.dashboard-main {
 		flex-direction: column !important;
+	}
+
+	.welcome-grid {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.qoute-row {
+		display: flex;
+		gap: 20px;
+	}
+
+	.card-qoute-flex {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+.card-qoute-flex {
+	display: flex;
+	flex-direction: column;
+}
+
+@media (max-width:1024px) {
+	.hr-button-statistcs{
+		display: flex;
+		flex-direction: column;
 	}
 }
 

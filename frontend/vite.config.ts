@@ -5,7 +5,12 @@ export default defineConfig({
 	plugins: [react()],
 	envPrefix: "REACT_APP_",
 	optimizeDeps: {
-		exclude: ["chunk-PCU3LZFG.js?v=1fa386ac", "chunk-ZVKPOEJN.js?v=f50d0803", "chunk-ZJSYB3WR.js?v=79ac281b"],
+		exclude: [
+			"chunk-PCU3LZFG.js?v=1fa386ac",
+			"chunk-ZVKPOEJN.js?v=f50d0803",
+			"chunk-ZJSYB3WR.js?v=79ac281b",
+			"chunk-YQD5JGWU.js?v=cfb2bdf0",
+		],
 	},
 	server: {
 		proxy: {

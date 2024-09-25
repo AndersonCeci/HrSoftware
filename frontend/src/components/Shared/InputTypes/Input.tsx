@@ -57,7 +57,7 @@ const rulePatterns: RulePatterns = {
   },
   number: {
     regex: /^\d+$/,
-    template: "1000000000$",
+    template: "123",
   },
 };
 

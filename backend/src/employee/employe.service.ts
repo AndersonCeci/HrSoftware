@@ -51,6 +51,9 @@ export class EmployeeService {
         case Position.HR:
           role = Role.HR;
           break;
+        case Position.CEO:
+          role = Role.CEO;
+          break;
         default:
           throw new Error('Invalid position');
       }
@@ -130,9 +133,11 @@ export class EmployeeService {
     }
   }
 
-  findAll(): Promise<Employee[]> {
-    return this.employeeModel.find().sort({ createdAt: -1 }).exec();
+  async findAll(): Promise<Employee[]> {
+    const allEmployes = this.employeeModel.find().sort({ createdAt: -1 });
+    return allEmployes;
   }
+
   async findStatusLength(): Promise<any[]> {
     const employmentData = await this.employeeModel
       .aggregate([
@@ -181,10 +186,18 @@ export class EmployeeService {
     });
   }
 
-  delete(id: string): Promise<Employee | null> {
-    this.inventoryService.cleanUpInventories(id);
-    const deleteEmploy = this.employeeModel.findByIdAndDelete(id);
-    this.userService.deleteUserByEmployID(id as unknown as Types.ObjectId);
+  async delete(id: string): Promise<Employee | null> {
+
+    await this.inventoryService.cleanUpInventories(id);
+
+    await this.userService.deleteUserByEmployID(id);
+    const deleteEmploy = await this.employeeModel.findByIdAndDelete(id).exec();
+
+    if (!deleteEmploy) {
+      console.log('No employee found with the given ID.');
+    } else {
+      console.log('Employee successfully deleted:', deleteEmploy);
+    }
     return deleteEmploy;
   }
 
