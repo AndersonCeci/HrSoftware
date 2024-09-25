@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -6,9 +5,7 @@ import {
   IsOptional,
   IsBoolean,
   IsArray,
-  IsNumber,
 } from 'class-validator';
-import { Types } from 'mongoose';
 
 export class CreateEventDto {
   @IsString()

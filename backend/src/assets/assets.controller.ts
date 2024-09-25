@@ -7,7 +7,6 @@ import {
   HttpException,
   Delete,
   Patch,
-  Query,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/createAsset.dto';
