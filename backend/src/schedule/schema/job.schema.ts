@@ -1,8 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as muv from 'mongoose-unique-validator';
+import { Document } from 'mongoose';
 
-@Schema({ timestamps: true })
-export class CronJob {
+@Schema()
+export class ScheduleJob extends Document {
+  @Prop({ required: true })
+  name: string;
+
   @Prop({ required: true })
   startDate: Date;
 
@@ -12,9 +15,11 @@ export class CronJob {
   @Prop({ required: true })
   step: string;
 
-  @Prop({ required: true, unique: true })
-  name: string;
+  @Prop({ required: true, default: 'active' })
+  status: string;
+
+  @Prop({ type: [Date], default: [] })
+  executionHistory: Date[];
 }
-export const CronJobSchema = SchemaFactory.createForClass(CronJob).plugin(muv, {
-  message: 'Error, expected job name to be unique.',
-});
+
+export const ScheduleJobSchema = SchemaFactory.createForClass(ScheduleJob);

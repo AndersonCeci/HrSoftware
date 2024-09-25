@@ -4,15 +4,17 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -38,7 +40,7 @@ export class AuthenticationGuard implements CanActivate {
   async verifyToken(token: string) {
     try {
       return await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET,
+        secret: this.configService.get<string>('JWT_SECRET'),
       });
     } catch {
       throw new UnauthorizedException();

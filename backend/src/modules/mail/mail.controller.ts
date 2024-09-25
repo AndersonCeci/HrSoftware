@@ -16,11 +16,8 @@ export class MailController {
   sendEmail(@Body() dto: SentEmailDTO) {
     try {
       if (dto.template === 'interview-template') {
-        console.log('interview-template');
-        console.log(dto);
         return this.mailService.sendInterviewEmail(dto);
       } else {
-        console.log('else');
         return this.mailService.sendEmail(dto);
       }
     } catch (error) {

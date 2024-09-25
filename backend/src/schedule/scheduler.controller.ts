@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { SchedulerService } from './scheduler.service';
+import { Cron } from '@nestjs/schedule';
 
 @Controller('scheduler')
 export class SchedulerController {
   constructor(private readonly schedulerService: SchedulerService) {}
+  private readonly logger = new Logger(SchedulerController.name);
   @Post('schedule')
   async handleCron(
     @Body('startDate') startDateStr: string,
@@ -21,16 +23,16 @@ export class SchedulerController {
         throw new Error('Start date must be before end date.');
       }
 
-      const task = async () => this.schedulerService.devLog();
+      // const task = async () => this.schedulerService.devLog();
       const jobName = 'devLog-job';
 
-      this.schedulerService.scheduleJob({
-        startDate,
-        endDate,
-        step,
-        jobName,
-        task,
-      });
+      // this.schedulerService.scheduleJob({
+      //   startDate,
+      //   endDate,
+      //   step,
+      //   jobName,
+      //   // task,
+      // });
 
       return { message: `Job '${jobName}' scheduled successfully.` };
     } catch (error) {
@@ -53,13 +55,18 @@ export class SchedulerController {
     return `Job ${jobName} rescheduled to "${newCronExpression}" successfully.`;
   }
 
-  @Get('jobs')
-  getAllJobs() {
-    return this.schedulerService.getCrons();
-  }
+  // @Get('jobs')
+  // getAllJobs() {
+  //   return this.schedulerService.getCrons();
+  // }
 
-  @Get('job/:jobName')
-  getJob(@Param('jobName') jobName: string) {
-    return this.schedulerService.getJob(jobName);
-  }
+  // @Get('job/:jobName')
+  // getJob(@Param('jobName') jobName: string) {
+  //   return this.schedulerService.getJob(jobName);
+  // }
+
+  // @Cron('45 * * * * *')
+  // handleCroner() {
+  //   this.logger.debug('Called when the current second is 45');
+  // }
 }

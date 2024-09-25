@@ -14,39 +14,44 @@ import EmailContent from "./EmailContent";
 import AddEmployeeForm from "../../Employment/components/AddEmployeeForm";
 import RejectDrawer from "./RejectDrawer";
 import { t } from "i18next";
+import { EmployeeDetails } from "../../../types/EmployeeDetailsProps";
 
 const { Title } = Typography;
 
 const Stepper: React.FC = () => {
-	const { editingRecord, updateApplicant, createApplicant, form } = useRecruitmentContext();
-	const [current, setCurrent] = useState(
-		findStepIndex(editingRecord?.stage ?? RecruitmentStage.Applied),
-	);
-	const [childrenDrawer, setChildrenDrawer] = useState(false);
-	const [employmentDrawer, setEmploymentDrawer] = useState(false);
-	const [interviewers, setInterviewers] = useState<string[]>([]);
+  const { editingRecord, updateApplicant, createApplicant, form } =
+    useRecruitmentContext();
+  const [current, setCurrent] = useState(
+    findStepIndex(editingRecord?.stage ?? RecruitmentStage.Applied)
+  );
+  const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [employmentDrawer, setEmploymentDrawer] = useState(false);
+  const [interviewers, setInterviewers] = useState<EmployeeDetails[]>([]);
 
-	useEffect(() => {
-		if (editingRecord) {
-			const stage =
-				current === 1
-					? editingRecord.firstInterview
-					: current === 2
-					? editingRecord.secondInterview
-					: null;
-			if (stage) {
-				form.setFieldsValue({
-					...stage,
-					interviewers: stage.interviewers,
-					date: stage.date ? moment(stage.date) : null,
-				});
-			}
-		}
-	}, [editingRecord, current, form]);
+  useEffect(() => {
+    if (editingRecord) {
+      const stage =
+        current === 1
+          ? editingRecord.firstInterview
+          : current === 2
+          ? editingRecord.secondInterview
+          : null;
+      if (stage) {
+        form.setFieldsValue({
+          ...stage,
+          interviewers: stage.interviewers,
+          date: stage.date ? moment(stage.date) : null,
+        });
+      }
+    } else {
+      form.resetFields();
+      setCurrent(0);
+    }
+  }, [editingRecord, current, form]);
 
-	const handleInterviewersChange = (newInterviewers: string[]) => {
-		setInterviewers(newInterviewers);
-	};
+  const handleInterviewersChange = (newInterviewers: EmployeeDetails[]) => {
+    setInterviewers(newInterviewers);
+  };
 
 	const handleSave = async () => {
 		try {

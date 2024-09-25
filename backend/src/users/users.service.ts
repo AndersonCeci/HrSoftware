@@ -110,4 +110,14 @@ export class UserService {
       .exec();
     return userWithEmployID;
   }
+
+  async saveRefreshToken(email: string, refreshToken: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    user.refreshToken = refreshToken;
+    return user.save();
+  }
 }

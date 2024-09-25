@@ -1,19 +1,14 @@
 import {
   IsNotEmpty,
-  IsEmail,
   IsString,
   IsEnum,
   Matches,
-  isDate,
-  IsDateString,
   IsArray,
   IsOptional,
   IsDate,
-  isNumber,
   IsNumber,
   IsBoolean,
 } from 'class-validator';
-import { Role } from 'src/users/schemas/user.schema';
 import { EmploymentStatus, Position } from '../schema/employe.schema';
 import { Types } from 'mongoose';
 import { Type } from 'class-transformer';
