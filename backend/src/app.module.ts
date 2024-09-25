@@ -29,8 +29,8 @@ import { SchedulerModule } from './schedule/scheduler.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthenticationGuard } from './guards/authentication.guard';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { AuthService } from './auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -38,6 +38,7 @@ import { AuthService } from './auth/auth.service';
       envFilePath: '.env',
       isGlobal: true,
     }),
+
     MongooseModule.forRoot(process.env.DBURL),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
@@ -64,14 +65,14 @@ import { AuthService } from './auth/auth.service';
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthorizationGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AuthenticationGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthorizationGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthenticationGuard,
+    // },
     AppService,
     JwtService,
     UploadService,

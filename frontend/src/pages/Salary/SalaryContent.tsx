@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from "react";
-import dayjs from "dayjs";
+import React, { useRef } from "react";
 import AddBonusModal from "./components/AddBonusModal";
 import EditSalaryModal from "./components/EditSalaryModal";
 import TableHeader from "../../components/Table/TableHeader";
@@ -21,7 +20,7 @@ const SalaryContent: React.FC = () => {
     handleModal,
     handleAddBonusSubmit,
     handleEditSubmit,
-  
+
     createSalary,
   } = useSalaryHook();
 
@@ -32,7 +31,7 @@ const SalaryContent: React.FC = () => {
         onClick={handleModal}
         hideButton={!isHr}
       />
-      <FilterComponent/>
+      <FilterComponent />
 
       <TableComponent />
 

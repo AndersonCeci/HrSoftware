@@ -6,7 +6,11 @@ import { EmployeeService } from './employe.service';
 import { UsersModule } from 'src/users/users.module';
 import { NotificationsModule } from 'src/notificationsGateway/notification.module';
 import { InventoryModule } from 'src/inventory/inventory.module';
-import { Inventory, InventorySchema } from 'src/inventory/schemas/Inventory.schema';
+import {
+  Inventory,
+  InventorySchema,
+} from 'src/inventory/schemas/Inventory.schema';
+import { MailModule } from 'src/modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -19,6 +23,7 @@ import { Inventory, InventorySchema } from 'src/inventory/schemas/Inventory.sche
     ]),
     UsersModule,
     NotificationsModule,
+    MailModule,
     forwardRef(() => InventoryModule),
   ],
   providers: [EmployeeService],

@@ -35,7 +35,7 @@ export class UserService {
     return savedUser;
   }
 
-   async findOne(userId: string): Promise<User | null> {
+  async findOne(userId: string): Promise<User | null> {
     return this.userModel.findById(userId).exec();
   }
 
@@ -106,5 +106,15 @@ export class UserService {
 
   async deleteUserByEmployID(employID: Types.ObjectId): Promise<User | null> {
     return this.userModel.findOneAndDelete(employID).exec();
+  }
+
+  async saveRefreshToken(email: string, refreshToken: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    user.refreshToken = refreshToken;
+    return user.save();
   }
 }

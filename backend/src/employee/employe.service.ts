@@ -19,6 +19,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { CreateNotificationDto } from 'src/notificationsGateway/dto/CreateNotificationDto';
 import { NotificationStatus } from 'src/notificationsGateway/notification.schema';
 import { InventoryService } from 'src/inventory/inventory.service';
+import { MailService } from 'src/modules/mail/mail.service';
 
 @Injectable()
 export class EmployeeService {
@@ -29,6 +30,7 @@ export class EmployeeService {
     private readonly inventoryService: InventoryService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationsService,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
@@ -109,6 +111,17 @@ export class EmployeeService {
 
       await this.userService.createUser(createUserDto);
 
+      await this.mailService.sendEmail({
+        sender: 'geraldbane3@gmail.com',
+        recepients: ['geraldbane333@gmail.com'],
+        template: 'welcome-template',
+        subject: 'Miresevjen ne HRSoftware!',
+        email: createdEmployee.email,
+        password: 'codevider',
+        hr: 'Elizabeta',
+        text: '',
+      });
+
       return updatedEmployee;
     } catch (error) {
       console.error('Error creating employee:', error);
@@ -187,7 +200,9 @@ export class EmployeeService {
     return await this.employeeModel.findOne({ username: name }).exec();
   }
 
-  @Cron(CronExpression.EVERY_10_HOURS)
+  @Cron(CronExpression.EVERY_10_HOURS, {
+    name: 'Birthday cron',
+  })
   async handleCron() {
     await this.notifyBirthdayOneDayBefore();
     await this.notifyOneYearAnniversary();

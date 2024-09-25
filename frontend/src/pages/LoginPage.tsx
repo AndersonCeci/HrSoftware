@@ -1,4 +1,4 @@
-import { Form, message, Typography } from "antd";
+import { Form, Typography } from "antd";
 import Button from "../components/Shared/Button";
 import "../styles/LoginPage.css";
 import FormInputs from "../components/Shared/InputTypes/FormInputs";
@@ -8,35 +8,11 @@ import useHttp from "../hooks/useHttp";
 import Login from "../assets/login.svg";
 import LoginLogo from "../assets/loginlogo.png";
 import { setToLocalStorage } from "../utils/utils";
-import { AxiosError } from "axios";
-import Axios from "../helpers/axios";
 
 const LoginPage: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, error, sendRequest] = useHttp();
   const navigate = useNavigate();
-
-  async function handleAuth(email: string) {
-    try {
-      const res = await Axios.get(`/auth/check-refresh-token`, {
-        params: {
-          email: email,
-        },
-      });
-
-      const { url, message: authMessage } = res.data;
-      console.log("URL", url);
-      message.info(authMessage);
-      return url;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        message.error(
-          error.response?.data.errorDetails.message || error.message
-        );
-      }
-      return null;
-    }
-  }
 
   function handleSubmit() {
     const dataToSubmit = {

@@ -16,15 +16,14 @@ export class MailService {
         from: dto.sender,
         to: dto.recepients,
         subject: dto.subject,
-        template: 'welcome-template',
+
+        template: dto.template,
         context: {
           title: 'Welcome',
           name: dto.name,
           email: dto.email,
           password: dto.password,
           hr: dto.hr,
-          imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/hrsoftware-75457.appspot.com/o/loginlogo.png?alt=media',
         },
         text: dto.text,
       });
@@ -42,14 +41,12 @@ export class MailService {
       }
 
       throw new InternalServerErrorException(
-        'Failed to send email. Please try again later.',
+        `Failed to send email. Please try again later.${error}`,
       );
     }
   }
-
   async sendInterviewEmail(dto: SentEmailDTO) {
     try {
-      console.log(dto);
       const res = await this.mailerService.sendMail({
         from: dto.sender,
         to: dto.recepients,

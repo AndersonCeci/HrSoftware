@@ -3,13 +3,14 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class SentEmailDTO {
   @IsNotEmpty()
+  @IsString()
   template: string;
 
   @IsNotEmpty()
   sender?: string | Address;
 
   @IsNotEmpty()
-  recepients: string | Address[];
+  recepients: (string | Address)[];
 
   @IsNotEmpty()
   @IsString()

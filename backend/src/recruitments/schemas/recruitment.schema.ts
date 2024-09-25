@@ -80,7 +80,7 @@ export class Recruitment extends Document {
   @Prop()
   deleteDate: Date;
 
-  @Prop({ default: false })
+  @Prop()
   rejectReason?: string;
 
   @Prop({ required: false, ref: 'Events' })
