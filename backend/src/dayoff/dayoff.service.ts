@@ -218,6 +218,14 @@ export class DayoffService {
   }
 
   async getRemainingDays(employeeId: string): Promise<number> {
+    const today = new Date();
+
+    const isFirstOfJanuary = today.getDate() === 1 && today.getMonth() === 0;
+
+    if (isFirstOfJanuary) {
+      return 25;
+    }
+
     const approvedDayOffs = await this.dayoffModel
       .find({
         employeeId: employeeId,
@@ -230,7 +238,6 @@ export class DayoffService {
     }, 0);
 
     const totalAvailableDays = 25;
-
     const remainingDays = totalAvailableDays - totalApprovedDays;
 
     return remainingDays >= 0 ? remainingDays : 0;

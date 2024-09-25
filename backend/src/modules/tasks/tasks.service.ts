@@ -27,7 +27,7 @@ export class TasksService {
 
   @Cron(CronExpression.EVERY_12_HOURS)
   async handleCron() {
-    await this.notifyTasksDueInOneDay();
+    // await this.notifyTasksDueInOneDay();
   }
 
   async notifyTasksDueInOneDay(): Promise<Task[] | void> {
@@ -64,7 +64,6 @@ export class TasksService {
     };
     await this.notificationService.createNotification(createNotificationDto);
   }
-
 
   findAllTasks(): Promise<Task[]> {
     return this.taskModel.find({ isDeleted: false }).exec();

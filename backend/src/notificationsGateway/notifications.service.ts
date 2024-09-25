@@ -8,7 +8,7 @@ import { Notifications, NotificationStatus } from './notification.schema';
 export class NotificationsService {
   constructor(
     @InjectModel(Notifications.name)
-    private  notificationModel: Model<Notifications>,
+    private notificationModel: Model<Notifications>,
   ) {}
 
   async getNotifications(): Promise<Notifications[]> {

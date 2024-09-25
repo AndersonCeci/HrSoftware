@@ -2,6 +2,8 @@ import { NotificationsService } from 'src/notificationsGateway/notifications.ser
 import {
   BadRequestException,
   forwardRef,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -116,7 +118,16 @@ export class EmployeeService {
     } catch (error) {
       console.error('Error creating employee:', error);
 
-      throw new Error(`Employee creation failed: ${error.message}`);
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: '',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
     }
   }
 
@@ -174,7 +185,6 @@ export class EmployeeService {
   }
 
   async delete(id: string): Promise<Employee | null> {
-
     await this.inventoryService.cleanUpInventories(id);
 
     await this.userService.deleteUserByEmployID(id);
@@ -382,7 +392,6 @@ export class EmployeeService {
 
   async findByIds(ids: string[]): Promise<Employee[]> {
     try {
-      console.warn('herererrerererrer tetstst', ids);
       const objectIds = ids.map((id) => {
         if (!Types.ObjectId.isValid(id)) {
           throw new BadRequestException(`Invalid ID format: ${id}`);

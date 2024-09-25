@@ -7,7 +7,7 @@ export enum NotificationStatus {
   REMINDER = 'reminder',
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Notifications extends Document {
   @Prop({ required: true })
   message: string;

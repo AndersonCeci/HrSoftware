@@ -21,7 +21,7 @@ export enum EmploymentStatus {
   ONSITE = 'On Site',
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Employee extends Document {
   @Prop({ required: true })
   name: string;
