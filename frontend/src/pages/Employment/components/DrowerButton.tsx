@@ -15,7 +15,11 @@ const DrowerButton = ({ current, item, onChange, onFinish }: DrowerButtonProps) 
 		<Row>
 			<Col offset={1}>
 				{current !== 2 && (
-					<Space>
+					<Space
+						style={{
+							marginBottom: "20px",
+						}}
+					>
 						{current > 0 && <Button onClick={() => onChange(-1)}> {t("back")}</Button>}
 						<Button
 							type={ButtonType.PRIMARY}

@@ -10,6 +10,7 @@ export default defineConfig({
 			"chunk-ZVKPOEJN.js?v=f50d0803",
 			"chunk-ZJSYB3WR.js?v=79ac281b",
 			"chunk-YQD5JGWU.js?v=cfb2bdf0",
+			"chunk-SVBQQXXT.js?v=b40e65c5",
 		],
 	},
 	server: {
