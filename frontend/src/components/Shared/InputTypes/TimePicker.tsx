@@ -1,5 +1,6 @@
 import { TimePicker as TP, Form } from "antd";
 import { t } from "i18next";
+import FormItemLabel from "./FormItemLabel";
 
 type TimePickerProps = {
 	label: string;
@@ -39,7 +40,7 @@ const TimePicker = ({ label, name, required, dependsOn, format = "h:mm" }: TimeP
 
 	return (
 		<Form.Item
-			label={label}
+			label={<FormItemLabel>{label}</FormItemLabel>}
 			style={{ width: "100%" }}
 			name={name}
 			dependencies={[dependsOn]}

@@ -1,6 +1,6 @@
 import { UserType } from "../types/userType";
 import { Input } from "antd";
-import Pusher from "pusher-js";
+// import Pusher from "pusher-js";
 import "../styles/MessageBoard.css";
 import Button from "../../../components/Shared/Button";
 import { SendOutlined } from "@ant-design/icons";
@@ -23,21 +23,21 @@ export default function MessageBoard({ selectedUser }: MessageBoardProps) {
 	const userData = getFromLocalStorage();
 	const userID = userData.employID;
 
-	useEffect(() => {
-		// if (selectedUser) {
-		// 	setMessages((prev) => prev.filter((message) => message.recieverID === selectedUser._id));
-		// }
+	// useEffect(() => {
+	// 	// if (selectedUser) {
+	// 	// 	setMessages((prev) => prev.filter((message) => message.recieverID === selectedUser._id));
+	// 	// }
 
-		const pusher = new Pusher("778e41d67fa4dbcc69e7", {
-			cluster: "eu",
-		});
+	// 	const pusher = new Pusher("778e41d67fa4dbcc69e7", {
+	// 		cluster: "eu",
+	// 	});
 
-		const channel = pusher.subscribe("my-channel");
-		channel.bind("my-event", function (data: MessageType) {
-			alert(JSON.stringify(data));
-			setMessages((prev) => [...prev, data]);
-		});
-	}, []);
+	// 	const channel = pusher.subscribe("my-channel");
+	// 	channel.bind("my-event", function (data: MessageType) {
+	// 		alert(JSON.stringify(data));
+	// 		setMessages((prev) => [...prev, data]);
+	// 	});
+	// }, []);
 
 	function handleSendMessage() {
 		if (message) {

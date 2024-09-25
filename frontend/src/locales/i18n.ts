@@ -2,7 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { SqTranslation } from "./SqTranslation";
 import { EnTranslation } from "./EnTranslation";
-import { getFromLocalStorage } from "./utils";
+import { getFromLocalStorage } from "../utils/utils";
 
 const resources = {
 	en: {
@@ -26,8 +26,8 @@ i18n.use(initReactI18next).init({
 	},
 });
 
-i18n.on('languageChanged', (lng) => {
-  localStorage.setItem('i18nextLng', lng);
+i18n.on("languageChanged", (lng) => {
+	localStorage.setItem("i18nextLng", lng);
 });
 
 export default i18n;

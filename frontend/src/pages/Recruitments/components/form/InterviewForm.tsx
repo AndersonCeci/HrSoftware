@@ -1,10 +1,6 @@
 import { Form, Input, Steps, Row, Select, Col } from "antd";
 import { useRecruitmentContext } from "../../context";
-import {
-  evaluationSteps,
-  interviewTypes,
-  RecruitmentStage,
-} from "../../columns/constants";
+import { evaluationSteps, interviewTypes, RecruitmentStage } from "../../columns/constants";
 import { EmployeeDetails } from "../../../../types/EmployeeDetailsProps";
 
 import { useState, useCallback, useEffect, useRef } from "react";
@@ -13,6 +9,7 @@ import { debounce } from "../../../../helpers/debounce.helper";
 import FormInputs from "../../../../components/Shared/InputTypes/FormInputs";
 import { getFromLocalStorage } from "../../../../utils/utils";
 import { useEmployeeAPI } from "../../../../helpers/employee.helper";
+import { t } from "i18next";
 
 const InterviewForm: React.FC<{
   step: string;
@@ -147,33 +144,33 @@ const InterviewForm: React.FC<{
         </Row>
       </Form.Item>
 
-      <Form.Item label="Notes" name={"notes"}>
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item label="Evaluation" name={"evaluation"}>
-        <Row>
-          <Steps
-            direction="horizontal"
-            onChange={(current) => {
-              setCurrent(current);
-            }}
-            responsive
-            size="small"
-            labelPlacement="vertical"
-            current={current}
-          >
-            {evaluationSteps.map((item, index) => (
-              <Steps.Step
-                key={index}
-                title={item.title}
-                icon={<span style={{ width: "10px" }}>{item.content}</span>}
-              />
-            ))}
-          </Steps>
-        </Row>
-      </Form.Item>
-    </>
-  );
+			<Form.Item label="Notes" name={"notes"}>
+				<Input.TextArea />
+			</Form.Item>
+			<Form.Item label={t('evaluate')} name={"evaluation"}>
+				<Row>
+					<Steps
+						direction="horizontal"
+						onChange={(current) => {
+							setCurrent(current);
+						}}
+						responsive
+						size="small"
+						labelPlacement="vertical"
+						current={current}
+					>
+						{evaluationSteps.map((item, index) => (
+							<Steps.Step
+								key={index}
+								title={t(item.title)}
+								icon={<span style={{ width: "10px" }}>{item.content}</span>}
+							/>
+						))}
+					</Steps>
+				</Row>
+			</Form.Item>
+		</>
+	);
 };
 
 export default InterviewForm;
