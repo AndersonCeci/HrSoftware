@@ -1,13 +1,14 @@
 import "./styles/Dashboard.css";
 import { t } from "i18next";
-import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
+// import EmployeeWelcomeGrid from "./components/EmployeeWelcomeGrid";
 import { Content } from "antd/es/layout/layout";
 import HRWelcomeGrid from "./components/HRWelcomeGrid";
 import useHttp from "../../hooks/useHttp";
 import { useEffect, useState } from "react";
 import { LeftDataType } from "../Dismissed/types/Left";
+import { Flex } from "antd";
 
-export interface Data {
+export interface HrData {
   noEmployee: number;
   status: string;
   color: string;
@@ -67,18 +68,18 @@ const DashboardPage: React.FC = () => {
 
   const countDismissedEmployees = dismissedTableData.total || 0;
 
-  const initialData: Data[] = [
+  const initialData: HrData[] = [
     {
       noEmployee: onSite,
       status: t("onSiteEmployees"),
       color: "#136F63",
-      path: "/employment",
+      path: "/employee",
     },
     {
       noEmployee: remote,
       status: t("remoteEmployees"),
       color: "#474CCC",
-      path: `/employment`,
+      path: `/employee`,
     },
     {
       noEmployee: countDismissedEmployees,
@@ -97,11 +98,7 @@ const DashboardPage: React.FC = () => {
         color: "grey",
       }}
     >
-      {userData.role === "employee" ? (
-        <EmployeeWelcomeGrid />
-      ) : (
         <HRWelcomeGrid initialData={initialData} />
-      )}
     </Content>
   );
 };

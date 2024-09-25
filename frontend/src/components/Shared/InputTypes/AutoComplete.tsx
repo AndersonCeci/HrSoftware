@@ -1,4 +1,4 @@
-import { AutoComplete as AssasinsCreed, Form } from "antd";
+import { AutoComplete as AC, Form } from "antd";
 
 type AutoCompleteProps = {
 	name: string;
@@ -42,7 +42,7 @@ const AutoComplete = ({
 			validateDebounce={1000}
 			style={{ width: "100%" }}
 		>
-			<AssasinsCreed
+			<AC
 				allowClear
 				size="large"
 				placeholder={label}
