@@ -11,6 +11,7 @@ import { ButtonType } from "../../../enums/Button";
 import { ApplicantProps } from "../../../types/ApplicantProps";
 import { Dispatch, SetStateAction } from "react";
 import { Col, Row, Tooltip } from "antd/lib";
+import { t } from "i18next";
 import { isCEO } from "../../../utils/utils";
 
 type GenerateColumnsParams = {
@@ -25,7 +26,7 @@ export const columns = ({
 	setEditingRecord,
 }: GenerateColumnsParams): TableProps<ApplicantProps>["columns"] => [
 	createTableColumns({
-		title: "Applicant",
+		title: t("applicantName"),
 		dataIndex: "_id",
 		key: "_id",
 		width: "70px",
@@ -40,42 +41,44 @@ export const columns = ({
 	}),
 	createTableColumns({ title: "Email", dataIndex: "email", key: "email" }),
 	createTableColumns({
-		title: "Resume",
+		title: t("resume"),
 		dataIndex: "cv",
 		key: "cv",
 		displayAs: (value) =>
 			value ? (
 				<Link to={value} target="_blank" rel="noopener noreferrer">
 					<Button size="large" type={ButtonType.LINK} icon={<IoDocumentAttach />}>
-						<span> View </span>
+						<span> {t("lookCV")} </span>
 					</Button>
 				</Link>
 			) : (
-				<span>No File</span>
+				<span>{t("noCV")}</span>
 			),
 
 		align: "center",
 		width: 60,
 	}),
 	createTableColumns({
-		title: "Position",
+		title: t("position"),
 		dataIndex: "position",
 		key: "position",
 		width: "70px",
 	}),
 	createTableColumns({
-		title: "Application Phase",
+		title: t("applicationStage"),
 		dataIndex: "stage",
 		key: "stage",
-		displayAs: (value) => (
-			<Tag color={selectOption.find((item) => item.label === value)?.color || "cyan"}>{value}</Tag>
-		),
+		displayAs: (value) => {
+			const item = selectOption.find((item) => item.label === value);
+
+			return <Tag color={item?.color}>{t(item!.label)}</Tag>;
+		},
 		align: "center",
 		width: 60,
 		onFilter: (value, record) => record.stage.indexOf(value) === 0,
 	}),
 	createTableColumns({
-		title: "Date Submitted",
+		title: t("submittedDate"),
 		dataIndex: "submittedDate",
 		key: "submittedDate",
 		width: "70px",
@@ -91,7 +94,7 @@ export const columns = ({
 	}),
 
 	createTableColumns({
-		title: "Reference",
+		title: t("reference"),
 		dataIndex: "reference",
 		key: "reference",
 		width: "70px",
@@ -100,7 +103,7 @@ export const columns = ({
 	...(!isCEO()
 		? [
 				createTableColumns({
-					title: "More",
+					title: t("more"),
 					dataIndex: "_id",
 					key: "action",
 					displayAs: (record) => {
@@ -109,7 +112,7 @@ export const columns = ({
 							<>
 								<Row gutter={15} justify={"center"}>
 									<Col>
-										<Tooltip title="Edit applicant" color="cyan">
+										<Tooltip title={t("editApplicant")} color="cyan">
 											<Button
 												type={ButtonType.TEXT}
 												block

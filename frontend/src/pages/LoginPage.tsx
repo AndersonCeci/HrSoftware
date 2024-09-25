@@ -12,120 +12,86 @@ import { AxiosError } from "axios";
 import Axios from "../helpers/axios";
 
 const LoginPage: React.FC = () => {
-  const [form] = Form.useForm();
-  const [isLoading, error, sendRequest] = useHttp();
-  const navigate = useNavigate();
-  const API = import.meta.env.REACT_APP_MAIN;
+	const [form] = Form.useForm();
+	const [isLoading, error, sendRequest] = useHttp();
+	const navigate = useNavigate();
+	const API = import.meta.env.REACT_APP_MAIN;
 
-  async function handleAuth(email: string) {
-    try {
-      const res = await Axios.get(`${API}/auth/check-refresh-token`, {
-        params: {
-          email: email,
-        },
-      });
+	async function handleAuth(email: string) {
+		try {
+			const res = await Axios.get(`${API}/auth/check-refresh-token`, {
+				params: {
+					email: email,
+				},
+			});
 
-      const { url, message: authMessage } = res.data;
-      console.log("URL", url);
-      message.info(authMessage);
-      return url;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        message.error(
-          error.response?.data.errorDetails.message || error.message
-        );
-      }
-      return null;
-    }
-  }
+			const { url, message: authMessage } = res.data;
+			console.log("URL", url);
+			message.info(authMessage);
+			return url;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				message.error(error.response?.data.errorDetails.message || error.message);
+			}
+			return null;
+		}
+	}
 
-  function handleSubmit() {
-    const dataToSubmit = {
-      username: form.getFieldValue("username"),
-      password: form.getFieldValue("password"),
-    };
+	function handleSubmit() {
+		const dataToSubmit = {
+			username: form.getFieldValue("username"),
+			password: form.getFieldValue("password"),
+		};
 
-    sendRequest(
-      useHttp.postRequestHelper("login", dataToSubmit),
-      async (responseData: any) => {
-        const { accessToken, ...rest } = responseData;
-        const userData = {
-          ...rest,
-          token: accessToken,
-        };
-        setToLocalStorage("userData", userData);
-        navigate("/dashboard");
-        // if (responseData.role !== Roles.HR) {
-        //   // const authUrl = await handleAuth(responseData.email);
-        //   // console.log("responseData", responseData);
-        //   // const userData = {
-        //   //   ...rest,
-        //   //   token: accessToken,
-        //   // };
-        //   // setToLocalStorage("userData", userData);
-        //   // if (authUrl) {
-        //   //   window.location.href = authUrl;
-        //   // } else {
-        //   //   navigate("/dashboard");
-        //   // }
-        // } else {
+		sendRequest(useHttp.postRequestHelper("login", dataToSubmit), async (responseData: any) => {
+			const { accessToken, ...rest } = responseData;
+			const userData = {
+				...rest,
+				token: accessToken,
+			};
+			setToLocalStorage("userData", userData);
 
-        // }
-      }
-    );
-  }
+			navigate("/dashboard");
+		});
+	}
 
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      navigate("/dashboard");
-    }
-  }, []);
+	useEffect(() => {
+		const userData = localStorage.getItem("userData");
+		if (userData) {
+			navigate("/dashboard");
+		}
+	}, []);
 
-  return (
-    <div className="login-page">
-      <div className="login-form-image-container">
-        <div className="image-container">
-          <img src={Login} alt="Logo" />
-        </div>
+	return (
+		<div className="login-page">
+			<div className="login-form-image-container">
+				<div className="image-container">
+					<img src={Login} alt="Logo" />
+				</div>
 
-        <div className="login-inputs">
-          <img src={LoginLogo} className="loginlogo"></img>
-          <Form
-            layout="vertical"
-            form={form}
-            initialValues={{ remember: true }}
-            onFinish={handleSubmit}
-            onFinishFailed={() => console.log("Failed")}
-          >
-            <h2 className="login-title">Login</h2>
+				<div className="login-inputs">
+					<img src={LoginLogo} className="loginlogo"></img>
+					<Form
+						layout="vertical"
+						form={form}
+						initialValues={{ remember: true }}
+						onFinish={handleSubmit}
+						onFinishFailed={() => console.log("Failed")}
+					>
+						<h2 className="login-title">Login</h2>
 
-            <FormInputs.Input
-              name="username"
-              label="Email"
-              defaultValidateRule="email"
-              required
-            />
-            <FormInputs.Input
-              name="password"
-              label="Password"
-              type="password"
-              required
-            />
+						<FormInputs.Input name="username" label="Email" defaultValidateRule="email" required />
+						<FormInputs.Input name="password" label="Password" type="password" required />
 
-            {error && (
-              <Typography.Text type="danger">
-                Invalid Email or Password
-              </Typography.Text>
-            )}
-            <Button htmlType="submit" type="primary" size="large" block>
-              {isLoading ? "Loading..." : "Log in"}
-            </Button>
-          </Form>
-        </div>
-      </div>
-    </div>
-  );
+						{error && <Typography.Text type="danger">Invalid Email or Password</Typography.Text>}
+						<Button htmlType="submit" type="primary" size="large" block>
+							{isLoading ? "Loading..." : "Log in"}
+						</Button>
+					</Form>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default LoginPage;
