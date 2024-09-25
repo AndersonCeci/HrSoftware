@@ -17,7 +17,6 @@ export class EventsService {
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
 
     const event = await this.eventModel.create(createEventDto);
-    console.log('Event created:', event);
 
     const createNotificationDto: CreateNotificationDto = {
       message: `A new event has been created: ${event.eventName}`,
@@ -125,7 +124,7 @@ export class EventsService {
     return events[0];
   }
 
-  async populateEmployee(
+  async joinEvent(
     eventID: string,
     joinEmployee: string,
   ): Promise<Event> {
@@ -136,14 +135,8 @@ export class EventsService {
     return ok;
   }
 
-  async checkParticipantType() {
-    const event = await this.eventModel.findOne({ eventName: 'hockey' });
-    console.log(typeof event.eventParticipants[0]);
-    return event;
-  }
-
   async unassignAllEmployeesFromAllEvents() {
-    const result = await this.eventModel
+    return await this.eventModel
       .updateMany(
         {},
         {
@@ -158,14 +151,9 @@ export class EventsService {
     currentDate.setHours(0, 0, 0, 0);
     const events = await this.eventModel.aggregate([
       {
-        $match: { isDeleted: false },
+        $match: { isDeleted: false, eventDate: { $gte: currentDate } },
       },
 
-      {
-        $match: {
-          eventDate: { $gte: currentDate },
-        },
-      },
       {
         $addFields: {
           eventParticipants: {

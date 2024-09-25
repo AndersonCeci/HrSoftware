@@ -60,15 +60,7 @@ export class EventsController {
       throw new BadRequestException('Invalid joinEmployee ID');
     }
 
-    return this.eventsService.populateEmployee(
-      id,
-      assignEmployeeDto.joinEmployee,
-    );
-  }
-
-  @Get('check')
-  async check() {
-    return this.eventsService.checkParticipantType();
+    return this.eventsService.joinEvent(id, assignEmployeeDto.joinEmployee);
   }
 
   @Delete('deleteAll')

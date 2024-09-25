@@ -14,7 +14,6 @@ import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import mongoose from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
-import { Inventory } from './schemas/Inventory.schema';
 import { EmployeeService } from 'src/employee/employe.service';
 
 @Controller('inventory')
@@ -54,13 +53,10 @@ export class InventoryController {
     );
   }
 
-  @Patch('prove/assign/:id')
+  @Patch('repair/:id')
   async prove(
-    @Param('id') id: string,
-  ) {
-    return this.inventoryService.prove(
-      id
-    );
+  @Param('id') id: string) {
+    return this.inventoryService.repairAsset(id);
   }
 
   @Patch('unassign/:id')

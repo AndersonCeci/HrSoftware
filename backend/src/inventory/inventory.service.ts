@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Inventory, InventoryStatus } from './schemas/Inventory.schema';
 import { Model, Types } from 'mongoose';
@@ -22,13 +22,12 @@ export class InventoryService {
   async createInventory(
     createInventoryDto: CreateInventoryDto,
   ): Promise<Inventory[]> {
- 
-
     const foundAsset = await this.assetsService.findName(
       createInventoryDto.assetName,
     );
 
     if (!foundAsset) {
+      Logger.error(`Asset with name ${createInventoryDto.assetName} not found.`,);
       throw new NotFoundException();
     }
 
@@ -69,7 +68,6 @@ export class InventoryService {
     inventoryID: string,
     employeeDetails: string,
     assignDate: string,
-    //status: InventoryStatus,
   ): Promise<Inventory> {
     const foundEmployee = await this.employeeModel.findById(employeeDetails);
 
@@ -88,8 +86,6 @@ export class InventoryService {
     const assignedInventory = await this.inventoryModel
       .findById(inventoryID)
       .populate('employeeDetails');
-
-  
 
     const createNotificationDto: CreateNotificationDto = {
       message: `You have been assigned an asset: ${assignedInventory.assetName}`,
@@ -132,32 +128,12 @@ export class InventoryService {
     return response as unknown as Inventory;
   }
 
-  async unnAssignAndRepair(inventoryID: string): Promise<Inventory> {
-    const foundInventory = await this.inventoryModel.findById(inventoryID);
+  async repairAsset(inventoryID: string): Promise<Inventory> {
+    const inventoryToRepair = await this.unassignFromEmployee(inventoryID);
 
-    if (!foundInventory) {
-      throw new NotFoundException(
-        `Inventory item with ID ${inventoryID} not found`,
-      );
-    }
+    inventoryToRepair.status = InventoryStatus.OnRepair;
 
-    foundInventory.employeeDetails = null;
-    foundInventory.status = InventoryStatus.OnRepair;
-    foundInventory.assignDate = null;
-
-    const updatedInventory = await foundInventory.save();
-    const response = {
-      ...updatedInventory.toObject(),
-      employeeDetails: updatedInventory.employeeDetails,
-    };
-    return response as unknown as Inventory;
-  }
-
-  async prove(inventoryID: string): Promise<Inventory> {
-    const ok = await this.unassignFromEmployee(inventoryID)
-    ok.status = InventoryStatus.OnRepair;
-
-    return ok
+    return inventoryToRepair;
   }
 
   async delete(id: string): Promise<Inventory> {
@@ -188,7 +164,7 @@ export class InventoryService {
     updateInventoryDto: UpdateInventoryDto,
   ): Promise<Inventory> {
     if (updateInventoryDto.status === InventoryStatus.OnRepair) {
-      return await this.unnAssignAndRepair(id);
+      return await this.repairAsset(id);
     }
     return this.inventoryModel
       .findByIdAndUpdate(id, updateInventoryDto, { new: true })

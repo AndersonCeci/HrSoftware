@@ -55,7 +55,6 @@ export class DayoffService {
     let isApproved = false;
     let approvedDate: Date | null = null;
 
-    console.log('Employee role:', employee.role);
     if (employee.role.toLowerCase() === Role.CEO) {
       isApproved = true;
       approvedDate = new Date();
@@ -168,20 +167,17 @@ export class DayoffService {
   }
 
   async approved(id: string): Promise<DayOff> {
-    console.log('Approved function called with ID:', id);
-
+    
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
     const dayOffRequest = await this.dayoffModel.findById(id).exec();
 
     if (!dayOffRequest) {
-      console.log('Day off request not found');
       throw new Error('Day off request not found');
     }
 
     if (dayOffRequest.isApproved) {
-      console.log('Day off request is already approved');
       throw new Error('Day off request is already approved');
     }
 
