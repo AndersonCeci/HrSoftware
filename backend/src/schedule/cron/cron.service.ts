@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { parseExpression } from 'cron-parser';
 import { isValidCron } from 'cron-validator';
 
 @Injectable()
@@ -34,5 +35,21 @@ export class CronService {
     }
 
     return cronExpression;
+  }
+
+  getCronExpressions(startDate: Date, step: string): string {
+    try {
+      parseExpression(step);
+
+      return step;
+    } catch (error) {
+      const minutes = parseInt(step, 10);
+      if (isNaN(minutes)) {
+        throw new Error(
+          'Invalid step format. Please provide either a valid cron expression or a number of minutes.',
+        );
+      }
+      return `*/${minutes} * * * *`;
+    }
   }
 }

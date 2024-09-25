@@ -70,7 +70,20 @@ export class UpdateRecruitmentDto {
 
   @IsOptional()
   @IsString()
-  readonly rejectReason: string;
+  readonly rejectReason?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly phoneNumber: string;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly isDeleted: boolean;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  readonly deleteDate: Date;
 
   @IsOptional()
   @IsMongoId({ message: 'Invalid MongoDB ObjectId format' })

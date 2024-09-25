@@ -22,7 +22,7 @@ import { join } from 'path';
           from: '"No Reply" <no-reply@hrsofware.com>',
         },
         template: {
-          dir: join(__dirname, '..', 'src', 'modules', 'mail', 'templates'),
+          dir: join(process.cwd(), 'src', 'modules', 'mail', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -34,5 +34,6 @@ import { join } from 'path';
   ],
   providers: [MailService],
   controllers: [MailController],
+  exports: [MailService],
 })
 export class MailModule {}

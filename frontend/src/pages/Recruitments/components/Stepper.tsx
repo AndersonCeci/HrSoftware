@@ -18,6 +18,7 @@ import OfferMadeForm from "./form/OfferMadeForm";
 import EmailContent from "./EmailContent";
 import AddEmployeeForm from "../../Employment/components/AddEmployeeForm";
 import RejectDrawer from "./RejectDrawer";
+import { EmployeeDetails } from "../../../types/EmployeeDetailsProps";
 
 const { Title } = Typography;
 
@@ -29,7 +30,7 @@ const Stepper: React.FC = () => {
   );
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [employmentDrawer, setEmploymentDrawer] = useState(false);
-  const [interviewers, setInterviewers] = useState<string[]>([]);
+  const [interviewers, setInterviewers] = useState<EmployeeDetails[]>([]);
 
   useEffect(() => {
     if (editingRecord) {
@@ -46,10 +47,13 @@ const Stepper: React.FC = () => {
           date: stage.date ? moment(stage.date) : null,
         });
       }
+    } else {
+      form.resetFields();
+      setCurrent(0);
     }
   }, [editingRecord, current, form]);
 
-  const handleInterviewersChange = (newInterviewers: string[]) => {
+  const handleInterviewersChange = (newInterviewers: EmployeeDetails[]) => {
     setInterviewers(newInterviewers);
   };
 

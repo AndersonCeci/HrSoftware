@@ -12,27 +12,27 @@ import { IoDocumentAttach } from "react-icons/io5";
 import { isHR } from "../../../utils/utils";
 
 export function getColumns(
-	tableData: EmployeeDataType[],
-	onEdit: (record: EmployeeDataType) => void,
-	onDelete: (id: EmployeeDataType) => void,
-	onPromote: (record: EmployeeDataType) => void,
+  tableData: EmployeeDataType[],
+  onEdit: (record: EmployeeDataType) => void,
+  onDelete: (id: EmployeeDataType) => void,
+  onPromote: (record: EmployeeDataType) => void
 ): TableProps<EmployeeDataType>["columns"] {
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const isHr = isHR();
-	return [
-		createTableColumns({
-			title: t("name"),
-			dataIndex: "name",
-			key: "name",
-			filterDropdown: true,
-			onFilter: (inputValue, filter) => {
-				const value = filter.name + " " + filter.surname;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const isHr = isHR();
+  return [
+    createTableColumns({
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
+      filterDropdown: true,
+      onFilter: (inputValue, filter) => {
+        const value = filter.name + " " + filter.surname;
 
-				return value.toLowerCase().includes(inputValue.toLowerCase());
-			},
-			filterIcon: <SearchOutlined className="nav-menu-icon" />,
-			displayAs: (_, record) => {
-				const value = record.name + " " + record.surname;
+        return value.toLowerCase().includes(inputValue.toLowerCase());
+      },
+      filterIcon: <SearchOutlined className="nav-menu-icon" />,
+      displayAs: (_, record) => {
+        const value = record.name + " " + record.surname;
 
 				return <span>{value}</span>;
 			},

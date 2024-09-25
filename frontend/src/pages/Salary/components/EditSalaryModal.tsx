@@ -40,7 +40,7 @@ const getPayroll = async (
     const res = await Axios.get(`${SALARY_API}/net-salary`, {
       params: { grossSalary, workDays },
     });
-    console.log(res.data);
+
     return res.data;
   } catch (error) {
     if (error instanceof AxiosError) {

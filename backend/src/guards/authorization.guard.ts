@@ -26,8 +26,7 @@ export class AuthorizationGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    console.log(user);
-    console.log(requiredRoles);
+
     if (!user || !user.id) {
       throw new UnauthorizedException();
     }
