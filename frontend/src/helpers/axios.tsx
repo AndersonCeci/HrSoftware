@@ -25,14 +25,7 @@ Axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    const errorMessage =
-      error.response?.data?.message ||
-      error.message ||
-      "An unexpected error occurred";
-    console.error("API Error:", errorMessage);
-    return Promise.reject(errorMessage);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default Axios;

@@ -11,6 +11,7 @@ import {
   NotFoundException,
   HttpException,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { SalaryService } from './services/salary.service';
 import { SalaryDTO } from './dto/salaryDTO/salary.dto';
@@ -21,6 +22,8 @@ import { validate } from 'class-validator';
 import { PayrollService } from './services/payroll.service';
 import { Payroll } from './dto/PayrollDTO/payroll.dto';
 import { SchedulerService } from 'src/schedule/scheduler.service';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Controller('salary')
 export class SalaryController {
@@ -29,7 +32,6 @@ export class SalaryController {
     private readonly payrollService: PayrollService,
     private readonly scheduler: SchedulerService,
   ) {}
-
   @Post()
   async create(@Body() salaryDTO: SalaryDTO) {
     const dto = plainToClass(SalaryDTO, salaryDTO);
@@ -42,8 +44,10 @@ export class SalaryController {
 
   @Get()
   async getAllNew(
+    @Req() req: any,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query('employeeID') employeeID: string,
     @Query('startDate') startDate?: Date,
     @Query('endDate') endDate?: Date,
     @Query('name') name?: string,
@@ -54,10 +58,11 @@ export class SalaryController {
     return await this.salaryService.getSalariesWithEmployeeInfo(
       pageNumber,
       limitNumber,
+      employeeID,
+      req.user.role,
       filter,
     );
   }
-
   @Patch(':salaryID')
   async updateSalary(
     @Param('salaryID') salaryID: Types.ObjectId,
@@ -70,12 +75,10 @@ export class SalaryController {
     }
     return await this.salaryService.updateSalary(salaryID, dto);
   }
-
   @Delete(':userId')
   async deleteSalary(@Param('userId') userId: string) {
     return await this.salaryService.softDeleteSalaryById(userId);
   }
-
   @Get('net-salary')
   async netSalary(
     @Query('grossSalary') grossSalary: number,
@@ -118,7 +121,6 @@ export class SalaryController {
       return { message: `Error scheduling job: ${error.message}` };
     }
   }
-
   @Get('chart')
   async getChartData(@Query('id') id: string) {
     try {
@@ -132,7 +134,6 @@ export class SalaryController {
       throw new NotFoundException('Data not found or an error occurred');
     }
   }
-
   @Post('compensate')
   async compensateEmployees() {
     try {

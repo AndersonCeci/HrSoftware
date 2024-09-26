@@ -6,6 +6,7 @@ import { Bonus } from "../../../types/BonusProps";
 import { message } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import Axios from "../../../helpers/axios";
+import { getFromLocalStorage } from "../../../utils/utils";
 const API = import.meta.env.REACT_APP_SALARY;
 
 interface Filter {
@@ -38,7 +39,7 @@ export const useSalaryHook = () => {
   const { selectedSalary, setSelectedSalary } = salaryContext;
   const { setIsAddBonusModalOpen, setIsEditModalOpen } = modalContext;
   const { tableData, setTableData } = tableContext;
-
+  const employeeID = getFromLocalStorage().employID;
   useEffect(() => {
     fetchSalaries(page, limit, filters);
   }, [page, limit, filters]);
@@ -51,7 +52,7 @@ export const useSalaryHook = () => {
     setLoading(true);
     try {
       const response = await Axios.get(API, {
-        params: { page, limit, ...filters },
+        params: { page, limit, ...filters, employeeID },
       });
       const { data, meta } = response.data;
       setTableData(data);
@@ -178,8 +179,7 @@ export const useSalaryHook = () => {
         ...values,
         paid: false,
       };
-      console.log("POST", salary);
-      await Axios.post(API, salary);
+      const res = await Axios.post(API, salary);
       message.success("Salary inserted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {

@@ -13,6 +13,7 @@ import { PaginatedDTO } from '../../../paginationDTO/paginated.dto';
 import { ExportSalaryDTO } from '../dto/salaryDTO/export-salary.dto';
 import { EmployeeService } from 'src/employee/employe.service';
 import { Employee } from 'src/employee/schema/employe.schema';
+import { Role } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class SalaryService {
@@ -45,16 +46,47 @@ export class SalaryService {
 
   async find(id: string): Promise<Salary> {
     try {
-      const salary = await this.salaryModel.findById(id, { isDeleted: false });
-      if (!salary) {
+      const salary = await this.salaryModel.aggregate([
+        { $match: { _id: new Types.ObjectId(id), isDeleted: false } },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'employeeID',
+            foreignField: '_id',
+            as: 'employeeDetails',
+          },
+        },
+        { $unwind: '$employeeDetails' },
+        {
+          $project: {
+            employeeID: 1,
+            dateTaken: 1,
+            netSalary: 1,
+            workDays: 1,
+            bonuses: 1,
+            socialSecurityContributions: 1,
+            healthInsurance: 1,
+            grossSalary: 1,
+            total: 1,
+            paid: 1,
+            healthInsuranceCompany: 1,
+            socialInsuranceCompany: 1,
+            'employeeDetails.name': 1,
+            'employeeDetails.surname': 1,
+          },
+        },
+      ]);
+
+      if (!salary || !salary.length) {
         throw new NotFoundException('Salary not found');
       }
-      return salary;
+
+      return salary[0];
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new Error('Failed to find salary');
+      throw new InternalServerErrorException('Failed to find salary');
     }
   }
 
@@ -83,16 +115,25 @@ export class SalaryService {
   ): Promise<Salary> {
     try {
       const { employeeID, ...otherFields } = newSalary;
+
+      // Update the salary document with the new fields
       const updatedSalary = await this.salaryModel.findByIdAndUpdate(
         salaryID,
         { $set: otherFields },
         { new: true },
       );
+
       if (!updatedSalary) {
-        throw new Error('Salary not found');
+        throw new NotFoundException('Salary not found');
       }
-      return updatedSalary;
+
+      const enrichedSalary = await this.find(updatedSalary._id.toString());
+
+      return enrichedSalary;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Failed to update salary');
     }
   }
@@ -114,6 +155,8 @@ export class SalaryService {
   async getSalariesWithEmployeeInfo(
     page: number,
     limit: number,
+    employeeID: string,
+    role: string,
     filter: {
       startDate?: Date;
       endDate?: Date;
@@ -134,7 +177,9 @@ export class SalaryService {
       matchStage.dateTaken.$lte = new Date(filter.endDate);
     }
 
-    if (filter.employeeID) {
+    if (role === Role.Employee) {
+      matchStage.employeeID = new Types.ObjectId(employeeID);
+    } else if (filter.employeeID) {
       matchStage.employeeID = new Types.ObjectId(filter.employeeID);
     }
 

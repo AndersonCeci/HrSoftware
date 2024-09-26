@@ -6,15 +6,17 @@ import {
   Param,
   Put,
   Req,
-  UseGuards,
   Delete,
   HttpException,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './users.service';
 import { ChangePasswordDTO } from './dto/update-password.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 import mongoose from 'mongoose';
+import { AuthenticatedRequest } from 'src/auth/interfaces/AuthRequest';
+import { AuthenticationGuard } from 'src/guards/authentication.guard';
+import { PassportJwtAuthGuard } from 'src/auth/guards/passport-jwt.guard';
 
 @Controller('users')
 export class UsersController {
@@ -39,14 +41,14 @@ export class UsersController {
   async getUserByEmail(@Param('email') email: string) {
     return await this.userService.getUserByEmail(email);
   }
-
+  @UseGuards(PassportJwtAuthGuard)
   @Put('change-password')
   async updatePassword(
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
     @Body() updatePasswordDto: ChangePasswordDTO,
   ) {
     return await this.userService.updatePassword(
-      req.user.username,
+      req.user.email,
       updatePasswordDto.oldPassword,
       updatePasswordDto.newPassword,
     );
