@@ -2,26 +2,10 @@ import { ObjectId, Types } from 'mongoose';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/users.service';
-import { Role } from 'src/users/schemas/user.schema';
+import { SignInData } from './interfaces/SignInData';
+import { AuthResult } from './interfaces/AuthResult';
 
 type AuthInput = { email: string; password: string };
-type SignInData = {
-  _id: string;
-  username: string;
-  role: Role;
-  loginRole: Role;
-  employID: Types.ObjectId;
-  email: string;
-};
-type AuthResult = {
-  accessToken: string;
-  _id: string;
-  username: string;
-  role: Role;
-  loginRole: Role;
-  employID: Types.ObjectId;
-  email: string;
-};
 
 @Injectable()
 export class AuthService {
@@ -69,6 +53,7 @@ export class AuthService {
         username: user.username,
         role: user.role,
         loginRole: user.loginRole,
+        employID: user.employID,
       };
 
       const accessToken = this.jwtService.sign(tokenPayload, {});

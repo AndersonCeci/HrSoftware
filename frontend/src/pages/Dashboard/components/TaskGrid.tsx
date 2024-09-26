@@ -171,11 +171,6 @@ const TaskGrid: React.FC = () => {
 			<div className="header-container">
 				<h1 className="task-title">{t(`reminders`)}</h1>
 				<Search onChange={onSearch} placeholder={t("searchAReminder")} allowClear style={{ width: 300 }} />
-				<Tooltip placement="bottom" title="Add new">
-					<button onClick={onAddTask} className="add-btn">
-						<PlusOutlined />
-					</button>
-				</Tooltip>
 			</div>
 			<Table
 				pagination={{ pageSize: 10 }}

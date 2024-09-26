@@ -52,6 +52,7 @@ export class UserService {
     oldPassword: string,
     newPassword: string,
   ) {
+    console.log(oldPassword);
     const user = await this.getUserByEmail(email);
 
     if (!user) {

@@ -221,4 +221,5 @@ export const SqTranslation = {
 	OK: "Mire",
 	Positive: "Pozitiv",
 	selectInterviewers: "Zgjidh Intervistuesit",
+	salaries: "Pagat",
 };

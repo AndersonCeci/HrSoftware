@@ -65,14 +65,14 @@ import { JwtService } from '@nestjs/jwt';
   ],
   controllers: [],
   providers: [
-     {
-       provide: APP_GUARD,
-       useClass: AuthorizationGuard,
-     },
-     {
-       provide: APP_GUARD,
-       useClass: AuthenticationGuard,
-     },
+    {
+      provide: APP_GUARD,
+      useClass: AuthorizationGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
+    },
     AppService,
     JwtService,
     UploadService,

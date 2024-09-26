@@ -11,8 +11,10 @@ import {
 import { GmailApiService } from './gmail-api.service';
 import { SchedulerDTO } from 'src/schedule/schedulerDTO/scheduler.dto';
 import { SchedulerService } from 'src/schedule/scheduler.service';
-import { GaxiosError } from 'gaxios';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/users/schemas/user.schema';
 
+@Roles([Role.HR, Role.CEO])
 @Controller('gmail-api')
 export class GmailApiController {
   constructor(

@@ -222,5 +222,6 @@ export const EnTranslation = {
 	"Not Sure": "Not Sure",
 	OK: "OK",
 	Positive: "Positive",
-  selectInterviewers: "Select Interviewers",
+	selectInterviewers: "Select Interviewers",
+	salaries: "Salaries",
 };
