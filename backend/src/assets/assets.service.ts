@@ -17,14 +17,13 @@ export class AssetsService {
   async createAsset(createAssetDto: CreateAssetDto): Promise<Asset[]> {
     const { assetName, isDeleted = false, deleteDate } = createAssetDto;
 
-    const inventoryEntries = assetName.map((code) => ({
-      assetName: code,
+    const assetEntries = assetName.map((asset) => ({
+      assetName: asset,
       isDeleted,
       deleteDate,
     }));
-    Logger.log('create');
 
-    return await this.assetModel.create(inventoryEntries);
+    return await this.assetModel.create(assetEntries);
   }
 
   async findAll(): Promise<Asset[]> {
@@ -226,9 +225,3 @@ export class AssetsService {
       .exec();
   }
 }
-// {
-//   $skip: resPerPage * page,
-// },
-// {
-//   $limit: resPerPage,
-// },

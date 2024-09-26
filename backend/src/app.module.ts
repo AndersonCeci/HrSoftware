@@ -30,7 +30,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { JwtService } from '@nestjs/jwt';
-import { ThrottlerModule } from '@nestjs/throttler';
+
 
 @Module({
   imports: [

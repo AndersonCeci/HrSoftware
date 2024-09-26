@@ -14,7 +14,6 @@ import { InventoryService } from './inventory.service';
 import { UpdateInventoryDto } from './dto/updateInventory.dto';
 import mongoose from 'mongoose';
 import { AssignEmployeeDto } from './dto/assignEmployee.dto';
-import { Inventory } from './schemas/Inventory.schema';
 import { EmployeeService } from 'src/employee/employe.service';
 
 @Controller('inventory')
@@ -26,26 +25,13 @@ export class InventoryController {
 
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
-    console.log('hellom from tyhen othrer sid', createInventoryDto);
     return this.inventoryService.createInventory(createInventoryDto);
-  }
-
-  @Get()
-  async findAll(): Promise<Inventory[]> {
-    console.log('findAll route triggered');
-    return this.inventoryService.findAll();
   }
 
   @Delete(':id')
   async deleteInventory(@Param('id') id: string) {
     return this.inventoryService.delete(id);
   }
-
-  // @Delete(':id')
-  // async deleteByName(@Param('id') id: string) {
-  //   const result = await this.inventoryService.softDeleteAssetById(id);
-  //   return result;
-  // }
 
   @Patch('assign/:id')
   async assignToEmployee(
@@ -64,8 +50,13 @@ export class InventoryController {
       id,
       assignEmployeeDto.employeeDetails,
       assignEmployeeDto.assignDate,
-      assignEmployeeDto.status,
     );
+  }
+
+  @Patch('repair/:id')
+  async prove(
+  @Param('id') id: string) {
+    return this.inventoryService.repairAsset(id);
   }
 
   @Patch('unassign/:id')

@@ -1,11 +1,10 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class DayOff extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
-  //employeeId: Types.ObjectId;
   employeeId: string;
 
   @Prop()
