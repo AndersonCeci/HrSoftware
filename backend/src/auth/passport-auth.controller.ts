@@ -14,6 +14,7 @@ import {
 import { AuthService } from './auth.service';
 import { PassportJwtAuthGuard } from './guards/passport-jwt.guard';
 import { Public } from 'src/decorators/public.decorator';
+import { AuthenticatedRequest } from './interfaces/AuthRequest';
 
 @Controller('')
 export class PassportAuthController {
@@ -28,7 +29,7 @@ export class PassportAuthController {
   @Public()
   @Get('verify')
   @UseGuards(PassportJwtAuthGuard)
-  async verifyToken(@Request() request) {
+  async verifyToken(@Req() request: AuthenticatedRequest) {
     try {
       const token = request.headers.authorization.split(' ')[1];
       const user = await this.authService.verifyToken(token);

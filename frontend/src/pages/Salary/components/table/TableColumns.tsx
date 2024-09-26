@@ -24,6 +24,29 @@ const columns = ({
 
   return [
     createTableColumns({
+      dataIndex: "employeeDetails.name",
+      title: "Name",
+      key: "name",
+      displayAs: (name) =>
+        name ? (
+          <span> {capitalizeFirstLetter(name)}</span>
+        ) : (
+          <span>{"No Name"}</span>
+        ),
+    }),
+    createTableColumns({
+      dataIndex: "employeeDetails.surname",
+      title: "Surname",
+      key: "surname",
+      displayAs: (record) =>
+        record ? (
+          <span> {capitalizeFirstLetter(record)}</span>
+        ) : (
+          <span>{"No Surname"}</span>
+        ),
+    }),
+
+    createTableColumns({
       dataIndex: "employeeDetails",
       title: "Employee Details",
       key: "_id",

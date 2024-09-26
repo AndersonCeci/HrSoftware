@@ -11,13 +11,14 @@ import {
   BadRequestException,
   InternalServerErrorException,
   Patch,
-  UseGuards,
-  Req,
 } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/Recruitments.dto';
 import mongoose, { Types } from 'mongoose';
 import { UpdateRecruitmentDto } from './dto/UpdateRecruitments.dto';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/users/schemas/user.schema';
 
+@Roles([Role.CEO, Role.HR])
 @Controller('recruitments')
 export class RecruitmentsController {
   constructor(private recruitmentService: RecruitmentService) {}
